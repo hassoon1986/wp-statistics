@@ -214,7 +214,7 @@ class Admin_Pages {
 		if ( array_key_exists( 'wp-statistics-nonce', $_POST ) ) {
 			if ( wp_verify_nonce( $_POST['wp-statistics-nonce'], 'update-options' ) ) {
 
-				$wp_statistics_options = \Option::getOptions();
+				$wp_statistics_options = Option::getOptions();
 
 				// General Option
 				$selist                       = SearchEngine::getList( true );
@@ -289,7 +289,7 @@ class Admin_Pages {
 
 
 				// Prepare Exclusion List
-				foreach ( \User::get_role_list() as $role ) {
+				foreach ( User::get_role_list() as $role ) {
 					$role_post = 'wps_exclude_' . str_replace( " ", "_", strtolower( $role ) );
 
 					if ( array_key_exists( $role_post, $_POST ) ) {
@@ -307,7 +307,7 @@ class Admin_Pages {
 						'post_type'    => 'page',
 						'post_title'   => __( 'WP Statistics Honey Pot Page', 'wp-statistics' ) .
 						                  ' [' .
-						                  \TimeZone::getCurrentDate() .
+						                  TimeZone::getCurrentDate() .
 						                  ']',
 						'post_content' => __( 'This is the Honey Pot for WP Statistics to use, do not delete.', 'wp-statistics' ),
 						'post_status'  => 'publish',
@@ -368,11 +368,11 @@ class Admin_Pages {
 				if ( array_key_exists( 'wps_private_country_code', $_POST ) ) {
 					$_POST['wps_private_country_code'] = trim( strtoupper( $_POST['wps_private_country_code'] ) );
 				} else {
-					$_POST['wps_private_country_code'] = \GeoIP::$private_country;
+					$_POST['wps_private_country_code'] = GeoIP::$private_country;
 				}
 
 				if ( $_POST['wps_private_country_code'] == '' ) {
-					$_POST['wps_private_country_code'] = \GeoIP::$private_country;
+					$_POST['wps_private_country_code'] = GeoIP::$private_country;
 				}
 
 				foreach ( $wps_option_list as $option ) {
@@ -500,7 +500,7 @@ class Admin_Pages {
 
 				if ( array_key_exists( 'wps_reset_plugin', $_POST ) ) {
 
-					$default_options   = \Option::defaultOption();
+					$default_options   = Option::defaultOption();
 					$excluded_defaults = array( 'force_robot_update', 'robot_list' );
 					$again_options     = array();
 
@@ -514,7 +514,7 @@ class Admin_Pages {
 							switch_to_blog( $blog_id );
 
 							// Delete the wp_statistics option.
-							update_option( \Option::$opt_name, array() );
+							update_option( Option::$opt_name, array() );
 
 							// Delete the user options.
 							$wpdb->query( "DELETE FROM {$wpdb->prefix}usermeta WHERE meta_key LIKE 'wp_statistics%'" );
@@ -530,14 +530,14 @@ class Admin_Pages {
 							$again_options['first_show_welcome_page'] = true;
 							$again_options['show_welcome_page']       = false;
 
-							update_option( \Option::$opt_name, $again_options );
+							update_option( Option::$opt_name, $again_options );
 						}
 
 						restore_current_blog();
 					} else {
 
 						// Delete the wp_statistics option.
-						update_option( \Option::$opt_name, array() );
+						update_option( Option::$opt_name, array() );
 
 						// Delete the user options.
 						$wpdb->query( "DELETE FROM {$wpdb->prefix}usermeta WHERE meta_key LIKE 'wp_statistics%'" );
@@ -553,7 +553,7 @@ class Admin_Pages {
 						$again_options['first_show_welcome_page'] = true;
 						$again_options['show_welcome_page']       = false;
 
-						update_option( \Option::$opt_name, $again_options );
+						update_option( Option::$opt_name, $again_options );
 					}
 
 					// We need to reload the page after we reset the options but it's too late to do it through a HTTP redirect so do a
@@ -562,7 +562,7 @@ class Admin_Pages {
 					exit;
 				}
 
-				\Option::save_options( $wp_statistics_options );
+				Option::save_options( $wp_statistics_options );
 				wp_redirect( Admin_Menus::admin_url( 'settings' ) );
 				exit;
 

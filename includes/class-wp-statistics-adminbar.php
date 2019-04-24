@@ -31,7 +31,7 @@ class AdminBar {
 		global $wp_admin_bar;
 
 		// Check Show WordPress Admin Bar
-		if ( $this->show_admin_bar() and is_admin_bar_showing() and wp_statistics_check_access_user() ) {
+		if ( self::show_admin_bar() and is_admin_bar_showing() and wp_statistics_check_access_user() ) {
 
 			/**
 			 * List Of Admin Bar Wordpress
@@ -42,12 +42,12 @@ class AdminBar {
 			$admin_bar_list = array(
 				'wp-statistic-menu'                   => array(
 					'title' => '<span class="ab-icon"></span>',
-					'href'  => Admin_Menus::admin_url( 'overview' )
+					'href'  => ( is_admin() ? Admin_Menus::admin_url( 'overview' ) : admin_url( 'admin.php?page=wps_overview_page' ) )
 				),
 				'wp-statistics-menu-useronline'       => array(
 					'parent' => 'wp-statistic-menu',
 					'title'  => __( 'Online User', 'wp-statistics' ) . ": " . wp_statistics_useronline(),
-					'href'   => Admin_Menus::admin_url( 'online' )
+					'href'   => ( is_admin() ? Admin_Menus::admin_url( 'online' ) : admin_url( 'admin.php?page=wps_online_page' ) )
 				),
 				'wp-statistics-menu-todayvisitor'     => array(
 					'parent' => 'wp-statistic-menu',
@@ -68,7 +68,7 @@ class AdminBar {
 				'wp-statistics-menu-viewstats'        => array(
 					'parent' => 'wp-statistic-menu',
 					'title'  => __( 'View Stats', 'wp-statistics' ),
-					'href'   => Admin_Menus::admin_url( 'overview' )
+					'href'   => ( is_admin() ? Admin_Menus::admin_url( 'overview' ) : admin_url( 'admin.php?page=wps_overview_page' ) )
 				)
 			);
 

@@ -11,6 +11,13 @@ class Admin_Assets {
 	public static $prefix = 'wp-statistics-admin';
 
 	/**
+	 * Suffix Of Minify File in Assets
+	 *
+	 * @var string
+	 */
+	public static $suffix_min = '.min';
+
+	/**
 	 * Admin_Assets constructor.
 	 */
 	public function __construct() {
@@ -37,10 +44,34 @@ class Admin_Assets {
 	}
 
 	/**
-	 * Check asset Suffix
+	 * Get Asset Url
+	 *
+	 * @param $file_name
+	 * @return string
 	 */
-	public static function suffix() {
-		return ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? array( 'suffix' => '', 'dir' => '' ) : array( 'suffix' => '.min', 'dir' => '/min/' );
+	public static function url( $file_name ) {
+
+		// Get file Extension Type
+		$ext = pathinfo( $file_name, PATHINFO_EXTENSION );
+		if ( $ext != "js" and $ext != "css" ) {
+			$ext = 'images';
+		}
+
+		// Prepare File Path
+		$path = 'assets/' . $ext . '/';
+
+		// Prepare Full Url
+		$url = WP_STATISTICS_URL . $path;
+
+		// Check Exist Min Version for Css / Js
+		if ( defined( 'SCRIPT_DEBUG' ) and SCRIPT_DEBUG === false and ( $ext == "css" || $ext == "js" ) ) {
+			$min_version = str_replace( array( ".css", ".js" ), array( self::$suffix_min . ".css", self::$suffix_min . ".js" ), $file_name );
+			if ( file_exists( Helper::get_file_path( $path . $min_version ) ) ) {
+				return $url . $min_version;
+			}
+		}
+
+		return $url . $file_name;
 	}
 
 	/**
@@ -50,17 +81,14 @@ class Admin_Assets {
 		global $pagenow;
 
 		$screen_id = Helper::get_screen_id();
-		$suffix     = self::suffix();
 
 		// Load Css Admin Area
-		wp_enqueue_style( self::$prefix , WP_STATISTICS_URL . 'assets/css/admin.css', array(), WP_STATISTICS_VERSION );
+		wp_enqueue_style( self::$prefix, self::url( 'admin.css' ), array(), self::version() );
 
-		// Load rtl Version Css
+		// Load Rtl Version Css
 		if ( is_rtl() ) {
-			wp_enqueue_style( self::$prefix . '-rtl', WP_STATISTICS_URL . 'assets/css/rtl.css', array(), WP_STATISTICS_VERSION );
+			wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
 		}
-
-
 
 		// Check in Dashboard
 		if ( in_array( $screen_id, array( 'dashboard' ) ) ) {
@@ -77,14 +105,13 @@ class Admin_Assets {
 		global $pagenow;
 
 		$screen_id = Helper::get_screen_id();
-		$suffix     = self::suffix();
 
 		//Load Admin Js
-		wp_enqueue_script( 'wp-statistics-admin-js', WP_STATISTICS_URL . 'assets/js/admin.js', array( 'jquery' ), WP_STATISTICS_VERSION );
+		wp_enqueue_script( 'wp - statistics - admin - js', WP_STATISTICS_URL . 'assets / js / admin . js', array( 'jquery' ), WP_STATISTICS_VERSION );
 
 
 		if ( $pagenow == "widgets.php" ) {
-			wp_enqueue_script( 'add_wp_statistic_button_for_widget_text', WP_STATISTICS_URL . 'assets/js/tinymce.js' );
+			wp_enqueue_script( 'add_wp_statistic_button_for_widget_text', WP_STATISTICS_URL . 'assets / js / tinymce . js' );
 		}
 
 		//Load Chart Js
@@ -112,7 +139,7 @@ class Admin_Assets {
 		}
 
 		if ( $load_chart === true ) {
-			wp_enqueue_script( 'wp-statistics-chart-js', WP_STATISTICS_URL . 'assets/js/Chart.bundle.min.js', false, '2.7.3', $load_in_footer );
+			wp_enqueue_script( 'wp - statistics - chart - js', WP_STATISTICS_URL . 'assets / js / Chart . bundle . min . js', false, '2.7.3', $load_in_footer );
 		}
 
 	}

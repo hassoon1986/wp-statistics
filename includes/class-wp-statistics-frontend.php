@@ -2,7 +2,6 @@
 
 namespace WP_STATISTICS;
 
-
 class Frontend {
 
 	public function __construct() {
@@ -55,9 +54,9 @@ class Frontend {
 	 */
 	public function enqueue_scripts() {
 
-		// Load our CSS to be used.
-		if ( is_admin_bar_showing() ) {
-			wp_enqueue_style( 'wpstatistics-css', WP_STATISTICS_URL . 'assets/css/frontend.css', true, WP_STATISTICS_VERSION );
+		// Load Admin Bar Css
+		if ( AdminBar::show_admin_bar() and is_admin_bar_showing() ) {
+			wp_enqueue_style( 'wp-statistics', WP_STATISTICS_URL . 'assets/css/frontend.min.css', true, WP_STATISTICS_VERSION );
 		}
 	}
 

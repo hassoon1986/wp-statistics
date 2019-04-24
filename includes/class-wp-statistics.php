@@ -123,6 +123,7 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-shortcode.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-widget.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-adminbar.php';
 
 		// Hits Class
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user-online.php';
@@ -157,7 +158,6 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-menus.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-assets.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-notices.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-bar.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/TinyMCE/class-wp-statistics-tinymce.php';
 		}
 
@@ -285,6 +285,9 @@ final class WP_Statistics {
 		# Load WordPress Cron
 		new \WP_STATISTICS\Schedule;
 
+		# Admin Bar
+		new \WP_STATISTICS\AdminBar;
+
 		# Run in Admin
 		if ( is_admin() ) {
 
@@ -319,9 +322,6 @@ final class WP_Statistics {
 
 			# Welcome Screen
 			new \WP_STATISTICS\Welcome;
-
-			# Admin Menu Bar
-			$this->container['admin_bar'] = new \WP_STATISTICS\AdminBar;
 		}
 
 		# Run in Frontend

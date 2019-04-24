@@ -105,6 +105,16 @@ class Helper {
 	}
 
 	/**
+	 * Get File Path Of Plugins File
+	 *
+	 * @param $path
+	 * @return string
+	 */
+	public static function get_file_path( $path ) {
+		return wp_normalize_path( path_join( WP_STATISTICS_DIR, $path ) );
+	}
+
+	/**
 	 * Check User is Used Cache Plugin
 	 *
 	 * @return array
