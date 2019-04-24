@@ -19,10 +19,6 @@ class Admin {
 			return;
 		}
 
-		//Load Script in Admin Area
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-
 		//Add Custom MetaBox in Wp-statistics Admin Page
 		add_action( 'add_meta_boxes', 'WP_Statistics_Editor::add_meta_box' );
 
@@ -296,51 +292,6 @@ class Admin {
 
 		$id = $post->ID;
 		echo "<div class='misc-pub-section'>" . __( 'WP Statistics - Hits', 'wp-statistics' ) . ": <b><a href='" . Admin_Menus::admin_url( 'pages', array( 'page-id' => $id ) ) . "'>" . wp_statistics_pages( 'total', "", $id ) . "</a></b></div>";
-	}
-
-	/**
-	 * Enqueue Scripts in Admin Area
-	 */
-	public function enqueue_scripts() {
-		global $pagenow;
-
-		// Load our CSS to be used.
-		wp_enqueue_style( 'wpstatistics-admin-css', WP_STATISTICS_URL . 'assets/css/admin.css', true, WP_STATISTICS_VERSION );
-		if ( is_rtl() ) {
-			wp_enqueue_style( 'rtl-css', WP_STATISTICS_URL . 'assets/css/rtl.css', true, WP_STATISTICS_VERSION );
-		}
-
-		//Load Admin Js
-		wp_enqueue_script( 'wp-statistics-admin-js', WP_STATISTICS_URL . 'assets/js/admin.js', array( 'jquery' ), WP_STATISTICS_VERSION );
-
-		//Load Chart Js
-		$load_in_footer = false;
-		$load_chart     = false;
-
-		//Load in Setting Page
-		$pages_required_chart = array(
-			'wps_overview_page',
-			'wps_browsers_page',
-			'wps_hits_page',
-			'wps_pages_page',
-			'wps_categories_page',
-			'wps_tags_page',
-			'wps_authors_page',
-			'wps_searches_page',
-		);
-		if ( isset( $_GET['page'] ) and array_search( $_GET['page'], $pages_required_chart ) !== false ) {
-			$load_chart = true;
-		}
-
-		//Load in Post Page
-		if ( $pagenow == "post.php" and Option::get( 'hit_post_metabox' ) ) {
-			$load_chart = true;
-		}
-
-		if ( $load_chart === true ) {
-			wp_enqueue_script( 'wp-statistics-chart-js', WP_STATISTICS_URL . 'assets/js/Chart.bundle.min.js', false, '2.7.3', $load_in_footer );
-		}
-
 	}
 
 	/**

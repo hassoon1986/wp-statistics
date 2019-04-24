@@ -94,6 +94,17 @@ class Helper {
 	}
 
 	/**
+	 * Get Screen ID
+	 *
+	 * @return string
+	 */
+	public static function get_screen_id() {
+		$screen    = get_current_screen();
+		$screen_id = $screen ? $screen->id : '';
+		return $screen_id;
+	}
+
+	/**
 	 * Check User is Used Cache Plugin
 	 *
 	 * @return array

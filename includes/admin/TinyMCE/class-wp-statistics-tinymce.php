@@ -15,9 +15,6 @@ class TinyMCE {
 		// Add Filter TinyMce Editor
 		add_action( 'admin_head', array( $this, 'wp_statistic_add_my_tc_button' ) );
 
-		//Load Text Widget Button
-		add_action( 'admin_enqueue_scripts', array( $this, 'load_tinymcejs_widget_wp_admin_style' ) );
-
 		// Add TextLang
 		add_action( 'admin_footer-widgets.php', array( $this, 'my_post_edit_page_footer' ), 999 );
 	}
@@ -121,16 +118,6 @@ class TinyMCE {
 		$locales ['wp-statistic-tinymce-plugin'] = WP_STATISTICS_DIR . 'includes/admin/TinyMCE/locale.php';
 
 		return $locales;
-	}
-
-	/*
-	 * Add Button For Text Widget
-	 */
-	public function load_tinymcejs_widget_wp_admin_style() {
-		global $pagenow;
-		if ( $pagenow == "widgets.php" ) {
-			wp_enqueue_script( 'add_wp_statistic_button_for_widget_text', WP_STATISTICS_URL . 'assets/js/tinymce.js' );
-		}
 	}
 
 	/*
