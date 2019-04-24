@@ -18,6 +18,28 @@ class Admin_Assets {
 	public static $suffix_min = '.min';
 
 	/**
+	 * Assets Folder name in Plugin
+	 *
+	 * @var string
+	 */
+	public static $asset_dir = 'assets';
+
+	/**
+	 * Basic Of Plugin Url in Wordpress
+	 *
+	 * @var string
+	 * @example http://site.com/wp-content/plugins/my-plugin/
+	 */
+	public static $plugin_url = WP_STATISTICS_URL;
+
+	/**
+	 * Current Asset Version for this plugin
+	 *
+	 * @var string
+	 */
+	public static $asset_version = WP_STATISTICS_VERSION;
+
+	/**
 	 * Admin_Assets constructor.
 	 */
 	public function __construct() {
@@ -38,7 +60,7 @@ class Admin_Assets {
 			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 				return time();
 			} else {
-				return WP_STATISTICS_VERSION;
+				return self::$asset_version;
 			}
 		}
 	}
@@ -58,10 +80,10 @@ class Admin_Assets {
 		}
 
 		// Prepare File Path
-		$path = 'assets/' . $ext . '/';
+		$path = self::$asset_dir . '/' . $ext . '/';
 
 		// Prepare Full Url
-		$url = WP_STATISTICS_URL . $path;
+		$url = self::$plugin_url . $path;
 
 		// Check Exist Min Version for Css / Js
 		if ( defined( 'SCRIPT_DEBUG' ) and SCRIPT_DEBUG === false and ( $ext == "css" || $ext == "js" ) ) {
@@ -79,22 +101,35 @@ class Admin_Assets {
 	 */
 	public function admin_styles() {
 
+		// Get Current Screen ID
 		$screen_id = Helper::get_screen_id();
 
-		// Load Css Admin Area
-		wp_enqueue_style( self::$prefix, self::url( 'admin.css' ), array(), self::version() );
+		// Load Plugin Css
+		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) ) ) {
 
-		// Load Rtl Version Css
-		if ( is_rtl() ) {
-			wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
+			// Load Admin Css
+			wp_enqueue_style( self::$prefix, self::url( 'admin.css' ), array(), self::version() );
+
+			// Load Rtl Version Css
+			if ( is_rtl() ) {
+				wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
+			}
 		}
 
-		// Load Pagination and Print Css only in Plugins Pages
+		// Load Pagination only in Plugins Pages
 		if ( Admin_Menus::in_plugin_page() ) {
-			wp_enqueue_style( self::$prefix . '-print', self::url( 'print.css' ), array(), self::version() );
 			wp_enqueue_style( self::$prefix . '-pagination', self::url( 'pagination.css' ), array(), self::version() );
 		}
 
+		//Load Jquery VMap Css
+		if ( ! Option::get( 'disable_map' ) and ( Admin_Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
+			wp_enqueue_style( self::$prefix . '-jqvmap', self::url( 'jqvmap.min.css' ), array(), '1.5.1' );
+		}
+
+		// Load Jquery-ui theme
+		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'overview' ) === false and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+			wp_enqueue_style( self::$prefix . '-jquery-ui-smooth', self::url( 'jquery-ui/smoothness.min.css' ), array(), '1.11.4' );
+		}
 
 	}
 
@@ -102,21 +137,27 @@ class Admin_Assets {
 	 * Enqueue scripts.
 	 */
 	public function admin_scripts() {
-		global $pagenow;
 
+		// Get Current Screen ID
 		$screen_id = Helper::get_screen_id();
 
-		// Load Chart Js Library
-		$_is_load_chart_js = self::is_load_chart_js();
-		if ( $_is_load_chart_js['status'] ) {
-			wp_enqueue_script( self::$prefix . '-chart.js', self::url( 'chart.bundle.js' ), false, '2.8.0', $_is_load_chart_js['footer'] );
+		// Load Chart Js Library [ Load in <head> Tag ]
+		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and Option::get( 'hit_post_metabox' ) ) ) {
+			wp_enqueue_script( self::$prefix . '-chart.js', self::url( 'chartjs/chart.bundle.min.js' ), false, '2.8.0', false );
+		}
+
+		// Load Jquery VMap Js Library
+		if ( ! Option::get( 'disable_map' ) and ( Admin_Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
+			wp_enqueue_script( self::$prefix . '-jqvmap', self::url( 'jqvmap/jquery.vmap.min.js' ), true, '1.5.1' );
+			wp_enqueue_script( self::$prefix . '-jqvmap-world', self::url( 'jqvmap/jquery.vmap.world.min.js' ), true, '1.5.1' );
 		}
 
 		// Load Admin Js
-		wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
+		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) ) {
+			wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
+		}
 
-
-		// Load Tiny MCE for Widget Page
+		// Load TinyMCE for Widget Page
 		if ( in_array( $screen_id, array( 'widgets' ) ) ) {
 			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ), array( 'jquery' ), self::version() );
 		}
@@ -126,47 +167,30 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-dashboard', self::url( 'dashboard.js' ), array( 'jquery' ), self::version() );
 		}
 
+		// Load Overview Script
+		if ( Admin_Menus::in_page( 'overview' ) ) {
+			wp_enqueue_script( self::$prefix . '-overview', self::url( 'overview.js' ), array( 'jquery' ), self::version() );
+		}
+
 		// Load Editors Script
-		if ( in_array( $screen_id, array( 'post', 'page' ) ) ) {
+		if ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) {
 			wp_enqueue_script( self::$prefix . '-editor', self::url( 'editor.js' ), array( 'jquery' ), self::version() );
 		}
 
+		// Load Jquery UI
+		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'overview' ) === false and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+			wp_enqueue_script( 'jquery-ui-datepicker' );
 
-		//Load Chart Js
-		$load_in_footer = false;
-		$load_chart     = false;
-
-		//Load in Setting Page
-		$pages_required_chart = array(
-			'wps_overview_page',
-			'wps_browsers_page',
-			'wps_hits_page',
-			'wps_pages_page',
-			'wps_categories_page',
-			'wps_tags_page',
-			'wps_authors_page',
-			'wps_searches_page',
-		);
-		if ( isset( $_GET['page'] ) and array_search( $_GET['page'], $pages_required_chart ) !== false ) {
-			$load_chart = true;
 		}
 
-		//Load in Post Page
-		if ( $pagenow == "post.php" and Option::get( 'hit_post_metabox' ) ) {
-			$load_chart = true;
+		// Load WordPress PostBox Script
+		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+			wp_enqueue_script( 'common' );
+			wp_enqueue_script( 'wp-lists' );
+			wp_enqueue_script( 'postbox' );
 		}
 
+		//TODO Mix dashboard.js and overview.js and editor.js in admin.js file at latest
 	}
-
-	/**
-	 * Check Load Chart Js Library
-	 */
-	public static function is_load_chart_js() {
-		$status = array( 'status' => false, 'footer' => false );
-
-
-		return $status;
-	}
-
 
 }

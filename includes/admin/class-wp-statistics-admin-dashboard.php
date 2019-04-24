@@ -207,20 +207,6 @@ class Admin_Dashboard {
 	}
 
 	/**
-	 * Load Widget Script/style
-	 */
-	static function load_widget_css_and_scripts() {
-
-		// Load the map code.
-		if ( ! Option::get( 'disable_dashboard' ) ) {
-			wp_enqueue_style( 'jqvmap-css', WP_STATISTICS_URL . 'assets/jqvmap/jqvmap.css', true, '1.5.1' );
-			wp_enqueue_script( 'jquery-vmap', WP_STATISTICS_URL . 'assets/jqvmap/jquery.vmap.js', true, '1.5.1' );
-			wp_enqueue_script( 'jquery-vmap-world', WP_STATISTICS_URL . 'assets/jqvmap/maps/jquery.vmap.world.js', true, '1.5.1' );
-		}
-
-	}
-
-	/**
 	 * Add inline Script
 	 * For Add button Refresh/Direct Button Link in Top of Meta Box
 	 */
@@ -231,9 +217,6 @@ class Admin_Dashboard {
 		if ( 'dashboard' != $screen->id ) {
 			return;
 		}
-
-		//Load Of Require Jquery Library Function
-		Admin_Dashboard::load_widget_css_and_scripts();
 
 		//Prepare List Of Dashboard
 		$page_urls  = array();

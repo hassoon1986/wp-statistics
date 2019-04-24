@@ -14,9 +14,6 @@ include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 <div class="wrap wps-wrap">
 	<?php Admin_Templates::show_page_title( __( 'Top 100 Visitors Today', 'wp-statistics' ) ); ?>
 	<?php
-	wp_enqueue_script( 'jquery-ui-datepicker' );
-	wp_register_style( 'jquery-ui-smoothness-css', WP_STATISTICS_URL . 'assets/css/jquery-ui-smoothness.min.css' );
-	wp_enqueue_style( 'jquery-ui-smoothness-css' );
 
 	$current = 0;
 	$statsdate  = \WP_STATISTICS\TimeZone::getCurrentDate( get_option( "date_format" ), '-' . $current );

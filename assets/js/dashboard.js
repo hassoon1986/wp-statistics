@@ -1,6 +1,3 @@
-/*
- Function to handle the loading of widget content
- */
 
 function wp_statistics_get_widget_contents(widget, container_id) {
     var data = {

@@ -851,11 +851,6 @@ class Admin_Pages {
 			);
 		}
 
-		// Load the postbox script that provides the widget style boxes.
-		wp_enqueue_script( 'common' );
-		wp_enqueue_script( 'wp-lists' );
-		wp_enqueue_script( 'postbox' );
-
 		// The different pages have different files to load.
 		switch ( $log_type ) {
 			case 'all-browsers':
@@ -893,14 +888,6 @@ class Admin_Pages {
 				break;
 			default:
 				if ( get_current_screen()->parent_base == Admin_Menus::get_page_slug( 'overview' ) ) {
-
-					wp_enqueue_style( 'wpstatistics-jqvmap-css', WP_STATISTICS_URL . 'assets/jqvmap/jqvmap.css', true, '1.5.1' );
-					wp_enqueue_script( 'wpstatistics-jquery-vmap', WP_STATISTICS_URL . 'assets/jqvmap/jquery.vmap.js', true, '1.5.1' );
-					wp_enqueue_script( 'wpstatistics-jquery-vmap-world', WP_STATISTICS_URL . 'assets/jqvmap/maps/jquery.vmap.world.js', true, '1.5.1' );
-
-					// Load our custom widgets handling javascript.
-					wp_enqueue_script( 'wp_statistics_log', WP_STATISTICS_URL . 'assets/js/log.js' );
-
 					include WP_STATISTICS_DIR . 'includes/log/log.php';
 				}
 

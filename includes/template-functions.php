@@ -1129,11 +1129,6 @@ function wp_statistics_geoip_supported() {
 // This function creates the date range selector 'widget' used in the various statistics pages.
 function wp_statistics_date_range_selector( $page, $current, $range = array(), $desc = array(), $extrafields = '', $pre_extra = '', $post_extra = '' ) {
 
-	//import DataPicker Jquery Ui Jquery Plugin
-	wp_enqueue_script( 'jquery-ui-datepicker' );
-	wp_register_style( 'jquery-ui-smoothness-css', WP_STATISTICS_URL . 'assets/css/jquery-ui-smoothness.min.css' );
-	wp_enqueue_style( 'jquery-ui-smoothness-css' );
-
 	//Create Object List Of Default Hit Day to Display
 	if ( $range == null or count( $range ) == 0 ) {
 

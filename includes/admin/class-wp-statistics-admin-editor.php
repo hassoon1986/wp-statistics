@@ -103,7 +103,6 @@ class Editor {
 			return;
 		}
 
-		Admin_Dashboard::load_widget_css_and_scripts();
 		$loading_img = Admin_Templates::loading_meta_box();
 		$new_buttons = '</button>';
 
