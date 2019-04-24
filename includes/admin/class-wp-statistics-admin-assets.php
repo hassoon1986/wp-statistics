@@ -78,7 +78,6 @@ class Admin_Assets {
 	 * Enqueue styles.
 	 */
 	public function admin_styles() {
-		global $pagenow;
 
 		$screen_id = Helper::get_screen_id();
 
@@ -90,9 +89,10 @@ class Admin_Assets {
 			wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
 		}
 
-		// Check in Dashboard
-		if ( in_array( $screen_id, array( 'dashboard' ) ) ) {
-
+		// Load Pagination and Print Css only in Plugins Pages
+		if ( Admin_Menus::in_plugin_page() ) {
+			wp_enqueue_style( self::$prefix . '-print', self::url( 'print.css' ), array(), self::version() );
+			wp_enqueue_style( self::$prefix . '-pagination', self::url( 'pagination.css' ), array(), self::version() );
 		}
 
 
@@ -106,13 +106,31 @@ class Admin_Assets {
 
 		$screen_id = Helper::get_screen_id();
 
+		// Load Chart Js Library
+		$_is_load_chart_js = self::is_load_chart_js();
+		if ( $_is_load_chart_js['status'] ) {
+			wp_enqueue_script( self::$prefix . '-chart.js', self::url( 'chart.bundle.js' ), false, '2.8.0', $_is_load_chart_js['footer'] );
+		}
+
 		// Load Admin Js
 		wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
 
+
 		// Load Tiny MCE for Widget Page
 		if ( in_array( $screen_id, array( 'widgets' ) ) ) {
-			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ) );
+			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ), array( 'jquery' ), self::version() );
 		}
+
+		// Load Admin Dashboard Script
+		if ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) {
+			wp_enqueue_script( self::$prefix . '-dashboard', self::url( 'dashboard.js' ), array( 'jquery' ), self::version() );
+		}
+
+		// Load Editors Script
+		if ( in_array( $screen_id, array( 'post', 'page' ) ) ) {
+			wp_enqueue_script( self::$prefix . '-editor', self::url( 'editor.js' ), array( 'jquery' ), self::version() );
+		}
+
 
 		//Load Chart Js
 		$load_in_footer = false;
@@ -138,10 +156,16 @@ class Admin_Assets {
 			$load_chart = true;
 		}
 
-		if ( $load_chart === true ) {
-			wp_enqueue_script( 'wp - statistics - chart - js', WP_STATISTICS_URL . 'assets / js / Chart . bundle . min . js', false, '2.7.3', $load_in_footer );
-		}
+	}
 
+	/**
+	 * Check Load Chart Js Library
+	 */
+	public static function is_load_chart_js() {
+		$status = array( 'status' => false, 'footer' => false );
+
+
+		return $status;
 	}
 
 

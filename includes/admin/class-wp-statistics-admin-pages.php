@@ -856,10 +856,6 @@ class Admin_Pages {
 		wp_enqueue_script( 'wp-lists' );
 		wp_enqueue_script( 'postbox' );
 
-		// Load the css we use for the statistics pages.
-		wp_enqueue_style( 'wpstatistics-log-css', WP_STATISTICS_URL . 'assets/css/log.css', true, WP_STATISTICS_VERSION );
-		wp_enqueue_style( 'wpstatistics-pagination-css', WP_STATISTICS_URL . 'assets/css/pagination.css', true, WP_STATISTICS_VERSION );
-
 		// The different pages have different files to load.
 		switch ( $log_type ) {
 			case 'all-browsers':

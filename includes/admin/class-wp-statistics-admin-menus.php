@@ -69,12 +69,21 @@ class Admin_Menus {
 	 */
 	public static function in_page( $page ) {
 		global $pagenow;
+		return ( is_admin() and $pagenow == "admin.php" and isset( $_REQUEST['page'] ) and $_REQUEST['page'] == Admin_Menus::get_page_slug( $page ) );
+	}
 
-		//Check is custom page
-		if ( $pagenow == "admin.php" and isset( $_REQUEST['page'] ) and $_REQUEST['page'] == Admin_Menus::get_page_slug( $page ) ) {
-			return true;
+	/**
+	 * Check if User in WP-Statistics Plugin Admin Page
+	 */
+	public static function in_plugin_page() {
+		global $pagenow;
+		if ( is_admin() and $pagenow == "admin.php" and isset( $_REQUEST['page'] ) ) {
+			$admin_menu_slug = explode( "[slug]", self::$admin_menu_slug );
+			preg_match( '/(?<=' . $admin_menu_slug[0] . ').*?(?=' . $admin_menu_slug[1] . ')/', $_REQUEST['page'], $page_name );
+			if ( is_array( $page_name ) and count( $page_name ) > 0 ) {
+				return true;
+			}
 		}
-
 		return false;
 	}
 

@@ -211,9 +211,6 @@ class Admin_Dashboard {
 	 */
 	static function load_widget_css_and_scripts() {
 
-		// Load the css we use for the statistics pages.
-		wp_enqueue_style( 'wpstatistics-log-css', WP_STATISTICS_URL . 'assets/css/log.css', true, '1.2' );
-
 		// Load the map code.
 		if ( ! Option::get( 'disable_dashboard' ) ) {
 			wp_enqueue_style( 'jqvmap-css', WP_STATISTICS_URL . 'assets/jqvmap/jqvmap.css', true, '1.5.1' );
@@ -221,20 +218,6 @@ class Admin_Dashboard {
 			wp_enqueue_script( 'jquery-vmap-world', WP_STATISTICS_URL . 'assets/jqvmap/maps/jquery.vmap.world.js', true, '1.5.1' );
 		}
 
-		// Load chart library
-		if ( ! isset( $_GET['post'] ) ) {
-			wp_enqueue_script( 'wp-statistics-chart-js', WP_STATISTICS_URL . 'assets/js/Chart.bundle.min.js', false, '2.7.3', false );
-		}
-
-		//Get current screen page
-		$screen = get_current_screen();
-
-		// Load our custom widgets handling javascript.
-		if ( 'post' == $screen->id || 'page' == $screen->id ) {
-			wp_enqueue_script( 'Editor', WP_STATISTICS_URL . 'assets/js/editor.js' );
-		} else {
-			wp_enqueue_script( 'Admin_Dashboard', WP_STATISTICS_URL . 'assets/js/dashboard.js' );
-		}
 	}
 
 	/**
