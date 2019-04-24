@@ -20,7 +20,7 @@ class Admin {
 		}
 
 		//Add Custom MetaBox in Wp-statistics Admin Page
-		add_action( 'add_meta_boxes', 'WP_Statistics_Editor::add_meta_box' );
+		add_action( 'add_meta_boxes', array( '\WP_STATISTICS\Editor', 'add_meta_box' ) );
 
 		// Display the admin notices if we should.
 		if ( isset( $pagenow ) && array_key_exists( 'page', $_GET ) ) {
@@ -57,7 +57,7 @@ class Admin {
 	 */
 	public function register_visitors_log_tbl() {
 
-	    //TODO Push to Setting Page
+		//TODO Push to Setting Page
 		//Add Visitor RelationShip Table
 		if ( Admin_Menus::in_page( 'settings' ) and isset( $_POST['wps_visitors_log'] ) and $_POST['wps_visitors_log'] == 1 ) {
 			Install::setup_visitor_relationship_table();

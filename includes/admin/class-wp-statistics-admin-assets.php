@@ -106,12 +106,12 @@ class Admin_Assets {
 
 		$screen_id = Helper::get_screen_id();
 
-		//Load Admin Js
-		wp_enqueue_script( 'wp - statistics - admin - js', WP_STATISTICS_URL . 'assets / js / admin . js', array( 'jquery' ), WP_STATISTICS_VERSION );
+		// Load Admin Js
+		wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
 
-
-		if ( $pagenow == "widgets.php" ) {
-			wp_enqueue_script( 'add_wp_statistic_button_for_widget_text', WP_STATISTICS_URL . 'assets / js / tinymce . js' );
+		// Load Tiny MCE for Widget Page
+		if ( in_array( $screen_id, array( 'widgets' ) ) ) {
+			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ) );
 		}
 
 		//Load Chart Js
