@@ -30,3 +30,6 @@ composer.lock
 
 # PHPStorm
 .idea
+
+# Npm Package
+node_modules

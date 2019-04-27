@@ -32,7 +32,7 @@ function wp_statistics_refresh_widget() {
     var container_id = 'wp-statistics-page-div';
     var widget = 'page';
 
-    container = jQuery("#" + container_id);
+    var container = jQuery("#" + container_id);
     container.html(wp_statistics_loading_image);
 
     wp_statistics_get_widget_contents(widget, container_id);

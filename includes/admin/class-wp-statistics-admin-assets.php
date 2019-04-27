@@ -123,7 +123,7 @@ class Admin_Assets {
 
 		//Load Jquery VMap Css
 		if ( ! Option::get( 'disable_map' ) and ( Admin_Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
-			wp_enqueue_style( self::$prefix . '-jqvmap', self::url( 'jqvmap.min.css' ), array(), '1.5.1' );
+			wp_enqueue_style( self::$prefix . '-jqvmap', self::url( 'jqvmap/jqvmap.min.css' ), array(), '1.5.1' );
 		}
 
 		// Load Jquery-ui theme

@@ -1,4 +1,3 @@
-
 function wp_statistics_get_widget_contents(widget, container_id) {
     var data = {
         'action': 'wp_statistics_get_widget_contents',
@@ -6,7 +5,7 @@ function wp_statistics_get_widget_contents(widget, container_id) {
         'format': 'dashboard'
     };
 
-    container = jQuery("#" + container_id);
+    var container = jQuery("#" + container_id);
 
     if (container.is(':visible')) {
         jQuery.ajax({
