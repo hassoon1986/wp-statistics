@@ -15,7 +15,7 @@ include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 	<?php Admin_Templates::show_page_title( __( 'Top 100 Visitors Today', 'wp-statistics' ) ); ?>
 	<?php
 
-	$current = 0;
+	$current    = 0;
 	$statsdate  = \WP_STATISTICS\TimeZone::getCurrentDate( get_option( "date_format" ), '-' . $current );
 	$rang_start = \WP_STATISTICS\TimeZone::getCurrentDate( "Y-m-d" );
 	if ( isset( $_GET['statsdate'] ) and strtotime( $_GET['statsdate'] ) != false ) {
@@ -26,24 +26,10 @@ include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 	echo '<br><form method="get">' . "\r\n";
 	echo ' ' . __( 'Date', 'wp-statistics' ) . ': ';
 
-	echo '<input type="hidden" name="page" value="' . \WP_STATISTICS\Admin_Menus::get_page_slug('top-visitors') . '">' . "\r\n";
-	echo '<input type="text" size="18" name="statsdate" id="statsdate" value="' . htmlentities( $statsdate, ENT_QUOTES ) . '" autocomplete="off" placeholder="' . __( wp_statistics_dateformat_php_to_jqueryui( get_option( "date_format" ) ), 'wp-statistics' ) . '"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
-	echo '<input type="hidden" name="statsdate" id="stats-date" value="' . $rang_start . '">';
+	echo '<input type="hidden" name="page" value="' . \WP_STATISTICS\Admin_Menus::get_page_slug( 'top-visitors' ) . '">' . "\r\n";
+	echo '<input type="text" size="18" name="statsdate" wps-date-picker="stats" value="' . htmlentities( $statsdate, ENT_QUOTES ) . '" autocomplete="off" placeholder="' . __( Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
+	echo '<input type="hidden" name="statsdate" id="date-stats" value="' . $rang_start . '">';
 	echo '</form>' . "\r\n";
-
-	echo '<script>
-        jQuery(function() { 
-        //Get MYSQL Date
-        function wp_statistics_get_mysql_date(timestamp) {
-            var k = timestamp.valueOf() / 1000;
-            var t = new Date(k * 1000);
-            return t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2);
-        }
-        //From Date
-        jQuery( "#statsdate" ).datepicker({dateFormat: \'' . wp_statistics_dateformat_php_to_jqueryui( get_option( "date_format" ) ) . '\', onSelect: function(selectedDate) {var v = jQuery(this).val();var d = new Date(v);if (v.length > 0) {jQuery("#stats-date").val(wp_statistics_get_mysql_date(d));}}});
-        });
-        </script>' . "\r\n";
-
 	?>
     <div class="postbox-container" id="last-log" style="width: 100%;">
         <div class="metabox-holder">

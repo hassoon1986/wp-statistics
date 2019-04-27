@@ -11,7 +11,7 @@
 	Admin_Templates::show_page_title( __( 'Author Statistics', 'wp-statistics' ) ); ?>
 	<?php
 	//Set Default Time Picker Option
-	list( $daysToDisplay, $rangestart, $rangeend ) = wp_statistics_prepare_range_time_picker();
+	list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
 	if ( array_key_exists( 'author', $_GET ) ) {
 		$author = intval( $_GET['author'] );
 	} else {
@@ -51,7 +51,7 @@
 		$rangeend
 	);
 
-	wp_statistics_date_range_selector(
+	Admin_Templates::date_range_selector(
 		\WP_STATISTICS\Admin_Menus::get_page_slug('authors'),
 		$daysToDisplay,
 		null,

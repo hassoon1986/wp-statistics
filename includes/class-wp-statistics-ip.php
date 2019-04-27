@@ -51,7 +51,10 @@ class IP {
 			$ip = $_SERVER[ $ip_method ];
 		}
 
-		// This Filter Used For Custom $_SERVER String
+		/**
+		 * This Filter Used For Custom $_SERVER String
+		 * @see https://wp-statistics.com/sanitize-user-ip/
+		 */
 		$ip = apply_filters( 'wp_statistics_sanitize_user_ip', $ip );
 
 		// Sanitize For HTTP_X_FORWARDED
@@ -156,6 +159,17 @@ class IP {
 	public static function getIPMethod() {
 		$ip_method = Option::get( 'ip_method' );
 		return ( $ip_method != false ? $ip_method : self::$default_ip_method );
+	}
+
+	/**
+	 * Check IP contain Special Character
+	 *
+	 * @param $ip
+	 * @return bool
+	 */
+	public static function check_sanitize_ip( $ip ) {
+		$preg = preg_replace( '/[^0-9- .:]/', '', $ip );
+		return $preg == $ip;
 	}
 
 }

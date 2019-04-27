@@ -152,9 +152,28 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-jqvmap-world', self::url( 'jqvmap/jquery.vmap.world.min.js' ), true, '1.5.1' );
 		}
 
+		// Load AjaxQ Library
+		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+			wp_enqueue_script( self::$prefix . '-ajaxQ', self::url( 'ajaxq/ajaxq.js' ), true, '0.0.7' );
+		}
+
+		// Load Jquery UI and Moment Js
+		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'overview' ) === false and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+			wp_enqueue_script( self::$prefix . '-momentjs', self::url( 'moment-js/moment.min.js' ), true, '2.24.0' );
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+		}
+
+		// Load WordPress PostBox Script
+		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+			wp_enqueue_script( 'common' );
+			wp_enqueue_script( 'wp-lists' );
+			wp_enqueue_script( 'postbox' );
+		}
+
 		// Load Admin Js
 		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) ) {
 			wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
+			wp_localize_script( self::$prefix, 'wps_i18n', self::wps_i18n() );
 		}
 
 		// Load TinyMCE for Widget Page
@@ -177,20 +196,27 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-editor', self::url( 'editor.js' ), array( 'jquery' ), self::version() );
 		}
 
-		// Load Jquery UI
-		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'overview' ) === false and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
-			wp_enqueue_script( 'jquery-ui-datepicker' );
-
-		}
-
-		// Load WordPress PostBox Script
-		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
-			wp_enqueue_script( 'common' );
-			wp_enqueue_script( 'wp-lists' );
-			wp_enqueue_script( 'postbox' );
-		}
-
 		//TODO Mix dashboard.js and overview.js and editor.js in admin.js file at latest
+	}
+
+	/**
+	 * Prepare Localize WP-Statistics Admin Js
+	 */
+	public static function wps_i18n() {
+		return array(
+
+			// Add Admin Ajax WordPress URL
+			'ajax-url'    => admin_url( 'admin-ajax.php' ),
+
+
+			// Date format
+			'date_format' => array(
+				'jquery_ui' => Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ),
+				'moment_js' => Admin_Templates::convert_php_to_moment_js( get_option( "date_format" ) ),
+			)
+
+
+		);
 	}
 
 }

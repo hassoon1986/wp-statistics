@@ -18,7 +18,7 @@ if ( WP_STATISTICS\Option::get( 'record_exclusions' ) != 1 ) {
 }
 
 //Set Default Time Picker Option
-list( $daysToDisplay, $rangestart, $rangeend ) = wp_statistics_prepare_range_time_picker();
+list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
 list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_range_calculator(
 	$daysToDisplay,
 	$rangestart,
@@ -160,7 +160,7 @@ foreach ( $excluded_reasons as $reason ) {
 ?>
 <div class="wrap wps-wrap">
 	<?php Admin_Templates::show_page_title( __( 'Exclusions Statistics', 'wp-statistics' ) ); ?>
-	<?php wp_statistics_date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('exclusions'), $daysToDisplay ); ?>
+	<?php Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('exclusions'), $daysToDisplay ); ?>
     <div class="postbox-container" id="last-log">
         <div class="metabox-holder">
             <div class="meta-box-sortables">

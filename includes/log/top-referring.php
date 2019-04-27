@@ -12,7 +12,7 @@ use WP_STATISTICS\Referred;
 
 $date_args = '';
 //Set Default Time Picker Option
-list( $daysToDisplay, $rangestart, $rangeend ) = wp_statistics_prepare_range_time_picker();
+list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
 if ( isset( $_GET['hitdays'] ) and $_GET['hitdays'] > 0 ) {
 	$date_args .= '&hitdays=' . $daysToDisplay;
 }
@@ -79,7 +79,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 ?>
 <div class="wrap wps-wrap">
 	<?php Admin_Templates::show_page_title( __( 'Top Referring Sites', 'wp-statistics' ) ); ?>
-    <div><?php wp_statistics_date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('referrers'), $daysToDisplay, null, null, $referr_field ); ?></div>
+    <div><?php Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('referrers'), $daysToDisplay, null, null, $referr_field ); ?></div>
     <br class="clear"/>
 
     <ul class="subsubsub">

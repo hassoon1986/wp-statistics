@@ -10,14 +10,14 @@
 	Admin_Templates::show_page_title( __( 'Hit Statistics', 'wp-statistics' ) ); ?>
 	<?php
 	//Set Default Time Picker Option
-	list( $daysToDisplay, $rangestart, $rangeend ) = wp_statistics_prepare_range_time_picker();
+	list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
 	list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_range_calculator(
 		$daysToDisplay,
 		$rangestart,
 		$rangeend
 	);
 
-	wp_statistics_date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('hits'), $daysToDisplay );
+	Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('hits'), $daysToDisplay );
 
 	$visit_total   = 0;
 	$visitor_total = 0;

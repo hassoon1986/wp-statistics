@@ -273,6 +273,22 @@ class Admin_Pages {
 					$wp_statistics_options[ $new_option ] = $value;
 				}
 
+				// Prepare Visitor IP
+				$value = 'REMOTE_ADDR';
+				if ( isset( $_POST['ip_method'] ) and ! empty( $_POST['ip_method'] ) ) {
+
+					// Check Custom Header
+					if ( $_POST['ip_method'] == "CUSTOM_HEADER" ) {
+						if ( trim( $_POST['user_custom_header_ip_method'] ) != "" ) {
+							$value = $_POST['user_custom_header_ip_method'];
+						}
+					} else {
+						$value = $_POST['ip_method'];
+					}
+				}
+
+				$wp_statistics_options['ip_method'] = $value;
+
 
 				// Prepare Access Level
 				$wps_option_list = array_merge( $wps_option_list, array( 'wps_read_capability', 'wps_manage_capability' ) );

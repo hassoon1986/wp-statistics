@@ -33,7 +33,7 @@ if ( is_object( $post ) ) {
 }
 
 //Set Default Time Picker Option
-list( $daysToDisplay, $rangestart, $rangeend ) = wp_statistics_prepare_range_time_picker();
+list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
 
 //Check Page
 if ( array_key_exists( 'page-id', $_GET ) ) {
@@ -68,7 +68,7 @@ $html .= '<br>';
 ?>
 <div class="wrap wps-wrap">
 	<?php Admin_Templates::show_page_title( sprintf( __( 'Page Trend for Post ID %s', 'wp-statistics' ), $pageid ) . ' - ' . $title ); ?>
-	<?php wp_statistics_date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
+	<?php Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
     <div class="postbox-container" id="last-log">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
