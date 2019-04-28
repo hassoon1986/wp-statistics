@@ -1393,7 +1393,7 @@ function wp_statistics_paginate_links( $args = array() ) {
 		) );
 
 		if ( $args['show_now_page'] ) {
-			echo '<p id="result-log">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
+			echo '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
 		}
 
 		echo '</div>';
@@ -1543,75 +1543,6 @@ function wp_statistics_ignore_insert( $query ) {
 }
 
 /**
- * Get Html Body Page By Url
- *
- * @param $url string e.g : wp-statistics.com
- * @return bool
- */
-function wp_statistics_get_html_page( $url ) {
-
-	//sanitize Url
-	$parse_url = wp_parse_url( $url );
-	$urls[]    = esc_url_raw( $url );
-
-	//Check Protocol Url
-	if ( ! array_key_exists( 'scheme', $parse_url ) ) {
-		$urls      = array();
-		$url_parse = wp_parse_url( $url );
-		foreach ( array( 'http://', 'https://' ) as $scheme ) {
-			$urls[] = preg_replace( '/([^:])(\/{2,})/', '$1/', $scheme . path_join( ( isset( $url_parse['host'] ) ? $url_parse['host'] : '' ), ( isset( $url_parse['path'] ) ? $url_parse['path'] : '' ) ) );
-		}
-	}
-
-	//Send Request for Get Page Html
-	foreach ( $urls as $page ) {
-		$response = wp_remote_get( $page, array(
-			'timeout'    => 30,
-			'user-agent' => "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36"
-		) );
-		if ( is_wp_error( $response ) ) {
-			continue;
-		}
-		$data = wp_remote_retrieve_body( $response );
-		if ( is_wp_error( $data ) ) {
-			continue;
-		}
-		return ( wp_strip_all_tags( $data ) == "" ? false : $data );
-	}
-
-	return false;
-}
-
-/**
- * Get Site title By Url
- *
- * @param $url string e.g : wp-statistics.com
- * @return bool|string
- */
-function wp_statistics_get_site_title( $url ) {
-
-	//Get ody Page
-	$html = wp_statistics_get_html_page( $url );
-	if ( $html === false ) {
-		return false;
-	}
-
-	//Get Page Title
-	if ( class_exists( 'DOMDocument' ) ) {
-		$dom = new DOMDocument;
-		@$dom->loadHTML( $html );
-		$title = '';
-		if ( isset( $dom ) and $dom->getElementsByTagName( 'title' )->length > 0 ) {
-			$title = $dom->getElementsByTagName( 'title' )->item( '0' )->nodeValue;
-		}
-		return ( wp_strip_all_tags( $title ) == "" ? false : wp_strip_all_tags( $title ) );
-	}
-
-	return false;
-}
-
-
-/**
  * Get WebSite IP Server And Country Name
  *
  * @param $url string domain name e.g : wp-statistics.com
@@ -1632,7 +1563,7 @@ function wp_statistics_get_domain_server( $url ) {
 			$result['ip'] = $ip;
 			//Get country Code
 			if ( WP_STATISTICS\Option::get( 'geoip' ) ) {
-				$geoip_reader = \WP_STATISTICS\GeoIP::Loader( 'country' );
+				$geoip_reader = \WP_STATISTICS\GeoIP::Loader( 'country' ); //TODO Change Method
 				if ( $geoip_reader != false ) {
 					try {
 						$record            = $geoip_reader->country( $ip );
@@ -1645,29 +1576,5 @@ function wp_statistics_get_domain_server( $url ) {
 	}
 
 	return $result;
-}
-
-/**
- * Get Number Referer Domain
- *
- * @param $url
- * @param array $time_rang
- * @return integer
- */
-function wp_statistics_get_number_referer_from_domain( $url, $time_rang = array() ) {
-	global $wpdb;
-
-	//Get Domain Name
-	$search_url = WP_STATISTICS\Helper::get_domain_name( esc_url_raw( $url ) );
-
-	//Prepare SQL
-	$time_sql = '';
-	if ( count( $time_rang ) > 0 and ! empty( $time_rang ) ) {
-		$time_sql = sprintf( "AND `last_counter` BETWEEN '%s' AND '%s'", $time_rang[0], $time_rang[1] );
-	}
-	$sql = $wpdb->prepare( "SELECT COUNT(*) FROM `{$wpdb->prefix}statistics_visitor` WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND (`referred` LIKE  %s OR `referred` LIKE %s OR `referred` LIKE %s OR `referred` LIKE %s) " . $time_sql . " ORDER BY `{$wpdb->prefix}statistics_visitor`.`ID` DESC", 'https://www.' . $wpdb->esc_like( $search_url ) . '%', 'https://' . $wpdb->esc_like( $search_url ) . '%', 'http://www.' . $wpdb->esc_like( $search_url ) . '%', 'http://' . $wpdb->esc_like( $search_url ) . '%' );
-
-	//Get Count
-	return $wpdb->get_var( $sql );
 }
 

@@ -107,4 +107,30 @@ class Referred {
 
 		return htmlentities( $referrer, ENT_QUOTES );
 	}
+
+	/**
+	 * Get Number Referer Domain
+	 *
+	 * @param $url
+	 * @param array $time_rang
+	 * @return integer
+	 */
+	public static function get_number_referer_from_domain( $url, $time_rang = array() ) {
+		global $wpdb;
+
+		//Get Domain Name
+		$search_url = Helper::get_domain_name( esc_url_raw( $url ) );
+
+		//Prepare SQL
+		$time_sql = '';
+		if ( count( $time_rang ) > 0 and ! empty( $time_rang ) ) {
+			$time_sql = sprintf( "AND `last_counter` BETWEEN '%s' AND '%s'", $time_rang[0], $time_rang[1] );
+		}
+		$sql = $wpdb->prepare( "SELECT COUNT(*) FROM `{$wpdb->prefix}statistics_visitor` WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND (`referred` LIKE  %s OR `referred` LIKE %s OR `referred` LIKE %s OR `referred` LIKE %s) " . $time_sql . " ORDER BY `{$wpdb->prefix}statistics_visitor`.`ID` DESC", 'https://www.' . $wpdb->esc_like( $search_url ) . '%', 'https://' . $wpdb->esc_like( $search_url ) . '%', 'http://www.' . $wpdb->esc_like( $search_url ) . '%', 'http://' . $wpdb->esc_like( $search_url ) . '%' );
+
+		//Get Count
+		return $wpdb->get_var( $sql );
+	}
+
+
 }

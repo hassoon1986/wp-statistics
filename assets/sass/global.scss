@@ -1,0 +1,57 @@
+/* Color Style */
+.wps-text-danger {
+  color: #DC3545;
+}
+
+.wps-text-success {
+  color: #459605;
+}
+
+.wps-text-warning {
+  color: #dc6b26;
+}
+
+.wps-text-muted {
+  color: #797979;
+}
+
+/* Text Center */
+.wps-center {
+  text-align: center;
+}
+
+/* disable Break Link */
+a[href*='?page=wps_break_menu'] {
+  pointer-events: none;
+}
+
+/* Cursor Default */
+.wps-cursor-default {
+  cursor: default;
+}
+
+/* Text Wrap */
+.wps-text-wrap {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 200px;
+}
+
+/* Admin Page Title */
+.wps_page_title {
+  display: inline-block;
+  vertical-align: -15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
+
+.wps_title {
+  display: inline;
+  font-size: 1.6em;
+}
+
+.wp-statistics-container {
+  margin: 0 auto;
+}

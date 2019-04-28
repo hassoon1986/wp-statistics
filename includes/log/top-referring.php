@@ -236,7 +236,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 
 										//Prepare Data
 										$domain = $items->domain;
-										$number = wp_statistics_get_number_referer_from_domain( $items->domain, array( $rangestartdate, $rangeenddate ) );
+										$number = Referred::get_number_referer_from_domain( $items->domain, array( $rangestartdate, $rangeenddate ) );
 
 										//Get Site Link
 										$referrer_html = Referred::html_sanitize_referrer( $domain );
@@ -244,7 +244,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 										//Get Site information if Not Exist
 										if ( ! array_key_exists( $domain, $referrer_list ) ) {
 											$get_site_inf             = wp_statistics_get_domain_server( $domain );
-											$get_site_title           = wp_statistics_get_site_title( $domain );
+											$get_site_title           = \WP_STATISTICS\Helper::get_site_title_by_url( $domain );
 											$referrer_list[ $domain ] = array(
 												'ip'      => $get_site_inf['ip'],
 												'country' => $get_site_inf['country'],

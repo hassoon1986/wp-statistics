@@ -382,4 +382,72 @@ class Helper {
 		return $url[0];
 	}
 
+	/**
+	 * Get Site title By Url
+	 *
+	 * @param $url string e.g : wp-statistics.com
+	 * @return bool|string
+	 */
+	public static function get_site_title_by_url( $url ) {
+
+		//Get Body Page
+		$html = Helper::get_html_page( $url );
+		if ( $html === false ) {
+			return false;
+		}
+
+		//Get Page Title
+		if ( class_exists( 'DOMDocument' ) ) {
+			$dom = new \DOMDocument;
+			@$dom->loadHTML( $html );
+			$title = '';
+			if ( isset( $dom ) and $dom->getElementsByTagName( 'title' )->length > 0 ) {
+				$title = $dom->getElementsByTagName( 'title' )->item( '0' )->nodeValue;
+			}
+			return ( wp_strip_all_tags( $title ) == "" ? false : wp_strip_all_tags( $title ) );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get Html Body Page By Url
+	 *
+	 * @param $url string e.g : wp-statistics.com
+	 * @return bool
+	 */
+	public static function get_html_page( $url ) {
+
+		//sanitize Url
+		$parse_url = wp_parse_url( $url );
+		$urls[]    = esc_url_raw( $url );
+
+		//Check Protocol Url
+		if ( ! array_key_exists( 'scheme', $parse_url ) ) {
+			$urls      = array();
+			$url_parse = wp_parse_url( $url );
+			foreach ( array( 'http://', 'https://' ) as $scheme ) {
+				$urls[] = preg_replace( '/([^:])(\/{2,})/', '$1/', $scheme . path_join( ( isset( $url_parse['host'] ) ? $url_parse['host'] : '' ), ( isset( $url_parse['path'] ) ? $url_parse['path'] : '' ) ) );
+			}
+		}
+
+		//Send Request for Get Page Html
+		foreach ( $urls as $page ) {
+			$response = wp_remote_get( $page, array(
+				'timeout'    => 30,
+				'user-agent' => "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36"
+			) );
+			if ( is_wp_error( $response ) ) {
+				continue;
+			}
+			$data = wp_remote_retrieve_body( $response );
+			if ( is_wp_error( $data ) ) {
+				continue;
+			}
+			return ( wp_strip_all_tags( $data ) == "" ? false : $data );
+		}
+
+		return false;
+	}
+
 }

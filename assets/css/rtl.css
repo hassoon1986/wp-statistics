@@ -96,3 +96,38 @@
 .wps-wrap table.widefat {
     direction: rtl;
 }
+
+.rtl .wp-statistics-settings .widefat {
+    float: right;
+}
+
+
+.rtl .wp-statistics-plugins .widefat > * {
+    float: right;
+}
+
+.rtl .wp-statistics-plugins .widefat .plugin-card .desc,
+.rtl .wp-statistics-plugins .widefat .plugin-card .name {
+    margin-right: 148px;
+    margin-left: 0;
+}
+
+
+
+.rtl .wp-statistics-plugins .plugin-card .cover-ribbon {
+    right: -8px;
+}
+
+.rtl .wp-statistics-plugins .plugin-card .cover-ribbon .cover-ribbon-inside {
+    transform: rotate(45deg);
+    right: -34px;
+    left: auto;
+}
+
+.rtl .wp-statistics-plugins .plugin-card .cover-ribbon .cover-ribbon-inside:before {
+    left: -1px;
+}
+
+.rtl .wp-statistics-plugins .plugin-card .cover-ribbon .cover-ribbon-inside:after {
+    right: -1px;
+}

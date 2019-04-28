@@ -104,21 +104,12 @@ class Admin_Assets {
 		// Get Current Screen ID
 		$screen_id = Helper::get_screen_id();
 
-		// Load Plugin Css
-		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) ) ) {
+		// Load Admin Css
+		wp_enqueue_style( self::$prefix, self::url( 'admin.css' ), array(), self::version() );
 
-			// Load Admin Css
-			wp_enqueue_style( self::$prefix, self::url( 'admin.css' ), array(), self::version() );
-
-			// Load Rtl Version Css
-			if ( is_rtl() ) {
-				wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
-			}
-		}
-
-		// Load Pagination only in Plugins Pages
-		if ( Admin_Menus::in_plugin_page() ) {
-			wp_enqueue_style( self::$prefix . '-pagination', self::url( 'pagination.css' ), array(), self::version() );
+		// Load Rtl Version Css
+		if ( is_rtl() ) {
+			wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
 		}
 
 		//Load Jquery VMap Css
