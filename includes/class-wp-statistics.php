@@ -159,6 +159,11 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-assets.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-notices.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/TinyMCE/class-wp-statistics-tinymce.php';
+
+			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-settings.php';
+
+
+
 		}
 
 		// Front Class.
@@ -294,9 +299,6 @@ final class WP_Statistics {
 		    // TODO Seperate All Classes
 			new \WP_STATISTICS\Admin;
 
-			# Admin Pages
-			new \WP_STATISTICS\Admin_Pages();
-
 			# Admin Menu
 			new \WP_STATISTICS\Admin_Menus;
 
@@ -322,6 +324,9 @@ final class WP_Statistics {
 
 			# Welcome Screen
 			new \WP_STATISTICS\Welcome;
+
+			# Setting PAges
+            new \WP_STATISTICS\settings_page;
 		}
 
 		# Run in Frontend

@@ -222,7 +222,7 @@
         </th>
 
         <td>
-            <a href="<?php echo Admin_Menus::admin_url( 'settings', array( 'tab' => 'externals-settings', 'update-referrerspam' => 'yes' ) ) ?>" class="button"><?php _e( 'Update', 'wp-staitsitcs' ); ?></a>
+            <a href="<?php echo Admin_Menus::admin_url( 'settings', array( 'tab' => 'externals-settings', 'update-referrer-spam' => 'yes' ) ) ?>" class="button"><?php _e( 'Update', 'wp-staitsitcs' ); ?></a>
             <p class="description"><?php _e( 'Click button to download the update.', 'wp-statistics' ); ?></p>
         </td>
     </tr>

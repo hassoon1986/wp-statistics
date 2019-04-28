@@ -39,9 +39,6 @@ class Admin {
 			add_action( 'post_submitbox_misc_actions', array( $this, 'post_init' ) );
 		}
 
-		// Runs some scripts at the end of the admin panel inside the body tag
-		add_action( 'admin_footer', array( $this, 'admin_footer_scripts' ) );
-
 		// Add Notice Use cache plugin
 		add_action( 'admin_notices', array( $this, 'notification_use_cache_plugin' ) );
 
@@ -292,41 +289,5 @@ class Admin {
 
 		$id = $post->ID;
 		echo "<div class='misc-pub-section'>" . __( 'WP Statistics - Hits', 'wp-statistics' ) . ": <b><a href='" . Admin_Menus::admin_url( 'pages', array( 'page-id' => $id ) ) . "'>" . wp_statistics_pages( 'total', "", $id ) . "</a></b></div>";
-	}
-
-	/**
-	 * Admin footer scripts
-	 */
-	public function admin_footer_scripts() {
-		global $WP_Statistics;
-
-		// Check to see if the GeoIP database needs to be downloaded and do so if required.
-		if ( Option::get( 'update_geoip' ) ) {
-			foreach ( GeoIP::$library as $geoip_name => $geoip_array ) {
-				Updates::download_geoip( $geoip_name, "update" );
-			}
-		}
-
-		// Check to see if the referrer spam database needs to be downloaded and do so if required.
-		if ( Option::get( 'update_referrerspam' ) ) {
-			Updates::download_referrerspam();
-		}
-
-		if ( Option::get( 'send_upgrade_email' ) ) {
-			Option::update( 'send_upgrade_email', false );
-
-			$blogname  = get_bloginfo( 'name' );
-			$blogemail = get_bloginfo( 'admin_email' );
-
-			$headers[] = "From: $blogname <$blogemail>";
-			$headers[] = "MIME-Version: 1.0";
-			$headers[] = "Content-type: text/html; charset=utf-8";
-
-			if ( Option::get( 'email_list' ) == '' ) {
-				Option::update( 'email_list', $blogemail );
-			}
-
-			wp_mail( Option::get( 'email_list' ), sprintf( __( 'WP Statistics %s installed on', 'wp-statistics' ), WP_STATISTICS_VERSION ) . ' ' . $blogname, __( 'Installation/upgrade complete!', 'wp-statistics' ), $headers );
-		}
 	}
 }

@@ -132,5 +132,36 @@ class Referred {
 		return $wpdb->get_var( $sql );
 	}
 
+	/**
+	 * Downloads the referrer spam database from https://github.com/matomo-org/referrer-spam-blacklist.
+	 * @return string
+	 */
+	public static function download_referrer_spam() {
+
+		// If referrer spam is disabled, bail out.
+		if ( Option::get( 'referrerspam' ) == false ) {
+			return '';
+		}
+
+		// This is the location of the file to download.
+		$download_url = 'https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt';
+
+		// Download the file from MaxMind, this places it in a temporary location.
+		$response = wp_remote_get( $download_url, array( 'timeout' => 30 ) );
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+		$referrerspamlist = wp_remote_retrieve_body( $response );
+		if ( is_wp_error( $referrerspamlist ) ) {
+			return false;
+		}
+
+		if ( $referrerspamlist != '' || Option::get( 'referrerspamlist' ) != '' ) {
+			Option::update( 'referrerspamlist', $referrerspamlist );
+		}
+
+		return true;
+	}
+
 
 }

@@ -104,7 +104,8 @@ a[href*='?page=wps_break_menu'] {
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
     padding: 7px 14px;
     vertical-align: -1px;
-    margin: -8px 5px -5px 5px; }
+    margin: -8px 5px -5px 5px;
+    border-radius: 5px; }
 
 /**
  * WP-Statistics Setting Admin page

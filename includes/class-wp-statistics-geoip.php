@@ -161,4 +161,161 @@ class GeoIP {
 		return $default_country;
 	}
 
+	/**
+	 * This function downloads the GeoIP database from MaxMind.
+	 *
+	 * @param $pack
+	 * @param string $type
+	 *
+	 * @return string
+	 */
+	public static function download( $pack, $type = "enable" ) {
+
+		// Create Empty Return Function
+		$result["status"] = false;
+
+		// Sanitize Pack name
+		$pack = strtolower( $pack );
+
+		// If GeoIP is disabled, bail out.
+		if ( $type == "update" and Option::get( GeoIP::$library[ $pack ]['opt'] ) == '' ) {
+			return '';
+		}
+
+		// Load Require Function
+		if ( ! function_exists( 'download_url' ) ) {
+			include( ABSPATH . 'wp-admin/includes/file.php' );
+		}
+		if ( ! function_exists( 'wp_generate_password' ) ) {
+			include( ABSPATH . 'wp-includes/pluggable.php' );
+		}
+
+		// Get the upload directory from WordPress.
+		$upload_dir = wp_upload_dir();
+
+		// We need the gzopen() function
+		if ( false === function_exists( 'gzopen' ) ) {
+			if ( $type == "enable" ) {
+				Option::update( GeoIP::$library[ $pack ]['opt'], '' );
+			}
+
+			return array_merge( $result, array( "notice" => __( 'Error the gzopen() function do not exist!', 'wp-statistics' ) ) );
+		}
+
+		// This is the location of the file to download.
+		$download_url = GeoIP::$library[ $pack ]['cdn'];
+		$response     = wp_remote_get( $download_url );
+
+		// Change download url if the maxmind.com doesn't response.
+		if ( wp_remote_retrieve_response_code( $response ) != '200' ) {
+			$download_url = GeoIP::$library[ $pack ]['github'];
+		}
+
+		// Create a variable with the name of the database file to download.
+		$DBFile = self::get_geo_ip_path( $pack );
+
+		// Check to see if the subdirectory we're going to upload to exists, if not create it.
+		if ( ! file_exists( $upload_dir['basedir'] . '/' . WP_STATISTICS_UPLOADS_DIR ) ) {
+			if ( ! @mkdir( $upload_dir['basedir'] . '/' . WP_STATISTICS_UPLOADS_DIR, 0755 ) ) {
+				if ( $type == "enable" ) {
+					Option::update( GeoIP::$library[ $pack ]['opt'], '' );
+				}
+
+				return array_merge( $result, array( "notice" => sprintf( __( 'Error creating GeoIP database directory, make sure your web server has permissions to create directories in: %s', 'wp-statistics' ), $upload_dir['basedir'] ) ) );
+			}
+		}
+
+		if ( ! is_writable( $upload_dir['basedir'] . '/' . WP_STATISTICS_UPLOADS_DIR ) ) {
+			if ( $type == "enable" ) {
+				Option::update( GeoIP::$library[ $pack ]['opt'], '' );
+			}
+
+			return array_merge( $result, array( "notice" => sprintf( __( 'Error setting permissions of the GeoIP database directory, make sure your web server has permissions to write to directories in : %s', 'wp-statistics' ), $upload_dir['basedir'] ) ) );
+		}
+
+		// Download the file from MaxMind, this places it in a temporary location.
+		$TempFile = download_url( $download_url );
+
+		// If we failed, through a message, otherwise proceed.
+		if ( is_wp_error( $TempFile ) ) {
+			if ( $type == "enable" ) {
+				Option::update( GeoIP::$library[ $pack ]['opt'], '' );
+			}
+
+			return array_merge( $result, array( "notice" => sprintf( __( 'Error downloading GeoIP database from: %s - %s', 'wp-statistics' ), $download_url, $TempFile->get_error_message() ) ) );
+		} else {
+			// Open the downloaded file to unzip it.
+			$ZipHandle = gzopen( $TempFile, 'rb' );
+
+			// Create th new file to unzip to.
+			$DBfh = fopen( $DBFile, 'wb' );
+
+			// If we failed to open the downloaded file, through an error and remove the temporary file.  Otherwise do the actual unzip.
+			if ( ! $ZipHandle ) {
+				if ( $type == "enable" ) {
+					Option::update( GeoIP::$library[ $pack ]['opt'], '' );
+				}
+
+				unlink( $TempFile );
+				return array_merge( $result, array( "notice" => sprintf( __( 'Error could not open downloaded GeoIP database for reading: %s', 'wp-statistics' ), $TempFile ) ) );
+			} else {
+				// If we failed to open the new file, throw and error and remove the temporary file.  Otherwise actually do the unzip.
+				if ( ! $DBfh ) {
+					if ( $type == "enable" ) {
+						Option::update( GeoIP::$library[ $pack ]['opt'], '' );
+					}
+
+					unlink( $TempFile );
+					return array_merge( $result, array( "notice" => sprintf( __( 'Error could not open destination GeoIP database for writing %s', 'wp-statistics' ), $DBFile ) ) );
+				} else {
+					while ( ( $data = gzread( $ZipHandle, 4096 ) ) != false ) {
+						fwrite( $DBfh, $data );
+					}
+
+					// Close the files.
+					gzclose( $ZipHandle );
+					fclose( $DBfh );
+
+					// Delete the temporary file.
+					unlink( $TempFile );
+
+					// Display the success message.
+					$result["status"] = true;
+					$result["notice"] = __( 'GeoIP Database updated successfully!', 'wp-statistics' );
+
+					// Update the options to reflect the new download.
+					if ( $type == "update" ) {
+						Option::update( 'last_geoip_dl', time() );
+						Option::update( 'update_geoip', false );
+					}
+
+					// Populate any missing GeoIP information if the user has selected the option.
+					if ( $pack == "country" ) {
+						if ( Option::get( 'geoip' ) && wp_statistics_geoip_supported() && Option::get( 'auto_pop' ) ) {
+							Updates::populate_geoip_info();
+						}
+					}
+				}
+			}
+		}
+
+		if ( Option::get( 'geoip_report' ) == true ) {
+			$blogname  = get_bloginfo( 'name' );
+			$blogemail = get_bloginfo( 'admin_email' );
+
+			$headers[] = "From: $blogname <$blogemail>";
+			$headers[] = "MIME-Version: 1.0";
+			$headers[] = "Content-type: text/html; charset=utf-8";
+
+			if ( Option::get( 'email_list' ) == '' ) {
+				Option::update( 'email_list', $blogemail );
+			}
+
+			wp_mail( Option::get( 'email_list' ), __( 'GeoIP update on', 'wp-statistics' ) . ' ' . $blogname, $result['notice'], $headers );
+		}
+
+		// All of the messages displayed above are stored in a string, now it's time to actually output the messages.
+		return $result;
+	}
+
 }

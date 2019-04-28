@@ -326,15 +326,15 @@ class Admin_Menus {
 
 				//Check Conditions For Show Menu
 				if ( wp_statistics_check_option_require( $menu ) === true ) {
-					add_submenu_page( self::get_page_slug( $menu['sub'] ), $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\Admin_Pages', $method ) );
+					add_submenu_page( self::get_page_slug( $menu['sub'] ), $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', 'view' ) );
 				}
 
 				//Check if add Break Line
 				if ( array_key_exists( 'break', $menu ) ) {
-					add_submenu_page( self::get_page_slug( $menu['sub'] ), '', '', $capability, 'wps_break_menu', array( '\WP_STATISTICS\Admin_Pages', $method ) );
+					add_submenu_page( self::get_page_slug( $menu['sub'] ), '', '', $capability, 'wps_break_menu', array( '\WP_STATISTICS\\' . $method . '_page', 'view' ) );
 				}
 			} else {
-				add_menu_page( $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\Admin_Pages', $method ), $menu['icon'] );
+				add_menu_page( $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', 'view' ), $menu['icon'] );
 			}
 		}
 
