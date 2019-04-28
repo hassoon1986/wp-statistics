@@ -147,7 +147,7 @@ if ( $_get != '%' ) {
 							if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
 								$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 							} else {
-								$agent = wp_statistics_icons( 'dashicons-editor-help', 'unknown' );
+								$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 							}
 							echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 							echo "</td>";
@@ -204,7 +204,7 @@ if ( $_get != '%' ) {
                 </div>
 				<?php
 				//Show Pagination
-				wp_statistics_paginate_links( array(
+				\WP_STATISTICS\Admin_Templates::paginate_links( array(
 					'item_per_page' => $items_per_page,
 					'total'         => $total,
 					'current'       => $page,

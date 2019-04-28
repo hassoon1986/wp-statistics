@@ -147,7 +147,7 @@ class Admin_Dashboard {
 		foreach ( $list as $widget_key => $dashboard ) {
 
 			//Register Dashboard Widget
-			if ( wp_statistics_check_option_require( $dashboard ) === true ) {
+			if ( Option::check_option_require( $dashboard ) === true ) {
 				wp_add_dashboard_widget( self::widget_setup_key( $widget_key ), $dashboard['name'], array( $this, 'generate_postbox_contents'), $control_callback = null, array( 'widget' => $widget_key ) );
 			}
 

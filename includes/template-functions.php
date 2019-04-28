@@ -514,7 +514,7 @@ function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = nu
 		list( $url, $page_id, $page_type ) = $out;
 
 		//Get Page Title
-		$page_info = wp_statistics_get_page_info( $page_id, $page_type );
+		$page_info = \WP_STATISTICS\Helper::get_page_info( $page_id, $page_type );
 		$title     = mb_substr( $page_info['title'], 0, 200, "utf-8" );
 		$page_url  = $page_info['link'];
 
@@ -982,15 +982,12 @@ function wp_statistics_countcomment() {
 
 // This function will return the total number of spam comments *IF* akismet is installed.
 function wp_statistics_countspam() {
-
 	return number_format_i18n( get_option( 'akismet_spam_count' ) );
 }
 
 // This function will return the total number of users in WordPress.
 function wp_statistics_countusers() {
-
 	$result = count_users();
-
 	return $result['total_users'];
 }
 
@@ -998,12 +995,8 @@ function wp_statistics_countusers() {
 function wp_statistics_lastpostdate() {
 	global $wpdb;
 
-	$db_date = $wpdb->get_var(
-		"SELECT post_date FROM {$wpdb->posts} WHERE post_type='post' AND post_status='publish' ORDER BY post_date DESC LIMIT 1"
-	);
-
+	$db_date = $wpdb->get_var( "SELECT post_date FROM {$wpdb->posts} WHERE post_type='post' AND post_status='publish' ORDER BY post_date DESC LIMIT 1" );
 	$date_format = get_option( 'date_format' );
-
 	return \WP_STATISTICS\TimeZone::getCurrentDate_i18n( $date_format, $db_date, false );
 }
 
@@ -1095,36 +1088,6 @@ function wp_statistics_average_registeruser( $days = false ) {
 	}
 }
 
-// This function handle's the Dashicons in the overview page.
-function wp_statistics_icons( $dashicons, $icon_name = null ) {
-	if ( null == $icon_name ) {
-		$icon_name = $dashicons;
-	}
-
-	return '<span class="dashicons ' . $dashicons . '"></span>';
-}
-
-// This function checks to see if all the PHP modules we need for GeoIP exists.
-function wp_statistics_geoip_supported() {
-	// Check to see if we can support the GeoIP code, requirements are:
-	$enabled = true;
-
-	// PHP's cURL extension installed
-	if ( ! function_exists( 'curl_init' ) ) {
-		$enabled = false;
-	}
-
-	// PHP NOT running in safe mode
-	if ( ini_get( 'safe_mode' ) ) {
-		// Double check php version, 5.4 and above don't support safe mode but the ini value may still be set after an upgrade.
-		if ( ! version_compare( phpversion(), '5.4', '<' ) ) {
-			$enabled = false;
-		}
-	}
-
-	return $enabled;
-}
-
 /**
  * This function is used to calculate the number of days and their respective unix timestamps.
  *
@@ -1162,28 +1125,6 @@ function wp_statistics_date_range_calculator( $days, $start, $end ) {
 
 	return array( $daysToDisplay, $rangestart_utime, $rangeend_utime );
 }
-
-
-/**
- * Delete All record From Table
- *
- * @param bool $table_name
- * @return string
- */
-function wp_statitiscs_empty_table( $table_name = false ) {
-	global $wpdb;
-
-	if ( $table_name ) {
-		$result = $wpdb->query( 'DELETE FROM ' . $table_name );
-
-		if ( $result ) {
-			return sprintf( __( '%s table data deleted successfully.', 'wp-statistics' ), '<code>' . $table_name . '</code>' );
-		}
-	}
-
-	return sprintf( __( 'Error, %s not emptied!', 'wp-statistics' ), $table_name );
-}
-
 
 /**
  * This function creates a small JavaScript that will load the contents of a overview or dashboard widget.
@@ -1296,32 +1237,6 @@ function wp_statistics_check_access_user( $type = 'both', $export = false ) {
 }
 
 /**
- * Notices displayed near the top of admin pages.
- *
- * @param $type
- * @param $message
- * @area admin
- */
-function wp_statistics_admin_notice_result( $type, $message ) {
-
-	switch ( $type ) {
-		case 'error':
-			$class = 'notice notice-error';
-			break;
-
-		case 'warning':
-			$class = 'notice notice-warning';
-			break;
-
-		case 'success':
-			$class = 'notice notice-success';
-			break;
-	}
-
-	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
-}
-
-/**
  * Get All Browser List For Detecting
  *
  * @param bool $all
@@ -1355,178 +1270,6 @@ function wp_statistics_get_browser_list( $all = true ) {
 			return __( "Unknown", 'wp-statistics' );
 		}
 	}
-}
-
-/**
- * Pagination Link
- *
- * @param array $args
- * @area admin
- * @return string
- */
-function wp_statistics_paginate_links( $args = array() ) {
-
-	//Prepare Arg
-	$defaults   = array(
-		'item_per_page' => 10,
-		'container'     => 'pagination-wrap',
-		'query_var'     => 'pagination-page',
-		'total'         => 0,
-		'current'       => 0,
-		'show_now_page' => true
-	);
-	$args       = wp_parse_args( $args, $defaults );
-	$total_page = ceil( $args['total'] / $args['item_per_page'] );
-
-	//Show Pagination Ui
-	if ( $total_page > 1 ) {
-		echo '<div class="' . $args['container'] . '">';
-		echo paginate_links( array(
-			'base'      => add_query_arg( $args['query_var'], '%#%' ),
-			'format'    => '',
-			'type'      => 'list',
-			'mid_size'  => 3,
-			'prev_text' => __( '&laquo;' ),
-			'next_text' => __( '&raquo;' ),
-			'total'     => $total_page,
-			'current'   => $args['current']
-		) );
-
-		if ( $args['show_now_page'] ) {
-			echo '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
-		}
-
-		echo '</div>';
-	}
-}
-
-/**
- * Get Post List From custom Post Type
- *
- * @param array $args
- * @area utility
- * @return mixed
- */
-function wp_statistics_get_post_list( $args = array() ) {
-
-	//Prepare Arg
-	$defaults = array(
-		'post_type'      => 'page',
-		'post_status'    => 'publish',
-		'posts_per_page' => '-1',
-		'order'          => 'ASC',
-		'fields'         => 'ids'
-	);
-	$args     = wp_parse_args( $args, $defaults );
-
-	//Get Post List
-	$query = new WP_Query( $args );
-	$list  = array();
-	foreach ( $query->posts as $ID ) {
-		$list[ $ID ] = get_the_title( $ID );
-	}
-
-	return $list;
-}
-
-/**
- * Get Page information
- *
- * @param $page_id
- * @param string $type
- * @return array
- */
-function wp_statistics_get_page_info( $page_id, $type = 'post' ) {
-
-	//Create Empty Object
-	$arg      = array();
-	$defaults = array(
-		'link'      => '',
-		'edit_link' => '',
-		'object_id' => $page_id,
-		'title'     => '-',
-		'meta'      => array()
-	);
-
-	if ( ! empty( $type ) ) {
-		switch ( $type ) {
-			case "product":
-			case "attachment":
-			case "post":
-			case "page":
-				$arg = array(
-					'title'     => get_the_title( $page_id ),
-					'link'      => get_the_permalink( $page_id ),
-					'edit_link' => get_edit_post_link( $page_id ),
-					'meta'      => array(
-						'post_type' => get_post_type( $page_id )
-					)
-				);
-				break;
-			case "category":
-			case "post_tag":
-			case "tax":
-				$term = get_term( $page_id );
-				$arg  = array(
-					'title'     => $term->name,
-					'link'      => ( is_wp_error( get_term_link( $page_id ) ) === true ? '' : get_term_link( $page_id ) ),
-					'edit_link' => get_edit_term_link( $page_id ),
-					'meta'      => array(
-						'taxonomy'         => $term->taxonomy,
-						'term_taxonomy_id' => $term->term_taxonomy_id,
-						'count'            => $term->count,
-					)
-				);
-				break;
-			case "home":
-				$arg = array(
-					'title' => __( 'Home Page', 'wp-statistics' ),
-					'link'  => get_site_url()
-				);
-				break;
-			case "author":
-				$user_info = get_userdata( $page_id );
-				$arg       = array(
-					'title'     => ( $user_info->display_name != "" ? $user_info->display_name : $user_info->first_name . ' ' . $user_info->last_name ),
-					'link'      => get_author_posts_url( $page_id ),
-					'edit_link' => get_edit_user_link( $page_id ),
-				);
-				break;
-			case "search":
-				$result['title'] = __( 'Search Page', 'wp-statistics' );
-				break;
-			case "404":
-				$result['title'] = __( '404 not found', 'wp-statistics' );
-				break;
-			case "archive":
-				$result['title'] = __( 'Post Archive', 'wp-statistics' );
-				break;
-		}
-	}
-
-	return wp_parse_args( $arg, $defaults );
-}
-
-/**
- * Check WP-statistics Option Require
- *
- * @param array $item
- * @param string $condition_key
- * @return array|bool
- */
-function wp_statistics_check_option_require( $item = array(), $condition_key = 'require' ) {
-
-	$condition = true;
-	if ( array_key_exists( 'require', $item ) ) {
-		foreach ( $item[ $condition_key ] as $if ) {
-			if ( ! WP_STATISTICS\Option::get( $if ) ) {
-				$condition = false;
-				break;
-			}
-		}
-	}
-
-	return $condition;
 }
 
 /**

@@ -291,7 +291,7 @@ class GeoIP {
 
 					// Populate any missing GeoIP information if the user has selected the option.
 					if ( $pack == "country" ) {
-						if ( Option::get( 'geoip' ) && wp_statistics_geoip_supported() && Option::get( 'auto_pop' ) ) {
+						if ( Option::get( 'geoip' ) && GeoIP::IsSupport() && Option::get( 'auto_pop' ) ) {
 							self::Update_GeoIP_Visitor();
 						}
 					}
@@ -367,6 +367,30 @@ class GeoIP {
 		}
 
 		return array( 'status' => true, 'data' => sprintf( __( 'Updated %s GeoIP records in the visitors database.', 'wp-statistics' ), $count ) );
+	}
+
+	/**
+	 * if PHP modules we need for GeoIP exists.
+	 *
+	 * @return bool
+	 */
+	public static function IsSupport() {
+		$enabled = true;
+
+		// PHP cURL extension installed
+		if ( ! function_exists( 'curl_init' ) ) {
+			$enabled = false;
+		}
+
+		// PHP NOT running in safe mode
+		if ( ini_get( 'safe_mode' ) ) {
+			// Double check php version, 5.4 and above don't support safe mode but the ini value may still be set after an upgrade.
+			if ( ! version_compare( phpversion(), '5.4', '<' ) ) {
+				$enabled = false;
+			}
+		}
+
+		return $enabled;
 	}
 
 }

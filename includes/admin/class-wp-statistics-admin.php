@@ -111,7 +111,7 @@ class Admin {
 			if ( ! Option::get( 'visitors' ) ) {
 				$itemstoenable[] = __( 'visitor tracking', 'wp-statistics' );
 			}
-			if ( ! Option::get( 'geoip' ) && wp_statistics_geoip_supported() ) {
+			if ( ! Option::get( 'geoip' ) && GeoIp::IsSupport() ) {
 				$itemstoenable[] = __( 'geoip collection', 'wp-statistics' );
 			}
 

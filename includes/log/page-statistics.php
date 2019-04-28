@@ -59,7 +59,7 @@ $url_fields = '&prepage=' . $pageid;
 //Show Select Box Ui
 $html       = __( 'Select Page', 'wp-statistics' ) . ': ';
 $html       .= '<select name="page-id">';
-foreach ( wp_statistics_get_post_list( $arg ) as $post_id => $post_title ) {
+foreach ( \WP_STATISTICS\Helper::get_post_list( $arg ) as $post_id => $post_title ) {
 	$html .= '<option value="' . $post_id . '"' . selected( $post_id, $page, false ) . '>' . $post_title . '</option>';
 }
 $html .= '</select>';

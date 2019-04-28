@@ -201,11 +201,11 @@ class Ajax {
 			if ( $table_name == "all" ) {
 				$x_tbl = 1;
 				foreach ( $list_db_table as $tbl_key => $tbl_name ) {
-					echo ( $x_tbl > 1 ? '<br>' : '' ) . wp_statitiscs_empty_table( $tbl_name );
+					echo ( $x_tbl > 1 ? '<br>' : '' ) . DB::EmptyTable( $tbl_name );
 					$x_tbl ++;
 				}
 			} else {
-				echo wp_statitiscs_empty_table( DB::table( $table_name ) );
+				echo DB::EmptyTable( DB::table( $table_name ) );
 			}
 
 			Install::Primary_Values();

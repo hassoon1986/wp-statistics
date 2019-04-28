@@ -25,7 +25,7 @@ function wp_statistics_generate_users_online_postbox_content( $ISOCountryCode ) 
 			$item->location = strtoupper( $item->location );
 
 			//Get current Page info
-			$page_info = wp_statistics_get_page_info( $item->page_id, $item->type );
+			$page_info = \WP_STATISTICS\Helper::get_page_info( $item->page_id, $item->type );
 
 			echo "<tr>";
 			echo "<td style='text-align: left'><img src='" . plugins_url( 'wp-statistics/assets/images/flags/' . $item->location . '.png' ) . "' title='{$ISOCountryCode[$item->location]}'/></td>";

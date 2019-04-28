@@ -197,4 +197,26 @@ class Option {
 		update_user_meta( User::get_user_id(), self::$opt_name, $user_options );
 	}
 
+	/**
+	 * Check WP-statistics Option Require
+	 *
+	 * @param array $item
+	 * @param string $condition_key
+	 * @return array|bool
+	 */
+	public static function check_option_require( $item = array(), $condition_key = 'require' ) {
+
+		$condition = true;
+		if ( array_key_exists( 'require', $item ) ) {
+			foreach ( $item[ $condition_key ] as $if ) {
+				if ( ! Option::get( $if ) ) {
+					$condition = false;
+					break;
+				}
+			}
+		}
+
+		return $condition;
+	}
+
 }

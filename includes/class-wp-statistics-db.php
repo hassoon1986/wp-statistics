@@ -97,4 +97,24 @@ class DB {
 		return ( $export == 'all' ? $list : ( array_key_exists( $export, $list ) ? $list[ $export ] : null ) );
 	}
 
+	/**
+	 * Delete All record From Table
+	 *
+	 * @param bool $table_name
+	 * @return string
+	 */
+	public static function EmptyTable( $table_name = false ) {
+		global $wpdb;
+
+		if ( $table_name ) {
+			$result = $wpdb->query( 'DELETE FROM ' . $table_name );
+
+			if ( $result ) {
+				return sprintf( __( '%s table data deleted successfully.', 'wp-statistics' ), '<code>' . $table_name . '</code>' );
+			}
+		}
+
+		return sprintf( __( 'Error, %s not emptied!', 'wp-statistics' ), $table_name );
+	}
+
 }

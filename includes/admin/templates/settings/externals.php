@@ -17,7 +17,7 @@
     </tr>
 
 	<?php
-	if ( wp_statistics_geoip_supported() ) {
+	if ( WP_STATISTICS\GeoIP::IsSupport() ) {
 		?>
         <tr valign="top">
             <th scope="row">

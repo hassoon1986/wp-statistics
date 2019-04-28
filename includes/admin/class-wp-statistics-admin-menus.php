@@ -342,7 +342,7 @@ class Admin_Menus {
 			if ( array_key_exists( 'sub', $menu ) ) {
 
 				//Check Conditions For Show Menu
-				if ( wp_statistics_check_option_require( $menu ) === true ) {
+				if ( Option::check_option_require( $menu ) === true ) {
 					add_submenu_page( self::get_page_slug( $menu['sub'] ), $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', 'view' ) );
 				}
 

@@ -158,7 +158,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 											$map_string = "";
 										} else {
 											$ip_string  = "{$items->ip}";
-											$map_string = "<a class='wps-text-muted' href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . wp_statistics_icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
+											$map_string = "<a class='wps-text-muted' href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . \WP_STATISTICS\Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
 										}
 
 										echo "<tr>";
@@ -178,7 +178,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 										if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
 											$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 										} else {
-											$agent = wp_statistics_icons( 'dashicons-editor-help', 'unknown' );
+											$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 										}
 										echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 										echo "</td>";
@@ -279,7 +279,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
                 </div>
 				<?php
 				if ( $total > 0 ) {
-					wp_statistics_paginate_links( array(
+					\WP_STATISTICS\Admin_Templates::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,

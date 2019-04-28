@@ -31,8 +31,8 @@ class Admin_Templates {
 	public static function meta_box_button( $export = 'all' ) {
 
 		//Prepare button
-		$refresh = '</button><button class="handlediv button-link wps-refresh" type="button" id="{{refreshid}}">' . wp_statistics_icons( 'dashicons-update' ) . '<span class="screen-reader-text">' . __( 'Reload', 'wp-statistics' ) . '</span></button>';
-		$more    = '<button class="handlediv button-link wps-more" type="button" id="{{moreid}}">' . wp_statistics_icons( 'dashicons-external' ) . '<span class="screen-reader-text">' . __( 'More Details', 'wp-statistics' ) . '</span></button>';
+		$refresh = '</button><button class="handlediv button-link wps-refresh" type="button" id="{{refreshid}}">' . Admin_Templates::icons( 'dashicons-update' ) . '<span class="screen-reader-text">' . __( 'Reload', 'wp-statistics' ) . '</span></button>';
+		$more    = '<button class="handlediv button-link wps-more" type="button" id="{{moreid}}">' . Admin_Templates::icons( 'dashicons-external' ) . '<span class="screen-reader-text">' . __( 'More Details', 'wp-statistics' ) . '</span></button>';
 
 		//Export
 		if ( $export == 'all' ) {
@@ -48,6 +48,64 @@ class Admin_Templates {
 	public static function loading_meta_box() {
 		$loading = '<div class="wps_loading_box"><img src=" ' . plugins_url( 'wp-statistics/assets/images/' ) . 'loading.svg" alt="' . __( 'Reloading...', 'wp-statistics' ) . '"></div>';
 		return $loading;
+	}
+
+	/**
+	 * Pagination Link
+	 *
+	 * @param array $args
+	 * @area admin
+	 * @return string
+	 */
+	public static function paginate_links( $args = array() ) {
+
+		//Prepare Arg
+		$defaults   = array(
+			'item_per_page' => 10,
+			'container'     => 'pagination-wrap',
+			'query_var'     => 'pagination-page',
+			'total'         => 0,
+			'current'       => 0,
+			'show_now_page' => true
+		);
+		$args       = wp_parse_args( $args, $defaults );
+		$total_page = ceil( $args['total'] / $args['item_per_page'] );
+
+		//Show Pagination Ui
+		if ( $total_page > 1 ) {
+			echo '<div class="' . $args['container'] . '">';
+			echo paginate_links( array(
+				'base'      => add_query_arg( $args['query_var'], '%#%' ),
+				'format'    => '',
+				'type'      => 'list',
+				'mid_size'  => 3,
+				'prev_text' => __( '&laquo;' ),
+				'next_text' => __( '&raquo;' ),
+				'total'     => $total_page,
+				'current'   => $args['current']
+			) );
+
+			if ( $args['show_now_page'] ) {
+				echo '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
+			}
+
+			echo '</div>';
+		}
+	}
+
+	/**
+	 * This function handle's the Dash icons in the overview page.
+	 *
+	 * @param $dashicons
+	 * @param null $icon_name
+	 * @return string
+	 */
+	public static function icons( $dashicons, $icon_name = null ) {
+		if ( null == $icon_name ) {
+			$icon_name = $dashicons;
+		}
+
+		return '<span class="dashicons ' . $dashicons . '"></span>';
 	}
 
 	/**

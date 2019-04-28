@@ -169,7 +169,7 @@ for ( $i = $daysToDisplay; $i >= 0; $i -- ) {
                     </div>
                 </div>
 				<?php if ( $total > 0 ) {
-					wp_statistics_paginate_links( array(
+					\WP_STATISTICS\Admin_Templates::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,

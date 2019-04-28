@@ -20,7 +20,7 @@ function wp_statistics_generate_pages_postbox_content() {
 		$counter += 1;
 
 		// Lookup the post title.
-		$page_info = wp_statistics_get_page_info( $item->id, $item->type );
+		$page_info = \WP_STATISTICS\Helper::get_page_info( $item->id, $item->type );
 		$title     = mb_substr( $page_info['title'], 0, 200, "utf-8" );
 		$page_link = $page_info['link'];
 

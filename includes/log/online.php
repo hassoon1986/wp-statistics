@@ -72,7 +72,7 @@
 									$map_string = "";
 								} else {
 									$ip_string  = "{$items->ip}";
-									$map_string = "<a class='wps-text-muted' href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . wp_statistics_icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
+									$map_string = "<a class='wps-text-muted' href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . \WP_STATISTICS\Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
 								}
 
 								echo "<tr>";
@@ -82,7 +82,7 @@
 								if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
 									$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 								} else {
-									$agent = wp_statistics_icons( 'dashicons-editor-help', 'unknown' );
+									$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 								}
 								echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 								echo "</td>";
@@ -135,7 +135,7 @@
 								echo "</td>";
 
 								//Show Page
-								$page_info = wp_statistics_get_page_info( $items->page_id, $items->type );
+								$page_info = \WP_STATISTICS\Helper::get_page_info( $items->page_id, $items->type );
 								echo "<td style=\"text-align: left\">";
 								echo ( $page_info['link'] != '' ? '<a href="' . $page_info['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . mb_substr( $page_info['title'], 0, 200, "utf-8" ) . ( $page_info['link'] != '' ? '</a>' : '' );
 								echo "</td>";
@@ -162,7 +162,7 @@
                 </div>
 				<?php
 				if ( $total > 0 ) {
-					wp_statistics_paginate_links( array(
+					\WP_STATISTICS\Admin_Templates::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,

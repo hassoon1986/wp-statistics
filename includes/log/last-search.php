@@ -113,7 +113,7 @@ $total = $search_result[ $referred ];
 
 								$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 
-								$dash_icon = wp_statistics_icons( 'dashicons-location-alt', 'map' );
+								$dash_icon = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-location-alt', 'map' );
 
 								echo "<table width=\"100%\" class=\"widefat table-stats\" id=\"last-referrer\"><tr>";
 								echo "<td>" . __( 'Word', 'wp-statistics' ) . "</td>";
@@ -158,7 +158,7 @@ $total = $search_result[ $referred ];
 									) {
 										$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 									} else {
-										$agent = wp_statistics_icons( 'dashicons-editor-help', 'unknown' );
+										$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 									}
 									echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 									echo "</td>";
@@ -218,7 +218,7 @@ $total = $search_result[ $referred ];
                 </div>
 				<?php
 				if ( $total > 0 ) {
-					wp_statistics_paginate_links( array(
+					\WP_STATISTICS\Admin_Templates::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,
