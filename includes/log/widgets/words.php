@@ -64,7 +64,7 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 			}
 
 			echo "<tr>";
-			echo "<td style=\"text-align: left\"><span title='{$words}' class='wps-cursor-default wps-text-wrap'>".$words."</span></td>";
+			echo "<td style=\"text-align: left\"><span title='{$words}' class='wps-cursor-default wps-text-wrap'>" . $words . "</span></td>";
 			echo "<td style=\"text-align: left\">";
 			if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
 				$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
@@ -106,8 +106,8 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 			echo "</td>";
 
 			echo "<td style=\"text-align: left\">";
-			if ( substr( $items->ip, 0, 6 ) == '#hash#' ) {
-				$ip_string = __( '#hash#', 'wp-statistics' );
+			if ( \WP_STATISTICS\IP::IsHashIP( $items->ip ) ) {
+				$ip_string = \WP_STATISTICS\IP::$hash_ip_prefix;
 			} else {
 				$ip_string = "<a href='" . Admin_Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";
 			}

@@ -50,4 +50,12 @@ class Historical {
 		return $result > $count ? $result : $count;
 	}
 
+	/**
+	 * Check Is Empty Historical Table
+	 */
+	public static function isEmpty() {
+		global $wpdb;
+		return ( $wpdb->get_var( "SELECT COUNT(*) FROM " . DB::table( 'historical' ) ) < 1 );
+	}
+
 }

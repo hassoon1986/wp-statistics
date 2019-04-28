@@ -34,6 +34,13 @@ class IP {
 	public static $default_ip_method = 'REMOTE_ADDR';
 
 	/**
+	 * Hash IP Prefix
+	 *
+	 * @var string
+	 */
+	public static $hash_ip_prefix = '#hash#';
+
+	/**
 	 * Returns the current IP address of the remote client.
 	 *
 	 * @return bool|string
@@ -75,15 +82,28 @@ class IP {
 
 	/**
 	 * Generate hash string
+	 *
+	 * @param bool $ip
+	 * @return bool
 	 */
-	public static function getHashIP() {
+	public static function getHashIP( $ip = false ) {
 
 		// Check Enabled Options
 		if ( Option::get( 'hash_ips' ) == true ) {
-			return apply_filters( 'wp_statistics_hash_ip', '#hash#' . sha1( self::getIP() . ( UserAgent::getHttpUserAgent() == '' ? 'Unknown' : UserAgent::getHttpUserAgent() ) ) );
+			return apply_filters( 'wp_statistics_hash_ip', self::$hash_ip_prefix . sha1( ( $ip === false ? self::getIP() : $ip ) . ( UserAgent::getHttpUserAgent() == '' ? 'Unknown' : UserAgent::getHttpUserAgent() ) ) );
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check IP is Hashed
+	 *
+	 * @param $ip
+	 * @return bool
+	 */
+	public static function IsHashIP( $ip ) {
+		return ( substr( $ip, 0, strlen( self::$hash_ip_prefix ) ) == self::$hash_ip_prefix );
 	}
 
 	/**
@@ -170,6 +190,25 @@ class IP {
 	public static function check_sanitize_ip( $ip ) {
 		$preg = preg_replace( '/[^0-9- .:]/', '', $ip );
 		return $preg == $ip;
+	}
+
+	/**
+	 * Update All Hash String For Hash IP
+	 */
+	public static function Update_HashIP_Visitor() {
+		global $wpdb;
+
+		// Get the rows from the Visitors table.
+		$result = $wpdb->get_results( "SELECT DISTINCT ip FROM " . DB::table( 'visitor' ) );
+		foreach ( $result as $row ) {
+			if ( IP::IsHashIP( $row->ip ) ) {
+				$wpdb->update(
+					DB::table( 'visitor' ),
+					array( 'ip' => IP::$hash_ip_prefix . sha1( $row->ip . Helper::random_string() ), ),
+					array( 'ip' => $row->ip )
+				);
+			}
+		}
 	}
 
 }

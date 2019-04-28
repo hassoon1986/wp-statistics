@@ -195,7 +195,7 @@ $total = $search_result[ $referred ];
 									echo "</td>";
 
 									echo "<td style=\"text-align: left\">";
-									if ( substr( $items->ip, 0, 6 ) == '#hash#' ) {
+									if ( \WP_STATISTICS\IP::IsHashIP( $items->ip ) ) {
 										$ip_string = __( '#hash#', 'wp-statistics' );
 									} else {
 										$ip_string = "<a href='" . Admin_Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";

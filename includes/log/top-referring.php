@@ -153,8 +153,8 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 									if ( $i > $start and $i <= $end ) {
 
 										//Sanitize IP
-										if ( substr( $items->ip, 0, 6 ) == '#hash#' ) {
-											$ip_string  = __( '#hash#', 'wp-statistics' );
+										if ( \WP_STATISTICS\IP::IsHashIP( $items->ip ) ) {
+											$ip_string  = \WP_STATISTICS\IP::$hash_ip_prefix;
 											$map_string = "";
 										} else {
 											$ip_string  = "{$items->ip}";

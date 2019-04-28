@@ -63,8 +63,8 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 						$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/unknown.png' ) . "' class='log-tools' title='{$markets['agent']}'/>";
 					}
 
-					if ( substr( $markets['ip'], 0, 6 ) == '#hash#' ) {
-						$markets['ip'] = __( '#hash#', 'wp-statistics' );
+					if ( \WP_STATISTICS\IP::IsHashIP( $markets['ip'] ) ) {
+						$markets['ip'] = \WP_STATISTICS\IP::$hash_ip_prefix;
 					}
 
 					$city = '';

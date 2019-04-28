@@ -27,15 +27,11 @@
 
             <td>
 				<?php
-				GLOBAL $wpdb, $WP_Statistics;
-				$wp_prefix = $wpdb->prefix;
-
+				global $wpdb, $WP_Statistics;
 				$dbupdates = WP_STATISTICS\Option::get( 'pending_db_updates' );
 
 				// Check the number of index's on the visitors table, if it's only 5 we need to check for duplicate entries and remove them
-				$result = $wpdb->query(
-					"SHOW INDEX FROM {$wp_prefix}statistics_visitor WHERE Key_name = 'date_ip_agent'"
-				);
+				$result = $wpdb->query( "SHOW INDEX FROM ".\WP_STATISTICS\DB::table('visitor')." WHERE Key_name = 'date_ip_agent'" );
 
 				// Note, the result will be the number of fields contained in the index, so in our case 5.
 				if ( $result != 5 ) {
@@ -62,11 +58,10 @@
             </th>
             <td>
 				<?php
-				GLOBAL $wpdb;
-				$wp_prefix = $wpdb->prefix;
+				global $wpdb;
 
 				// Check the number of index's on the visits table, if it's only 5 we need to check for duplicate entries and remove them
-				$result = $wpdb->query( "SHOW INDEX FROM {$wp_prefix}statistics_visit WHERE Key_name = 'unique_date'" );
+				$result = $wpdb->query( "SHOW INDEX FROM ".\WP_STATISTICS\DB::table('visit')." WHERE Key_name = 'unique_date'" );
 
 				// Note, the result will be the number of fields contained in the index, so in our case 1.
 				if ( $result != 1 ) {
@@ -87,35 +82,6 @@
 				WP_STATISTICS\Option::update( 'pending_db_updates', $dbupdates );
 				?>
             </td>
-
-        </tr>
-
-        <tr valign="top">
-            <th scope="row" colspan="2"><h3><?php _e( 'Search Table', 'wp-statistics' ); ?></h3></th>
-        </tr>
-
-        <tr valign="top">
-            <th scope="row">
-                <label for="index-submit"><?php _e( 'Convert:', 'wp-statistics' ); ?></label>
-            </th>
-            <td>
-				<?php
-				// Note, the result will be the number of fields contained in the index, so in our case 1.
-				if ( WP_STATISTICS\Option::get( 'search_converted' ) != 1 ) {
-					?>
-                    <input id="visits-submit" class="button button-primary" type="button" value="<?php _e( 'Convert Now!', 'wp-statistics' ); ?>" name="search-submit" onclick="location.href=document.URL+'&search=1&tab=database'">
-                    <p class="description"><?php echo __( 'Older installs of WP Statistics store details of searches in the visitors table which can become a performance issue on large datasets.', 'wp-statistics' ) . ' ' . __( 'A new table has been created to hold this information in a more scalable fashion, however the old data must first be converted to the new format before it can be used.', 'wp-statistics' ); ?></p>
-                    <p class="description"><?php _e( 'This operation could take a long time on installs with many rows in the visitors table.', 'wp-statistics' ); ?></p>
-					<?php
-				} else {
-					?>
-                    <p class="description"><?php echo __( 'Older installs of WP Statistics store details of searches in the visitors table which can become a performance issue on large datasets.', 'wp-statistics' ) . ' ' . __( 'A new table has been created to hold this information in a more scalable fashion.', 'wp-statistics' ); ?></p>
-                    <p class="description"><?php _e( 'Congratulations, your installation is already up to date, nothing to do.', 'wp-statistics' ); ?></p>
-					<?php
-				}
-				?>
-            </td>
-
         </tr>
 
         </tbody>

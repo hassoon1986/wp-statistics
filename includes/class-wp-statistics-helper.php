@@ -450,4 +450,20 @@ class Helper {
 		return false;
 	}
 
+	/**
+	 * Generate Random String
+	 *
+	 * @param $num
+	 * @return string
+	 */
+	public static function random_string( $num = 50 ) {
+		$characters   = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$randomString = '';
+		for ( $i = 0; $i < $num; $i ++ ) {
+			$randomString .= $characters[ rand( 0, strlen( $characters ) - 1 ) ];
+		}
+
+		return $randomString;
+	}
+
 }

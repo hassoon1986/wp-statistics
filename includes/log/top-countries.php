@@ -192,8 +192,8 @@ if ( isset( $_REQUEST['country'] ) ) {
 								echo "</td>";
 
 								echo "<td style=\"text-align: left\">";
-								if ( substr( $items->ip, 0, 6 ) == '#hash#' ) {
-									$ip_string = __( '#hash#', 'wp-statistics' );
+								if ( \WP_STATISTICS\IP::IsHashIP( $items->ip ) ) {
+									$ip_string = \WP_STATISTICS\IP::$hash_ip_prefix;
 								} else {
 									$ip_string = "<a href='" . Admin_Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";
 								}

@@ -31,14 +31,7 @@
     </tr>
 
     <tr valign="top">
-        <td scope="row" colspan="2"><?php echo sprintf(
-				__(
-					'Feel like showing us how much you enjoy WP Statistics? Drop by our %sdonation%s page and show us some love!',
-					'wp-statistics'
-				),
-				'<a href="http://wp-statistics.com/donate" target="_blank">',
-				'</a>'
-			); ?></td>
+        <td scope="row" colspan="2"><?php echo sprintf( __( 'Feel like showing us how much you enjoy WP Statistics? Drop by our %sdonation%s page and show us some love!', 'wp-statistics' ), '<a href="http://wp-statistics.com/donate" target="_blank">', '</a>' ); ?></td>
     </tr>
 
     <tr valign="top">
@@ -46,14 +39,7 @@
     </tr>
 
     <tr valign="top">
-        <td scope="row" colspan="2"><?php echo sprintf(
-				__(
-					'Come visit our great new %swebsite%s and keep up to date on the latest news about WP Statistics.',
-					'wp-statistics'
-				),
-				'<a href="http://wp-statistics.com" target="_blank">',
-				'</a>'
-			); ?></td>
+        <td scope="row" colspan="2"><?php echo sprintf( __( 'Come visit our great new %swebsite%s and keep up to date on the latest news about WP Statistics.', 'wp-statistics' ), '<a href="http://wp-statistics.com" target="_blank">', '</a>' ); ?></td>
     </tr>
 
     <tr valign="top">
@@ -61,14 +47,7 @@
     </tr>
 
     <tr valign="top">
-        <td scope="row" colspan="2"><?php printf(
-				__(
-					'Thanks for installing WP Statistics, we encourage you to submit a %srating and review%s over at WordPress.org. Your feedback is greatly appreciated!',
-					'wp-statistics'
-				),
-				'<a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank">',
-				'</a>'
-			); ?>
+        <td scope="row" colspan="2"><?php printf( __( 'Thanks for installing WP Statistics, we encourage you to submit a %srating and review%s over at WordPress.org. Your feedback is greatly appreciated!', 'wp-statistics' ), '<a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank">', '</a>' ); ?>
         </td>
     </tr>
 

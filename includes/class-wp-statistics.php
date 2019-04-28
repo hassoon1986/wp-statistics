@@ -151,8 +151,6 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-editor.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-export.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-uninstall.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-updates.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-welcome.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-network.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-purge.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-menus.php';
@@ -160,7 +158,11 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-notices.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/TinyMCE/class-wp-statistics-tinymce.php';
 
+			// Admin Pages List
+			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-welcome.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-settings.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-optimization.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-plugins.php';
 
 
 
@@ -325,8 +327,11 @@ final class WP_Statistics {
 			# Welcome Screen
 			new \WP_STATISTICS\Welcome;
 
-			# Setting PAges
+			# Setting Pages
             new \WP_STATISTICS\settings_page;
+
+            # optimization Page
+            new \WP_STATISTICS\optimization_page;
 		}
 
 		# Run in Frontend

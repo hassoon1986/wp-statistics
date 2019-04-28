@@ -49,6 +49,20 @@ class Admin_Menus {
 	public static $load_admin_slug = 'toplevel_page_[slug]';
 
 	/**
+	 * Admin Page Load Action Slug
+	 *
+	 * @var string
+	 */
+	public static $load_admin_submenu_slug = 'statistics_page_[slug]';
+
+	/**
+	 * Wp-Statistics donate link
+	 *
+	 * @var string
+	 */
+	public static $donate = 'http://wp-statistics.com/donate';
+
+	/**
 	 * Get List Admin Pages
 	 */
 	public static function get_admin_page_list() {
@@ -293,6 +307,9 @@ class Admin_Menus {
 		# Load WP-Statistics Admin Menu
 		add_action( 'admin_menu', array( $this, 'wp_admin_menu' ) );
 
+		# Filter Donate Link
+		add_action( "load-" . str_replace( "[slug]", self::get_page_slug( 'donate' ), self::$load_admin_submenu_slug ), array( $this, 'donate' ) );
+
 	}
 
 	/**
@@ -331,16 +348,24 @@ class Admin_Menus {
 
 				//Check if add Break Line
 				if ( array_key_exists( 'break', $menu ) ) {
-					add_submenu_page( self::get_page_slug( $menu['sub'] ), '', '', $capability, 'wps_break_menu', array( '\WP_STATISTICS\\' . $method . '_page', 'view' ) );
+					add_submenu_page( self::get_page_slug( $menu['sub'] ), '', '', $capability, 'wps_break_menu', array( '\WP_STATISTICS\\' . $method . '_page', $method ) );
 				}
 			} else {
-				add_menu_page( $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', 'view' ), $menu['icon'] );
+				add_menu_page( $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', $method ), $menu['icon'] );
 			}
 		}
 
 		// Add action to load the meta boxes to the overview page.
 		// TODO Push to OrverView Page Class
 		add_action( 'load-' . self::get_action_menu_slug( 'overview' ), array( '\WP_STATISTICS\Admin_Pages', 'overview' ) );
+	}
+
+	/**
+	 * WP-Statistics Donate Page
+	 */
+	public function donate() {
+		wp_redirect( self::$donate );
+		exit;
 	}
 
 }

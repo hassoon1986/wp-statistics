@@ -205,7 +205,6 @@
         });
     });
 </script>
-
 <div class="wrap wps-wrap">
     <table class="form-table">
         <tbody>

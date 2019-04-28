@@ -292,7 +292,7 @@ class GeoIP {
 					// Populate any missing GeoIP information if the user has selected the option.
 					if ( $pack == "country" ) {
 						if ( Option::get( 'geoip' ) && wp_statistics_geoip_supported() && Option::get( 'auto_pop' ) ) {
-							Updates::populate_geoip_info();
+							self::Update_GeoIP_Visitor();
 						}
 					}
 				}
@@ -316,6 +316,57 @@ class GeoIP {
 
 		// All of the messages displayed above are stored in a string, now it's time to actually output the messages.
 		return $result;
+	}
+
+	/**
+	 * Update All GEO-IP Visitors
+	 *
+	 * @return array
+	 */
+	public static function Update_GeoIP_Visitor() {
+		global $wpdb;
+
+		// Find all rows in the table that currently don't have GeoIP info or have an unknown ('000') location.
+		$result = $wpdb->get_results( "SELECT id,ip FROM `" . DB::table( 'visitor' ) . "` WHERE location = '' or location = '" . GeoIP::$private_country . "' or location IS NULL" );
+
+		// Try create a new reader instance.
+		$reader = false;
+		if ( Option::get( 'geoip' ) ) {
+			$reader = GeoIP::Loader( 'country' );
+		}
+
+		if ( $reader === false ) {
+			return array( 'status' => false, 'data' => __( 'Unable to load the GeoIP database, make sure you have downloaded it in the settings page.', 'wp-statistics' ) );
+		}
+
+		$count = 0;
+
+		// Loop through all the missing rows and update them if we find a location for them.
+		foreach ( $result as $item ) {
+			$count ++;
+
+			// If the IP address is only a hash, don't bother updating the record.
+			if ( IP::IsHashIP( $item->ip ) === false and $reader != false ) {
+				try {
+					$record   = $reader->country( $item->ip );
+					$location = $record->country->isoCode;
+					if ( $location == "" ) {
+						$location = GeoIP::$private_country;
+					}
+				} catch ( \Exception $e ) {
+					$location = GeoIP::$private_country;
+				}
+
+				// Update the row in the database.
+				$wpdb->update(
+					DB::table( 'visitor' ),
+					array( 'location' => $location ),
+					array( 'id' => $item->id )
+				);
+			}
+		}
+
+		return array( 'status' => true, 'data' => sprintf( __( 'Updated %s GeoIP records in the visitors database.', 'wp-statistics' ), $count ) );
 	}
 
 }
