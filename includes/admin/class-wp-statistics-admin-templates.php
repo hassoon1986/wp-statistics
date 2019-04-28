@@ -51,13 +51,6 @@ class Admin_Templates {
 	}
 
 	/**
-	 * Donate
-	 */
-	public static function donate() {
-		echo "<script>window.location.href='http://wp-statistics.com/donate';</script>";
-	}
-
-	/**
 	 * Convert PHP date Format to Moment js
 	 *
 	 * @param $phpFormat

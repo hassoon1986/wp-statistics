@@ -1,9 +1,6 @@
 <div class="wrap wps-wrap about-wrap full-width-layout">
     <div class="wp-statistics-welcome">
-        <h1><?php use WP_STATISTICS\Admin_Helper;
-	        use WP_STATISTICS\Admin_Menus;
-
-	        printf( __( 'Welcome to WP-Statistics&nbsp;%s', 'wp-statistics' ), WP_STATISTICS_VERSION ); ?></h1>
+        <h1><?php printf( __( 'Welcome to WP-Statistics&nbsp;%s', 'wp-statistics' ), WP_STATISTICS_VERSION ); ?></h1>
 
         <p class="about-text">
 			<?php printf( __( 'Thank you for updating to the latest version! We encourage you to submit a %srating and review%s over at WordPress.org. Your feedback is greatly appreciated!', 'wp-statistics' ), '<a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank">', '</a>' ); ?>
@@ -18,7 +15,7 @@
             <a href="#" class="nav-tab" data-tab="addons"><?php _e( 'Add-Ons', 'wp-statistics' ); ?></a>
             <a href="#" class="nav-tab" data-tab="credit"><?php _e( 'Credits', 'wp-statistics' ); ?></a>
             <a href="#" class="nav-tab" data-tab="changelog"><?php _e( 'Changelog', 'wp-statistics' ); ?></a>
-            <a href="https://wp-statistics.com/donate/" class="nav-tab donate" data-tab="link" target="_blank"><?php _e( 'Donate', 'wp-statistics' ); ?></a>
+            <a href="<?php echo \WP_STATISTICS\Admin_Menus::$donate; ?>" class="nav-tab donate" data-tab="link" target="_blank"><?php _e( 'Donate', 'wp-statistics' ); ?></a>
         </h2>
 
         <div data-content="whats-news" class="tab-content current">
@@ -145,7 +142,7 @@
         </div>
         <hr style="clear: both;">
         <div class="wps-return-to-dashboard">
-            <a href="<?php echo Admin_Menus::admin_url( 'overview' ); ?>"><?php _e( 'Go to Statistics &rarr; Overview', 'wp-statistics' ); ?></a>
+            <a href="<?php echo \WP_STATISTICS\Admin_Menus::admin_url( 'overview' ); ?>"><?php _e( 'Go to Statistics &rarr; Overview', 'wp-statistics' ); ?></a>
         </div>
     </div>
 </div>
