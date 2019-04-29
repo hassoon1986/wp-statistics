@@ -24,7 +24,9 @@ class RestApi {
 	 */
 	protected $db;
 
-
+	/**
+	 * RestApi constructor.
+	 */
 	public function __construct() {
 		global $wpdb;
 
