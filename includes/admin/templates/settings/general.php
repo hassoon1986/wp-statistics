@@ -7,7 +7,9 @@
 <table class="form-table">
     <tbody>
     <tr valign="top">
-        <th scope="row" colspan="2"><h3><?php _e( 'Online Users', 'wp-statistics' ); ?></h3></th>
+        <th scope="row" colspan="2"><h3><?php use WP_STATISTICS\RestApi;
+
+		        _e( 'Online Users', 'wp-statistics' ); ?></h3></th>
     </tr>
 
     <tr valign="top">
@@ -258,7 +260,7 @@
             <label for="use_cache_plugin"><?php _e( 'Yes', 'wp-statistics' ); ?></label>
 
             <p class="description"><?php _e( 'If you use WordPress Cache Plugins, enable this option.', 'wp-statistics' ); ?></p>
-            <p class="description"><?php echo sprintf( __( 'To register WP-Statistics REST API endpoint  ( %s ) , go to the <a href="%s">Permalink page</a> and update the permalink with press Save Changes.', 'wp-statistics' ), WP_Statistics_Rest::route, admin_url( 'options-permalink.php' ) ); ?></p>
+            <p class="description"><?php echo sprintf( __( 'To register WP-Statistics REST API endpoint  ( %s ) , go to the <a href="%s">Permalink page</a> and update the permalink with press Save Changes.', 'wp-statistics' ), RestApi::$namespace, admin_url( 'options-permalink.php' ) ); ?></p>
             <p class="description"><?php echo __( 'Don\'t forget to clear your enabled plugin cache.', 'wp-statistics' ); ?></p>
         </td>
     </tr>

@@ -102,8 +102,8 @@ a[href*='?page=wps_break_menu'] {
     box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.8) !important;
     color: #f0f0f0;
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-    padding: 7px 14px;
-    vertical-align: -1px;
+    padding: 7.5px 14px;
+    vertical-align: -1.5px;
     margin: -8px 5px -5px 5px;
     border-radius: 5px; }
 
@@ -242,7 +242,7 @@ a[href*='?page=wps_break_menu'] {
  * WP-Statistics Welcome Admin page
  */
 .wp-statistics-welcome .wp-badge {
-  background-image: url("../images/logo-250-white.png");
+  background-image: url("../../images/logo-250-white.png");
   background-color: #1aabec; }
 
 .wp-statistics-welcome .nav-tab.donate {

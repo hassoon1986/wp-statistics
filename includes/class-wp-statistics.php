@@ -174,7 +174,8 @@ final class WP_Statistics {
 		}
 
 		// Rest-Api
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
+
 
 		// WP-Cli
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -333,6 +334,9 @@ final class WP_Statistics {
             # optimization Page
             new \WP_STATISTICS\optimization_page;
 		}
+
+		# Rest API
+        new \WP_STATISTICS\RestApi();
 
 		# Run in Frontend
 		if ( ! is_admin() ) {
