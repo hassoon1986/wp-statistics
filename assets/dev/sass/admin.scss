@@ -1,32 +1,35 @@
+// Define
+$image_path : "../images";
+
 // Global
-@import "global";
+@import "component/global";
 
 // Print Style
-@import "print";
+@import "component/print";
 
 // WordPress Admin Bar
-@import "admin-bar";
+@import "component/admin-bar";
 
 // WordPress Pagination
-@import "pagination";
+@import "component/pagination";
 
 // WordPress Admin Setting Page
-@import "setting-page";
+@import "pages/setting-page";
 
 // WordPress Admin Add-one Page
-@import "add-one-page";
+@import "pages/add-one-page";
 
 // WordPress Admin WElCome PAge
-@import "welcome-page";
+@import "pages/welcome-page";
 
 // WordPress Admin Editor
-@import "editor";
+@import "component/editor";
 
 // WordPress Admin Pages
-@import "admin-pages";
+@import "pages/admin-pages";
 
 // WordPress Meta Boxes
-@import "meta-box";
+@import "component/meta-box";
 
 // About Meta Box
 @import "meta-box/about";

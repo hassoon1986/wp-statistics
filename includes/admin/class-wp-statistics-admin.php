@@ -179,9 +179,9 @@ class Admin {
 
 				$set_transient = true;
 				$alert         = '<div class="notice notice-warning is-dismissible"><p>' . sprintf( __( 'Here is an error associated with Connecting WordPress Rest API, Please Flushing rewrite rules or activate wp rest api for performance WP-Statistics Plugin Cache / Go %1$sSettings->Permalinks%2$s', 'wp-statistics' ), '<a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '">', '</a>' ) . '</div>';
-				$request       = wp_remote_post( path_join( get_rest_url(), RestApi::$namespace . '/' . RestApi::func ), array(
+				$request       = wp_remote_post( get_rest_url(null, RestApi::$namespace . '/enable') , array(
 					'method' => 'POST',
-					'body'   => array( 'rest-api-wp-statistics' => 'wp-statistics' )
+					'body'   => array( 'connect' => 'wp-statistics' )
 				) );
 				if ( is_wp_error( $request ) ) {
 					echo $alert;

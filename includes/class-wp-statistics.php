@@ -168,14 +168,15 @@ final class WP_Statistics {
 
 		}
 
+		// Rest-Api
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
+		require_once WP_STATISTICS_DIR . 'includes/api/v2/class-wp-statistics-api-hit.php';
+
+
 		// Front Class.
 		if ( ! is_admin() ) {
 			require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-frontend.php';
 		}
-
-		// Rest-Api
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
-
 
 		// WP-Cli
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -336,7 +337,8 @@ final class WP_Statistics {
 		}
 
 		# Rest API
-        new \WP_STATISTICS\RestApi();
+        new \WP_STATISTICS\RestApi;
+		new \WP_STATISTICS\Api\v2\Hit;
 
 		# Run in Frontend
 		if ( ! is_admin() ) {

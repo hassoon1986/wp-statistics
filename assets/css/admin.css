@@ -242,7 +242,7 @@ a[href*='?page=wps_break_menu'] {
  * WP-Statistics Welcome Admin page
  */
 .wp-statistics-welcome .wp-badge {
-  background-image: url("../../images/logo-250-white.png");
+  background-image: url("../images/logo-250-white.png");
   background-color: #1aabec; }
 
 .wp-statistics-welcome .nav-tab.donate {
