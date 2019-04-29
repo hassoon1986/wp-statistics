@@ -39,27 +39,8 @@ class Admin {
 			add_action( 'post_submitbox_misc_actions', array( $this, 'post_init' ) );
 		}
 
-		// Add Notice Use cache plugin
-		add_action( 'admin_notices', array( $this, 'notification_use_cache_plugin' ) );
-
-		//Add Visitors Log Table
-		add_action( 'admin_init', array( $this, 'register_visitors_log_tbl' ) );
-
 		//Check Require update page type in database
 		Install::_init_page_type_updater();
-	}
-
-	/**
-	 * Create a New Table Visitors Log in mysql
-	 */
-	public function register_visitors_log_tbl() {
-
-		//TODO Push to Setting Page
-		//Add Visitor RelationShip Table
-		if ( Admin_Menus::in_page( 'settings' ) and isset( $_POST['wps_visitors_log'] ) and $_POST['wps_visitors_log'] == 1 ) {
-			Install::setup_visitor_relationship_table();
-		}
-
 	}
 
 	/**
@@ -147,58 +128,6 @@ class Admin {
 					echo '<div class="update-nag">' . sprintf( __( 'Database updates are required, please go to %soptimization page%s and update the following: %s', 'wp-statistics' ), '<a href="' . $get_bloginfo_url . '">', '</a>', implode( __( ',', 'wp-statistics' ), $dbupdatestodo ) ) . '</div>';
 				}
 			}
-		}
-	}
-
-	/*
-	 * Show Notification Cache Plugin
-	 */
-	public static function notification_use_cache_plugin() {
-		$screen = get_current_screen();
-
-		if ( $screen->id == "toplevel_page_" . Admin_Menus::get_page_slug( 'overview' ) or $screen->id == "statistics_page_" . Admin_Menus::get_page_slug( 'settings' ) ) {
-			$plugin = Helper::is_active_cache_plugin();
-
-			if ( ! Option::get( 'use_cache_plugin' ) and $plugin['status'] === true ) {
-				echo '<div class="notice notice-warning is-dismissible"><p>';
-
-				$alert = sprintf( __( 'You Are Using %s Plugin in WordPress', 'wp-statistics' ), $plugin['plugin'] );
-				if ( $plugin['plugin'] == "core" ) {
-					$alert = __( 'WP_CACHE is Enable in Your WordPress', 'wp-statistics' );
-				}
-
-				echo $alert . ", " . sprintf( __( 'Please enable %1$sCache Setting%2$s in WP Statistics.', 'wp-statistics' ), '<a href="' . Admin_Menus::admin_url( 'settings' ) . '">', '</a>' );
-				echo '</p></div>';
-			}
-		}
-
-		// Test Rest Api is Active for Cache
-		if ( Option::get( 'use_cache_plugin' ) and $screen->id == "statistics_page_" . Admin_Menus::get_page_slug( 'settings' ) ) {
-
-			if ( false === ( $check_rest_api = get_transient( '_check_rest_api_wp_statistics' ) ) ) {
-
-				$set_transient = true;
-				$alert         = '<div class="notice notice-warning is-dismissible"><p>' . sprintf( __( 'Here is an error associated with Connecting WordPress Rest API, Please Flushing rewrite rules or activate wp rest api for performance WP-Statistics Plugin Cache / Go %1$sSettings->Permalinks%2$s', 'wp-statistics' ), '<a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '">', '</a>' ) . '</div>';
-				$request       = wp_remote_post( get_rest_url(null, RestApi::$namespace . '/enable') , array(
-					'method' => 'POST',
-					'body'   => array( 'connect' => 'wp-statistics' )
-				) );
-				if ( is_wp_error( $request ) ) {
-					echo $alert;
-					$set_transient = false;
-				}
-				$body = wp_remote_retrieve_body( $request );
-				$data = json_decode( $body, true );
-				if ( ! isset( $data['rest-api-wp-statistics'] ) and $set_transient === true ) {
-					echo $alert;
-					$set_transient = false;
-				}
-
-				if ( $set_transient === true ) {
-					set_transient( '_check_rest_api_wp_statistics', array( "rest-api-wp-statistics" => "OK" ), 2 * HOUR_IN_SECONDS );
-				}
-			}
-
 		}
 	}
 

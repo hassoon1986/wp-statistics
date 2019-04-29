@@ -56,7 +56,7 @@ class Frontend {
 
 		// Load Admin Bar Css
 		if ( AdminBar::show_admin_bar() and is_admin_bar_showing() ) {
-			wp_enqueue_style( 'wp-statistics', WP_STATISTICS_URL . 'assets/css/frontend.min.css', true, WP_STATISTICS_VERSION );
+			wp_enqueue_style( 'wp-statistics', WP_STATISTICS_URL . 'assets/css/frontend.css', true, WP_STATISTICS_VERSION );
 		}
 	}
 
@@ -67,7 +67,7 @@ class Frontend {
 		if ( Option::get( 'use_cache_plugin' ) ) {
 			$this->html_comment();
 			//TODO Solve Load Rest Class
-			echo '<script>var WP_Statistics_http = new XMLHttpRequest();WP_Statistics_http.open(\'POST\', \'' . add_query_arg( array( '_' => time() ), path_join( get_rest_url(), RestApi::$namespace . '/' . RestApi::func ) ) . '\', true);WP_Statistics_http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");WP_Statistics_http.send("' . Hits::$rest_hits_key . '=" + JSON.stringify(' . self::set_default_params() . '));</script>' . "\n";
+			echo '<script>var WP_Statistics_http = new XMLHttpRequest();WP_Statistics_http.open(\'POST\', \'' . add_query_arg( array( '_' => time() ), get_rest_url( null, RestApi::$namespace . '/'. Api\v2\Hit::$endpoint ) ) . '\', true);WP_Statistics_http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");WP_Statistics_http.send("' . Hits::$rest_hits_key . '=" + JSON.stringify(' . self::set_default_params() . '));</script>' . "\n";
 		}
 	}
 

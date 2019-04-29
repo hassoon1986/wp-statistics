@@ -220,6 +220,7 @@ class Hits {
 
 	/**
 	 * Get Visitor information and Record To DB
+	 *
 	 * @throws \Exception
 	 */
 	public static function record() {

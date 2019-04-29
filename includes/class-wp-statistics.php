@@ -334,6 +334,9 @@ final class WP_Statistics {
 
             # optimization Page
             new \WP_STATISTICS\optimization_page;
+
+            # Admin Notice
+            new \WP_STATISTICS\Admin_Notices;
 		}
 
 		# Rest API

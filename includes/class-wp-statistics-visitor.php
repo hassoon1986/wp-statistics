@@ -36,9 +36,6 @@ class Visitor {
 	public static function save_visitor( $visitor = array() ) {
 		global $wpdb;
 
-		# Action Before Save Visitor To DB
-		do_action( 'wp_statistics_before_save_visitor', $visitor );
-
 		# Add Filter Insert ignore
 		add_filter( 'query', 'wp_statistics_ignore_insert', 10 );
 

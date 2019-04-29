@@ -114,6 +114,11 @@ class settings_page {
 					$wp_statistics_options[ $new_option ] = $value;
 				}
 
+				//Add Visitor RelationShip Table
+				if ( isset( $_POST['wps_visitors_log'] ) and $_POST['wps_visitors_log'] == 1 ) {
+					Install::setup_visitor_relationship_table();
+				}
+
 				// Prepare Visitor IP
 				$value = 'REMOTE_ADDR';
 				if ( isset( $_POST['ip_method'] ) and ! empty( $_POST['ip_method'] ) ) {

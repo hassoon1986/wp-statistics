@@ -166,7 +166,7 @@ class Pages {
 		$page_uri = Pages::get_page_uri();
 
 		// Get String Search Wordpress
-		if ( array_key_exists( "search_query", $current_page ) ) {
+		if ( array_key_exists( "search_query", $current_page ) and ! empty( $current_page["search_query"] ) ) {
 			$page_uri = "?s=" . $current_page['search_query'];
 		}
 
@@ -237,9 +237,6 @@ class Pages {
 	 */
 	public static function save_page( $page = array() ) {
 		global $wpdb;
-
-		# Action Before Save Page To DB
-		do_action( 'wp_statistics_before_save_page', $page );
 
 		# Add Filter Insert ignore
 		add_filter( 'query', 'wp_statistics_ignore_insert', 10 );
