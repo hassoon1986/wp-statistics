@@ -2,6 +2,10 @@
 
 namespace WP_STATISTICS\Api\v2;
 
+use WP_STATISTICS\Helper;
+use WP_STATISTICS\Hits;
+use WP_STATISTICS\Option;
+
 class Hit extends \WP_STATISTICS\RestApi {
 	/**
 	 * Hit Endpoint
@@ -33,8 +37,19 @@ class Hit extends \WP_STATISTICS\RestApi {
 		// Record WP-Statistics when Cache is enable
 		register_rest_route( self::$namespace, '/' . self::$endpoint, array(
 			array(
-				'methods'  => \WP_REST_Server::CREATABLE,
-				'callback' => array( $this, 'hit_callback' )
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'hit_callback' ),
+				'permission_callback' => function () {
+					return ( Option::get( 'use_cache_plugin' ) == 1 ? true : false );
+				},
+				'args'                => array(
+					Hits::$rest_hits_key => array(
+						'required'          => true,
+						'validate_callback' => function ( $value, $request, $key ) {
+							return ( Helper::json_to_array( $value ) === false ? false : true );
+						}
+					)
+				)
 			)
 		) );
 
@@ -57,9 +72,23 @@ class Hit extends \WP_STATISTICS\RestApi {
 	 *
 	 * @param \WP_REST_Request $request
 	 * @return \WP_REST_Response
+	 * @throws \Exception
 	 */
 	public function hit_callback( \WP_REST_Request $request ) {
+		$param = $request->get_param( Hits::$rest_hits_key );
 
+		// Check List OF Require Parameter
+		$list           = Helper::json_to_array( $param );
+		$require_params = array( 'referred', 'ip', 'hash_ip', 'exclude', 'exclude_reason', 'ua', 'track_all', 'timestamp', 'current_page_type', 'current_page_id', 'page_uri', 'user_id' );
+		foreach ( $require_params as $parameter ) {
+			if ( ! array_key_exists( $parameter, $list ) ) {
+				return self::response( 'Missing ' . $parameter . ' parameter.', 400 );
+			}
+		}
+
+		// Run Hit Record
+		Hits::record();
+		return self::response( __( 'Visitor Hit was recorded successfully.', 'wp-statistics' ) );
 	}
 
 	/**
@@ -73,8 +102,6 @@ class Hit extends \WP_STATISTICS\RestApi {
 			return self::response( 'enable' );
 		}
 
-		return self::response( 'Missing connect parameter', 400 );
+		return self::response( 'Missing connect parameter.', 400 );
 	}
-
-
 }
