@@ -197,8 +197,10 @@ class Admin_Assets {
 		return array(
 
 			// Add Admin Ajax WordPress URL
-			'ajax-url'    => admin_url( 'admin-ajax.php' ),
+			'ajax_url'    => admin_url( 'admin-ajax.php' ),
 
+			// Rest-API Meta Box Url
+			'api_url'    => get_rest_url( null, RestApi::$namespace . '/metabox' ),
 
 			// Date format
 			'date_format' => array(

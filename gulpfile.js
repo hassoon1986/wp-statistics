@@ -19,9 +19,13 @@ gulp.task('sass', function () {
 //Gulp Script Concat
 gulp.task('script', function () {
     return gulp.src([
-        './assets/dev/javascript/global.js',
-        './assets/dev/javascript/setting-page.js',
-        './assets/dev/javascript/welcome-page.js'
+        './assets/dev/javascript/config.js',
+        './assets/dev/javascript/ajax.js',
+        './assets/dev/javascript/helper.js',
+        './assets/dev/javascript/meta-box.js',
+        './assets/dev/javascript/meta-box/*.js',
+        './assets/dev/javascript/pages/*.js',
+        './assets/dev/javascript/run.js',
     ])
         .pipe(concat('admin.js'))
         .pipe(insert.prepend('jQuery(document).ready(function ($) {'))

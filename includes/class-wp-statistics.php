@@ -124,6 +124,7 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-widget.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-adminbar.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-meta-box.php';
 
 		// Hits Class
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user-online.php';
@@ -139,12 +140,14 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-exclusion.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-hits.php';
 
+		// Meta Box List
+		\WP_STATISTICS\Meta_Box::load();
+
 		// Admin classes
 		if ( is_admin() ) {
 
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-templates.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-meta-box.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-pages.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-ajax.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-dashboard.php';
@@ -163,15 +166,12 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-settings.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-optimization.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-plugins.php';
-
-
-
 		}
 
 		// Rest-Api
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
 		require_once WP_STATISTICS_DIR . 'includes/api/v2/class-wp-statistics-api-hit.php';
-
+		require_once WP_STATISTICS_DIR . 'includes/api/v2/class-wp-statistics-api-meta-box.php';
 
 		// Front Class.
 		if ( ! is_admin() ) {
@@ -300,7 +300,7 @@ final class WP_Statistics {
 		# Run in Admin
 		if ( is_admin() ) {
 
-		    // TODO Seperate All Classes
+			// TODO Seperate All Classes
 			new \WP_STATISTICS\Admin;
 
 			# Admin Menu
@@ -316,7 +316,7 @@ final class WP_Statistics {
 			new \WP_STATISTICS\Ajax;
 
 			# Admin Meta Box
-			new \WP_STATISTICS\Admin_Meta_Boxes;
+			new \WP_STATISTICS\Meta_Box;
 
 			# Admin Dashboard Widget
 			new \WP_STATISTICS\Admin_Dashboard;
@@ -330,18 +330,20 @@ final class WP_Statistics {
 			new \WP_STATISTICS\Welcome;
 
 			# Setting Pages
-            new \WP_STATISTICS\settings_page;
+			new \WP_STATISTICS\settings_page;
 
-            # optimization Page
-            new \WP_STATISTICS\optimization_page;
+			# optimization Page
+			new \WP_STATISTICS\optimization_page;
 
-            # Admin Notice
-            new \WP_STATISTICS\Admin_Notices;
+			# Admin Notice
+			new \WP_STATISTICS\Admin_Notices;
 		}
 
 		# Rest API
-        new \WP_STATISTICS\RestApi;
+		new \WP_STATISTICS\RestApi;
 		new \WP_STATISTICS\Api\v2\Hit;
+		new \WP_STATISTICS\Api\v2\Meta_Box;
+
 
 		# Run in Frontend
 		if ( ! is_admin() ) {

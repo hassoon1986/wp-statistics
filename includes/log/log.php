@@ -2,6 +2,7 @@
 
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Meta_Box;
 use WP_STATISTICS\Admin_Templates;
 
 $nag_html = '';
@@ -54,7 +55,7 @@ function wp_statistics_generate_overview_postbox_contents( $post, $args ) {
 //Prepare List Of Page Url
 $page_urls   = array();
 $widget_list = array( 'browsers', 'countries', 'hits', 'pages', 'referring', 'search', 'words', 'top-visitors', 'recent' );
-$all_widget  = \WP_STATISTICS\Admin_Dashboard::widget_list();
+$all_widget  = Meta_Box::_list();
 foreach ( $widget_list as $widget ) {
 	if ( array_key_exists( $widget, $all_widget ) ) {
 		$page_urls[ 'wps_' . str_replace( "-", "_", $widget ) . '_more_button' ] = Admin_Menus::admin_url( $all_widget[ $widget ]['page_url'] );

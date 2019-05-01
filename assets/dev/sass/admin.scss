@@ -1,39 +1,25 @@
 // Define
-$image_path : "../images";
+$image_path: "../images";
 
 // Global
 @import "component/global";
 
-// Print Style
+// WordPress Admin Component
 @import "component/print";
-
-// WordPress Admin Bar
+@import "component/placeholder/placeholder-loading";
 @import "component/admin-bar";
-
-// WordPress Pagination
 @import "component/pagination";
-
-// WordPress Admin Setting Page
-@import "pages/setting-page";
-
-// WordPress Admin Add-one Page
-@import "pages/add-one-page";
-
-// WordPress Admin WElCome PAge
-@import "pages/welcome-page";
-
-// WordPress Admin Editor
 @import "component/editor";
-
-// WordPress Admin Pages
-@import "pages/admin-pages";
-
-// WordPress Meta Boxes
 @import "component/meta-box";
 
-// About Meta Box
-@import "meta-box/about";
+// WordPress Admin Page
+@import "pages/setting-page";
+@import "pages/add-one-page";
+@import "pages/welcome-page";
+@import "pages/admin-pages";
 
+// Load WordPress Meta Box
+@import "meta-box/about";
 
 
 #last-log {
@@ -353,7 +339,6 @@ $image_path : "../images";
 .wp-statistics-sub-fullwidth {
   width: 100%;
 }
-
 
 
 .wp-statistics-table {

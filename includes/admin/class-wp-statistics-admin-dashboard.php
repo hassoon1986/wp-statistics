@@ -5,7 +5,7 @@ namespace WP_STATISTICS;
 class Admin_Dashboard {
 	/**
 	 * User Meta Set Dashboard Option name
-     *
+	 *
 	 * @var string
 	 */
 	public static $dashboard_set = 'dashboard_set';
@@ -23,134 +23,14 @@ class Admin_Dashboard {
 	}
 
 	/**
-	 * Widget Setup Key
-	 *
-	 * @param $key
-	 * @return string
-	 */
-	public static function widget_setup_key( $key ) {
-		return 'wp-statistics-' . $key . '-widget';
-	}
-
-	/**
-	 * Get Widget List
-	 *
-	 * @param bool $widget
-	 * @return array|mixed
-	 */
-	public static function widget_list( $widget = false ) {
-
-		/**
-		 * List of WP-Statistics Widget
-		 *
-		 * --- Array Arg -----
-		 * page_url : link of Widget Page @see WP_Statistics::$page
-		 * name     : Name Of Widget Box
-		 * require  : the Condition From Wp-statistics Option if == true
-		 * hidden   : if set true , Default Hidden Dashboard in Wordpress Admin
-		 *
-		 */
-		$list = array(
-			'quickstats'       => array(
-				'page_url' => 'overview',
-				'name'     => __( 'Quick Stats', 'wp-statistics' )
-			),
-			'summary'          => array(
-				'name'   => __( 'Summary', 'wp-statistics' ),
-				'hidden' => true
-			),
-			'browsers'         => array(
-				'page_url' => 'browser',
-				'name'     => __( 'Top 10 Browsers', 'wp-statistics' ),
-				'require'  => array( 'visitors' ),
-				'hidden'   => true
-			),
-			'countries'        => array(
-				'page_url' => 'countries',
-				'name'     => __( 'Top 10 Countries', 'wp-statistics' ),
-				'require'  => array( 'geoip', 'visitors' ),
-				'hidden'   => true
-			),
-			'hits'             => array(
-				'page_url' => 'hits',
-				'name'     => __( 'Hit Statistics', 'wp-statistics' ),
-				'require'  => array( 'visits' ),
-				'hidden'   => true
-			),
-			'pages'            => array(
-				'page_url' => 'pages',
-				'name'     => __( 'Top 10 Pages', 'wp-statistics' ),
-				'require'  => array( 'pages' ),
-				'hidden'   => true
-			),
-			'referring'        => array(
-				'page_url' => 'referrers',
-				'name'     => __( 'Top Referring Sites', 'wp-statistics' ),
-				'require'  => array( 'visitors' ),
-				'hidden'   => true
-			),
-			'search'           => array(
-				'page_url' => 'searches',
-				'name'     => __( 'Search Engine Referrals', 'wp-statistics' ),
-				'require'  => array( 'visitors' ),
-				'hidden'   => true
-			),
-			'words'            => array(
-				'page_url' => 'words',
-				'name'     => __( 'Latest Search Words', 'wp-statistics' ),
-				'require'  => array( 'visitors' ),
-				'hidden'   => true
-			),
-			'top-visitors'     => array(
-				'page_url' => 'top-visitors',
-				'name'     => __( 'Top 10 Visitors Today', 'wp-statistics' ),
-				'require'  => array( 'visitors' ),
-				'hidden'   => true
-			),
-			'recent'           => array(
-				'page_url' => 'visitors',
-				'name'     => __( 'Recent Visitors', 'wp-statistics' ),
-				'require'  => array( 'visitors' ),
-				'hidden'   => true
-			),
-			'hitsmap'          => array(
-				'name'    => __( 'Today\'s Visitors Map', 'wp-statistics' ),
-				'require' => array( 'visitors' ),
-				'hidden'  => true
-			)
-		);
-
-		//Print List of Dashboard
-		if ( $widget === false ) {
-			return $list;
-		} else {
-			if ( array_key_exists( $widget, $list ) ) {
-				return $list[ $widget ];
-			}
-		}
-
-		return array();
-	}
-
-	/**
 	 * This function Register Wp-statistics Dashboard to wordpress Admin
 	 */
 	public function register_dashboard_widget() {
 
-		//Check Dashboard Widget
-		if ( ! function_exists( 'wp_add_dashboard_widget' ) ) {
-			return;
-		}
-
-		//Get List Of Wp-statistics Dashboard Widget
-		$list = self::widget_list();
-		foreach ( $list as $widget_key => $dashboard ) {
-
-			//Register Dashboard Widget
-			if ( Option::check_option_require( $dashboard ) === true ) {
-				wp_add_dashboard_widget( self::widget_setup_key( $widget_key ), $dashboard['name'], array( $this, 'generate_postbox_contents'), $control_callback = null, array( 'widget' => $widget_key ) );
+		foreach ( Meta_Box::_list() as $widget_key => $dashboard ) {
+			if ( Option::check_option_require( $dashboard ) === true and isset( $dashboard['show_on_dashboard'] ) and $dashboard['show_on_dashboard'] === true ) {
+				wp_add_dashboard_widget( Meta_Box::getMetaBoxKey( $widget_key ), $dashboard['name'], array( $this, 'generate_postbox_contents' ), $control_callback = null, array( 'widget' => $widget_key ) );
 			}
-
 		}
 	}
 
@@ -184,7 +64,7 @@ class Admin_Dashboard {
 	public static function set_user_hidden_dashboard_option() {
 
 		//Get List Of Wp-statistics Dashboard Widget
-		$dashboard_list = self::widget_list();
+		$dashboard_list = Meta_Box::_list();
 		$hidden_opt     = 'metaboxhidden_dashboard';
 
 		//Create Empty Option and save in User meta
@@ -198,8 +78,8 @@ class Admin_Dashboard {
 
 		//Set Default Hidden Dashboard in Admin Wordpress
 		foreach ( $dashboard_list as $widget => $dashboard ) {
-			if ( array_key_exists( 'hidden', $dashboard ) ) {
-				$hidden_widgets[] = self::widget_setup_key( $widget );
+			if ( isset( $dashboard['hidden'] ) and $dashboard['hidden'] === true ) {
+				$hidden_widgets[] = Meta_Box::getMetaBoxKey( $widget );
 			}
 		}
 
@@ -220,7 +100,7 @@ class Admin_Dashboard {
 
 		//Prepare List Of Dashboard
 		$page_urls  = array();
-		$dashboards = self::widget_list();
+		$dashboards = Meta_Box::_list();
 		foreach ( $dashboards as $widget_key => $dashboard ) {
 			if ( array_key_exists( 'page_url', $dashboard ) ) {
 				$page_urls[ 'wp-statistics-' . $widget_key . '-widget_more_button' ] = Admin_Menus::admin_url( $dashboard['page_url'] );
@@ -261,7 +141,7 @@ class Admin_Dashboard {
                     }
 
                     var temp_html = temp.html();
-                    if (temp_id == '<?php echo self::widget_setup_key( 'summary' ); ?>') {
+                    if (temp_id == '<?php echo Meta_Box::getMetaBoxKey( 'summary' ); ?>') {
                         new_text = '<?php echo Admin_Templates::meta_box_button( 'refresh' );?>';
                         new_text = new_text.replace('{{refreshid}}', temp_id + '_refresh_button');
                         temp_html = temp_html.replace('</button>', new_text);
