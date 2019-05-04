@@ -9,9 +9,4 @@ class summary {
 		return $args;
 	}
 
-	public static function i18n() {
-		return array(
-		);
-	}
-
 }

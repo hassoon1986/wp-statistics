@@ -6,7 +6,14 @@ class quickstats {
 
 	public static function get( $args = array() ) {
 
-		return $args;
+
+		return array('test' => 'yes');
+	}
+
+	public static function lang() {
+		return array(
+			'online' => 'user_online'
+		);
 	}
 
 }

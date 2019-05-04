@@ -70,10 +70,39 @@ wps_js.get_meta_box_info = function (key) {
 };
 
 /**
+ * Get MetaBox Lang
+ */
+wps_js.meta_box_lang = function (meta_box, lang) {
+    if (lang in wps_js.i18n.meta_boxes[meta_box]['lang']) {
+        return wps_js.i18n.meta_boxes[meta_box]['lang'][lang];
+    }
+    return '';
+};
+
+/**
  * Get MetaBox inner text selector
  */
 wps_js.meta_box_inner = function (key) {
     return "#" + wps_js.getMetaBoxKey(key) + " div.inside";
+};
+
+/**
+ * Create Custom Button for Meta Box
+ */
+wps_js.meta_box_button = function (key) {
+    let selector = "#" + wps_js.getMetaBoxKey(key) + " button[class=handlediv]";
+    let meta_box_info = wps_js.get_meta_box_info(key);
+
+    // Clean Button
+    jQuery("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh], #" + wps_js.getMetaBoxKey(key) + " button[class*=wps-more]").remove();
+
+    // Add Refresh Button
+    jQuery(`<button class="handlediv button-link wps-refresh" type="button"><span class="dashicons dashicons-update"></span> <span class="screen-reader-text">` + wps_js._('reload') + `</span></button>`).insertAfter(selector);
+
+    // Check Page Url Button
+    if ("page_url" in meta_box_info) {
+        jQuery(`<button class="handlediv button-link wps-more" type="button" onclick="location.href = '` + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
+    }
 };
 
 /**
@@ -100,6 +129,9 @@ wps_js.run_meta_box = function (key, params = false) {
             main.html(wps_js.placeholder());
         }
 
+        // Add Custom Button
+        wps_js.meta_box_button(key);
+
         // Get Meta Box Data
         let arg = {'name': key};
         if (params !== false) {
@@ -120,3 +152,30 @@ wps_js.run_meta_boxes = function (list = false) {
         wps_js.run_meta_box(value);
     });
 };
+
+
+/**
+ * Disable Close WordPress Post ox for Meta Box Button
+ */
+jQuery(document).on('mouseenter mouseleave', '.wps-refresh, .wps-more', function (ev) {
+    let wordpress_postbox = jQuery('.postbox h3, .postbox .handlediv');
+    if (ev.type === 'mouseenter') {
+        wordpress_postbox.unbind('click.postboxes');
+    } else {
+        wordpress_postbox.bind('click.postboxes');
+    }
+});
+
+/**
+ * Meta Box Refresh Click Handler
+ */
+jQuery(document).on("click", '.wps-refresh', function (e) {
+    e.preventDefault();
+
+    // Get Meta Box name By Parent ID
+    let parentID = jQuery(this).parent(".postbox").attr("id");
+    let meta_box_name = parentID.split('statistics-').pop().split('-widget')[0];
+
+    // Run Meta Box
+    wps_js.run_meta_box(meta_box_name);
+});

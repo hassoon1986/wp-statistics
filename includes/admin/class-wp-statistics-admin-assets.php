@@ -144,7 +144,7 @@ class Admin_Assets {
 		}
 
 		// Load AjaxQ Library
-		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+		if ( ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) {
 			wp_enqueue_script( self::$prefix . '-ajaxQ', self::url( 'ajaxq/ajaxq.js' ), true, '0.0.7' );
 		}
 
@@ -172,11 +172,6 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ), array( 'jquery' ), self::version() );
 		}
 
-		// Load Admin Dashboard Script
-		if ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) {
-			wp_enqueue_script( self::$prefix . '-dashboard', self::url( 'dashboard.js' ), array( 'jquery' ), self::version() );
-		}
-
 		// Load Overview Script
 		if ( Admin_Menus::in_page( 'overview' ) ) {
 			wp_enqueue_script( self::$prefix . '-overview', self::url( 'overview.js' ), array( 'jquery' ), self::version() );
@@ -187,7 +182,7 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-editor', self::url( 'editor.js' ), array( 'jquery' ), self::version() );
 		}
 
-		//TODO Mix dashboard.js and overview.js and editor.js in admin.js file at latest
+		//TODO Mix overview.js and editor.js in admin.js file at latest
 	}
 
 	/**
@@ -201,22 +196,38 @@ class Admin_Assets {
 			// Add Admin Ajax WordPress URL
 			'ajax_url'    => admin_url( 'admin-ajax.php' ),
 
-			// Rest-API Meta Box Url
-			'api_url'     => get_rest_url( null, RestApi::$namespace . '/metabox' ),
-
 			// Date format
 			'date_format' => array(
 				'jquery_ui' => Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ),
 				'moment_js' => Admin_Templates::convert_php_to_moment_js( get_option( "date_format" ) ),
-			)
+			),
+
+			// Global Lang
+			'more_detail' => __( 'More Details', 'wp-statistics' ),
+			'reload'      => __( 'Reload', 'wp-statistics' ),
 		);
 
-		// Get Meta Boxes i18n
-		foreach ( Meta_Box::_list() as $meta_box => $value ) {
-			$class = Meta_Box::getMetaBoxClass( $meta_box );
-			if ( method_exists( $class, 'i18n' ) ) {
-				$list[ str_replace( "-", "_", $meta_box ) ] = $class::i18n();
+		// Rest-API Meta Box Url
+		$list['metabox_api'] = get_rest_url( null, RestApi::$namespace . '/metabox' );
+
+		// Meta Box List
+		$meta_boxes_list    = Meta_Box::_list();
+		$list['meta_boxes'] = array();
+		foreach ( $meta_boxes_list as $meta_box => $value ) {
+
+			// Convert Page Url
+			if ( isset( $value['page_url'] ) ) {
+				$value['page_url'] = Admin_Menus::admin_url( $value['page_url'] );
 			}
+
+			// Add Meta Box Lang
+			$class = Meta_Box::getMetaBoxClass( $meta_box );
+			if ( method_exists( $class, 'lang' ) ) {
+				$value['lang'] = $class::lang();
+			}
+
+			//Push to List
+			$list['meta_boxes'][ $meta_box ] = $value;
 		}
 
 		return $list;

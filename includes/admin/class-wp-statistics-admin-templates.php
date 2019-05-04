@@ -23,6 +23,7 @@ class Admin_Templates {
 	}
 
 	/**
+	 * //TODO Remove At Last
 	 * Show MetaBox button Refresh/Direct Button Link in Top of Meta Box
 	 *
 	 * @param string $export
@@ -31,8 +32,8 @@ class Admin_Templates {
 	public static function meta_box_button( $export = 'all' ) {
 
 		//Prepare button
-		$refresh = '</button><button class="handlediv button-link wps-refresh" type="button" id="{{refreshid}}">' . Admin_Templates::icons( 'dashicons-update' ) . '<span class="screen-reader-text">' . __( 'Reload', 'wp-statistics' ) . '</span></button>';
-		$more    = '<button class="handlediv button-link wps-more" type="button" id="{{moreid}}">' . Admin_Templates::icons( 'dashicons-external' ) . '<span class="screen-reader-text">' . __( 'More Details', 'wp-statistics' ) . '</span></button>';
+		$refresh = '</button><button class="handlediv button-link wps-refresh" type="button">' . Admin_Templates::icons( 'dashicons-update' ) . '<span class="screen-reader-text">' . __( 'Reload', 'wp-statistics' ) . '</span></button>';
+		$more    = '<button class="handlediv button-link wps-more" type="button">' . Admin_Templates::icons( 'dashicons-external' ) . '<span class="screen-reader-text">' . __( 'More Details', 'wp-statistics' ) . '</span></button>';
 
 		//Export
 		if ( $export == 'all' ) {

@@ -119,6 +119,11 @@ class settings_page {
 					Install::setup_visitor_relationship_table();
 				}
 
+				//Flush Rewrite Use Cache Plugin
+				if ( isset( $_POST['wps_use_cache_plugin'] ) ) {
+					flush_rewrite_rules();
+				}
+
 				// Prepare Visitor IP
 				$value = 'REMOTE_ADDR';
 				if ( isset( $_POST['ip_method'] ) and ! empty( $_POST['ip_method'] ) ) {
