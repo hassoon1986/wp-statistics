@@ -87,6 +87,14 @@ wps_js.meta_box_inner = function (key) {
 };
 
 /**
+ * Get MetaBox name by tag ID
+ * ex: wp-statistics-summary-widget -> summary
+ */
+wps_js.meta_box_name_by_id = function (ID) {
+    return ID.split('statistics-').pop().split('-widget')[0];
+};
+
+/**
  * Create Custom Button for Meta Box
  */
 wps_js.meta_box_button = function (key) {
@@ -153,7 +161,6 @@ wps_js.run_meta_boxes = function (list = false) {
     });
 };
 
-
 /**
  * Disable Close WordPress Post ox for Meta Box Button
  */
@@ -174,8 +181,26 @@ jQuery(document).on("click", '.wps-refresh', function (e) {
 
     // Get Meta Box name By Parent ID
     let parentID = jQuery(this).parent(".postbox").attr("id");
-    let meta_box_name = parentID.split('statistics-').pop().split('-widget')[0];
+    let meta_box_name = wps_js.meta_box_name_by_id(parentID);
 
     // Run Meta Box
     wps_js.run_meta_box(meta_box_name);
+});
+
+/**
+ * Watch Show/Hide Meta Box in WordPress Dashboard
+ * We dont Use PreventDefault Because WordPress Core use Checked checkbox.
+ */
+jQuery(document).on("click", 'input[type=checkbox][id^="wp-statistics-"][id$="-widget-hide"]', function () {
+
+    // Check is Checked For Show Post Box
+    if (jQuery(this).is(':checked')) {
+
+        // Get Meta Box name By ID
+        let ID = jQuery(this).attr("id");
+        let meta_box_name = wps_js.meta_box_name_by_id(ID);
+
+        // Run Meta Box
+        wps_js.run_meta_box(meta_box_name);
+    }
 });
