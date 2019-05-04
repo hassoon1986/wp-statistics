@@ -1,4 +1,4 @@
-.ph-item {
+.wps-ph-item {
   &, *,
   ::after, ::before {
     box-sizing: border-box;
@@ -7,12 +7,12 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  padding: $ph-gutter ($ph-gutter / 2) ($ph-gutter - $ph-spacer) ($ph-gutter / 2);
+  //padding: $ph-gutter ($ph-gutter / 2) ($ph-gutter - $ph-spacer) ($ph-gutter / 2);
   overflow: hidden;
-  margin-bottom: $ph-gutter;
+  //margin-bottom: $ph-gutter;
   background-color: $ph-bg;
-  border: 1px solid darken($ph-bg, 10%);
-  border-radius: $ph-border-radius;
+ // border: 1px solid darken($ph-bg, 10%);
+  //border-radius: $ph-border-radius;
 
   &::before {
     content: " ";
@@ -37,13 +37,13 @@
   }
 }
 
-.ph-row {
+.wps-ph-row {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: ($ph-spacer / 2);
 
   div {
-    height: 10px;
+    height: 15px;
     margin-bottom: ($ph-spacer / 2);
     background-color: $ph-color;
   }
@@ -57,26 +57,26 @@
   }
 }
 
-.ph-col-2 {
+.wps-ph-col-2 {
   flex: 0 0 percentage(2 / 12);
 }
-.ph-col-4 {
+.wps-ph-col-4 {
   flex: 0 0 percentage(4 / 12);
 }
-.ph-col-6 {
+.wps-ph-col-6 {
   flex: 0 0 percentage(6 / 12);
 }
-.ph-col-8 {
+.wps-ph-col-8 {
   flex: 0 0 percentage(8 / 12);
 }
-.ph-col-10 {
+.wps-ph-col-10 {
   flex: 0 0 percentage(10 / 12);
 }
-.ph-col-12 {
+.wps-ph-col-12 {
   flex: 0 0 percentage(12 / 12);
 }
 
-.ph-avatar {
+.wps-ph-avatar {
   position: relative;
   width: 100%;
   min-width: 60px;
@@ -92,7 +92,7 @@
   }
 }
 
-.ph-picture {
+.wps-ph-picture {
   width: 100%;
   height: 120px;
   background-color: $ph-color;
