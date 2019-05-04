@@ -194,22 +194,32 @@ class Admin_Assets {
 	 * Prepare Localize WP-Statistics Admin Js
 	 */
 	public static function wps_i18n() {
-		return array(
+
+		// Basic
+		$list = array(
 
 			// Add Admin Ajax WordPress URL
 			'ajax_url'    => admin_url( 'admin-ajax.php' ),
 
 			// Rest-API Meta Box Url
-			'api_url'    => get_rest_url( null, RestApi::$namespace . '/metabox' ),
+			'api_url'     => get_rest_url( null, RestApi::$namespace . '/metabox' ),
 
 			// Date format
 			'date_format' => array(
 				'jquery_ui' => Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ),
 				'moment_js' => Admin_Templates::convert_php_to_moment_js( get_option( "date_format" ) ),
 			)
-
-
 		);
+
+		// Get Meta Boxes i18n
+		foreach ( Meta_Box::_list() as $meta_box => $value ) {
+			$class = Meta_Box::getMetaBoxClass( $meta_box );
+			if ( method_exists( $class, 'i18n' ) ) {
+				$list[ str_replace( "-", "_", $meta_box ) ] = $class::i18n();
+			}
+		}
+
+		return $list;
 	}
 
 }
