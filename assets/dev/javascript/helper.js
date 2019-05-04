@@ -21,3 +21,12 @@ wps_js.date_picker = function (input, mask) {
         });
     }
 };
+
+/**
+ * Redirect To Custom Url
+ *
+ * @param url
+ */
+wps_js.redirect = function(url) {
+    window.location.replace(url);
+};

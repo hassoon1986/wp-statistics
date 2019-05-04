@@ -48,8 +48,15 @@ wps_js.placeholder = function () {
 /**
  * Show No Data Error if Meta Box is Empty
  */
-wps_js.no_data = function () {
+wps_js.no_meta_box_data = function () {
 
+};
+
+/**
+ * Show Error Connection if Meta Box is Empty
+ */
+wps_js.error_meta_box_data = function (text) {
+    return 'error dad';
 };
 
 /**
@@ -63,17 +70,25 @@ wps_js.get_meta_box_info = function (key) {
 };
 
 /**
+ * Get MetaBox inner text selector
+ */
+wps_js.meta_box_inner = function (key) {
+    return "#" + wps_js.getMetaBoxKey(key) + " div.inside";
+};
+
+/**
  * Run Meta Box
  *
  * @param key
+ * @param params
  */
-wps_js.run_meta_box = function (key) {
+wps_js.run_meta_box = function (key, params = false) {
 
     // Check Exist Meta Box div
     if (wps_js.exist_tag("#" + wps_js.getMetaBoxKey(key)) && jQuery("#" + wps_js.getMetaBoxKey(key)).is(":visible")) {
 
         // Meta Box Main
-        let main = jQuery("#" + wps_js.getMetaBoxKey(key) + " div.inside");
+        let main = jQuery(wps_js.meta_box_inner(key));
 
         // Get Meta Box Method
         let method = wps_js.get_meta_box_method(key);
@@ -86,9 +101,11 @@ wps_js.run_meta_box = function (key) {
         }
 
         // Get Meta Box Data
-
-
-
+        let arg = {'name': key};
+        if (params !== false) {
+            arg = jQuery.extend({}, params, arg);
+        }
+        wps_js.ajaxQ('metabox', arg, method, 'error_meta_box_data');
     }
 };
 
