@@ -190,22 +190,25 @@ class Admin_Assets {
 	 */
 	public static function wps_i18n() {
 
-		// Basic
-		$list = array(
-
-			// Add Admin Ajax WordPress URL
-			'ajax_url'    => admin_url( 'admin-ajax.php' ),
-
-			// Date format
-			'date_format' => array(
-				'jquery_ui' => Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ),
-				'moment_js' => Admin_Templates::convert_php_to_moment_js( get_option( "date_format" ) ),
-			),
-
-			// Global Lang
-			'more_detail' => __( 'More Details', 'wp-statistics' ),
-			'reload'      => __( 'Reload', 'wp-statistics' ),
+		// Date Format
+		$list['date_format'] = array(
+			'jquery_ui' => Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ),
+			'moment_js' => Admin_Templates::convert_php_to_moment_js( get_option( "date_format" ) ),
 		);
+
+		//Global Option
+		$list['options'] = array(
+			'rtl'         => ( is_rtl() ? 1 : 0 ),
+			'user_online' => ( Option::get( 'useronline' ) ? 1 : 0 ),
+			'visitors'    => ( Option::get( 'visitors' ) ? 1 : 0 ),
+			'visits'      => ( Option::get( 'visits' ) ? 1 : 0 ),
+			'geo_ip'      => ( Option::get( 'geoip' ) ? 1 : 0 ),
+			'geo_city'    => ( Option::get( 'geoip_city' ) ? 1 : 0 ),
+		);
+
+		// Global Lang
+		$list['more_detail'] = __( 'More Details', 'wp-statistics' );
+		$list['reload']      = __( 'Reload', 'wp-statistics' );
 
 		// Rest-API Meta Box Url
 		$list['metabox_api'] = get_rest_url( null, RestApi::$namespace . '/metabox' );

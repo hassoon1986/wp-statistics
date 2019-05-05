@@ -27,7 +27,7 @@ wps_js.getMetaBoxKey = function (key) {
  */
 wps_js.placeholder = function () {
     return `
-    <div class="wps-ph-item">
+<div class="wps-ph-item">
     <div class="wps-ph-col-12">
         <div class="wps-ph-picture"></div>
         <div class="wps-ph-row">

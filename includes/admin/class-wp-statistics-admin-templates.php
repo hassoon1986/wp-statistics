@@ -44,6 +44,7 @@ class Admin_Templates {
 	}
 
 	/**
+	 *  //TODO Remove At Last
 	 * Show Loading Meta Box
 	 */
 	public static function loading_meta_box() {
