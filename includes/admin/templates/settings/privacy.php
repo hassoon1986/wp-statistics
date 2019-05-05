@@ -2,13 +2,13 @@
     <tbody>
     <tr valign="top">
         <th scope="row" colspan="2"><h3><?php use WP_STATISTICS\Admin_Helper;
-		        use WP_STATISTICS\Admin_Menus;
+		        use WP_STATISTICS\Menus;
 
 		        _e( 'Privacy and Data Protection', 'wp-statistics' ); ?></h3></th>
     </tr>
 
     <tr valign="top">
-        <td scope="row" colspan="2"><?php echo sprintf( __( 'If you want to delete visitor data, please <a href="%s">click here</a>.', 'wp-statistics' ), Admin_Menus::admin_url( 'optimization', array( 'tab' => 'purging' ) ) ); ?></td>
+        <td scope="row" colspan="2"><?php echo sprintf( __( 'If you want to delete visitor data, please <a href="%s">click here</a>.', 'wp-statistics' ), Menus::admin_url( 'optimization', array( 'tab' => 'purging' ) ) ); ?></td>
     </tr>
 
     <tr valign="top">

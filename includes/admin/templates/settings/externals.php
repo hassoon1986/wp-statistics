@@ -2,7 +2,7 @@
     <tbody>
     <tr valign="top">
         <th scope="row" colspan="2"><h3><?php use WP_STATISTICS\Admin_Helper;
-		        use WP_STATISTICS\Admin_Menus;
+		        use WP_STATISTICS\Menus;
 
 		        _e( 'GeoIP settings', 'wp-statistics' ); ?></h3></th>
     </tr>
@@ -222,7 +222,7 @@
         </th>
 
         <td>
-            <a href="<?php echo Admin_Menus::admin_url( 'settings', array( 'tab' => 'externals-settings', 'update-referrer-spam' => 'yes' ) ) ?>" class="button"><?php _e( 'Update', 'wp-staitsitcs' ); ?></a>
+            <a href="<?php echo Menus::admin_url( 'settings', array( 'tab' => 'externals-settings', 'update-referrer-spam' => 'yes' ) ) ?>" class="button"><?php _e( 'Update', 'wp-staitsitcs' ); ?></a>
             <p class="description"><?php _e( 'Click button to download the update.', 'wp-statistics' ); ?></p>
         </td>
     </tr>

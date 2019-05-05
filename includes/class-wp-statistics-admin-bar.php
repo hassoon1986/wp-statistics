@@ -42,12 +42,12 @@ class AdminBar {
 			$admin_bar_list = array(
 				'wp-statistic-menu'                   => array(
 					'title' => '<span class="ab-icon"></span>',
-					'href'  => ( is_admin() ? Admin_Menus::admin_url( 'overview' ) : admin_url( 'admin.php?page=wps_overview_page' ) )
+					'href'  => Menus::admin_url( 'overview' )
 				),
 				'wp-statistics-menu-useronline'       => array(
 					'parent' => 'wp-statistic-menu',
 					'title'  => __( 'Online User', 'wp-statistics' ) . ": " . wp_statistics_useronline(),
-					'href'   => ( is_admin() ? Admin_Menus::admin_url( 'online' ) : admin_url( 'admin.php?page=wps_online_page' ) )
+					'href'   => Menus::admin_url( 'online' )
 				),
 				'wp-statistics-menu-todayvisitor'     => array(
 					'parent' => 'wp-statistic-menu',
@@ -68,7 +68,7 @@ class AdminBar {
 				'wp-statistics-menu-viewstats'        => array(
 					'parent' => 'wp-statistic-menu',
 					'title'  => __( 'View Stats', 'wp-statistics' ),
-					'href'   => ( is_admin() ? Admin_Menus::admin_url( 'overview' ) : admin_url( 'admin.php?page=wps_overview_page' ) )
+					'href'   => Menus::admin_url( 'overview' )
 				)
 			);
 

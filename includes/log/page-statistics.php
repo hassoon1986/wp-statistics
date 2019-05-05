@@ -68,7 +68,7 @@ $html .= '<br>';
 ?>
 <div class="wrap wps-wrap">
 	<?php Admin_Templates::show_page_title( sprintf( __( 'Page Trend for Post ID %s', 'wp-statistics' ), $pageid ) . ' - ' . $title ); ?>
-	<?php Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
+	<?php Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
     <div class="postbox-container" id="last-log">
         <div class="metabox-holder">
             <div class="meta-box-sortables">

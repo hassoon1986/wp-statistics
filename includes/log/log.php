@@ -1,14 +1,14 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\Meta_Box;
 use WP_STATISTICS\Admin_Templates;
 
 $nag_html = '';
 
 if ( ! WP_STATISTICS\Option::get( 'geoip' ) ) {
-	$nag_html .= '<div class="notice notice-warning"><p>' . sprintf( __( 'GeoIP collection is not enabled. Please go to <a href="%s">setting page</a> to enable GeoIP for getting more information and location (country) from the visitor.', 'wp-statistics' ), Admin_Menus::admin_url( 'settings', array( 'tab' => 'externals-settings' ) ) ) . '</p></div>';
+	$nag_html .= '<div class="notice notice-warning"><p>' . sprintf( __( 'GeoIP collection is not enabled. Please go to <a href="%s">setting page</a> to enable GeoIP for getting more information and location (country) from the visitor.', 'wp-statistics' ), Menus::admin_url( 'settings', array( 'tab' => 'externals-settings' ) ) ) . '</p></div>';
 }
 
 if ( ! WP_STATISTICS\Option::get( 'disable_donation_nag', false ) ) {
@@ -23,7 +23,7 @@ if ( is_array( $widget_order ) && count( $widget_order ) > 2 ) {
 }
 
 // Add the about box here as metaboxes added on the actual page load cannot be closed.
-add_meta_box( 'wps_about_postbox', sprintf( __( 'WP Statistics - Version %s', 'wp-statistics' ), WP_STATISTICS_VERSION ), 'wp_statistics_generate_overview_postbox_contents', \WP_STATISTICS\Admin_Menus::get_action_menu_slug('overview'), 'side', null, array( 'widget' => 'about' ) );
+add_meta_box( 'wps_about_postbox', sprintf( __( 'WP Statistics - Version %s', 'wp-statistics' ), WP_STATISTICS_VERSION ), 'wp_statistics_generate_overview_postbox_contents', \WP_STATISTICS\Menus::get_action_menu_slug('overview'), 'side', null, array( 'widget' => 'about' ) );
 
 function wp_statistics_generate_overview_postbox_contents( $post, $args ) {
 	$widget       = $args['args']['widget'];
@@ -42,11 +42,11 @@ function wp_statistics_generate_overview_postbox_contents( $post, $args ) {
 
     <div class="metabox-holder" id="overview-widgets">
         <div class="postbox-container" id="wps-postbox-container-1">
-			<?php do_meta_boxes( \WP_STATISTICS\Admin_Menus::get_action_menu_slug('overview'), 'side', '' ); ?>
+			<?php do_meta_boxes( \WP_STATISTICS\Menus::get_action_menu_slug('overview'), 'side', '' ); ?>
         </div>
 
         <div class="postbox-container" id="wps-postbox-container-2">
-			<?php do_meta_boxes( \WP_STATISTICS\Admin_Menus::get_action_menu_slug('overview'), 'normal', '' ); ?>
+			<?php do_meta_boxes( \WP_STATISTICS\Menus::get_action_menu_slug('overview'), 'normal', '' ); ?>
         </div>
     </div>
 </div>
@@ -58,13 +58,13 @@ $widget_list = array( 'browsers', 'countries', 'hits', 'pages', 'referring', 'se
 $all_widget  = Meta_Box::_list();
 foreach ( $widget_list as $widget ) {
 	if ( array_key_exists( $widget, $all_widget ) ) {
-		$page_urls[ 'wps_' . str_replace( "-", "_", $widget ) . '_more_button' ] = Admin_Menus::admin_url( $all_widget[ $widget ]['page_url'] );
+		$page_urls[ 'wps_' . str_replace( "-", "_", $widget ) . '_more_button' ] = Menus::admin_url( $all_widget[ $widget ]['page_url'] );
 	}
 }
 
 //Add Extra Pages For Overview Page
 foreach ( array( 'exclusions' => 'exclusions', 'users_online' => 'online' ) as $p_key => $p_link ) {
-	$page_urls[ 'wps_' . $p_key . '_more_button' ] = Admin_Menus::admin_url( $p_link );
+	$page_urls[ 'wps_' . $p_key . '_more_button' ] = Menus::admin_url( $p_link );
 }
 ?>
 <script type="text/javascript">
@@ -100,7 +100,7 @@ foreach ( array( 'exclusions' => 'exclusions', 'users_online' => 'online' ) as $
         jQuery('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 
         // postboxes setup
-        postboxes.add_postbox_toggles('<?php echo \WP_STATISTICS\Admin_Menus::get_action_menu_slug('overview'); ?>');
+        postboxes.add_postbox_toggles('<?php echo \WP_STATISTICS\Menus::get_action_menu_slug('overview'); ?>');
 
         jQuery('.wps-refresh').unbind('click').on('click', wp_statistics_refresh_widget);
         jQuery('.wps-more').unbind('click').on('click', wp_statistics_goto_more);

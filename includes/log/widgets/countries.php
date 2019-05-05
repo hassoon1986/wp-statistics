@@ -1,7 +1,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 
 function wp_statistics_generate_countries_postbox_content() {
 	global $wpdb;
@@ -24,7 +24,7 @@ function wp_statistics_generate_countries_postbox_content() {
 			echo "<td style='text-align: left;'>$i</td>";
 			echo "<td style='text-align: left;'><img src='" . plugins_url( 'wp-statistics/assets/images/flags/' . $item->location . '.png' ) . "' title='{$ISOCountryCode[$item->location]}'/></td>";
 			echo "<td style='text-align: left;'>{$ISOCountryCode[$item->location]}</td>";
-			echo "<td style='text-align: left;'><a href='" . Admin_Menus::admin_url( 'countries', array( 'country' => $item->location ) ) . "'>" . number_format_i18n( $item->count ) . "</a></td>";
+			echo "<td style='text-align: left;'><a href='" . Menus::admin_url( 'countries', array( 'country' => $item->location ) ) . "'>" . number_format_i18n( $item->count ) . "</a></td>";
 			echo "</tr>";
 		}
 		?>

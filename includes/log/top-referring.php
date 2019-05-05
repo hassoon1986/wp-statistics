@@ -6,7 +6,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\Admin_Templates;
 use WP_STATISTICS\Referred;
 
@@ -79,25 +79,25 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 ?>
 <div class="wrap wps-wrap">
 	<?php Admin_Templates::show_page_title( __( 'Top Referring Sites', 'wp-statistics' ) ); ?>
-    <div><?php Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('referrers'), $daysToDisplay, null, null, $referr_field ); ?></div>
+    <div><?php Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('referrers'), $daysToDisplay, null, null, $referr_field ); ?></div>
     <br class="clear"/>
 
     <ul class="subsubsub">
 		<?php if ( $referr ) { ?>
             <li class="all"><a <?php if ( ! $referr ) {
 					echo 'class="current"';
-				} ?>href="?page=<?php echo \WP_STATISTICS\Admin_Menus::get_page_slug('referrers') . $date_args; ?>"><?php _e(
+				} ?>href="?page=<?php echo \WP_STATISTICS\Menus::get_page_slug('referrers') . $date_args; ?>"><?php _e(
 						'All',
 						'wp-statistics'
 					); ?></a>
             </li>|
             <li>
-                <a class="current" href="?page=<?php echo \WP_STATISTICS\Admin_Menus::get_page_slug('referrers'); ?>&referr=<?php echo Referred::html_sanitize_referrer( $referr ) . $date_args; ?>"> <?php echo htmlentities( $title, ENT_QUOTES ); ?>
+                <a class="current" href="?page=<?php echo \WP_STATISTICS\Menus::get_page_slug('referrers'); ?>&referr=<?php echo Referred::html_sanitize_referrer( $referr ) . $date_args; ?>"> <?php echo htmlentities( $title, ENT_QUOTES ); ?>
                     <span class="count">(<?php echo number_format_i18n( $total ); ?>)</span></a></li>
 		<?php } else { ?>
             <li class="all"><a <?php if ( ! $referr ) {
 					echo 'class="current"';
-				} ?>href="?page=<?php echo \WP_STATISTICS\Admin_Menus::get_page_slug('referrers') . $date_args; ?>"><?php _e(
+				} ?>href="?page=<?php echo \WP_STATISTICS\Menus::get_page_slug('referrers') . $date_args; ?>"><?php _e(
 						'All',
 						'wp-statistics'
 					); ?>
@@ -158,7 +158,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 											$map_string = "";
 										} else {
 											$ip_string  = "{$items->ip}";
-											$map_string = "<a class='wps-text-muted' href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . \WP_STATISTICS\Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
+											$map_string = "<a class='wps-text-muted' href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . \WP_STATISTICS\Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
 										}
 
 										echo "<tr>";
@@ -180,7 +180,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 										} else {
 											$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 										}
-										echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
+										echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 										echo "</td>";
 
 										//Show Country
@@ -260,7 +260,7 @@ $ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 										if ( WP_STATISTICS\Option::get( 'geoip' ) ) {
 											echo "<td>" . ( trim( $referrer_list[ $domain ]['country'] ) == "" ? $unknown : "<img src='" . plugins_url( 'wp-statistics/assets/images/flags/' . $referrer_list[ $domain ]['country'] . '.png' ) . "' title='{$ISOCountryCode[$referrer_list[ $domain ]['country']]}' class='log-tools'/>" ) . "</td>";
 										}
-										echo "<td><a class='wps-text-success' href='?page=" . \WP_STATISTICS\Admin_Menus::get_page_slug('referrers') . "&referr=" . $referrer_html . $date_args . "'>" . number_format_i18n( $number ) . "</a></td>";
+										echo "<td><a class='wps-text-success' href='?page=" . \WP_STATISTICS\Menus::get_page_slug('referrers') . "&referr=" . $referrer_html . $date_args . "'>" . number_format_i18n( $number ) . "</a></td>";
 										echo "</tr>";
 									}
 									$i ++;

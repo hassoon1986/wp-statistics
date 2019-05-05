@@ -6,7 +6,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\Admin_Templates;
 use WP_STATISTICS\Referred;
 
@@ -46,7 +46,7 @@ if ( $_get != '%' ) {
     <ul class="subsubsub">
         <li class="all"><a <?php if ( $_get == '%' ) {
 				echo 'class="current"';
-			} ?>href="<?php echo Admin_Menus::admin_url( 'visitors' ); ?>"><?php _e( 'All', 'wp-statistics' ); ?>
+			} ?>href="<?php echo Menus::admin_url( 'visitors' ); ?>"><?php _e( 'All', 'wp-statistics' ); ?>
                 <span class="count">(<?php echo number_format_i18n( $total_visitor ); ?>)</span></a></li>
 		<?php
 		if ( isset( $_var ) ) {
@@ -75,7 +75,7 @@ if ( $_get != '%' ) {
 
 					//Get Browser name
 					$browser_name = wp_statistics_get_browser_list( strtolower( $Browser ) );
-					echo "<li><a " . $current . "href='" . Admin_Menus::admin_url( 'visitors', array( 'agent' => $Browser ) ) . "'> " . $browser_name . " <span class='count'>(" . number_format_i18n( wp_statistics_useragent( $Browser ) ) . ")</span></a></li>";
+					echo "<li><a " . $current . "href='" . Menus::admin_url( 'visitors', array( 'agent' => $Browser ) ) . "'> " . $browser_name . " <span class='count'>(" . number_format_i18n( wp_statistics_useragent( $Browser ) ) . ")</span></a></li>";
 					echo $spacer;
 				}
 			} else {
@@ -84,7 +84,7 @@ if ( $_get != '%' ) {
 				} else {
 					$current = "";
 				}
-				echo $spacer . "<li><a {$current} href='?page=" . \WP_STATISTICS\Admin_Menus::get_page_slug('visitors') . "&{$_var}={$_get}'>{$title} <span class='count'>({$total})</span></a></li>";
+				echo $spacer . "<li><a {$current} href='?page=" . \WP_STATISTICS\Menus::get_page_slug('visitors') . "&{$_var}={$_get}'>{$title} <span class='count'>({$total})</span></a></li>";
 			}
 		}
 		?>
@@ -149,7 +149,7 @@ if ( $_get != '%' ) {
 							} else {
 								$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 							}
-							echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
+							echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 							echo "</td>";
 							$city = '';
 							if ( WP_STATISTICS\Option::get( 'geoip_city' ) ) {
@@ -187,7 +187,7 @@ if ( $_get != '%' ) {
 							if ( \WP_STATISTICS\IP::IsHashIP( $items->ip ) ) {
 								$ip_string = \WP_STATISTICS\IP::$hash_ip_prefix;
 							} else {
-								$ip_string = "<a href='" . Admin_Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";
+								$ip_string = "<a href='" . Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";
 							}
 							echo $ip_string;
 							echo "</td>";

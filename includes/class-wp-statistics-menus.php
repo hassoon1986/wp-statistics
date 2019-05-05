@@ -2,7 +2,7 @@
 
 namespace WP_STATISTICS;
 
-class Admin_Menus {
+class Menus {
 	/**
 	 * List Of Admin Page Slug WP-statistics
 	 *
@@ -83,7 +83,7 @@ class Admin_Menus {
 	 */
 	public static function in_page( $page ) {
 		global $pagenow;
-		return ( is_admin() and $pagenow == "admin.php" and isset( $_REQUEST['page'] ) and $_REQUEST['page'] == Admin_Menus::get_page_slug( $page ) );
+		return ( is_admin() and $pagenow == "admin.php" and isset( $_REQUEST['page'] ) and $_REQUEST['page'] == Menus::get_page_slug( $page ) );
 	}
 
 	/**

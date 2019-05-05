@@ -18,6 +18,10 @@ class SearchEngine {
 	 */
 	public static function getList( $all = false ) {
 
+		// Get Base Search Engine image dir
+		$image_url = WP_STATISTICS_URL . '/assets/images/search-engine/';
+
+		// List OF Search engine
 		$default = $engines = array(
 			'ask'        => array(
 				'name'         => 'Ask.com',
@@ -27,6 +31,7 @@ class SearchEngine {
 				'regexpattern' => 'ask\.com',
 				'querykey'     => 'q',
 				'image'        => 'ask.png',
+				'logo_url'     => $image_url . 'ask.png'
 			),
 			'baidu'      => array(
 				'name'         => 'Baidu',
@@ -36,6 +41,7 @@ class SearchEngine {
 				'regexpattern' => 'baidu\.com',
 				'querykey'     => 'wd',
 				'image'        => 'baidu.png',
+				'logo_url'     => $image_url . 'baidu.png'
 			),
 			'bing'       => array(
 				'name'         => 'Bing',
@@ -45,6 +51,7 @@ class SearchEngine {
 				'regexpattern' => 'bing\.com',
 				'querykey'     => 'q',
 				'image'        => 'bing.png',
+				'logo_url'     => $image_url . 'bing.png'
 			),
 			'clearch'    => array(
 				'name'         => 'clearch.org',
@@ -54,6 +61,7 @@ class SearchEngine {
 				'regexpattern' => 'clearch\.org',
 				'querykey'     => 'q',
 				'image'        => 'clearch.png',
+				'logo_url'     => $image_url . 'clearch.png'
 			),
 			'duckduckgo' => array(
 				'name'         => 'DuckDuckGo',
@@ -63,6 +71,7 @@ class SearchEngine {
 				'regexpattern' => array( 'duckduckgo\.com', 'ddg\.gg' ),
 				'querykey'     => 'q',
 				'image'        => 'duckduckgo.png',
+				'logo_url'     => $image_url . 'duckduckgo.png'
 			),
 			'google'     => array(
 				'name'         => 'Google',
@@ -72,6 +81,7 @@ class SearchEngine {
 				'regexpattern' => 'google\.',
 				'querykey'     => 'q',
 				'image'        => 'google.png',
+				'logo_url'     => $image_url . 'google.png'
 			),
 			'yahoo'      => array(
 				'name'         => 'Yahoo!',
@@ -81,6 +91,7 @@ class SearchEngine {
 				'regexpattern' => 'yahoo\.com',
 				'querykey'     => 'p',
 				'image'        => 'yahoo.png',
+				'logo_url'     => $image_url . 'yahoo.png'
 			),
 			'yandex'     => array(
 				'name'         => 'Yandex',
@@ -90,6 +101,7 @@ class SearchEngine {
 				'regexpattern' => 'yandex\.ru',
 				'querykey'     => 'text',
 				'image'        => 'yandex.png',
+				'logo_url'     => $image_url . 'yandex.png'
 			),
 			'qwant'      => array(
 				'name'         => 'Qwant',
@@ -99,6 +111,7 @@ class SearchEngine {
 				'regexpattern' => 'qwant\.com',
 				'querykey'     => 'q',
 				'image'        => 'qwant.png',
+				'logo_url'     => $image_url . 'qwant.png'
 			)
 		);
 
@@ -357,7 +370,7 @@ class SearchEngine {
 		do_action( 'wp_statistics_before_save_search_word', $data );
 
 		# Save to Database
-		$wpdb->insert( DB::table('search'), $data );
+		$wpdb->insert( DB::table( 'search' ), $data );
 
 		# Action after Save Search Engine Word
 		do_action( 'wp_statistics_after_save_search_word', $data );

@@ -38,7 +38,7 @@ class Welcome {
 			Option::update( 'show_welcome_page', false );
 
 			// Redirect to welcome page
-			wp_redirect( Admin_Menus::admin_url( 'wps_welcome' ) );
+			wp_redirect( Menus::admin_url( 'wps_welcome' ) );
 			exit;
 		}
 

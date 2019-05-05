@@ -1,7 +1,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 
 function wp_statistics_generate_about_postbox_content() {
 	global $WP_Statistics;
@@ -19,9 +19,9 @@ function wp_statistics_generate_about_postbox_content() {
 		if ( current_user_can( wp_statistics_validate_capability( WP_STATISTICS\Option::get( 'manage_capability', 'manage_options' ) ) ) ) {
 			?>
             | <p>
-                <a href="<?php echo Admin_Menus::admin_url( 'settings', array( 'tab' => 'about' ) ); ?>"><?php _e( 'More Info', 'wp-statistics' ); ?></a>
+                <a href="<?php echo Menus::admin_url( 'settings', array( 'tab' => 'about' ) ); ?>"><?php _e( 'More Info', 'wp-statistics' ); ?></a>
             </p>| <p>
-                <a href="<?php echo Admin_Menus::admin_url( 'wps_welcome' ); ?>"><?php _e( 'What’s New', 'wp-statistics' ); ?>?</a></p>
+                <a href="<?php echo Menus::admin_url( 'wps_welcome' ); ?>"><?php _e( 'What’s New', 'wp-statistics' ); ?>?</a></p>
 			<?php
 		}
 		?>

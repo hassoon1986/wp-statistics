@@ -17,7 +17,7 @@
 		$rangeend
 	);
 
-	Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('hits'), $daysToDisplay );
+	Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('hits'), $daysToDisplay );
 
 	$visit_total   = 0;
 	$visitor_total = 0;

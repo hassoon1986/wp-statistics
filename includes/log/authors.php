@@ -52,7 +52,7 @@
 	);
 
 	Admin_Templates::date_range_selector(
-		\WP_STATISTICS\Admin_Menus::get_page_slug('authors'),
+		\WP_STATISTICS\Menus::get_page_slug('authors'),
 		$daysToDisplay,
 		null,
 		null,

@@ -1,7 +1,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\Referred;
 
 function wp_statistics_generate_referring_postbox_content( $count = 10 ) {
@@ -60,7 +60,7 @@ function wp_statistics_generate_referring_postbox_content( $count = 10 ) {
 			echo "<tr>";
 			echo "<td>" . WP_STATISTICS\Helper::show_site_icon( $domain ) . " " . Referred::get_referrer_link( $domain, $referrer_list[ $domain ]['title'], true ) . "</td>";
 			echo "<td><span class='wps-cursor-default' " . ( $referrer_list[ $domain ]['country'] != "" ? 'title="' . $ISOCountryCode[ $referrer_list[ $domain ]['country'] ] . '"' : '' ) . ">" . ( $referrer_list[ $domain ]['ip'] != "" ? $referrer_list[ $domain ]['ip'] : '-' ) . "</span></td>";
-			echo "<td><a href='" . Admin_Menus::admin_url( 'referrers', array( 'referr' => $referrer_html ) ) . "'>" . number_format_i18n( $number ) . "</a></td>";
+			echo "<td><a href='" . Menus::admin_url( 'referrers', array( 'referr' => $referrer_html ) ) . "'>" . number_format_i18n( $number ) . "</a></td>";
 			echo "</tr>";
 		}
 

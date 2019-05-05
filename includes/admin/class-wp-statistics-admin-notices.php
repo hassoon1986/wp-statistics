@@ -35,7 +35,7 @@ class Admin_Notices {
 		$plugin = Helper::is_active_cache_plugin();
 		if ( ! Option::get( 'use_cache_plugin' ) and $plugin['status'] === true ) {
 			$text = ( $plugin['plugin'] == "core" ? __( 'WP_CACHE is enable in your WordPress', 'wp-statistics' ) : sprintf( __( 'You are using %s plugin in WordPress', 'wp-statistics' ), $plugin['plugin'] ) );
-			Helper::wp_admin_notice( $text . ", " . sprintf( __( 'Please enable %1$sCache Setting%2$s in WP Statistics.', 'wp-statistics' ), '<a href="' . Admin_Menus::admin_url( 'settings' ) . '">', '</a>' ), 'warning', true );
+			Helper::wp_admin_notice( $text . ", " . sprintf( __( 'Please enable %1$sCache Setting%2$s in WP Statistics.', 'wp-statistics' ), '<a href="' . Menus::admin_url( 'settings' ) . '">', '</a>' ), 'warning', true );
 		}
 	}
 

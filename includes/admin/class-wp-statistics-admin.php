@@ -80,7 +80,7 @@ class Admin {
 			}
 
 
-			$get_bloginfo_url = Admin_Menus::admin_url( 'settings' );
+			$get_bloginfo_url = Menus::admin_url( 'settings' );
 
 			$itemstoenable = array();
 			if ( ! Option::get( 'useronline' ) ) {
@@ -101,7 +101,7 @@ class Admin {
 			}
 
 
-			$get_bloginfo_url = Admin_Menus::admin_url( 'optimization', array( 'tab' => 'database' ) );
+			$get_bloginfo_url = Menus::admin_url( 'optimization', array( 'tab' => 'database' ) );
 			$dbupdatestodo    = array();
 
 			if ( ! Option::get( 'search_converted' ) ) {
@@ -143,7 +143,7 @@ class Admin {
 
 		$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
 		if ( current_user_can( $manage_cap ) ) {
-			array_unshift( $links, '<a href="' . Admin_Menus::admin_url( 'settings' ) . '">' . __( 'Settings', 'wp-statistics' ) . '</a>' );
+			array_unshift( $links, '<a href="' . Menus::admin_url( 'settings' ) . '">' . __( 'Settings', 'wp-statistics' ) . '</a>' );
 		}
 
 		return $links;
@@ -206,7 +206,7 @@ class Admin {
 	 */
 	static function render_column( $column_name, $post_id ) {
 		if ( $column_name == 'wp-statistics' ) {
-			echo "<a href='" . Admin_Menus::admin_url( 'pages', array( 'page-id' => $post_id ) ) . "'>" . wp_statistics_pages( 'total', "", $post_id ) . "</a>";
+			echo "<a href='" . Menus::admin_url( 'pages', array( 'page-id' => $post_id ) ) . "'>" . wp_statistics_pages( 'total', "", $post_id ) . "</a>";
 		}
 	}
 
@@ -217,6 +217,6 @@ class Admin {
 		global $post;
 
 		$id = $post->ID;
-		echo "<div class='misc-pub-section'>" . __( 'WP Statistics - Hits', 'wp-statistics' ) . ": <b><a href='" . Admin_Menus::admin_url( 'pages', array( 'page-id' => $id ) ) . "'>" . wp_statistics_pages( 'total', "", $id ) . "</a></b></div>";
+		echo "<div class='misc-pub-section'>" . __( 'WP Statistics - Hits', 'wp-statistics' ) . ": <b><a href='" . Menus::admin_url( 'pages', array( 'page-id' => $id ) ) . "'>" . wp_statistics_pages( 'total', "", $id ) . "</a></b></div>";
 	}
 }

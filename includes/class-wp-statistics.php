@@ -123,8 +123,9 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-shortcode.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-widget.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-adminbar.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-meta-box.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-menus.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-admin-bar.php';
 
 		// Hits Class
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user-online.php';
@@ -140,9 +141,6 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-exclusion.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-hits.php';
 
-		// Meta Box List
-		\WP_STATISTICS\Meta_Box::load();
-
 		// Admin classes
 		if ( is_admin() ) {
 
@@ -156,7 +154,6 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-uninstall.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-network.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-purge.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-menus.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-assets.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-notices.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/TinyMCE/class-wp-statistics-tinymce.php';
@@ -167,6 +164,9 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-optimization.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-plugins.php';
 		}
+
+		// Meta Box List
+		\WP_STATISTICS\Meta_Box::load();
 
 		// Rest-Api
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
@@ -304,7 +304,7 @@ final class WP_Statistics {
 			new \WP_STATISTICS\Admin;
 
 			# Admin Menu
-			new \WP_STATISTICS\Admin_Menus;
+			new \WP_STATISTICS\Menus;
 
 			# Admin Asset
 			new \WP_STATISTICS\Admin_Assets;

@@ -6,7 +6,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Menus;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\Admin_Templates;
 use WP_STATISTICS\Referred;
 
@@ -62,7 +62,7 @@ $total = $search_result[ $referred ];
 				$current = 'class="current" ';
 			}
 
-			echo "<li><a {$current} href='" . ( $name == 'All' ? Admin_Menus::admin_url( 'words' ) : Admin_Menus::admin_url( 'words', array( 'referred' => $tag ) ) ) . "'>" . $translate . " <span class='count'>(" . number_format_i18n( $value ) . ")</span></a></li>{$separator}";
+			echo "<li><a {$current} href='" . ( $name == 'All' ? Menus::admin_url( 'words' ) : Menus::admin_url( 'words', array( 'referred' => $tag ) ) ) . "'>" . $translate . " <span class='count'>(" . number_format_i18n( $value ) . ")</span></a></li>{$separator}";
 		}
 		?>
     </ul>
@@ -160,7 +160,7 @@ $total = $search_result[ $referred ];
 									} else {
 										$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
 									}
-									echo "<a href='" . Admin_Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
+									echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 									echo "</td>";
 									$city = '';
 									if ( WP_STATISTICS\Option::get( 'geoip_city' ) ) {
@@ -198,7 +198,7 @@ $total = $search_result[ $referred ];
 									if ( \WP_STATISTICS\IP::IsHashIP( $items->ip ) ) {
 										$ip_string = __( '#hash#', 'wp-statistics' );
 									} else {
-										$ip_string = "<a href='" . Admin_Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";
+										$ip_string = "<a href='" . Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>{$items->ip}</a>";
 									}
 									echo $ip_string;
 									echo "</td>";

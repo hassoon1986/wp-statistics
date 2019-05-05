@@ -55,7 +55,7 @@
 		$rangeend
 	);
 
-	Admin_Templates::date_range_selector( \WP_STATISTICS\Admin_Menus::get_page_slug('tags'), $daysToDisplay, null, null, '&pretag=' . $tag, $html );
+	Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('tags'), $daysToDisplay, null, null, '&pretag=' . $tag, $html );
 
 	$args = array(
 		'tax_query' => array(

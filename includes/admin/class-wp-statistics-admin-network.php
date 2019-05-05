@@ -62,20 +62,20 @@ class Network {
 				$i = 0;
 
 				$options = array(
-					__( 'Overview', 'wp-statistics' )           => Admin_Menus::get_page_slug( 'overview' ),
-					__( 'Hits', 'wp-statistics' )               => Admin_Menus::get_page_slug( 'hits' ),
-					__( 'Online', 'wp-statistics' )             => Admin_Menus::get_page_slug( 'online' ),
-					__( 'Referrers', 'wp-statistics' )          => Admin_Menus::get_page_slug( 'referrers' ),
-					__( 'Search Words', 'wp-statistics' )       => Admin_Menus::get_page_slug( 'words' ),
-					__( 'Searches', 'wp-statistics' )           => Admin_Menus::get_page_slug( 'searches' ),
-					__( 'Pages', 'wp-statistics' )              => Admin_Menus::get_page_slug( 'pages' ),
-					__( 'Visitors', 'wp-statistics' )           => Admin_Menus::get_page_slug( 'visitors' ),
-					__( 'Countries', 'wp-statistics' )          => Admin_Menus::get_page_slug( 'countries' ),
-					__( 'Browsers', 'wp-statistics' )           => Admin_Menus::get_page_slug( 'browser' ),
-					__( 'Top Visitors Today', 'wp-statistics' ) => Admin_Menus::get_page_slug( 'top-visitors' ),
-					__( 'Exclusions', 'wp-statistics' )         => Admin_Menus::get_page_slug( 'exclusions' ),
-					__( 'Optimization', 'wp-statistics' )       => Admin_Menus::get_page_slug( 'optimization' ),
-					__( 'Settings', 'wp-statistics' )           => Admin_Menus::get_page_slug( 'settings' ),
+					__( 'Overview', 'wp-statistics' )           => Menus::get_page_slug( 'overview' ),
+					__( 'Hits', 'wp-statistics' )               => Menus::get_page_slug( 'hits' ),
+					__( 'Online', 'wp-statistics' )             => Menus::get_page_slug( 'online' ),
+					__( 'Referrers', 'wp-statistics' )          => Menus::get_page_slug( 'referrers' ),
+					__( 'Search Words', 'wp-statistics' )       => Menus::get_page_slug( 'words' ),
+					__( 'Searches', 'wp-statistics' )           => Menus::get_page_slug( 'searches' ),
+					__( 'Pages', 'wp-statistics' )              => Menus::get_page_slug( 'pages' ),
+					__( 'Visitors', 'wp-statistics' )           => Menus::get_page_slug( 'visitors' ),
+					__( 'Countries', 'wp-statistics' )          => Menus::get_page_slug( 'countries' ),
+					__( 'Browsers', 'wp-statistics' )           => Menus::get_page_slug( 'browser' ),
+					__( 'Top Visitors Today', 'wp-statistics' ) => Menus::get_page_slug( 'top-visitors' ),
+					__( 'Exclusions', 'wp-statistics' )         => Menus::get_page_slug( 'exclusions' ),
+					__( 'Optimization', 'wp-statistics' )       => Menus::get_page_slug( 'optimization' ),
+					__( 'Settings', 'wp-statistics' )           => Menus::get_page_slug( 'settings' ),
 				);
 
 				$sites = WP_STATISTICS\Helper::get_wp_sites_list();
@@ -125,7 +125,7 @@ class Network {
 	public function goto_blog() {
 		global $plugin_page;
 		$blog_id = str_replace( 'wp_statistics_blogid_', '', $plugin_page );
-		$url = get_admin_url( $blog_id ) . '/admin.php?page=' . Admin_Menus::get_page_slug( 'overview' );
+		$url = get_admin_url( $blog_id ) . '/admin.php?page=' . Menus::get_page_slug( 'overview' );
 		echo "<script>window.location.href = '$url';</script>";
 	}
 

@@ -438,12 +438,12 @@ class settings_page {
 						update_option( Option::$opt_name, $again_options );
 					}
 
-					wp_redirect( add_query_arg( array( 'reset_settings' => 'yes' ), Admin_Menus::admin_url( 'settings' ) ) );
+					wp_redirect( add_query_arg( array( 'reset_settings' => 'yes' ), Menus::admin_url( 'settings' ) ) );
 					exit;
 				}
 
 				Option::save_options( $wp_statistics_options );
-				wp_redirect( add_query_arg( array( 'save_setting' => 'yes' ), Admin_Menus::admin_url( 'settings' ) ) );
+				wp_redirect( add_query_arg( array( 'save_setting' => 'yes' ), Menus::admin_url( 'settings' ) ) );
 				exit;
 
 			}

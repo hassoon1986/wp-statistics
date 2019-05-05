@@ -15,7 +15,7 @@ class Admin_Pages {
 				'wps_hits_postbox',
 				__( 'Hit Statistics', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'normal',
 				null,
 				array( 'widget' => 'hits' )
@@ -27,7 +27,7 @@ class Admin_Pages {
 				'wps_top_visitors_postbox',
 				__( 'Top Visitors', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'normal',
 				null,
 				array( 'widget' => 'top.visitors' )
@@ -36,7 +36,7 @@ class Admin_Pages {
 				'wps_search_postbox',
 				__( 'Search Engine Referrals', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'normal',
 				null,
 				array( 'widget' => 'search' )
@@ -45,7 +45,7 @@ class Admin_Pages {
 				'wps_words_postbox',
 				__( 'Latest Search Words', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'normal',
 				null,
 				array( 'widget' => 'words' )
@@ -54,7 +54,7 @@ class Admin_Pages {
 				'wps_recent_postbox',
 				__( 'Recent Visitors', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'normal',
 				null,
 				array( 'widget' => 'recent' )
@@ -65,7 +65,7 @@ class Admin_Pages {
 					'wps_map_postbox',
 					__( 'Today\'s Visitors Map', 'wp-statistics' ),
 					'wp_statistics_generate_overview_postbox_contents',
-					Admin_Menus::get_action_menu_slug( 'overview' ),
+					Menus::get_action_menu_slug( 'overview' ),
 					'normal',
 					null,
 					array( 'widget' => 'map' )
@@ -78,7 +78,7 @@ class Admin_Pages {
 				'wps_pages_postbox',
 				__( 'Top 10 Pages', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'normal',
 				null,
 				array( 'widget' => 'pages' )
@@ -91,7 +91,7 @@ class Admin_Pages {
 				'wps_summary_postbox',
 				__( 'Summary', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'side',
 				null,
 				array( 'widget' => 'summary' )
@@ -100,7 +100,7 @@ class Admin_Pages {
 				'wps_browsers_postbox',
 				__( 'Browsers', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'side',
 				null,
 				array( 'widget' => 'browsers' )
@@ -109,7 +109,7 @@ class Admin_Pages {
 				'wps_referring_postbox',
 				__( 'Top Referring Sites', 'wp-statistics' ),
 				'wp_statistics_generate_overview_postbox_contents',
-				Admin_Menus::get_action_menu_slug( 'overview' ),
+				Menus::get_action_menu_slug( 'overview' ),
 				'side',
 				null,
 				array( 'widget' => 'referring' )
@@ -120,7 +120,7 @@ class Admin_Pages {
 					'wps_countries_postbox',
 					__( 'Top 10 Countries', 'wp-statistics' ),
 					'wp_statistics_generate_overview_postbox_contents',
-					Admin_Menus::get_action_menu_slug( 'overview' ),
+					Menus::get_action_menu_slug( 'overview' ),
 					'side',
 					null,
 					array( 'widget' => 'countries' )
@@ -130,7 +130,7 @@ class Admin_Pages {
 
 		//Left Show User online table
 		if ( Option::get( 'useronline' ) ) {
-			add_meta_box( 'wps_users_online_postbox', __( 'Online Users', 'wp-statistics' ), 'wp_statistics_generate_overview_postbox_contents', Admin_Menus::get_action_menu_slug( 'overview' ), 'side', null, array( 'widget' => 'users_online' ) );
+			add_meta_box( 'wps_users_online_postbox', __( 'Online Users', 'wp-statistics' ), 'wp_statistics_generate_overview_postbox_contents', Menus::get_action_menu_slug( 'overview' ), 'side', null, array( 'widget' => 'users_online' ) );
 		}
 	}
 
@@ -141,59 +141,59 @@ class Admin_Pages {
 		global $wpdb, $plugin_page;
 
 		switch ( $plugin_page ) {
-			case Admin_Menus::get_page_slug( 'browser' ):
+			case Menus::get_page_slug( 'browser' ):
 				$log_type = 'all-browsers';
 
 				break;
-			case Admin_Menus::get_page_slug( 'countries' ):
+			case Menus::get_page_slug( 'countries' ):
 				$log_type = 'top-countries';
 
 				break;
-			case Admin_Menus::get_page_slug( 'exclusions' ):
+			case Menus::get_page_slug( 'exclusions' ):
 				$log_type = 'exclusions';
 
 				break;
-			case Admin_Menus::get_page_slug( 'hits' ):
+			case Menus::get_page_slug( 'hits' ):
 				$log_type = 'hit-statistics';
 
 				break;
-			case Admin_Menus::get_page_slug( 'online' ):
+			case Menus::get_page_slug( 'online' ):
 				$log_type = 'online';
 
 				break;
-			case Admin_Menus::get_page_slug( 'pages' ):
+			case Menus::get_page_slug( 'pages' ):
 				$log_type = 'top-pages';
 
 				break;
-			case Admin_Menus::get_page_slug( 'categories' ):
+			case Menus::get_page_slug( 'categories' ):
 				$log_type = 'categories';
 
 				break;
-			case Admin_Menus::get_page_slug( 'tags' ):
+			case Menus::get_page_slug( 'tags' ):
 				$log_type = 'tags';
 
 				break;
-			case Admin_Menus::get_page_slug( 'authors' ):
+			case Menus::get_page_slug( 'authors' ):
 				$log_type = 'authors';
 
 				break;
-			case Admin_Menus::get_page_slug( 'referrers' ):
+			case Menus::get_page_slug( 'referrers' ):
 				$log_type = 'top-referring-site';
 
 				break;
-			case Admin_Menus::get_page_slug( 'searches' ):
+			case Menus::get_page_slug( 'searches' ):
 				$log_type = 'search-statistics';
 
 				break;
-			case Admin_Menus::get_page_slug( 'words' ):
+			case Menus::get_page_slug( 'words' ):
 				$log_type = 'last-all-search';
 
 				break;
-			case Admin_Menus::get_page_slug( 'top-visitors' ):
+			case Menus::get_page_slug( 'top-visitors' ):
 				$log_type = 'top-visitors';
 
 				break;
-			case Admin_Menus::get_page_slug( 'visitors' ):
+			case Menus::get_page_slug( 'visitors' ):
 				$log_type = 'last-all-visitor';
 
 				break;
@@ -226,7 +226,7 @@ class Admin_Pages {
 
 		if ( $result != 7 ) {
 
-			$get_bloginfo_url = Admin_Menus::admin_url( 'optimization', array( 'tab' => 'database' ) );
+			$get_bloginfo_url = Menus::admin_url( 'optimization', array( 'tab' => 'database' ) );
 			$missing_tables   = array();
 
 			$result = $wpdb->query(
@@ -316,7 +316,7 @@ class Admin_Pages {
 
 				break;
 			default:
-				if ( get_current_screen()->parent_base == Admin_Menus::get_page_slug( 'overview' ) ) {
+				if ( get_current_screen()->parent_base == Menus::get_page_slug( 'overview' ) ) {
 					include WP_STATISTICS_DIR . 'includes/log/log.php';
 				}
 

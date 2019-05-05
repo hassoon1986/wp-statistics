@@ -370,7 +370,7 @@ class Admin_Templates {
 		//List Of Pages For show 20 Days as First Parameter
 		$list_of_pages = array( 'hits', 'searches', 'pages', 'countries', 'categories', 'tags', 'authors', 'browser', 'exclusions' );
 		foreach ( $list_of_pages as $page ) {
-			if ( isset( $_GET['page'] ) and $_GET['page'] == Admin_Menus::get_page_slug( $page ) ) {
+			if ( isset( $_GET['page'] ) and $_GET['page'] == Menus::get_page_slug( $page ) ) {
 				$daysToDisplay = 30;
 			}
 		}

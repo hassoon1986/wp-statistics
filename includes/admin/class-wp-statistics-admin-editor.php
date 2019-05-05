@@ -115,7 +115,7 @@ class Editor {
 
 		$admin_url                                              = get_admin_url() . "/admin.php?page=";
 		$page_urls                                              = array();
-		$page_urls['wp_statistics_editor_meta_box_more_button'] = $admin_url . Admin_Menus::get_page_slug('pages') . '&page-id=';
+		$page_urls['wp_statistics_editor_meta_box_more_button'] = $admin_url . Menus::get_page_slug('pages') . '&page-id=';
 
 		//Button for Gutenberg
 		$btn_more_action = 'wp_statistics_goto_more';

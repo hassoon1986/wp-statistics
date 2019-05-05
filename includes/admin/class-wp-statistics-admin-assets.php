@@ -113,12 +113,12 @@ class Admin_Assets {
 		}
 
 		//Load Jquery VMap Css
-		if ( ! Option::get( 'disable_map' ) and ( Admin_Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
+		if ( ! Option::get( 'disable_map' ) and ( Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
 			wp_enqueue_style( self::$prefix . '-jqvmap', self::url( 'jqvmap/jqvmap.min.css' ), array(), '1.5.1' );
 		}
 
 		// Load Jquery-ui theme
-		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'overview' ) === false and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_style( self::$prefix . '-jquery-ui-smooth', self::url( 'jquery-ui/smoothness.min.css' ), array(), '1.11.4' );
 		}
 
@@ -133,38 +133,38 @@ class Admin_Assets {
 		$screen_id = Helper::get_screen_id();
 
 		// Load Chart Js Library [ Load in <head> Tag ]
-		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and Option::get( 'hit_post_metabox' ) ) ) {
+		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and Option::get( 'hit_post_metabox' ) ) ) {
 			wp_enqueue_script( self::$prefix . '-chart.js', self::url( 'chartjs/chart.bundle.min.js' ), false, '2.8.0', false );
 		}
 
 		// Load Jquery VMap Js Library
-		if ( ! Option::get( 'disable_map' ) and ( Admin_Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
+		if ( ! Option::get( 'disable_map' ) and ( Menus::in_page( 'overview' ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) ) {
 			wp_enqueue_script( self::$prefix . '-jqvmap', self::url( 'jqvmap/jquery.vmap.min.js' ), true, '1.5.1' );
 			wp_enqueue_script( self::$prefix . '-jqvmap-world', self::url( 'jqvmap/jquery.vmap.world.min.js' ), true, '1.5.1' );
 		}
 
 		// Load AjaxQ Library
-		if ( ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) {
+		if ( ( Menus::in_plugin_page() and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) {
 			wp_enqueue_script( self::$prefix . '-ajaxQ', self::url( 'ajaxq/ajaxq.js' ), true, '0.0.7' );
 		}
 
 		// Load Jquery UI and Moment Js
-		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'overview' ) === false and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_script( self::$prefix . '-momentjs', self::url( 'moment-js/moment.min.js' ), true, '2.24.0' );
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 		}
 
 		// Load WordPress PostBox Script
-		if ( Admin_Menus::in_plugin_page() and Admin_Menus::in_page( 'optimization' ) === false and Admin_Menus::in_page( 'settings' ) === false ) {
+		if ( Menus::in_plugin_page() and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_script( 'common' );
 			wp_enqueue_script( 'wp-lists' );
 			wp_enqueue_script( 'postbox' );
 		}
 
 		// Load Admin Js
-		if ( Admin_Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) ) {
+		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) ) {
 			wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
-			wp_localize_script( self::$prefix, 'wps_i18n', self::wps_i18n() );
+			wp_localize_script( self::$prefix, 'wps_global', self::wps_global() );
 		}
 
 		// Load TinyMCE for Widget Page
@@ -173,7 +173,7 @@ class Admin_Assets {
 		}
 
 		// Load Overview Script
-		if ( Admin_Menus::in_page( 'overview' ) ) {
+		if ( Menus::in_page( 'overview' ) ) {
 			wp_enqueue_script( self::$prefix . '-overview', self::url( 'overview.js' ), array( 'jquery' ), self::version() );
 		}
 
@@ -186,9 +186,9 @@ class Admin_Assets {
 	}
 
 	/**
-	 * Prepare Localize WP-Statistics Admin Js
+	 * Prepare global WP-Statistics data for use Admin Js
 	 */
-	public static function wps_i18n() {
+	public static function wps_global() {
 
 		// Date Format
 		$list['date_format'] = array(
@@ -207,8 +207,24 @@ class Admin_Assets {
 		);
 
 		// Global Lang
-		$list['more_detail'] = __( 'More Details', 'wp-statistics' );
-		$list['reload']      = __( 'Reload', 'wp-statistics' );
+		$list['i18n'] = array(
+			'more_detail'  => __( 'More Details', 'wp-statistics' ),
+			'reload'       => __( 'Reload', 'wp-statistics' ),
+			'online_users' => __( 'Online Users', 'wp-statistics' ),
+			'visitors'     => __( 'Visitors', 'wp-statistics' ),
+			'visits'       => __( 'Visits', 'wp-statistics' ),
+			'today'        => __( 'Today', 'wp-statistics' ),
+			'yesterday'    => __( 'Yesterday', 'wp-statistics' ),
+			'week'         => __( 'Last 7 Days (Week)', 'wp-statistics' ),
+			'month'        => __( 'Last 30 Days (Month)', 'wp-statistics' ),
+			'year'         => __( 'Last 365 Days (Year)', 'wp-statistics' ),
+			'total'        => __( 'Total', 'wp-statistics' ),
+			'daily_total'  => __( 'Daily Total', 'wp-statistics' ), //:
+			'date'         => __( 'Date', 'wp-statistics' ),
+			'time'         => __( 'Time', 'wp-statistics' ),
+
+
+		);
 
 		// Rest-API Meta Box Url
 		$list['metabox_api'] = get_rest_url( null, RestApi::$namespace . '/metabox' );
@@ -220,7 +236,7 @@ class Admin_Assets {
 
 			// Convert Page Url
 			if ( isset( $value['page_url'] ) ) {
-				$value['page_url'] = Admin_Menus::admin_url( $value['page_url'] );
+				$value['page_url'] = Menus::admin_url( $value['page_url'] );
 			}
 
 			// Add Meta Box Lang
