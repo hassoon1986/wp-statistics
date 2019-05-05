@@ -20,27 +20,12 @@ $image_path: "../images";
 
 // Load WordPress Meta Box
 @import "meta-box/about";
+@import "meta-box/summary";
 
 
 #last-log {
   width: 100%;
   direction: ltr;
-}
-
-#summary-stats {
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-  border: 1px none;
-  margin: 0 0 10px;
-}
-
-#summary-stats tr:first-child th {
-  border-top: 0 none;
-}
-
-#summary-stats span {
-  color: #21759B !important;
-  font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
-  font-size: 21px;
 }
 
 #post-stats {

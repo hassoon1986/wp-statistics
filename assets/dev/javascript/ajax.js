@@ -19,7 +19,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
 
         // Check Url
         if (url === false || url === "metabox") {
-            url = wps_js._('metabox_api');
+            url = wps_js.global.metabox_api;
         }
 
         // Query
@@ -32,7 +32,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
             success: function (data) {
 
                 // Check Meta Box URL
-                if (url === wps_js._('metabox_api')) {
+                if (url === wps_js.global.metabox_api) {
 
                     // Check is NO Data Meta Box
                     if (data['no_data']) {
@@ -42,6 +42,13 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
 
                         // Show Meta Box
                         jQuery(wps_js.meta_box_inner(params.name)).empty().html(wps_js[callback]['view'](data));
+
+                        // Check After Load Hook
+                        if (wps_js[callback]['meta_box_init']) {
+                            setTimeout(function () {
+                                wps_js[callback]['meta_box_init'](data);
+                            }, 200);
+                        }
                     }
                 } else {
 
@@ -52,7 +59,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
             error: function (xhr, status, error) {
 
                 // Check Meta Box Error
-                if (url === wps_js._('metabox_api')) {
+                if (url === wps_js.global.metabox_api) {
                     jQuery(wps_js.meta_box_inner(params.name)).empty().html(wps_js[error_callback](xhr.responseText));
                 } else {
 

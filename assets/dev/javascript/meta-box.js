@@ -63,8 +63,8 @@ wps_js.error_meta_box_data = function (text) {
  * Get MetaBox information by key
  */
 wps_js.get_meta_box_info = function (key) {
-    if (key in wps_js.i18n.meta_boxes) {
-        return wps_js.i18n.meta_boxes[key];
+    if (key in wps_js.global.meta_boxes) {
+        return wps_js.global.meta_boxes[key];
     }
     return [];
 };
@@ -73,8 +73,8 @@ wps_js.get_meta_box_info = function (key) {
  * Get MetaBox Lang
  */
 wps_js.meta_box_lang = function (meta_box, lang) {
-    if (lang in wps_js.i18n.meta_boxes[meta_box]['lang']) {
-        return wps_js.i18n.meta_boxes[meta_box]['lang'][lang];
+    if (lang in wps_js.global.meta_boxes[meta_box]['lang']) {
+        return wps_js.global.meta_boxes[meta_box]['lang'][lang];
     }
     return '';
 };
@@ -154,7 +154,7 @@ wps_js.run_meta_box = function (key, params = false) {
  */
 wps_js.run_meta_boxes = function (list = false) {
     if (list === false) {
-        list = Object.keys(wps_js.i18n.meta_boxes);
+        list = Object.keys(wps_js.global.meta_boxes);
     }
     list.forEach(function (value) {
         wps_js.run_meta_box(value);

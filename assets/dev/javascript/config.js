@@ -1,19 +1,15 @@
 /* Start Wp-statistics Admin Js */
 var wps_js = {};
 
-/* Get Wordpress i18n */
-wps_js.i18n = (typeof wps_i18n != 'undefined') ? wps_i18n : [];
+/* Get WP-Statistics global Data From Frontend */
+wps_js.global = (typeof wps_global != 'undefined') ? wps_global : [];
 
-/* WordPress Localize Method */
+/* WordPress Global Lang */
 wps_js._ = function (key) {
-    return (key in this.i18n ? this.i18n[key] : '');
+    return (key in this.global.i18n ? this.global.i18n[key] : '');
 };
 
-/* Check Active */
+/* Check Active Option */
 wps_js.is_active = function (option) {
-    return wps_js.i18n.options[option] === 1;
+    return wps_js.global.options[option] === 1;
 };
-
-if(wps_js.is_active('user_online')) {
-    alert("user online active hast");
-}
