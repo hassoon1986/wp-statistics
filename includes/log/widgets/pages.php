@@ -2,6 +2,7 @@
 
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Menus;
+use WP_STATISTICS\Pages;
 
 function wp_statistics_generate_pages_postbox_content() {
 	global $wpdb;
@@ -20,7 +21,7 @@ function wp_statistics_generate_pages_postbox_content() {
 		$counter += 1;
 
 		// Lookup the post title.
-		$page_info = \WP_STATISTICS\Helper::get_page_info( $item->id, $item->type );
+		$page_info = Pages::get_page_info( $item->id, $item->type );
 		$title     = mb_substr( $page_info['title'], 0, 200, "utf-8" );
 		$page_link = $page_info['link'];
 
@@ -44,6 +45,7 @@ function wp_statistics_generate_pages_postbox_content() {
 		echo "<tr>";
 		echo "<td style=\"text-align: left\">" . $counter . "</td>";
 		echo "<td style=\"text-align: left\">" . $title . "</td>";
+
 		echo '<td style="text-align: left"><a href="' . $page_link . '" target="_blank">' . htmlentities( urldecode( $item->uri ), ENT_QUOTES ) . '</a></td>';
 		echo '<td style="text-align: left"><a href="' . Menus::admin_url( 'pages', array( 'page-uri' => htmlentities( $item->uri, ENT_QUOTES ) ) ) . '">' . number_format_i18n( $item->count_sum ) . '</a></td>';
 		echo '</tr>';

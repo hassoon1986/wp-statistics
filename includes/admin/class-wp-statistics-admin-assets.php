@@ -221,7 +221,10 @@ class Admin_Assets {
 			'rank'          => __( 'Rank', 'wp-statistics' ),
 			'flag'          => __( 'Flag', 'wp-statistics' ),
 			'country'       => __( 'Country', 'wp-statistics' ),
-			'visitor_count' => __( 'Visitor Count', 'wp-statistics' )
+			'visitor_count' => __( 'Visitor Count', 'wp-statistics' ),
+			'id'            => __( 'ID', 'wp-statistics' ),
+			'title'         => __( 'Title', 'wp-statistics' ),
+			'link'          => __( 'Link', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url
@@ -239,8 +242,8 @@ class Admin_Assets {
 			}
 
 			// Remove unnecessary params
-			unset($value['show_on_dashboard']);
-			unset($value['hidden']);
+			unset( $value['show_on_dashboard'] );
+			unset( $value['hidden'] );
 
 			// Add Meta Box Lang
 			$class = Meta_Box::getMetaBoxClass( $meta_box );

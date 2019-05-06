@@ -515,7 +515,7 @@ function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = nu
 		list( $url, $page_id, $page_type ) = $out;
 
 		//Get Page Title
-		$page_info = \WP_STATISTICS\Helper::get_page_info( $page_id, $page_type );
+		$page_info = Pages::get_page_info( $page_id, $page_type );
 		$title     = mb_substr( $page_info['title'], 0, 200, "utf-8" );
 		$page_url  = $page_info['link'];
 

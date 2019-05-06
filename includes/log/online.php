@@ -8,6 +8,7 @@
 	use WP_STATISTICS\Country;
 	use WP_STATISTICS\Menus;
 	use WP_STATISTICS\Admin_Templates;
+	use WP_STATISTICS\Pages;
 	use WP_STATISTICS\Referred;
 
 	Admin_Templates::show_page_title( __( 'Online Users', 'wp-statistics' ) ); ?>
@@ -136,7 +137,7 @@
 								echo "</td>";
 
 								//Show Page
-								$page_info = \WP_STATISTICS\Helper::get_page_info( $items->page_id, $items->type );
+								$page_info = Pages::get_page_info( $items->page_id, $items->type );
 								echo "<td style=\"text-align: left\">";
 								echo ( $page_info['link'] != '' ? '<a href="' . $page_info['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . mb_substr( $page_info['title'], 0, 200, "utf-8" ) . ( $page_info['link'] != '' ? '</a>' : '' );
 								echo "</td>";

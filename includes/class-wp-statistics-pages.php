@@ -256,4 +256,111 @@ class Pages {
 		return $page_id;
 	}
 
+	/**
+	 * Get Page information
+	 *
+	 * @param $page_id
+	 * @param string $type
+	 * @return array
+	 */
+	public static function get_page_info( $page_id, $type = 'post' ) {
+
+		//Create Empty Object
+		$arg      = array();
+		$defaults = array(
+			'link'      => '',
+			'edit_link' => '',
+			'object_id' => $page_id,
+			'title'     => '-',
+			'meta'      => array()
+		);
+
+		if ( ! empty( $type ) ) {
+			switch ( $type ) {
+				case "product":
+				case "attachment":
+				case "post":
+				case "page":
+					$arg = array(
+						'title'     => get_the_title( $page_id ),
+						'link'      => get_the_permalink( $page_id ),
+						'edit_link' => get_edit_post_link( $page_id ),
+						'meta'      => array(
+							'post_type' => get_post_type( $page_id )
+						)
+					);
+					break;
+				case "category":
+				case "post_tag":
+				case "tax":
+					$term = get_term( $page_id );
+					$arg  = array(
+						'title'     => $term->name,
+						'link'      => ( is_wp_error( get_term_link( $page_id ) ) === true ? '' : get_term_link( $page_id ) ),
+						'edit_link' => get_edit_term_link( $page_id ),
+						'meta'      => array(
+							'taxonomy'         => $term->taxonomy,
+							'term_taxonomy_id' => $term->term_taxonomy_id,
+							'count'            => $term->count,
+						)
+					);
+					break;
+				case "home":
+					$arg = array(
+						'title' => __( 'Home Page', 'wp-statistics' ),
+						'link'  => get_site_url()
+					);
+					break;
+				case "author":
+					$user_info = get_userdata( $page_id );
+					$arg       = array(
+						'title'     => ( $user_info->display_name != "" ? $user_info->display_name : $user_info->first_name . ' ' . $user_info->last_name ),
+						'link'      => get_author_posts_url( $page_id ),
+						'edit_link' => get_edit_user_link( $page_id ),
+					);
+					break;
+				case "search":
+					$result['title'] = __( 'Search Page', 'wp-statistics' );
+					break;
+				case "404":
+					$result['title'] = __( '404 not found', 'wp-statistics' );
+					break;
+				case "archive":
+					$result['title'] = __( 'Post Archive', 'wp-statistics' );
+					break;
+			}
+		}
+
+		return wp_parse_args( $arg, $defaults );
+	}
+
+	/**
+	 * Get Top number of Hits Pages
+	 *
+	 * @param int $number
+	 * @return array
+	 */
+	public static function getTop( $number = 10 ) {
+		global $wpdb;
+
+		// Get List Of Pages
+		$list   = array();
+		$result = $wpdb->get_results( "SELECT `pages`.`uri`,`pages`.`id`,`pages`.`type`, SUM(`pages`.`count`) + IFNULL(`historical`.`value`, 0) AS `count_sum` FROM `" . DB::table( 'pages' ) . "` `pages` LEFT JOIN `" . DB::table( 'historical' ) . "` `historical` ON `pages`.`uri`=`historical`.`uri` AND `historical`.`category`='uri' GROUP BY `uri` ORDER BY `count_sum` DESC LIMIT " . $number );
+		foreach ( $result as $item ) {
+
+			// Lookup the post title.
+			$page_info = Pages::get_page_info( $item->id, $item->type );
+
+			// Push to list
+			$list[] = array(
+				'title'           => $page_info['title'],
+				'link'            => $page_info['link'],
+				'str_url'         => htmlentities( urldecode( $item->uri ), ENT_QUOTES ),
+				'hits_page' => Menus::admin_url( 'pages', array( 'page-uri' => htmlentities( $item->uri, ENT_QUOTES ) ) ), # Convert to page-id in next Version [//TODO]
+				'number'          => number_format_i18n( $item->count_sum )
+			);
+		}
+
+		return $list;
+	}
 }
