@@ -11,15 +11,21 @@ class SearchEngine {
 	public static $error_found = 'No search query found!';
 
 	/**
+	 * Get base assets url search engine logo
+	 *
+	 * @return string
+	 */
+	public static function Asset() {
+		return WP_STATISTICS_URL . 'assets/images/search-engine/';
+	}
+
+	/**
 	 * Get List Of Search engine in WP-Statistics
 	 *
 	 * @param bool $all
 	 * @return array
 	 */
 	public static function getList( $all = false ) {
-
-		// Get Base Search Engine image dir
-		$image_url = WP_STATISTICS_URL . '/assets/images/search-engine/';
 
 		// List OF Search engine
 		$default = $engines = array(
@@ -31,7 +37,7 @@ class SearchEngine {
 				'regexpattern' => 'ask\.com',
 				'querykey'     => 'q',
 				'image'        => 'ask.png',
-				'logo_url'     => $image_url . 'ask.png'
+				'logo_url'     => self::Asset() . 'ask.png'
 			),
 			'baidu'      => array(
 				'name'         => 'Baidu',
@@ -41,7 +47,7 @@ class SearchEngine {
 				'regexpattern' => 'baidu\.com',
 				'querykey'     => 'wd',
 				'image'        => 'baidu.png',
-				'logo_url'     => $image_url . 'baidu.png'
+				'logo_url'     => self::Asset() . 'baidu.png'
 			),
 			'bing'       => array(
 				'name'         => 'Bing',
@@ -51,7 +57,7 @@ class SearchEngine {
 				'regexpattern' => 'bing\.com',
 				'querykey'     => 'q',
 				'image'        => 'bing.png',
-				'logo_url'     => $image_url . 'bing.png'
+				'logo_url'     => self::Asset() . 'bing.png'
 			),
 			'clearch'    => array(
 				'name'         => 'clearch.org',
@@ -61,7 +67,7 @@ class SearchEngine {
 				'regexpattern' => 'clearch\.org',
 				'querykey'     => 'q',
 				'image'        => 'clearch.png',
-				'logo_url'     => $image_url . 'clearch.png'
+				'logo_url'     => self::Asset() . 'clearch.png'
 			),
 			'duckduckgo' => array(
 				'name'         => 'DuckDuckGo',
@@ -71,7 +77,7 @@ class SearchEngine {
 				'regexpattern' => array( 'duckduckgo\.com', 'ddg\.gg' ),
 				'querykey'     => 'q',
 				'image'        => 'duckduckgo.png',
-				'logo_url'     => $image_url . 'duckduckgo.png'
+				'logo_url'     => self::Asset() . 'duckduckgo.png'
 			),
 			'google'     => array(
 				'name'         => 'Google',
@@ -81,7 +87,7 @@ class SearchEngine {
 				'regexpattern' => 'google\.',
 				'querykey'     => 'q',
 				'image'        => 'google.png',
-				'logo_url'     => $image_url . 'google.png'
+				'logo_url'     => self::Asset() . 'google.png'
 			),
 			'yahoo'      => array(
 				'name'         => 'Yahoo!',
@@ -91,7 +97,7 @@ class SearchEngine {
 				'regexpattern' => 'yahoo\.com',
 				'querykey'     => 'p',
 				'image'        => 'yahoo.png',
-				'logo_url'     => $image_url . 'yahoo.png'
+				'logo_url'     => self::Asset() . 'yahoo.png'
 			),
 			'yandex'     => array(
 				'name'         => 'Yandex',
@@ -101,7 +107,7 @@ class SearchEngine {
 				'regexpattern' => 'yandex\.ru',
 				'querykey'     => 'text',
 				'image'        => 'yandex.png',
-				'logo_url'     => $image_url . 'yandex.png'
+				'logo_url'     => self::Asset() . 'yandex.png'
 			),
 			'qwant'      => array(
 				'name'         => 'Qwant',
@@ -111,7 +117,7 @@ class SearchEngine {
 				'regexpattern' => 'qwant\.com',
 				'querykey'     => 'q',
 				'image'        => 'qwant.png',
-				'logo_url'     => $image_url . 'qwant.png'
+				'logo_url'     => self::Asset() . 'qwant.png'
 			)
 		);
 
@@ -144,6 +150,7 @@ class SearchEngine {
 			'regexpattern' => '',
 			'querykey'     => 'q',
 			'image'        => 'unknown.png',
+			'logo_url'     => self::Asset() . 'unknown.png'
 		);
 	}
 

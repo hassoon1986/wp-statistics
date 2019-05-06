@@ -208,21 +208,25 @@ class Admin_Assets {
 
 		// Global Lang
 		$list['i18n'] = array(
-			'more_detail'  => __( 'More Details', 'wp-statistics' ),
-			'reload'       => __( 'Reload', 'wp-statistics' ),
-			'online_users' => __( 'Online Users', 'wp-statistics' ),
-			'visitors'     => __( 'Visitors', 'wp-statistics' ),
-			'visits'       => __( 'Visits', 'wp-statistics' ),
-			'today'        => __( 'Today', 'wp-statistics' ),
-			'yesterday'    => __( 'Yesterday', 'wp-statistics' ),
-			'week'         => __( 'Last 7 Days (Week)', 'wp-statistics' ),
-			'month'        => __( 'Last 30 Days (Month)', 'wp-statistics' ),
-			'year'         => __( 'Last 365 Days (Year)', 'wp-statistics' ),
-			'total'        => __( 'Total', 'wp-statistics' ),
-			'daily_total'  => __( 'Daily Total', 'wp-statistics' ),
-			'date'         => __( 'Date', 'wp-statistics' ),
-			'time'         => __( 'Time', 'wp-statistics' ),
-			'browsers'     => __( 'Browsers', 'wp-statistics' )
+			'more_detail'   => __( 'More Details', 'wp-statistics' ),
+			'reload'        => __( 'Reload', 'wp-statistics' ),
+			'online_users'  => __( 'Online Users', 'wp-statistics' ),
+			'visitors'      => __( 'Visitors', 'wp-statistics' ),
+			'visits'        => __( 'Visits', 'wp-statistics' ),
+			'today'         => __( 'Today', 'wp-statistics' ),
+			'yesterday'     => __( 'Yesterday', 'wp-statistics' ),
+			'week'          => __( 'Last 7 Days (Week)', 'wp-statistics' ),
+			'month'         => __( 'Last 30 Days (Month)', 'wp-statistics' ),
+			'year'          => __( 'Last 365 Days (Year)', 'wp-statistics' ),
+			'total'         => __( 'Total', 'wp-statistics' ),
+			'daily_total'   => __( 'Daily Total', 'wp-statistics' ),
+			'date'          => __( 'Date', 'wp-statistics' ),
+			'time'          => __( 'Time', 'wp-statistics' ),
+			'browsers'      => __( 'Browsers', 'wp-statistics' ),
+			'rank'          => __( 'Rank', 'wp-statistics' ),
+			'flag'          => __( 'Flag', 'wp-statistics' ),
+			'country'       => __( 'Country', 'wp-statistics' ),
+			'visitor_count' => __( 'Visitor Count', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url

@@ -195,6 +195,20 @@ class Helper {
 	}
 
 	/**
+	 * Get Country flag
+	 *
+	 * @param $location
+	 * @return string
+	 */
+	public static function get_country_flag( $location ) {
+		$list_country = self::get_country_codes();
+		if ( ! array_key_exists( $location, $list_country ) ) {
+			$location = '000';
+		}
+		return WP_STATISTICS_URL . 'assets/images/flags/' . $location . '.png';
+	}
+
+	/**
 	 * Get Robots List
 	 *
 	 * @param string $type
