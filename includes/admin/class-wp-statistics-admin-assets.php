@@ -243,6 +243,10 @@ class Admin_Assets {
 				$value['page_url'] = Menus::admin_url( $value['page_url'] );
 			}
 
+			// Remove unnecessary params
+			unset($value['show_on_dashboard']);
+			unset($value['hidden']);
+
 			// Add Meta Box Lang
 			$class = Meta_Box::getMetaBoxClass( $meta_box );
 			if ( method_exists( $class, 'lang' ) ) {

@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     insert = require('gulp-insert'),
     babel = require('gulp-babel'),
     uglify = require('gulp-uglify'),
+    replace = require('gulp-replace'),
     sass = require('gulp-sass'),
     pipeline = require('readable-stream').pipeline;
 
@@ -32,6 +33,9 @@ gulp.task('script', function () {
         .pipe(insert.append('});'))
         .pipe(gulp.dest('./assets/js/'))
         .pipe(babel({presets: ['@babel/env']}))
+        .pipe(replace("\\n", ''))
+        .pipe(replace("\\t", ''))
+        .pipe(replace("  ", ''))
         .pipe(uglify())
         .pipe(gulp.dest('./assets/js/'));
 });
