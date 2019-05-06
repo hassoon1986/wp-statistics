@@ -221,13 +221,12 @@ class Admin_Assets {
 			'total'        => __( 'Total', 'wp-statistics' ),
 			'daily_total'  => __( 'Daily Total', 'wp-statistics' ), //:
 			'date'         => __( 'Date', 'wp-statistics' ),
-			'time'         => __( 'Time', 'wp-statistics' ),
-
-
+			'time'         => __( 'Time', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url
-		$list['metabox_api'] = get_rest_url( null, RestApi::$namespace . '/metabox' );
+		$list['meta_box_api']   = get_rest_url( null, RestApi::$namespace . '/metabox' );
+		$list['rest_api_nonce'] = wp_create_nonce( 'wp_rest' );
 
 		// Meta Box List
 		$meta_boxes_list    = Meta_Box::_list();

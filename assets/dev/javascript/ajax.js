@@ -19,11 +19,11 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
 
         // Check Url
         if (url === false || url === "metabox") {
-            url = wps_js.global.metabox_api;
+            url = wps_js.global.meta_box_api;
         }
 
-        // Query
-        jQuery.ajaxq(wps_js.ajax_queue.key, {
+        // prepare Ajax Parameter
+        let ajaxQ = {
             url: url,
             type: type,
             dataType: "json",
@@ -32,7 +32,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
             success: function (data) {
 
                 // Check Meta Box URL
-                if (url === wps_js.global.metabox_api) {
+                if (url === wps_js.global.meta_box_api) {
 
                     // Check is NO Data Meta Box
                     if (data['no_data']) {
@@ -59,7 +59,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
             error: function (xhr, status, error) {
 
                 // Check Meta Box Error
-                if (url === wps_js.global.metabox_api) {
+                if (url === wps_js.global.meta_box_api) {
                     jQuery(wps_js.meta_box_inner(params.name)).empty().html(wps_js[error_callback](xhr.responseText));
                 } else {
 
@@ -67,6 +67,17 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
                     wps_js[error_callback](xhr.responseText)
                 }
             }
-        });
+        };
+
+        // Check WordPress REST-API Nonce [https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/ ]
+        if (url === wps_js.global.meta_box_api) {
+            ajaxQ.beforeSend = function (xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', wps_js.global.rest_api_nonce);
+            };
+        }
+
+        // Send Request and Get Response
+        jQuery.ajaxq(wps_js.ajax_queue.key, ajaxQ);
+
     }, wps_js.ajax_queue.time);
 };

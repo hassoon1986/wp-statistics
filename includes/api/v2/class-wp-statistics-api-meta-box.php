@@ -2,6 +2,8 @@
 
 namespace WP_STATISTICS\Api\v2;
 
+use WP_STATISTICS\User;
+
 class Meta_Box extends \WP_STATISTICS\RestApi {
 	/**
 	 * Meta Box constructor.
@@ -28,7 +30,6 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 			array(
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'meta_box_callback' ),
-				'permission_callback' => $this->permissions_access_user(),
 				'args'                => array(
 					'name' => array(
 						'required'          => true,
@@ -36,7 +37,10 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 							return ( in_array( $value, array_keys( \WP_STATISTICS\Meta_Box::_list() ) ) and \WP_STATISTICS\Meta_Box::IsExistMetaBoxClass( $value ) );
 						}
 					)
-				)
+				),
+				'permission_callback' => function () {
+					return User::AccessUser( 'read' );
+				}
 			)
 		) );
 	}
