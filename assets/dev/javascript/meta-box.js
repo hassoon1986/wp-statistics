@@ -190,13 +190,15 @@ wps_js.run_meta_boxes = function (list = false) {
 
 /**
  * Disable Close WordPress Post ox for Meta Box Button
+ *
+ * @see wp-admin/js/postbox.js:107
  */
 jQuery(document).on('mouseenter mouseleave', '.wps-refresh, .wps-more', function (ev) {
-    let wordpress_postbox = jQuery('.postbox h3, .postbox .handlediv');
+    let wordpress_postbox = jQuery('.postbox .hndle, .postbox .handlediv');
     if (ev.type === 'mouseenter') {
-        wordpress_postbox.unbind('click.postboxes');
+        wordpress_postbox.off('click', window.postboxes.handle_click);
     } else {
-        wordpress_postbox.bind('click.postboxes');
+        wordpress_postbox.on('click', window.postboxes.handle_click);
     }
 });
 
