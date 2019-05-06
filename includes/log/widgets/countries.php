@@ -1,11 +1,12 @@
 <?php
 //TODO Remove at last
 use WP_STATISTICS\Admin_Helper;
+use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
 
 function wp_statistics_generate_countries_postbox_content() {
 	global $wpdb;
-	$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+	$ISOCountryCode = Country::getList();
 	?>
     <table width="100%" class="widefat table-stats wps-report-table">
         <tr>

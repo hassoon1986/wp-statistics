@@ -1,5 +1,6 @@
 <?php
 
+use WP_STATISTICS\Country;
 use WP_STATISTICS\Pages;
 
 /**
@@ -90,7 +91,7 @@ function wp_statistics_useronline( $options = array() ) {
 
 	//Check Location
 	if ( $arg['location'] != "all" ) {
-		$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+		$ISOCountryCode = Country::getList();
 		if ( array_key_exists( $arg['location'], $ISOCountryCode ) ) {
 			$where[] = "`location` = '" . $arg['location'] . "'";
 		}
@@ -335,7 +336,7 @@ function wp_statistics_visitor( $time, $daily = null, $count_only = false, $opti
 
 	//Check Location
 	if ( $arg['location'] != "all" ) {
-		$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+		$ISOCountryCode = Country::getList();
 		if ( array_key_exists( $arg['location'], $ISOCountryCode ) ) {
 			$where[] = "`" . WP_STATISTICS\DB::table( 'visitor' ) . "`.`location` = '" . $arg['location'] . "'";
 		}

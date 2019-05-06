@@ -10,7 +10,7 @@ class quickstats {
 	 * @return array
 	 */
 	public static function get( $args = array() ) {
-		return summary::data( array( 'hit-chart' ) );
+		return summary::getSummaryHits( array( 'user-online', 'visitors', 'visits', 'hit-chart' ) );
 	}
 
 }

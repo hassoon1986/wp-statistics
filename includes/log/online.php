@@ -5,6 +5,7 @@
 </script>
 <div class="wrap wps-wrap">
 	<?php use WP_STATISTICS\Admin_Helper;
+	use WP_STATISTICS\Country;
 	use WP_STATISTICS\Menus;
 	use WP_STATISTICS\Admin_Templates;
 	use WP_STATISTICS\Referred;
@@ -23,7 +24,7 @@
                     <div class="inside">
 						<?php
 						//Get List ISO country
-						$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+						$ISOCountryCode = Country::getList();
 
 						//Get Total User Online
 						$sql   = "SELECT COUNT(*) FROM {$wpdb->prefix}statistics_useronline";

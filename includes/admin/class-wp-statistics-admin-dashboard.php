@@ -24,7 +24,7 @@ class Admin_Dashboard {
 	 */
 	public function register_dashboard_widget() {
 
-		foreach ( Meta_Box::_list() as $widget_key => $dashboard ) {
+		foreach ( Meta_Box::getList() as $widget_key => $dashboard ) {
 			if ( Option::check_option_require( $dashboard ) === true and isset( $dashboard['show_on_dashboard'] ) and $dashboard['show_on_dashboard'] === true ) {
 				wp_add_dashboard_widget( Meta_Box::getMetaBoxKey( $widget_key ), $dashboard['name'], function () {
 					return null;
@@ -62,7 +62,7 @@ class Admin_Dashboard {
 	public static function set_user_hidden_dashboard_option() {
 
 		//Get List Of Wp-statistics Dashboard Widget
-		$dashboard_list = Meta_Box::_list();
+		$dashboard_list = Meta_Box::getList();
 		$hidden_opt     = 'metaboxhidden_dashboard';
 
 		//Create Empty Option and save in User meta

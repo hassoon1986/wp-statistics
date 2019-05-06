@@ -1,4 +1,5 @@
 <?php
+//TODO Remove at last
 function wp_statistics_generate_hits_postbox_content( $size = '300', $days = 20 ) {
 	global $wpdb;
 	$id       = 'visits-stats-' . rand( 111, 999 );

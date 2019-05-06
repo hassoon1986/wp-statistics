@@ -20,6 +20,7 @@ gulp.task('sass', function () {
 //Gulp Script Concat
 gulp.task('script', function () {
     return gulp.src([
+        './assets/dev/javascript/plugin/*.js',
         './assets/dev/javascript/config.js',
         './assets/dev/javascript/ajax.js',
         './assets/dev/javascript/helper.js',

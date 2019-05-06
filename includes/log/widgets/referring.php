@@ -1,6 +1,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
+use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
 use WP_STATISTICS\Referred;
 
@@ -31,7 +32,7 @@ function wp_statistics_generate_referring_postbox_content( $count = 10 ) {
 		<?php
 
 		//Load country Code
-		$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+		$ISOCountryCode = Country::getList();
 
 		//Get Refer Site Detail
 		$refer_opt     = get_option( 'wp_statistics_referrals_detail' );

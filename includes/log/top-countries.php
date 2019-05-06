@@ -6,6 +6,7 @@
 <?php
 //Set Default Time Picker Option
 use WP_STATISTICS\Admin_Helper;
+use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
 use WP_STATISTICS\Admin_Templates;
 use WP_STATISTICS\Referred;
@@ -18,7 +19,7 @@ list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_
 );
 
 //Load ISO
-$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+$ISOCountryCode = Country::getList();
 
 //Get Custom Country
 $country_name  = '';

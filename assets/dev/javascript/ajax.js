@@ -15,8 +15,6 @@ wps_js.ajax_queue = {
  */
 wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
 
-    setTimeout(function () {
-
         // Check Url
         if (url === false || url === "metabox") {
             url = wps_js.global.meta_box_api;
@@ -78,6 +76,4 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
 
         // Send Request and Get Response
         jQuery.ajaxq(wps_js.ajax_queue.key, ajaxQ);
-
-    }, wps_js.ajax_queue.time);
 };

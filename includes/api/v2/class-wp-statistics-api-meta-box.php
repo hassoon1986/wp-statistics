@@ -34,7 +34,7 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 					'name' => array(
 						'required'          => true,
 						'validate_callback' => function ( $value, $request, $key ) {
-							return ( in_array( $value, array_keys( \WP_STATISTICS\Meta_Box::_list() ) ) and \WP_STATISTICS\Meta_Box::IsExistMetaBoxClass( $value ) );
+							return ( in_array( $value, array_keys( \WP_STATISTICS\Meta_Box::getList() ) ) and \WP_STATISTICS\Meta_Box::IsExistMetaBoxClass( $value ) );
 						}
 					)
 				),

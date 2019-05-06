@@ -6,11 +6,12 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
+use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
 use WP_STATISTICS\Admin_Templates;
 use WP_STATISTICS\Referred;
 
-$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+$ISOCountryCode = Country::getList();
 
 $_var  = 'agent';
 $_get  = '%';

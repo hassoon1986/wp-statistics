@@ -7,8 +7,9 @@
 
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Country;
 
-$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
+$ISOCountryCode = Country::getList();
 include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 ?>
 <div class="wrap wps-wrap">

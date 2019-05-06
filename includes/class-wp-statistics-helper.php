@@ -173,42 +173,6 @@ class Helper {
 	}
 
 	/**
-	 * Get country codes
-	 *
-	 * @return array|bool|string
-	 */
-	public static function get_country_codes() {
-		global $WP_Statistics;
-
-		# Load From global
-		if ( isset( $WP_Statistics->country_codes ) ) {
-			return $WP_Statistics->country_codes;
-		}
-
-		# Load From file
-		include WP_STATISTICS_DIR . "includes/defines/country-codes.php";
-		if ( isset( $ISOCountryCode ) ) {
-			return $ISOCountryCode;
-		}
-
-		return array();
-	}
-
-	/**
-	 * Get Country flag
-	 *
-	 * @param $location
-	 * @return string
-	 */
-	public static function get_country_flag( $location ) {
-		$list_country = self::get_country_codes();
-		if ( ! array_key_exists( $location, $list_country ) ) {
-			$location = '000';
-		}
-		return WP_STATISTICS_URL . 'assets/images/flags/' . $location . '.png';
-	}
-
-	/**
 	 * Get Robots List
 	 *
 	 * @param string $type

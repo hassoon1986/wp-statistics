@@ -155,85 +155,85 @@ class Menus {
 				'page_url' => 'overview',
 			),
 			'hits'         => array(
-				'require'  => array( 'visits' ),
+				'require'  => array( 'visits' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Hits', 'wp-statistics' ),
 				'page_url' => 'hits',
 			),
 			'online'       => array(
-				'require'  => array( 'useronline' ),
+				'require'  => array( 'useronline' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Online', 'wp-statistics' ),
 				'page_url' => 'online',
 			),
 			'referrers'    => array(
-				'require'  => array( 'visitors' ),
+				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Referrers', 'wp-statistics' ),
 				'page_url' => 'referrers',
 			),
 			'words'        => array(
-				'require'  => array( 'visitors' ),
+				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Search Words', 'wp-statistics' ),
 				'page_url' => 'words',
 			),
 			'searches'     => array(
-				'require'  => array( 'visitors' ),
+				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Search Engines', 'wp-statistics' ),
 				'page_url' => 'searches',
 			),
 			'pages'        => array(
-				'require'  => array( 'pages' ),
+				'require'  => array( 'pages' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Pages', 'wp-statistics' ),
 				'page_url' => 'pages',
 			),
 			'visitors'     => array(
-				'require'  => array( 'visitors' ),
+				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Visitors', 'wp-statistics' ),
 				'page_url' => 'visitors',
 			),
 			'countries'    => array(
-				'require'  => array( 'geoip', 'visitors' ),
+				'require'  => array( 'geoip' => true, 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Countries', 'wp-statistics' ),
 				'page_url' => 'countries',
 			),
 			'categories'   => array(
-				'require'  => array( 'pages' ),
+				'require'  => array( 'pages' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Categories', 'wp-statistics' ),
 				'page_url' => 'categories',
 			),
 			'tags'         => array(
-				'require'  => array( 'pages' ),
+				'require'  => array( 'pages' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Tags', 'wp-statistics' ),
 				'page_url' => 'tags',
 			),
 			'authors'      => array(
-				'require'  => array( 'pages' ),
+				'require'  => array( 'pages' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Authors', 'wp-statistics' ),
 				'page_url' => 'authors',
 			),
 			'browsers'     => array(
-				'require'  => array( 'visitors' ),
+				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Browsers', 'wp-statistics' ),
 				'page_url' => 'browser',
 			),
 			'top.visotors' => array(
-				'require'  => array( 'visitors' ),
+				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Top Visitors Today', 'wp-statistics' ),
 				'page_url' => 'top-visitors',
 			),
 			'exclusions'   => array(
-				'require'  => array( 'record_exclusions' ),
+				'require'  => array( 'record_exclusions' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Exclusions', 'wp-statistics' ),
 				'page_url' => 'exclusions',
@@ -316,7 +316,7 @@ class Menus {
 	public function wp_admin_menu() {
 
 		// Get the read/write capabilities.
-		$read_cap   = User::ExistCapability( Option::get( 'read_capability', 'manage_options' ) );
+		$read_cap = User::ExistCapability( Option::get( 'read_capability', 'manage_options' ) );
 
 		//Show Admin Menu List
 		foreach ( self::get_menu_list() as $key => $menu ) {

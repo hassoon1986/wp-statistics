@@ -293,7 +293,7 @@ class Ajax {
 				wp_die();
 			}
 
-			$ISOCountryCode = Helper::get_country_codes();
+			$ISOCountryCode = Country::getList();
 			$search_engines = SearchEngine::getList();
 
 			require( WP_STATISTICS_DIR . 'includes/log/widgets/' . $widget . '.php' );

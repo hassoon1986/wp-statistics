@@ -143,11 +143,6 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-jqvmap-world', self::url( 'jqvmap/jquery.vmap.world.min.js' ), true, '1.5.1' );
 		}
 
-		// Load AjaxQ Library
-		if ( ( Menus::in_plugin_page() and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) ) {
-			wp_enqueue_script( self::$prefix . '-ajaxQ', self::url( 'ajaxq/ajaxq.js' ), true, '0.0.7' );
-		}
-
 		// Load Jquery UI and Moment Js
 		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_script( self::$prefix . '-momentjs', self::url( 'moment-js/moment.min.js' ), true, '2.24.0' );
@@ -234,7 +229,7 @@ class Admin_Assets {
 		$list['rest_api_nonce'] = wp_create_nonce( 'wp_rest' );
 
 		// Meta Box List
-		$meta_boxes_list    = Meta_Box::_list();
+		$meta_boxes_list    = Meta_Box::getList();
 		$list['meta_boxes'] = array();
 		foreach ( $meta_boxes_list as $meta_box => $value ) {
 

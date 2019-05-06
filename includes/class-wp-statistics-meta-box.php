@@ -45,8 +45,7 @@ class Meta_Box {
 	 * @param bool $meta_box
 	 * @return array|mixed
 	 */
-	public static function _list( $meta_box = false ) {
-
+	public static function getList( $meta_box = false ) {
 		/**
 		 * List of WP-Statistics Admin Meta Box
 		 *
@@ -73,72 +72,73 @@ class Meta_Box {
 			'browsers'     => array(
 				'page_url'          => 'browser',
 				'name'              => __( 'Top 10 Browsers', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'countries'    => array(
 				'page_url'          => 'countries',
 				'name'              => __( 'Top 10 Countries', 'wp-statistics' ),
-				'require'           => array( 'geoip', 'visitors' ),
+				'require'           => array( 'geoip' => true, 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'hits'         => array(
 				'page_url'          => 'hits',
 				'name'              => __( 'Hit Statistics', 'wp-statistics' ),
-				'require'           => array( 'visits' ),
+				'require'           => array( 'visits' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'pages'        => array(
 				'page_url'          => 'pages',
 				'name'              => __( 'Top 10 Pages', 'wp-statistics' ),
-				'require'           => array( 'pages' ),
+				'require'           => array( 'pages' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'referring'    => array(
 				'page_url'          => 'referrers',
 				'name'              => __( 'Top Referring Sites', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'search'       => array(
 				'page_url'          => 'searches',
 				'name'              => __( 'Search Engine Referrals', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'words'        => array(
 				'page_url'          => 'words',
 				'name'              => __( 'Latest Search Words', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'top-visitors' => array(
 				'page_url'          => 'top-visitors',
 				'name'              => __( 'Top 10 Visitors Today', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'recent'       => array(
 				'page_url'          => 'visitors',
 				'name'              => __( 'Recent Visitors', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			),
 			'hitsmap'      => array(
 				'name'              => __( 'Today\'s Visitors Map', 'wp-statistics' ),
-				'require'           => array( 'visitors' ),
+				'require'           => array( 'geoip' => true, 'visitors' => true, 'disable_map' => false ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
 			)
+			//TODO add users-online meta box
 		);
 
 		//Print List of Meta Box

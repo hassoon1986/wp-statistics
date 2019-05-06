@@ -15,7 +15,7 @@ class summary {
 	 * @return array
 	 */
 	public static function get( $args = array() ) {
-		return self::data( array( 'search-engine', 'timezone' ) );
+		return self::getSummaryHits( array( 'user-online', 'visitors', 'visits', 'search-engine', 'timezone' ) );
 	}
 
 	/**
@@ -37,98 +37,104 @@ class summary {
 	 * @param array $component
 	 * @return array
 	 */
-	public static function data( $component = array() ) {
+	public static function getSummaryHits( $component = array() ) {
 		$data = array();
 
 		// User Online
-		if ( Option::get( 'useronline' ) ) {
-			$data['user_online'] = array(
-				'value' => wp_statistics_useronline(),
-				'link'  => Menus::admin_url( 'online' )
-			);
+		if ( in_array( 'user-online', $component ) ) {
+			if ( Option::get( 'useronline' ) ) {
+				$data['user_online'] = array(
+					'value' => wp_statistics_useronline(),
+					'link'  => Menus::admin_url( 'online' )
+				);
+			}
 		}
 
 		// Get Visitors
-		if ( Option::get( 'visitors' ) ) {
-			$data['visitors'] = array();
+		if ( in_array( 'visitors', $component ) ) {
+			if ( Option::get( 'visitors' ) ) {
+				$data['visitors'] = array();
 
-			// Today
-			$data['visitors']['today'] = array(
-				'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 1 ) ),
-				'value' => number_format_i18n( wp_statistics_visitor( 'today', null, true ) )
-			);
+				// Today
+				$data['visitors']['today'] = array(
+					'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 1 ) ),
+					'value' => number_format_i18n( wp_statistics_visitor( 'today', null, true ) )
+				);
 
-			// Yesterday
-			$data['visitors']['yesterday'] = array(
-				'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 1 ) ),
-				'value' => number_format_i18n( wp_statistics_visitor( 'yesterday', null, true ) )
-			);
+				// Yesterday
+				$data['visitors']['yesterday'] = array(
+					'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 1 ) ),
+					'value' => number_format_i18n( wp_statistics_visitor( 'yesterday', null, true ) )
+				);
 
-			// Week
-			$data['visitors']['week'] = array(
-				'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 7 ) ),
-				'value' => number_format_i18n( wp_statistics_visitor( 'week', null, true ) )
-			);
+				// Week
+				$data['visitors']['week'] = array(
+					'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 7 ) ),
+					'value' => number_format_i18n( wp_statistics_visitor( 'week', null, true ) )
+				);
 
-			// Month
-			$data['visitors']['month'] = array(
-				'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 30 ) ),
-				'value' => number_format_i18n( wp_statistics_visitor( 'month', null, true ) )
-			);
+				// Month
+				$data['visitors']['month'] = array(
+					'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 30 ) ),
+					'value' => number_format_i18n( wp_statistics_visitor( 'month', null, true ) )
+				);
 
-			// Year
-			$data['visitors']['year'] = array(
-				'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 365 ) ),
-				'value' => number_format_i18n( wp_statistics_visitor( 'year', null, true ) )
-			);
+				// Year
+				$data['visitors']['year'] = array(
+					'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 365 ) ),
+					'value' => number_format_i18n( wp_statistics_visitor( 'year', null, true ) )
+				);
 
-			// Total
-			$data['visitors']['total'] = array(
-				'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 365 ) ),
-				'value' => number_format_i18n( wp_statistics_visitor( 'total', null, true ) )
-			);
+				// Total
+				$data['visitors']['total'] = array(
+					'link'  => Menus::admin_url( 'visitors', array( 'hitdays' => 365 ) ),
+					'value' => number_format_i18n( wp_statistics_visitor( 'total', null, true ) )
+				);
 
+			}
 		}
 
 		// Get Visits
-		if ( Option::get( 'visits' ) ) {
-			$data['visits'] = array();
+		if ( in_array( 'visits', $component ) ) {
+			if ( Option::get( 'visits' ) ) {
+				$data['visits'] = array();
 
-			// Today
-			$data['visits']['today'] = array(
-				'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 1 ) ),
-				'value' => number_format_i18n( wp_statistics_visit( 'today' ) )
-			);
+				// Today
+				$data['visits']['today'] = array(
+					'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 1 ) ),
+					'value' => number_format_i18n( wp_statistics_visit( 'today' ) )
+				);
 
-			// Yesterday
-			$data['visits']['yesterday'] = array(
-				'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 1 ) ),
-				'value' => number_format_i18n( wp_statistics_visit( 'yesterday' ) )
-			);
+				// Yesterday
+				$data['visits']['yesterday'] = array(
+					'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 1 ) ),
+					'value' => number_format_i18n( wp_statistics_visit( 'yesterday' ) )
+				);
 
-			// Week
-			$data['visits']['week'] = array(
-				'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 7 ) ),
-				'value' => number_format_i18n( wp_statistics_visit( 'week' ) )
-			);
+				// Week
+				$data['visits']['week'] = array(
+					'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 7 ) ),
+					'value' => number_format_i18n( wp_statistics_visit( 'week' ) )
+				);
 
-			// Month
-			$data['visits']['month'] = array(
-				'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 30 ) ),
-				'value' => number_format_i18n( wp_statistics_visit( 'month' ) )
-			);
+				// Month
+				$data['visits']['month'] = array(
+					'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 30 ) ),
+					'value' => number_format_i18n( wp_statistics_visit( 'month' ) )
+				);
 
-			// Year
-			$data['visits']['year'] = array(
-				'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 365 ) ),
-				'value' => number_format_i18n( wp_statistics_visit( 'year' ) )
-			);
+				// Year
+				$data['visits']['year'] = array(
+					'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 365 ) ),
+					'value' => number_format_i18n( wp_statistics_visit( 'year' ) )
+				);
 
-			// Total
-			$data['visits']['total'] = array(
-				'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 365 ) ),
-				'value' => number_format_i18n( wp_statistics_visit( 'total' ) )
-			);
+				// Total
+				$data['visits']['total'] = array(
+					'link'  => Menus::admin_url( 'hits', array( 'hitdays' => 365 ) ),
+					'value' => number_format_i18n( wp_statistics_visit( 'total' ) )
+				);
+			}
 		}
 
 		// Get Search Engine Detail
@@ -170,38 +176,9 @@ class summary {
 			);
 		}
 
-		// Get Hits chartJs (10 Day Ago)
+		// Get Hits chartJs (20 Day Ago)
 		if ( in_array( 'hit-chart', $component ) ) {
-			$days     = ( isset( $component['days'] ) ? $component['days'] : 20 );
-			$visitors = $date = $visits = array();
-
-			// Prepare Date time
-			for ( $i = $days; $i >= 0; $i -- ) {
-				$date[] = TimeZone::getCurrentDate( 'M j', '-' . $i );
-			}
-
-			// Push Basic Chart Data
-			$data['hits-chart'] = array(
-				'days'  => $days,
-				'title' => sprintf( __( 'Hits in the last %s days', 'wp-statistics' ), $days ),
-				'date'  => $date
-			);
-
-			// Get Visits Chart
-			if ( Option::get( 'visits' ) ) {
-				for ( $i = $days; $i >= 0; $i -- ) {
-					$visits[] = (int) wp_statistics_visit( '-' . $i, true );
-				}
-				$data['hits-chart']['visits'] = $visits;
-			}
-
-			// Get Visitors Chart
-			if ( Option::get( 'visitors' ) ) {
-				for ( $i = $days; $i >= 0; $i -- ) {
-					$visitors[] = (int) wp_statistics_visitor( '-' . $i, true );
-				}
-				$data['hits-chart']['visitors'] = $visitors;
-			}
+			$data['hits-chart'] = hits::LastHitsChart( ( isset( $component['days'] ) ? $component['days'] : 20 ) );
 		}
 
 		return $data;

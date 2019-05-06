@@ -206,10 +206,15 @@ class Option {
 	 */
 	public static function check_option_require( $item = array(), $condition_key = 'require' ) {
 
+		// Default is True
 		$condition = true;
+
+		// Check Require Params
 		if ( array_key_exists( 'require', $item ) ) {
-			foreach ( $item[ $condition_key ] as $if ) {
-				if ( ! Option::get( $if ) ) {
+			foreach ( $item[ $condition_key ] as $if => $value ) {
+
+				// Check Type of Condition
+				if ( ( $value === true and ! Option::get( $if ) ) || ( $value === false and Option::get( $if ) ) ) {
 					$condition = false;
 					break;
 				}

@@ -1,6 +1,8 @@
 <?php
 
 # Exit if accessed directly
+use WP_STATISTICS\Country;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -128,6 +130,7 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-admin-bar.php';
 
 		// Hits Class
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-country.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user-online.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user-agent.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-ip.php';
@@ -265,7 +268,7 @@ final class WP_Statistics {
 		$this->container['hits'] = new \WP_STATISTICS\Hits();
 
 		# Get Country Codes
-		$this->container['country_codes'] = \WP_STATISTICS\Helper::get_country_codes();
+		$this->container['country_codes'] = Country::getList();
 
 		# Get User Detail
 		$this->container['user_id'] = \WP_STATISTICS\User::get_user_id();

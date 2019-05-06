@@ -55,7 +55,7 @@ function wp_statistics_generate_overview_postbox_contents( $post, $args ) {
 //Prepare List Of Page Url
 $page_urls   = array();
 $widget_list = array( 'browsers', 'countries', 'hits', 'pages', 'referring', 'search', 'words', 'top-visitors', 'recent' );
-$all_widget  = Meta_Box::_list();
+$all_widget  = Meta_Box::getList();
 foreach ( $widget_list as $widget ) {
 	if ( array_key_exists( $widget, $all_widget ) ) {
 		$page_urls[ 'wps_' . str_replace( "-", "_", $widget ) . '_more_button' ] = Menus::admin_url( $all_widget[ $widget ]['page_url'] );
