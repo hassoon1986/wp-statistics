@@ -4,6 +4,13 @@ namespace WP_STATISTICS;
 
 class User {
 	/**
+	 * Default Manage User Capability
+	 *
+	 * @var string
+	 */
+	public static $default_manage_cap = 'manage_options';
+
+	/**
 	 * Check User is Logged in WordPress
 	 *
 	 * @return mixed
@@ -100,6 +107,77 @@ class User {
 	public static function get_role_list() {
 		global $wp_roles;
 		return $wp_roles->get_names();
+	}
+
+	/**
+	 * Validation User Capability
+	 *
+	 * @default manage_options
+	 * @param string $capability Capability
+	 * @return string 'manage_options'
+	 */
+	public static function ExistCapability( $capability ) {
+		global $wp_roles;
+
+		if ( ! is_object( $wp_roles ) || ! is_array( $wp_roles->roles ) ) {
+			return self::$default_manage_cap;
+		}
+
+		foreach ( $wp_roles->roles as $role ) {
+			$cap_list = $role['capabilities'];
+
+			foreach ( $cap_list as $key => $cap ) {
+				if ( $capability == $key ) {
+					return $capability;
+				}
+			}
+		}
+
+		return self::$default_manage_cap;
+	}
+
+	/**
+	 * Check User Access To WP-Statistics Admin
+	 *
+	 * @param string $type [manage | read ]
+	 * @param string|boolean $export
+	 * @return bool
+	 */
+	public static function AccessUser( $type = 'both', $export = false ) {
+
+		//List Of Default Cap
+		$list = array(
+			'manage' => array( 'manage_capability', 'manage_options' ),
+			'read'   => array( 'read_capability', 'manage_options' )
+		);
+
+		//User User Cap
+		$cap = 'both';
+		if ( ! empty( $type ) and array_key_exists( $type, $list ) ) {
+			$cap = $type;
+		}
+
+		//Check Export Cap name or Validation current_can_user
+		if ( $export == "cap" ) {
+			return self::ExistCapability( Option::get( $list[ $cap ][0], $list[ $cap ][1] ) );
+		}
+
+		//Check Access
+		switch ( $type ) {
+			case "manage":
+			case "read":
+				return current_user_can( self::ExistCapability( Option::get( $list[ $cap ][0], $list[ $cap ][1] ) ) );
+				break;
+			case "both":
+				foreach ( array( 'manage', 'read' ) as $c ) {
+					if ( self::AccessUser( $c ) === true ) {
+						return true;
+					}
+				}
+				break;
+		}
+
+		return false;
 	}
 
 }

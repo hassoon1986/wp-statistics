@@ -1127,6 +1127,7 @@ function wp_statistics_date_range_calculator( $days, $start, $end ) {
 }
 
 /**
+ * // TODO Remove At last
  * This function creates a small JavaScript that will load the contents of a overview or dashboard widget.
  *
  * @param $widget
@@ -1163,77 +1164,6 @@ function wp_statistics_generate_rgba_color( $num, $opacity = '1' ) {
 		hexdec( substr( $hash, 4, 2 ) ),
 		$opacity
 	);
-}
-
-/**
- * This function will validate that a capability exists,
- * if not it will default to returning the 'manage_options' capability.
- *
- * @param string $capability Capability
- * @return string 'manage_options'
- */
-function wp_statistics_validate_capability( $capability ) {
-	global $wp_roles;
-
-	if ( ! is_object( $wp_roles ) || ! is_array( $wp_roles->roles ) ) {
-		return 'manage_options';
-	}
-
-	foreach ( $wp_roles->roles as $role ) {
-		$cap_list = $role['capabilities'];
-
-		foreach ( $cap_list as $key => $cap ) {
-			if ( $capability == $key ) {
-				return $capability;
-			}
-		}
-	}
-
-	return 'manage_options';
-}
-
-/**
- * Check User Access To WP-Statistics Admin
- *
- * @param string $type [manage | read ]
- * @param string|boolean $export
- * @return bool
- */
-function wp_statistics_check_access_user( $type = 'both', $export = false ) {
-
-	//List Of Default Cap
-	$list = array(
-		'manage' => array( 'manage_capability', 'manage_options' ),
-		'read'   => array( 'read_capability', 'manage_options' )
-	);
-
-	//User User Cap
-	$cap = 'both';
-	if ( ! empty( $type ) and array_key_exists( $type, $list ) ) {
-		$cap = $type;
-	}
-
-	//Check Export Cap name or Validation current_can_user
-	if ( $export == "cap" ) {
-		return wp_statistics_validate_capability( WP_STATISTICS\Option::get( $list[ $cap ][0], $list[ $cap ][1] ) );
-	}
-
-	//Check Access
-	switch ( $type ) {
-		case "manage":
-		case "read":
-			return current_user_can( wp_statistics_validate_capability( WP_STATISTICS\Option::get( $list[ $cap ][0], $list[ $cap ][1] ) ) );
-			break;
-		case "both":
-			foreach ( array( 'manage', 'read' ) as $c ) {
-				if ( wp_statistics_check_access_user( $c ) === true ) {
-					return true;
-				}
-			}
-			break;
-	}
-
-	return false;
 }
 
 /**

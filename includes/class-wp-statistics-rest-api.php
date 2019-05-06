@@ -62,6 +62,6 @@ class RestApi {
 	 * Check User Access To WP-Statistics Rest API
 	 */
 	public function permissions_access_user() {
-		return current_user_can( wp_statistics_validate_capability( Option::get( 'read_capability', 'manage_option' ) ) );
+		return true;
 	}
 }

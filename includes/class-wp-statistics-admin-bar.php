@@ -31,7 +31,7 @@ class AdminBar {
 		global $wp_admin_bar;
 
 		// Check Show WordPress Admin Bar
-		if ( self::show_admin_bar() and is_admin_bar_showing() and wp_statistics_check_access_user() ) {
+		if ( self::show_admin_bar() and is_admin_bar_showing() and User::AccessUser() ) {
 
 			/**
 			 * List Of Admin Bar Wordpress

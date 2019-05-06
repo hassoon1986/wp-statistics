@@ -34,8 +34,7 @@ class Export {
 			}
 
 			//Check Current User Capability
-			$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
-			if ( current_user_can( $manage_cap ) ) {
+			if ( User::AccessUser('manage') ) {
 				$table = $_POST['table-to-export'];
 				$type  = $_POST['export-file-type'];
 

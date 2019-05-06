@@ -18,9 +18,8 @@ class Network {
 	public function wp_admin_menu() {
 
 		// Get the read/write capabilities required to view/manage the plugin as set by the user.
-        // TODO Remove At Last
-		$read_cap   = wp_statistics_validate_capability( Option::get( 'read_capability', 'manage_options' ) );
-		$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
+		$read_cap   = User::ExistCapability( Option::get( 'read_capability', 'manage_options' ) );
+		$manage_cap = User::ExistCapability( Option::get( 'manage_capability', 'manage_options' ) );
 
 		// Add the top level menu.
 		add_menu_page( __( 'Statistics', 'wp-statistics' ), __( 'Statistics', 'wp-statistics' ), $read_cap, WP_STATISTICS_MAIN_FILE, array( $this, 'overview'), 'dashicons-chart-pie' );

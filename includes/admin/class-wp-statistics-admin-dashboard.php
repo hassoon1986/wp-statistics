@@ -26,7 +26,9 @@ class Admin_Dashboard {
 
 		foreach ( Meta_Box::_list() as $widget_key => $dashboard ) {
 			if ( Option::check_option_require( $dashboard ) === true and isset( $dashboard['show_on_dashboard'] ) and $dashboard['show_on_dashboard'] === true ) {
-				wp_add_dashboard_widget( Meta_Box::getMetaBoxKey( $widget_key ), $dashboard['name'], function(){ return null; }, $control_callback = null, array( 'widget' => $widget_key ) );
+				wp_add_dashboard_widget( Meta_Box::getMetaBoxKey( $widget_key ), $dashboard['name'], function () {
+					return null;
+				}, $control_callback = null, array( 'widget' => $widget_key ) );
 			}
 		}
 	}
@@ -38,7 +40,7 @@ class Admin_Dashboard {
 	public function load_dashboard_widget() {
 
 		// If the user does not have at least read access to the status plugin, just return without adding the widgets.
-		if ( ! current_user_can( wp_statistics_validate_capability( Option::get( 'read_capability', 'manage_option' ) ) ) ) {
+		if ( ! User::AccessUser( 'read' ) ) {
 			return;
 		}
 

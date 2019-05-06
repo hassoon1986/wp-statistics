@@ -27,25 +27,13 @@ class Ajax {
 			add_action( 'wp_ajax_wp_statistics_' . $method, array( $this, $method . '_action_callback' ) );
 		}
 	}
-//	public function test_action_callback() {
-//		global $WP_Statistics;
-//		$manage_cap = wp_statistics_validate_capability(
-//			WP_STATISTICS\Option::get( 'manage_capability', 'manage_options' )
-//		);
-//		echo $manage_cap;
-//		die();
-//	}
 
 	/**
 	 * Setup an AJAX action to close the notice on the overview page.
 	 */
 	public function close_notice_action_callback() {
 
-		$manage_cap = wp_statistics_validate_capability(
-			Option::get( 'manage_capability', 'manage_options' )
-		);
-
-		if ( current_user_can( $manage_cap ) and isset( $_REQUEST['notice'] ) ) {
+		if ( User::AccessUser('manage') and isset( $_REQUEST['notice'] ) ) {
 			switch ( $_REQUEST['notice'] ) {
 				case 'donate':
 					Option::update( 'disable_donation_nag', true );
@@ -68,11 +56,7 @@ class Ajax {
 	public function delete_agents_action_callback() {
 		global $wpdb;
 
-		$manage_cap = wp_statistics_validate_capability(
-			Option::get( 'manage_capability', 'manage_options' )
-		);
-
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser('manage') ) {
 			$agent = $_POST['agent-name'];
 
 			if ( $agent ) {
@@ -106,11 +90,7 @@ class Ajax {
 	public function delete_platforms_action_callback() {
 		global $wpdb;
 
-		$manage_cap = wp_statistics_validate_capability(
-			Option::get( 'manage_capability', 'manage_options' )
-		);
-
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser('manage') ) {
 			$platform = $_POST['platform-name'];
 
 			if ( $platform ) {
@@ -143,11 +123,7 @@ class Ajax {
 	public function delete_ip_action_callback() {
 		global $wpdb;
 
-		$manage_cap = wp_statistics_validate_capability(
-			Option::get( 'manage_capability', 'manage_options' )
-		);
-
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser('manage') ) {
 			$ip_address = sanitize_text_field( $_POST['ip-address'] );
 
 			if ( $ip_address ) {
@@ -193,10 +169,7 @@ class Ajax {
 			exit;
 		}
 
-		//Check User Cap
-		$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
-
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser('manage') ) {
 
 			if ( $table_name == "all" ) {
 				$x_tbl = 1;
@@ -221,8 +194,7 @@ class Ajax {
 	 */
 	public function purge_data_action_callback() {
 
-		$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser('manage') ) {
 			$purge_days = 0;
 
 			if ( array_key_exists( 'purge-days', $_POST ) ) {
@@ -243,11 +215,7 @@ class Ajax {
 	 */
 	public function purge_visitor_hits_action_callback() {
 
-		$manage_cap = wp_statistics_validate_capability(
-			Option::get( 'manage_capability', 'manage_options' )
-		);
-
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser('manage') ) {
 			$purge_hits = 10;
 
 			if ( array_key_exists( 'purge-hits', $_POST ) ) {
@@ -268,6 +236,7 @@ class Ajax {
 	}
 
 	/**
+	 * //TODO Remove at last
 	 * Setup an AJAX action to purge visitors with more than a defined number of hits.
 	 */
 	public function get_widget_contents_action_callback() {
@@ -299,11 +268,8 @@ class Ajax {
 			$days = 20;
 		}
 
-		$view_cap = wp_statistics_validate_capability(
-			Option::get( 'read_capability', 'manage_options' )
-		);
 
-		if ( current_user_can( $view_cap ) ) {
+		if ( User::AccessUser('read') ) {
 			$widget = '';
 
 			if ( array_key_exists( 'widget', $_POST ) ) {

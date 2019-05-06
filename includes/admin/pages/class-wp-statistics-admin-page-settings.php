@@ -16,7 +16,7 @@ class settings_page {
 	public static function view() {
 
 		// Check the current user has the rights to be here.
-		if ( ! current_user_can( wp_statistics_validate_capability( Option::get( 'read_capability', 'manage_options' ) ) ) ) {
+		if ( ! User::AccessUser( 'read' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 
@@ -28,7 +28,7 @@ class settings_page {
 
 		// Check User Access To Save Setting
 		$wps_admin = false;
-		if ( current_user_can( wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) ) ) ) {
+		if ( User::AccessUser( 'manage' ) ) {
 			$wps_admin = true;
 		}
 		if ( $wps_admin === false ) {

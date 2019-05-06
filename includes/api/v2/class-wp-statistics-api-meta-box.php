@@ -26,10 +26,10 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 		// Get Admin Meta Box
 		register_rest_route( self::$namespace, '/metabox', array(
 			array(
-				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'meta_box_callback' ),
-				//'permission_callback' => self::permissions_access_user(),
-				'args'     => array(
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'meta_box_callback' ),
+				'permission_callback' => $this->permissions_access_user(),
+				'args'                => array(
 					'name' => array(
 						'required'          => true,
 						'validate_callback' => function ( $value, $request, $key ) {

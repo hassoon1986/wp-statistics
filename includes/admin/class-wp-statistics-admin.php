@@ -72,13 +72,9 @@ class Admin {
 		// If the user had told us to be quite, do so.
 		if ( ! Option::get( 'hide_notices' ) ) {
 
-			// Check to make sure the current user can manage WP Statistics,
-			// if not there's no point displaying the warnings.
-			$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
-			if ( ! current_user_can( $manage_cap ) ) {
+			if ( ! User::AccessUser( 'manage' ) ) {
 				return;
 			}
-
 
 			$get_bloginfo_url = Menus::admin_url( 'settings' );
 
@@ -141,8 +137,7 @@ class Admin {
 	 */
 	public function settings_links( $links, $file ) {
 
-		$manage_cap = wp_statistics_validate_capability( Option::get( 'manage_capability', 'manage_options' ) );
-		if ( current_user_can( $manage_cap ) ) {
+		if ( User::AccessUser( 'manage' ) ) {
 			array_unshift( $links, '<a href="' . Menus::admin_url( 'settings' ) . '">' . __( 'Settings', 'wp-statistics' ) . '</a>' );
 		}
 
@@ -174,9 +169,7 @@ class Admin {
 	 */
 	public function load_edit_init() {
 
-		$read_cap = wp_statistics_validate_capability( Option::get( 'read_capability', 'manage_options' ) );
-
-		if ( current_user_can( $read_cap ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
+		if ( User::AccessUser( 'read' ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
 			$post_types = Helper::get_list_post_type();
 			foreach ( $post_types as $type ) {
 				add_action( 'manage_' . $type . '_posts_columns', 'WP_Statistics_Admin::add_column', 10, 2 );

@@ -38,7 +38,7 @@ class Editor {
 		}
 
 		// If the user does not have at least read access to the status plugin, just return without adding the widgets.
-		if ( ! current_user_can( wp_statistics_validate_capability( Option::get( 'read_capability', 'manage_option' ) ) ) ) {
+		if ( User::AccessUser( 'read' ) === false ) {
 			return;
 		}
 
@@ -115,7 +115,7 @@ class Editor {
 
 		$admin_url                                              = get_admin_url() . "/admin.php?page=";
 		$page_urls                                              = array();
-		$page_urls['wp_statistics_editor_meta_box_more_button'] = $admin_url . Menus::get_page_slug('pages') . '&page-id=';
+		$page_urls['wp_statistics_editor_meta_box_more_button'] = $admin_url . Menus::get_page_slug( 'pages' ) . '&page-id=';
 
 		//Button for Gutenberg
 		$btn_more_action = 'wp_statistics_goto_more';
