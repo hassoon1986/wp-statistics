@@ -723,7 +723,6 @@ function wp_statistics_agent_version( $agent, $version, $rangestartdate = null, 
 }
 
 
-
 // This function will return the SQL WHERE clause for getting the search words for a given search engine.
 function wp_statistics_searchword_query( $search_engine = 'all' ) {
 
@@ -988,7 +987,7 @@ function wp_statistics_countusers() {
 function wp_statistics_lastpostdate() {
 	global $wpdb;
 
-	$db_date = $wpdb->get_var( "SELECT post_date FROM {$wpdb->posts} WHERE post_type='post' AND post_status='publish' ORDER BY post_date DESC LIMIT 1" );
+	$db_date     = $wpdb->get_var( "SELECT post_date FROM {$wpdb->posts} WHERE post_type='post' AND post_status='publish' ORDER BY post_date DESC LIMIT 1" );
 	$date_format = get_option( 'date_format' );
 	return \WP_STATISTICS\TimeZone::getCurrentDate_i18n( $date_format, $db_date, false );
 }
@@ -1187,41 +1186,5 @@ function wp_statistics_ignore_insert( $query ) {
 	$count = 0;
 	$query = preg_replace( '/^(INSERT INTO)/i', 'INSERT IGNORE INTO', $query, 1, $count );
 	return $query;
-}
-
-/**
- * Get WebSite IP Server And Country Name
- *
- * @param $url string domain name e.g : wp-statistics.com
- * @return array
- */
-function wp_statistics_get_domain_server( $url ) {
-
-	//Create Empty Object
-	$result = array(
-		'ip'      => '',
-		'country' => ''
-	);
-
-	//Get Ip by Domain
-	if ( function_exists( 'gethostbyname' ) ) {
-		$ip = gethostbyname( $url );
-		if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-			$result['ip'] = $ip;
-			//Get country Code
-			if ( WP_STATISTICS\Option::get( 'geoip' ) ) {
-				$geoip_reader = \WP_STATISTICS\GeoIP::Loader( 'country' ); //TODO Change Method
-				if ( $geoip_reader != false ) {
-					try {
-						$record            = $geoip_reader->country( $ip );
-						$result['country'] = $record->country->isoCode;
-					} catch ( Exception $e ) {
-					}
-				}
-			}
-		}
-	}
-
-	return $result;
 }
 

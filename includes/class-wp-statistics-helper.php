@@ -335,8 +335,8 @@ class Helper {
 	public static function show_site_icon( $url, $size = 16, $style = '' ) {
 		$url = preg_replace( '/^https?:\/\//', '', $url );
 		if ( $url != "" ) {
-			$imgurl = "https://www.google.com/s2/favicons?domain=" . $url;
-			return '<img src="' . $imgurl . '" width="' . $size . '" height="' . $size . '" style="' . ( $style == "" ? 'vertical-align: -3px;' : '' ) . '" />';
+			$img_url = "https://www.google.com/s2/favicons?domain=" . $url;
+			return '<img src="' . $img_url . '" width="' . $size . '" height="' . $size . '" style="' . ( $style == "" ? 'vertical-align: -3px;' : '' ) . '" />';
 		}
 
 		return false;

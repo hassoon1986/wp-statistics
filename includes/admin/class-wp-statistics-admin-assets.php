@@ -224,7 +224,8 @@ class Admin_Assets {
 			'visitor_count' => __( 'Visitor Count', 'wp-statistics' ),
 			'id'            => __( 'ID', 'wp-statistics' ),
 			'title'         => __( 'Title', 'wp-statistics' ),
-			'link'          => __( 'Link', 'wp-statistics' )
+			'link'          => __( 'Link', 'wp-statistics' ),
+			'address'       => __( 'Address', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url

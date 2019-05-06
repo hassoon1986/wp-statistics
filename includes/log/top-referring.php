@@ -244,7 +244,7 @@ $ISOCountryCode = Country::getList();
 
 										//Get Site information if Not Exist
 										if ( ! array_key_exists( $domain, $referrer_list ) ) {
-											$get_site_inf             = wp_statistics_get_domain_server( $domain );
+											$get_site_inf             = \WP_STATISTICS\Referred::get_domain_server( $domain );
 											$get_site_title           = \WP_STATISTICS\Helper::get_site_title_by_url( $domain );
 											$referrer_list[ $domain ] = array(
 												'ip'      => $get_site_inf['ip'],

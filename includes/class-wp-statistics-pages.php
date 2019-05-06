@@ -353,11 +353,11 @@ class Pages {
 
 			// Push to list
 			$list[] = array(
-				'title'           => $page_info['title'],
-				'link'            => $page_info['link'],
-				'str_url'         => htmlentities( urldecode( $item->uri ), ENT_QUOTES ),
+				'title'     => $page_info['title'],
+				'link'      => $page_info['link'],
+				'str_url'   => htmlentities( urldecode( $item->uri ), ENT_QUOTES ),
 				'hits_page' => Menus::admin_url( 'pages', array( 'page-uri' => htmlentities( $item->uri, ENT_QUOTES ) ) ), # Convert to page-id in next Version [//TODO]
-				'number'          => number_format_i18n( $item->count_sum )
+				'number'    => number_format_i18n( $item->count_sum )
 			);
 		}
 

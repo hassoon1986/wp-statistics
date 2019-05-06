@@ -1,5 +1,7 @@
 <?php
 
+//TODO Remove at last
+
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
@@ -23,7 +25,7 @@ function wp_statistics_generate_referring_postbox_content( $count = 10 ) {
 		set_transient( 'wps_top_referring', $get_urls, 12 * HOUR_IN_SECONDS );
 	}
 	?>
-    <table width="100%" class="widefat table-stats" id="top-referrer">
+    <table width="100%" class="widefat table-stats">
         <tr>
             <td width="50%"><?php _e( 'Address', 'wp-statistics' ); ?></td>
             <td width="40%"><?php _e( 'Server IP', 'wp-statistics' ); ?></td>
@@ -49,7 +51,7 @@ function wp_statistics_generate_referring_postbox_content( $count = 10 ) {
 
 			//Get Site information if Not Exist
 			if ( ! array_key_exists( $domain, $referrer_list ) ) {
-				$get_site_inf             = wp_statistics_get_domain_server( $domain );
+				$get_site_inf             = \WP_STATISTICS\Referred::get_domain_server( $domain );
 				$get_site_title           = \WP_STATISTICS\Helper::get_site_title_by_url( $domain );
 				$referrer_list[ $domain ] = array(
 					'ip'      => $get_site_inf['ip'],

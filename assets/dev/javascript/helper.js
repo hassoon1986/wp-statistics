@@ -31,7 +31,6 @@ wps_js.redirect = function (url) {
     window.location.replace(url);
 };
 
-
 /**
  * Create Line Chart JS
  */
@@ -114,4 +113,11 @@ wps_js.bar_chart = function (tag_id, label, data, label_callback) {
             }
         }
     });
+};
+
+/**
+ * Show Domain Icon
+ */
+wps_js.site_icon = function (domain) {
+    return `<img src="https://www.google.com/s2/favicons?domain=${domain}" width="16" height="16" alt="${domain}" style="vertical-align: -3px;" />`;
 };
