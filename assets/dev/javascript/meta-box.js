@@ -46,6 +46,20 @@ wps_js.placeholder = function () {
 };
 
 /**
+ * Default Circle PlaceHolder
+ */
+wps_js.circle_placeholder = function () {
+    return `
+<div class="wps-ph-item">
+    <div class="wps-ph-col-2"></div>
+    <div class="wps-ph-col-8">
+        <div class="wps-ph-avatar"></div>
+    </div>
+</div>
+`;
+};
+
+/**
  * Show No Data Error if Meta Box is Empty
  */
 wps_js.no_meta_box_data = function () {

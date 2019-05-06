@@ -221,7 +221,8 @@ class Admin_Assets {
 			'total'        => __( 'Total', 'wp-statistics' ),
 			'daily_total'  => __( 'Daily Total', 'wp-statistics' ),
 			'date'         => __( 'Date', 'wp-statistics' ),
-			'time'         => __( 'Time', 'wp-statistics' )
+			'time'         => __( 'Time', 'wp-statistics' ),
+			'browsers'     => __( 'Browsers', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url

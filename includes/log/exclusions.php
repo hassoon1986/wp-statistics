@@ -191,8 +191,8 @@ foreach ( $excluded_reasons as $reason ) {
                                             {
                                                 label: '<?php echo $key; ?>',
                                                 data: [<?php echo implode( ',', $value ); ?>],
-                                                backgroundColor: <?php echo wp_statistics_generate_rgba_color( $i, '0.2' ); ?>,
-                                                borderColor: <?php echo wp_statistics_generate_rgba_color( $i, '1' ); ?>,
+                                                backgroundColor: <?php echo \WP_STATISTICS\Helper::GenerateRgbaColor( $i, '0.2' ); ?>,
+                                                borderColor: <?php echo \WP_STATISTICS\Helper::GenerateRgbaColor( $i, '1' ); ?>,
                                                 borderWidth: 1,
                                                 fill: true,
                                             },

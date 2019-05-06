@@ -562,11 +562,8 @@ function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = nu
 	return array( $total, $uris );
 }
 
-
-
 // This function returns all unique user agents in the database.
 function wp_statistics_ua_list( $rangestartdate = null, $rangeenddate = null ) {
-
 	global $wpdb;
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
@@ -606,12 +603,7 @@ function wp_statistics_useragent( $agent, $rangestartdate = null, $rangeenddate 
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
 		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(agent) FROM {$wpdb->prefix}statistics_visitor WHERE `agent` = %s AND `last_counter` BETWEEN %s AND %s",
-				$agent,
-				$rangestartdate,
-				$rangeenddate
-			)
+			$wpdb->prepare( "SELECT COUNT(agent) FROM {$wpdb->prefix}statistics_visitor WHERE `agent` = %s AND `last_counter` BETWEEN %s AND %s", $agent, $rangestartdate, $rangeenddate )
 		);
 	} else {
 		$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(agent) FROM {$wpdb->prefix}statistics_visitor WHERE `agent` = %s", $agent ) );
@@ -1146,25 +1138,6 @@ function wp_statistics_generate_widget_load_javascript( $widget, $container_id =
 	<?php
 }
 
-/**
- * Generate RGBA colors
- *
- * @param        $num
- * @param string $opacity
- *
- * @return string
- */
-function wp_statistics_generate_rgba_color( $num, $opacity = '1' ) {
-	$hash = md5( 'color' . $num );
-
-	return sprintf(
-		"'rgba(%s, %s, %s, %s)'",
-		hexdec( substr( $hash, 0, 2 ) ),
-		hexdec( substr( $hash, 2, 2 ) ),
-		hexdec( substr( $hash, 4, 2 ) ),
-		$opacity
-	);
-}
 
 /**
  * Get All Browser List For Detecting

@@ -1,7 +1,7 @@
 /** Set AjaxQ Option */
 wps_js.ajax_queue = {
     key: 'wp-statistics',
-    time: 500 // millisecond
+    time: 400 // millisecond
 };
 
 /**
@@ -47,7 +47,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
                         if (wps_js[callback]['meta_box_init']) {
                             setTimeout(function () {
                                 wps_js[callback]['meta_box_init'](data);
-                            }, 200);
+                            }, 150);
                         }
                     }
                 } else {

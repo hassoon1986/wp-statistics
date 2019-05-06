@@ -573,4 +573,24 @@ class Helper {
 		return wp_parse_args( $arg, $defaults );
 	}
 
+	/**
+	 * Generate RGBA colors
+	 *
+	 * @param        $num
+	 * @param string $opacity
+	 * @param bool $quote
+	 * @return string
+	 */
+	public static function GenerateRgbaColor( $num, $opacity = '1', $quote = true ) {
+		$hash   = md5( 'color' . $num );
+		$format = ( $quote === true ? "'rgba(%s, %s, %s, %s)'" : "rgba(%s, %s, %s, %s)" );
+
+		return sprintf( $format,
+			hexdec( substr( $hash, 0, 2 ) ),
+			hexdec( substr( $hash, 2, 2 ) ),
+			hexdec( substr( $hash, 4, 2 ) ),
+			$opacity
+		);
+	}
+
 }

@@ -47,7 +47,7 @@ foreach ( $BrowserVisits as $key => $value ) {
 		$i ++;
 		$browser_name[]  = "'" . wp_statistics_get_browser_list( strtolower( $key ) ) . "'";
 		$browser_value[] = $value;
-		$browser_color[] = wp_statistics_generate_rgba_color( $i, '0.4' );
+		$browser_color[] = \WP_STATISTICS\Helper::GenerateRgbaColor( $i, '0.4' );
 	}
 }
 
@@ -55,7 +55,7 @@ foreach ( $BrowserVisits as $key => $value ) {
 if ( $other_agent_count > 0 ) {
 	$browser_name[]  = "'" . __( 'Other', 'wp-statistics' ) . "'";
 	$browser_value[] = $other_agent_count;
-	$browser_color[] = wp_statistics_generate_rgba_color( 10, '0.4' );
+	$browser_color[] = \WP_STATISTICS\Helper::GenerateRgbaColor( 10, '0.4' );
 }
 
 // Platforms
@@ -75,7 +75,7 @@ foreach ( $PlatformVisits as $key => $value ) {
 	$i ++;
 	$platform_name[]  = "'" . $key . "'";
 	$platform_value[] = $value;
-	$platform_color[] = wp_statistics_generate_rgba_color( $i, '0.4' );
+	$platform_color[] = \WP_STATISTICS\Helper::GenerateRgbaColor( $i, '0.4' );
 }
 ?>
 <div class="wrap wps-wrap">
@@ -254,7 +254,7 @@ function wp_statistics_browser_version_stats( $Browser, $rangestartdate, $rangee
 	foreach ( $versions as $key => $value ) {
 		$i ++;
 		$version_value[ $value ] = wp_statistics_agent_version( $Browser, $value, $rangestartdate, $rangeenddate );
-		$version_color[]         = wp_statistics_generate_rgba_color( $i, '0.4' );
+		$version_color[]         = \WP_STATISTICS\Helper::GenerateRgbaColor( $i, '0.4' );
 	}
 
 	natcasesort( $version_value );

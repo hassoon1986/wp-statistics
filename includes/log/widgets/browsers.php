@@ -1,4 +1,5 @@
 <?php
+//TODO  remove at last
 function wp_statistics_generate_browsers_postbox_content() {
 	global $wpdb;
 	$id                   = 'browser-stats-' . rand( 111, 999 );
@@ -11,8 +12,10 @@ function wp_statistics_generate_browsers_postbox_content() {
 	$topten_browser_value = array();
 
 	foreach ( $Browsers as $Browser ) {
+
 		//Get List Of count Visitor By Agent
 		$BrowserVisits[ $Browser ] = wp_statistics_useragent( $Browser );
+
 		//Sum This agent
 		$total += $BrowserVisits[ $Browser ];
 	}
@@ -35,15 +38,17 @@ function wp_statistics_generate_browsers_postbox_content() {
 
 		$topten_browser_name[]  = "'" . $browser_name . "'";
 		$topten_browser_value[] = $value;
-		$topten_browser_color[] = wp_statistics_generate_rgba_color( $count, '0.4' );
+		$topten_browser_color[] = \WP_STATISTICS\Helper::GenerateRgbaColor( $count, '0.4' );
 	}
 
 	if ( $topten_browser_name and $topten_browser_value and $other_agent_count > 0 ) {
 		$topten_browser_name[]  = "'" . __( 'Other', 'wp-statistics' ) . "'";
 		$topten_browser_value[] = ( $total - $topten );
-		$topten_browser_color[] = wp_statistics_generate_rgba_color( 10, '0.4' );
+		$topten_browser_color[] = \WP_STATISTICS\Helper::GenerateRgbaColor( 10, '0.4' );
 	}
 	?>
+
+
     <canvas id="<?php echo $id; ?>" height="220"></canvas>
     <script>
         var ctx = document.getElementById("<?php echo $id; ?>").getContext('2d');

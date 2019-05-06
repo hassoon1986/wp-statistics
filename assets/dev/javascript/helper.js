@@ -78,3 +78,40 @@ wps_js.line_chart = function (tag_id, title, label, data) {
         }
     });
 };
+
+/**
+ * Create Bar Chart JS
+ */
+wps_js.bar_chart = function (tag_id, label, data, label_callback) {
+
+    // Get Element By ID
+    let ctx = document.getElementById(tag_id).getContext('2d');
+
+    // Check is RTL Mode
+    if (wps_js.is_active('rtl')) {
+        Chart.defaults.global.defaultFontFamily = "tahoma";
+    }
+
+    // Create Chart
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: label,
+            datasets: data
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'bottom',
+            },
+            animation: {
+                duration: 0,
+            },
+            tooltips: {
+                callbacks: {
+                    label: label_callback
+                }
+            }
+        }
+    });
+};
