@@ -16,7 +16,7 @@ class settings_page {
 	public static function view() {
 
 		// Check the current user has the rights to be here.
-		if ( ! User::AccessUser( 'read' ) ) {
+		if ( ! User::Access( 'read' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 
@@ -28,7 +28,7 @@ class settings_page {
 
 		// Check User Access To Save Setting
 		$wps_admin = false;
-		if ( User::AccessUser( 'manage' ) ) {
+		if ( User::Access( 'manage' ) ) {
 			$wps_admin = true;
 		}
 		if ( $wps_admin === false ) {

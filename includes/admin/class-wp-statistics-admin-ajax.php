@@ -33,7 +33,7 @@ class Ajax {
 	 */
 	public function close_notice_action_callback() {
 
-		if ( User::AccessUser('manage') and isset( $_REQUEST['notice'] ) ) {
+		if ( User::Access('manage') and isset( $_REQUEST['notice'] ) ) {
 			switch ( $_REQUEST['notice'] ) {
 				case 'donate':
 					Option::update( 'disable_donation_nag', true );
@@ -56,7 +56,7 @@ class Ajax {
 	public function delete_agents_action_callback() {
 		global $wpdb;
 
-		if ( User::AccessUser('manage') ) {
+		if ( User::Access('manage') ) {
 			$agent = $_POST['agent-name'];
 
 			if ( $agent ) {
@@ -90,7 +90,7 @@ class Ajax {
 	public function delete_platforms_action_callback() {
 		global $wpdb;
 
-		if ( User::AccessUser('manage') ) {
+		if ( User::Access('manage') ) {
 			$platform = $_POST['platform-name'];
 
 			if ( $platform ) {
@@ -123,7 +123,7 @@ class Ajax {
 	public function delete_ip_action_callback() {
 		global $wpdb;
 
-		if ( User::AccessUser('manage') ) {
+		if ( User::Access('manage') ) {
 			$ip_address = sanitize_text_field( $_POST['ip-address'] );
 
 			if ( $ip_address ) {
@@ -169,7 +169,7 @@ class Ajax {
 			exit;
 		}
 
-		if ( User::AccessUser('manage') ) {
+		if ( User::Access('manage') ) {
 
 			if ( $table_name == "all" ) {
 				$x_tbl = 1;
@@ -194,7 +194,7 @@ class Ajax {
 	 */
 	public function purge_data_action_callback() {
 
-		if ( User::AccessUser('manage') ) {
+		if ( User::Access('manage') ) {
 			$purge_days = 0;
 
 			if ( array_key_exists( 'purge-days', $_POST ) ) {
@@ -215,7 +215,7 @@ class Ajax {
 	 */
 	public function purge_visitor_hits_action_callback() {
 
-		if ( User::AccessUser('manage') ) {
+		if ( User::Access('manage') ) {
 			$purge_hits = 10;
 
 			if ( array_key_exists( 'purge-hits', $_POST ) ) {
@@ -269,7 +269,7 @@ class Ajax {
 		}
 
 
-		if ( User::AccessUser('read') ) {
+		if ( User::Access('read') ) {
 			$widget = '';
 
 			if ( array_key_exists( 'widget', $_POST ) ) {

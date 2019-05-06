@@ -16,7 +16,7 @@ function wp_statistics_generate_about_postbox_content() {
             <a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank"><?php _e( 'Rate & Review', 'wp-statistics' ); ?></a>
         </p>
 		<?php
-		if ( \WP_STATISTICS\User::AccessUser('manage') ) {
+		if ( \WP_STATISTICS\User::Access('manage') ) {
 			?>
             | <p>
                 <a href="<?php echo Menus::admin_url( 'settings', array( 'tab' => 'about' ) ); ?>"><?php _e( 'More Info', 'wp-statistics' ); ?></a>

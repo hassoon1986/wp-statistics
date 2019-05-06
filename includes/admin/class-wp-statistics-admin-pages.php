@@ -207,7 +207,7 @@ class Admin_Pages {
 		}
 
 		// Verify the user has the rights to see the statistics.
-		if ( ! User::AccessUser( 'read' ) ) {
+		if ( ! User::Access( 'read' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 

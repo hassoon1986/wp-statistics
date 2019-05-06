@@ -15,7 +15,7 @@ class optimization_page {
 		global $wpdb;
 
 		// Check the current user has the rights to be here.
-		if ( ! User::AccessUser( 'manage' ) ) {
+		if ( ! User::Access( 'manage' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 

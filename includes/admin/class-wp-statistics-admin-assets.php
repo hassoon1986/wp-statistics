@@ -219,7 +219,7 @@ class Admin_Assets {
 			'month'        => __( 'Last 30 Days (Month)', 'wp-statistics' ),
 			'year'         => __( 'Last 365 Days (Year)', 'wp-statistics' ),
 			'total'        => __( 'Total', 'wp-statistics' ),
-			'daily_total'  => __( 'Daily Total', 'wp-statistics' ), //:
+			'daily_total'  => __( 'Daily Total', 'wp-statistics' ),
 			'date'         => __( 'Date', 'wp-statistics' ),
 			'time'         => __( 'Time', 'wp-statistics' )
 		);

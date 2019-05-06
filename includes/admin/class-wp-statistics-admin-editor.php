@@ -38,7 +38,7 @@ class Editor {
 		}
 
 		// If the user does not have at least read access to the status plugin, just return without adding the widgets.
-		if ( User::AccessUser( 'read' ) === false ) {
+		if ( User::Access( 'read' ) === false ) {
 			return;
 		}
 

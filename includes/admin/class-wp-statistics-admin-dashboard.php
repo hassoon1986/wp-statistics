@@ -40,7 +40,7 @@ class Admin_Dashboard {
 	public function load_dashboard_widget() {
 
 		// If the user does not have at least read access to the status plugin, just return without adding the widgets.
-		if ( ! User::AccessUser( 'read' ) ) {
+		if ( ! User::Access( 'read' ) ) {
 			return;
 		}
 

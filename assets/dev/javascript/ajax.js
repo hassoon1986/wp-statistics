@@ -69,7 +69,7 @@ wps_js.ajaxQ = function (url, params, callback, error_callback, type = 'GET') {
             }
         };
 
-        // Check WordPress REST-API Nonce [https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/ ]
+        // Check WordPress REST-API Nonce [https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/  ]
         if (url === wps_js.global.meta_box_api) {
             ajaxQ.beforeSend = function (xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', wps_js.global.rest_api_nonce);

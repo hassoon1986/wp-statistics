@@ -38,9 +38,9 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 						}
 					)
 				),
-				'permission_callback' => function () {
-					return User::AccessUser( 'read' );
-				}
+//				'permission_callback' => function () {
+//					return User::Access( 'read' );
+//				}
 			)
 		) );
 	}

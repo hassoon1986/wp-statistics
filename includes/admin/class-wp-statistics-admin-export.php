@@ -34,7 +34,7 @@ class Export {
 			}
 
 			//Check Current User Capability
-			if ( User::AccessUser('manage') ) {
+			if ( User::Access('manage') ) {
 				$table = $_POST['table-to-export'];
 				$type  = $_POST['export-file-type'];
 

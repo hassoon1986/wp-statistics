@@ -143,7 +143,7 @@ class User {
 	 * @param string|boolean $export
 	 * @return bool
 	 */
-	public static function AccessUser( $type = 'both', $export = false ) {
+	public static function Access( $type = 'both', $export = false ) {
 
 		//List Of Default Cap
 		$list = array(
@@ -170,7 +170,7 @@ class User {
 				break;
 			case "both":
 				foreach ( array( 'manage', 'read' ) as $c ) {
-					if ( self::AccessUser( $c ) === true ) {
+					if ( self::Access( $c ) === true ) {
 						return true;
 					}
 				}

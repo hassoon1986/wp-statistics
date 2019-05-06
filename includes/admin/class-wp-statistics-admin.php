@@ -72,7 +72,7 @@ class Admin {
 		// If the user had told us to be quite, do so.
 		if ( ! Option::get( 'hide_notices' ) ) {
 
-			if ( ! User::AccessUser( 'manage' ) ) {
+			if ( ! User::Access( 'manage' ) ) {
 				return;
 			}
 
@@ -137,7 +137,7 @@ class Admin {
 	 */
 	public function settings_links( $links, $file ) {
 
-		if ( User::AccessUser( 'manage' ) ) {
+		if ( User::Access( 'manage' ) ) {
 			array_unshift( $links, '<a href="' . Menus::admin_url( 'settings' ) . '">' . __( 'Settings', 'wp-statistics' ) . '</a>' );
 		}
 
@@ -169,7 +169,7 @@ class Admin {
 	 */
 	public function load_edit_init() {
 
-		if ( User::AccessUser( 'read' ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
+		if ( User::Access( 'read' ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
 			$post_types = Helper::get_list_post_type();
 			foreach ( $post_types as $type ) {
 				add_action( 'manage_' . $type . '_posts_columns', 'WP_Statistics_Admin::add_column', 10, 2 );

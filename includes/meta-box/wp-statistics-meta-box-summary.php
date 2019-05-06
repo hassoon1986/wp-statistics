@@ -8,20 +8,36 @@ use WP_STATISTICS\SearchEngine;
 use WP_STATISTICS\TimeZone;
 
 class summary {
-
+	/**
+	 * Get Summary Meta Box Data
+	 *
+	 * @param array $args
+	 * @return array
+	 */
 	public static function get( $args = array() ) {
-
-		return $args;
+		return self::data( array( 'search-engine', 'timezone' ) );
 	}
 
+	/**
+	 * Summary Meta Box Lang
+	 *
+	 * @return array
+	 */
+	public static function lang() {
+		return array(
+			'search_engine'     => __( 'Search Engine Referrals', 'wp-statistics' ),
+			'current_time_date' => __( 'Current Time and Date', 'wp-statistics' ),
+			'adjustment'        => __( '(Adjustment)', 'wp-statistics' )
+		);
+	}
 
 	/**
 	 * Get Summary Hits in WP-Statistics
 	 *
-	 * @param array $componenet
+	 * @param array $component
 	 * @return array
 	 */
-	public static function data( $componenet = array() ) {
+	public static function data( $component = array() ) {
 		$data = array();
 
 		// User Online
@@ -116,7 +132,7 @@ class summary {
 		}
 
 		// Get Search Engine Detail
-		if ( in_array( 'search-engine', $componenet ) ) {
+		if ( in_array( 'search-engine', $component ) ) {
 			$data['search-engine'] = array();
 			$total_today           = 0;
 			$total_yesterday       = 0;
@@ -146,7 +162,7 @@ class summary {
 		}
 
 		// Get Current Date and Time
-		if ( in_array( 'timezone', $componenet ) ) {
+		if ( in_array( 'timezone', $component ) ) {
 			$data['timezone'] = array(
 				'option-link' => admin_url( 'options-general.php' ),
 				'date'        => TimeZone::getCurrentDate_i18n( get_option( 'date_format' ) ),
@@ -155,8 +171,8 @@ class summary {
 		}
 
 		// Get Hits chartJs (10 Day Ago)
-		if ( in_array( 'hit-chart', $componenet ) ) {
-			$days     = ( isset( $componenet['days'] ) ? $componenet['days'] : 20 );
+		if ( in_array( 'hit-chart', $component ) ) {
+			$days     = ( isset( $component['days'] ) ? $component['days'] : 20 );
 			$visitors = $date = $visits = array();
 
 			// Prepare Date time

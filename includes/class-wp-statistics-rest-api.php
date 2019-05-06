@@ -58,10 +58,4 @@ class RestApi {
 		return new \WP_REST_Response( $output, $status );
 	}
 
-	/**
-	 * Check User Access To WP-Statistics Rest API
-	 */
-	public function permissions_access_user() {
-		return true;
-	}
 }
