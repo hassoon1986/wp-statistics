@@ -122,7 +122,7 @@ if ( $_get != '%' ) {
 						$query  = str_replace( "SELECT count(*) FROM", "SELECT * FROM", $sql ) . "  ORDER BY `{$wpdb->prefix}statistics_visitor`.`ID` DESC LIMIT {$offset}, {$items_per_page}";
 						$result = $wpdb->get_results( $query );
 
-						echo "<table width=\"100%\" class=\"widefat table-stats\" id=\"last-referrer\"><tr>";
+						echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\"><tr>";
 						echo "<td>" . __( 'Browser', 'wp-statistics' ) . "</td>";
 						if ( WP_STATISTICS\Option::get( 'geoip' ) ) {
 							echo "<td>" . __( 'Country', 'wp-statistics' ) . "</td>";

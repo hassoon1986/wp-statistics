@@ -7,7 +7,7 @@ function wp_statistics_generate_countries_postbox_content() {
 	global $wpdb;
 	$ISOCountryCode = \WP_STATISTICS\Helper::get_country_codes();
 	?>
-    <table width="100%" class="widefat table-stats" id="last-referrer">
+    <table width="100%" class="widefat table-stats wps-report-table">
         <tr>
             <td width="10%" style='text-align: left'><?php _e( 'Rank', 'wp-statistics' ); ?></td>
             <td width="10%" style='text-align: left'><?php _e( 'Flag', 'wp-statistics' ); ?></td>

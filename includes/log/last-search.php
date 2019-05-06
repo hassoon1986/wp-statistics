@@ -115,7 +115,7 @@ $total = $search_result[ $referred ];
 
 								$dash_icon = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-location-alt', 'map' );
 
-								echo "<table width=\"100%\" class=\"widefat table-stats\" id=\"last-referrer\"><tr>";
+								echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\"><tr>";
 								echo "<td>" . __( 'Word', 'wp-statistics' ) . "</td>";
 								echo "<td>" . __( 'Browser', 'wp-statistics' ) . "</td>";
 								if ( WP_STATISTICS\Option::get( 'geoip' ) ) {

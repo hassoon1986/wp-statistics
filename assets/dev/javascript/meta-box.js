@@ -63,7 +63,7 @@ wps_js.circle_placeholder = function () {
  * Show No Data Error if Meta Box is Empty
  */
 wps_js.no_meta_box_data = function () {
-
+    return 'NO Data';
 };
 
 /**

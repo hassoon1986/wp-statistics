@@ -132,7 +132,7 @@ for ( $i = $daysToDisplay; $i >= 0; $i -- ) {
 							$site_url       = site_url();
 							$count          = 0;
 
-							echo "<table width=\"100%\" class=\"widefat table-stats\" id=\"last-referrer\"><tr>";
+							echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\"><tr>";
 							echo "<td width='10%'>" . __( 'ID', 'wp-statistics' ) . "</td>";
 							echo "<td width='40%'>" . __( 'Title', 'wp-statistics' ) . "</td>";
 							echo "<td width='40%'>" . __( 'Link', 'wp-statistics' ) . "</td>";

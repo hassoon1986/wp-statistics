@@ -583,7 +583,8 @@ class Helper {
 	 */
 	public static function GenerateRgbaColor( $num, $opacity = '1', $quote = true ) {
 		$hash   = md5( 'color' . $num );
-		$format = ( $quote === true ? "'rgba(%s, %s, %s, %s)'" : "rgba(%s, %s, %s, %s)" );
+		$rgba   = "rgba(%s, %s, %s, %s)";
+		$format = ( $quote === true ? "'$rgba'" : $rgba );
 
 		return sprintf( $format,
 			hexdec( substr( $hash, 0, 2 ) ),

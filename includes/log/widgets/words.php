@@ -28,7 +28,7 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 
 	if ( sizeof( $result ) > 0 ) {
 		echo "<div class=\"wp-statistics-table\">";
-		echo "<table width=\"100%\" class=\"widefat table-stats\" id=\"last-referrer\">
+		echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\">
 		  <tr>";
 		echo "<td>" . __( 'Word', 'wp-statistics' ) . "</td>";
 		echo "<td>" . __( 'Browser', 'wp-statistics' ) . "</td>";

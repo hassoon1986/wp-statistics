@@ -12,7 +12,7 @@ function wp_statistics_generate_recent_postbox_content( $ISOCountryCode, $count 
 	);
 
 	echo "<div class=\"wp-statistics-table\">";
-	echo "<table width=\"100%\" class=\"widefat table-stats\" id=\"last-referrer\">
+	echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\">
 		  <tr>";
 	echo "<td>" . __( 'Browser', 'wp-statistics' ) . "</td>";
 	if ( WP_STATISTICS\Option::get( 'geoip' ) ) {

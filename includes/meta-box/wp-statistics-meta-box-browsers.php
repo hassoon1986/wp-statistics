@@ -46,16 +46,25 @@ class browsers {
 		}
 
 		if ( $top_ten_browser_name and $top_ten_browser_value and $other_agent_count > 0 ) {
-			$top_ten_browser_name[]  =  __( 'Other', 'wp-statistics' );
+			$top_ten_browser_name[]  = __( 'Other', 'wp-statistics' );
 			$top_ten_browser_value[] = (int) ( $total - $top_ten );
 			$top_ten_browser_color[] = Helper::GenerateRgbaColor( 10, '0.4', false );
 		}
 
-		return array(
+		// Prepare Response
+		$response = array(
 			'browsers_name'  => $top_ten_browser_name,
 			'browsers_value' => $top_ten_browser_value,
 			'browsers_color' => $top_ten_browser_color
 		);
+
+		// Check For No Data Meta Box
+		if ( count( array_filter( $top_ten_browser_value ) ) < 1 ) {
+			$response['no_data'] = 1;
+		}
+
+		// Response
+		return $response;
 	}
 
 }
