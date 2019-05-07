@@ -5,7 +5,7 @@ wps_js.search_meta_box = {
     },
 
     view: function (args = []) {
-        return `<canvas id="wp-statistics-search-meta-box-chart" height="210"></canvas>`;
+        return `<canvas id="` + wps_js.chart_id('search') + `" height="210"></canvas>`;
     },
 
     meta_box_init: function (args = []) {
@@ -35,7 +35,7 @@ wps_js.search_meta_box = {
                 fill: true
             });
         }
-        wps_js.line_chart("wp-statistics-search-meta-box-chart", args['title'], args['date'], datasets);
+        wps_js.line_chart(wps_js.chart_id('search'), args['title'], args['date'], datasets);
     },
 
 };

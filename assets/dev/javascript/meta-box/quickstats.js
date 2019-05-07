@@ -11,11 +11,11 @@ wps_js.quickstats_meta_box = {
         t += `<br><hr width="80%"/><br>`;
 
         // Show Chart JS
-        t += `<canvas id="wp-statistics-quickstats-meta-box-chart" height="210"></canvas>`;
+        t += `<canvas id="` + wps_js.chart_id('quickstats') + `" height="210"></canvas>`;
         return t;
     },
 
     meta_box_init: function (args = []) {
-        wps_js.hits_meta_box.hits_chart("wp-statistics-quickstats-meta-box-chart", args);
+        wps_js.hits_meta_box.hits_chart(wps_js.chart_id('quickstats'), args);
     }
 };

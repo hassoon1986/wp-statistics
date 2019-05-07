@@ -5,7 +5,7 @@ wps_js.browsers_meta_box = {
     },
 
     view: function (args = []) {
-        return '<canvas id="wp-statistics-browsers-meta-box-chart" height="220"></canvas>';
+        return '<canvas id="' + wps_js.chart_id('browsers') + '" height="220"></canvas>';
     },
 
     meta_box_init: function (args = []) {
@@ -29,7 +29,7 @@ wps_js.browsers_meta_box = {
         };
 
         // Show Chart
-        wps_js.bar_chart("wp-statistics-browsers-meta-box-chart", args['browsers_name'], data, label_callback);
+        wps_js.bar_chart(wps_js.chart_id('browsers'), args['browsers_name'], data, label_callback);
     }
 
 };

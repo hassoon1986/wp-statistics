@@ -5,18 +5,18 @@ wps_js.hits_meta_box = {
     },
 
     view: function (args = []) {
-        return `<canvas id="wp-statistics-hits-meta-box-chart" height="210"></canvas>`;
+        return '<canvas id="' + wps_js.chart_id('hits') + '" height="210"></canvas>';
     },
 
     meta_box_init: function (args = []) {
-        this.hits_chart("wp-statistics-hits-meta-box-chart", args);
+        this.hits_chart(wps_js.chart_id('hits'), args);
     },
 
     hits_chart: function (tag_id, args = []) {
 
         // Check Hit-chart for Quick State
         let params = args;
-        if('hits-chart' in args) {
+        if ('hits-chart' in args) {
             params = args['hits-chart'];
         }
 

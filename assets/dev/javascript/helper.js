@@ -116,6 +116,15 @@ wps_js.bar_chart = function (tag_id, label, data, label_callback) {
 };
 
 /**
+ * Create Chart ID by Meta Box name
+ *
+ * @param meta_box
+ */
+wps_js.chart_id = function (meta_box) {
+    return 'wp-statistics-' + meta_box + '-meta-box-chart';
+};
+
+/**
  * Show Domain Icon
  */
 wps_js.site_icon = function (domain) {
