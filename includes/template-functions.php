@@ -907,7 +907,7 @@ function wp_statistics_referrer( $time = null ) {
 		'year'      => - 365,
 		'total'     => 'ALL',
 	);
-	$sql      = "SELECT `referred` FROM `" . $wpdb->prefix . "statistics_visitor` WHERE referred <> ''";
+	$sql      = "SELECT `referred` FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE referred <> ''";
 	if ( array_key_exists( $time, $timezone ) ) {
 		if ( $time != "total" ) {
 			$sql .= " AND (`last_counter` = '" . \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $timezone[ $time ] ) . "')";

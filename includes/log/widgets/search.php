@@ -1,4 +1,7 @@
 <?php
+
+//TODO Remove at last
+
 function wp_statistics_generate_search_postbox_content( $search_engines, $size = "300", $days = 20 ) {
 	global $wpdb;
 	$id          = 'search-stats-' . rand( 111, 999 );
