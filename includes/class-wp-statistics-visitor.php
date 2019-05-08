@@ -210,7 +210,10 @@ class Visitor {
 		$defaults = array(
 			'sql'      => '',
 			'per_page' => 10,
-			'paged'    => 1
+			'paged'    => 1,
+			'fields'   => 'all',
+			'order'    => 'DESC',
+			'orderby'  => 'ID'
 		);
 		$args     = wp_parse_args( $arg, $defaults );
 

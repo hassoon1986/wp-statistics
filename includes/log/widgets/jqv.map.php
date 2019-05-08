@@ -1,4 +1,7 @@
 <?php
+
+//TODO Remove at last
+
 function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 
 	global $wpdb;
@@ -6,10 +9,6 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 	if ( WP_STATISTICS\Option::get( 'geoip' ) && ! WP_STATISTICS\Option::get( 'disable_map' ) ) { ?>
         <div id="map_canvas"></div>
 
-		<?php
-		$current_date = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d' );
-		$result       = $wpdb->get_row( "SELECT * FROM `{$wpdb->prefix}statistics_visitor` WHERE last_counter = '{$current_date}'" );
-		?>
         <script type="text/javascript">
             var country_pin = Array();
             var country_color = Array();
@@ -19,7 +18,7 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 				<?php
 				$result = $wpdb->get_results( "SELECT * FROM `{$wpdb->prefix}statistics_visitor` WHERE last_counter = '" . \WP_STATISTICS\Timezone::getCurrentDate( 'Y-m-d' ) . "'" );
 				$final_result = array();
-				$final_result[\WP_STATISTICS\GeoIP::$private_country] = array();
+				$final_result[ \WP_STATISTICS\GeoIP::$private_country ] = array();
 
 				//Load City Geoip
 				$geoip_reader = false;
@@ -31,8 +30,7 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 					foreach ( $result as $new_r ) {
 						$new_r->location = strtolower( $new_r->location );
 
-						$final_result[ $new_r->location ][] = array
-						(
+						$final_result[ $new_r->location ][] = array(
 							'location' => $new_r->location,
 							'agent'    => $new_r->agent,
 							'ip'       => $new_r->ip,
@@ -40,9 +38,9 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 					}
 				}
 
-				$final_total = count( $result ) - count( $final_result[\WP_STATISTICS\GeoIP::$private_country] );
+				$final_total = count( $result ) - count( $final_result[ \WP_STATISTICS\GeoIP::$private_country ] );
 
-				unset( $final_result[\WP_STATISTICS\GeoIP::$private_country] );
+				unset( $final_result[ \WP_STATISTICS\GeoIP::$private_country ] );
 
 				$startColor = array( 200, 238, 255 );
 				$endColor = array( 0, 100, 145 );
@@ -115,8 +113,6 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
                         }
                     },
                 });
-
-
             });
         </script>
 		<?php

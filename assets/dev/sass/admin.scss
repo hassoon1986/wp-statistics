@@ -21,6 +21,7 @@ $image_path: "../images";
 // Load WordPress Meta Box
 @import "meta-box/about";
 @import "meta-box/summary";
+@import "meta-box/map";
 
 
 #last-log {
@@ -85,32 +86,6 @@ $image_path: "../images";
   font-size: 10px !important;
   text-align: left;
   white-space: nowrap;
-}
-
-#map_canvas {
-  direction: ltr;
-  height: 300px;
-  width: 100%;
-}
-
-.map-html-marker {
-  max-height: 170px;
-  width: 200px;
-}
-
-.map-html-marker p {
-  border-bottom: 1px dashed #EFEFEF;
-  font-size: 10px;
-  margin: 2px 0;
-  padding: 3px 0;
-  text-align: left;
-}
-
-.map-html-marker p:last-child {
-  border-bottom: 0 none;
-}
-
-.log-latest {
 }
 
 .log-item {
@@ -271,10 +246,6 @@ $image_path: "../images";
 #donate-button a {
   height: 23px;
   line-height: 22px;
-}
-
-.jqvmap-label {
-  z-index: 10000;
 }
 
 .ui-sortable {
