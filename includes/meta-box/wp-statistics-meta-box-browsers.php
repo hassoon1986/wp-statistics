@@ -38,7 +38,7 @@ class browsers {
 			}
 
 			//Get Browser name
-			$browser_name = wp_statistics_get_browser_list( strtolower( $key ) );
+			$browser_name = \WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
 
 			$top_ten_browser_name[]  = $browser_name;
 			$top_ten_browser_value[] = (int) $value;

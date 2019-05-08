@@ -34,7 +34,7 @@ function wp_statistics_generate_browsers_postbox_content() {
 		}
 
 		//Get Browser name
-		$browser_name = wp_statistics_get_browser_list( strtolower( $key ) );
+		$browser_name = WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
 
 		$topten_browser_name[]  = "'" . $browser_name . "'";
 		$topten_browser_value[] = $value;

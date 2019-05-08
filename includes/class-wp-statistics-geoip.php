@@ -60,7 +60,7 @@ class GeoIP {
 
 		//Default Geo-Ip Option name
 		$opt = ( $which == "city" ? 'geoip_city' : 'geoip' );
-		//TODO Check Exist DATABASE FILE
+		//TODO Check Exist DATABASE FILE CHECKSUM
 
 		// Return
 		return Option::get( $opt );
@@ -391,6 +391,54 @@ class GeoIP {
 		}
 
 		return $enabled;
+	}
+
+	/**
+	 * Get City Detail By User IP
+	 *
+	 * @param bool $ip
+	 * @param string $return
+	 * @return String|null
+	 * @see https://github.com/maxmind/GeoIP2-php
+	 * @throws \Exception
+	 */
+	public static function getCity( $ip = false, $return = 'name' ) {
+
+		// Default City Name
+		$default_city = __( 'Unknown', 'wp-statistics' );
+
+		// Get User IP
+		$ip = ( $ip === false ? IP::getIP() : $ip );
+
+		// Load GEO-IP
+		$reader = self::Loader( 'city' );
+
+		//Get City name
+		if ( $reader != false ) {
+
+			try {
+				//Search in Geo-IP
+				$record = $reader->city( $ip );
+
+				//Get City
+				if ( $return == "all" ) {
+					$location = $record->city;
+				} else {
+					$location = $record->city->{$return};
+				}
+			} catch ( AddressNotFoundException $e ) {
+				//Don't Stuff
+			} catch ( InvalidDatabaseException $e ) {
+				//Don't Stuff
+			}
+		}
+
+		# Check Has Location
+		if ( isset( $location ) and ! empty( $location ) ) {
+			return $location;
+		}
+
+		return $default_city;
 	}
 
 }

@@ -55,7 +55,7 @@ if ( $_get != '%' ) {
 
 			if ( $_var == 'agent' ) {
 				$Browsers      = wp_statistics_ua_list();
-				$browser_names = wp_statistics_get_browser_list();
+				$browser_names = WP_STATISTICS\UserAgent::BrowserList();
 				$i             = 0;
 				$Total         = count( $Browsers );
 				echo $spacer;
@@ -75,7 +75,7 @@ if ( $_get != '%' ) {
 					}
 
 					//Get Browser name
-					$browser_name = wp_statistics_get_browser_list( strtolower( $Browser ) );
+					$browser_name = WP_STATISTICS\UserAgent::BrowserList( strtolower( $Browser ) );
 					echo "<li><a " . $current . "href='" . Menus::admin_url( 'visitors', array( 'agent' => $Browser ) ) . "'> " . $browser_name . " <span class='count'>(" . number_format_i18n( wp_statistics_useragent( $Browser ) ) . ")</span></a></li>";
 					echo $spacer;
 				}
@@ -145,7 +145,7 @@ if ( $_get != '%' ) {
 						foreach ( $result as $items ) {
 							echo "<tr>";
 							echo "<td style=\"text-align: left\">";
-							if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
+							if ( array_search( strtolower( $items->agent ), WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 								$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 							} else {
 								$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );

@@ -382,14 +382,69 @@ class SearchEngine {
 	public static function save_word( $data = array() ) {
 		global $wpdb;
 
-		# Action Before Save Search Engine Word
-		do_action( 'wp_statistics_before_save_search_word', $data );
-
 		# Save to Database
-		$wpdb->insert( DB::table( 'search' ), $data );
+		$insert_id = $wpdb->insert( DB::table( 'search' ), $data );
 
 		# Action after Save Search Engine Word
-		do_action( 'wp_statistics_after_save_search_word', $data );
+		do_action( 'wp_statistics_after_save_search_word', $data, $insert_id );
+	}
+
+	/**
+	 * Get Last Search Word
+	 *
+	 * @param string $search_engine
+	 * @param int $count
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getLastSearchWord( $search_engine = 'all', $count = 10 ) {
+		global $wpdb;
+
+		// Prepare Query
+		$search_query = wp_statistics_searchword_query( $search_engine );
+		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'visitor' ) . "` WHERE {$search_query} ORDER BY `{" . DB::table( 'visitor' ) . "}`.`ID` DESC  LIMIT 0, {$count}" );
+
+		// Get List
+		$list = array();
+		foreach ( $result as $items ) {
+
+			// Check Sanitize Parse Search engine name from Url referred
+			if ( ! self::getByQueryString( $items->referred ) ) {
+				continue;
+			}
+
+			$item = array(
+				'word'     => self::getByQueryString( $items->referred ),
+				'referred' => $items->referred,
+				'browser'  => array(
+					'name' => $items->agent,
+					'logo' => UserAgent::getBrowserLogo( $items->agent ),
+					'link' => Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) )
+				),
+				'date'     => date_i18n( get_option( 'date_format' ), strtotime( $items->last_counter ) ),
+			);
+
+			// Push IP
+			if ( IP::IsHashIP( $items->ip ) ) {
+				$item['hash_ip'] = IP::$hash_ip_prefix;
+			} else {
+				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+			}
+
+			// Push Country
+			if ( GeoIP::active() ) {
+				$item['country'] = array( 'location' => $items->location, 'flag' => Country::flag( $items->location ), 'name' => Country::getName( $items->location ) );
+			}
+
+			// Push City
+			if ( GeoIP::active( 'geoip_city' ) ) {
+				$item['city'] = GeoIP::getCity( $items->ip );
+			}
+
+			$list[] = $item;
+		}
+
+		return $list;
 	}
 
 

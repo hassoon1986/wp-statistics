@@ -11,7 +11,7 @@ function wp_statistics_generate_recent_postbox_content( $ISOCountryCode, $count 
 		"SELECT * FROM `{$wpdb->prefix}statistics_visitor` ORDER BY `{$wpdb->prefix}statistics_visitor`.`ID` DESC  LIMIT 0, {$count}"
 	);
 
-	echo "<div class=\"wp-statistics-table\">";
+	echo "<div class=\"wp-statistics-responsive-table\">";
 	echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\">
 		  <tr>";
 	echo "<td>" . __( 'Browser', 'wp-statistics' ) . "</td>";
@@ -35,7 +35,7 @@ function wp_statistics_generate_recent_postbox_content( $ISOCountryCode, $count 
 	foreach ( $result as $items ) {
 		echo "<tr>";
 		echo "<td style=\"text-align: left\">";
-		if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
+		if ( array_search( strtolower( $items->agent ), WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 			$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 		} else {
 			$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );

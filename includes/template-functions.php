@@ -579,7 +579,7 @@ function wp_statistics_ua_list( $rangestartdate = null, $rangeenddate = null ) {
 	}
 
 	$Browsers        = array();
-	$default_browser = wp_statistics_get_browser_list();
+	$default_browser = WP_STATISTICS\UserAgent::BrowserList();
 
 	foreach ( $result as $out ) {
 		//Check Browser is defined in wp-statistics
@@ -727,14 +727,14 @@ function wp_statistics_agent_version( $agent, $version, $rangestartdate = null, 
 function wp_statistics_searchword_query( $search_engine = 'all' ) {
 
 	// Get a complete list of search engines
-	$searchengine_list = WP_STATISTICS\SearchEngine::getList();
+	$search_engine_list = WP_STATISTICS\SearchEngine::getList();
 	$search_query      = '';
 
 	if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
 		// Are we getting results for all search engines or a specific one?
 		if ( strtolower( $search_engine ) == 'all' ) {
 			// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
-			foreach ( $searchengine_list as $key => $se ) {
+			foreach ( $search_engine_list as $key => $se ) {
 				$search_query .= "( `engine` = '{$key}' AND `words` <> '' ) OR ";
 			}
 
@@ -744,12 +744,11 @@ function wp_statistics_searchword_query( $search_engine = 'all' ) {
 			$search_query .= "`engine` = '{$search_engine}' AND `words` <> ''";
 		}
 	} else {
-		// Are we getting results for all search engines or a specific one?
+
 		if ( strtolower( $search_engine ) == 'all' ) {
-			// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
-			// NOTE:  This SQL query can be *VERY* long.
-			foreach ( $searchengine_list as $se ) {
-				// The SQL pattern for a search engine may be an array if it has to handle multiple domains (like google.com and google.ca) or other factors.
+
+			foreach ( $search_engine_list as $se ) {
+
 				if ( is_array( $se['sqlpattern'] ) ) {
 					foreach ( $se['sqlpattern'] as $subse ) {
 						$search_query .= "(`referred` LIKE '{$subse}{$se['querykey']}=%' AND `referred` NOT LIKE '{$subse}{$se['querykey']}=&%' AND `referred` NOT LIKE '{$subse}{$se['querykey']}=') OR ";
@@ -763,15 +762,15 @@ function wp_statistics_searchword_query( $search_engine = 'all' ) {
 			$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
 		} else {
 			// For just one?  Ok, the SQL pattern for a search engine may be an array if it has to handle multiple domains (like google.com and google.ca) or other factors.
-			if ( is_array( $searchengine_list[ $search_engine ]['sqlpattern'] ) ) {
-				foreach ( $searchengine_list[ $search_engine ]['sqlpattern'] as $se ) {
-					$search_query .= "(`referred` LIKE '{$se}{$searchengine_list[$search_engine]['querykey']}=%' AND `referred` NOT LIKE '{$se}{$searchengine_list[$search_engine]['querykey']}=&%' AND `referred` NOT LIKE '{$se}{$searchengine_list[$search_engine]['querykey']}=') OR ";
+			if ( is_array( $search_engine_list[ $search_engine ]['sqlpattern'] ) ) {
+				foreach ( $search_engine_list[ $search_engine ]['sqlpattern'] as $se ) {
+					$search_query .= "(`referred` LIKE '{$se}{$search_engine_list[$search_engine]['querykey']}=%' AND `referred` NOT LIKE '{$se}{$search_engine_list[$search_engine]['querykey']}=&%' AND `referred` NOT LIKE '{$se}{$search_engine_list[$search_engine]['querykey']}=') OR ";
 				}
 
 				// Trim off the last ' OR ' for the loop above.
 				$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
 			} else {
-				$search_query .= "(`referred` LIKE '{$searchengine_list[$search_engine]['sqlpattern']}{$searchengine_list[$search_engine]['querykey']}=%' AND `referred` NOT LIKE '{$searchengine_list[$search_engine]['sqlpattern']}{$searchengine_list[$search_engine]['querykey']}=&%' AND `referred` NOT LIKE '{$searchengine_list[$search_engine]['sqlpattern']}{$searchengine_list[$search_engine]['querykey']}=')";
+				$search_query .= "(`referred` LIKE '{$search_engine_list[$search_engine]['sqlpattern']}{$search_engine_list[$search_engine]['querykey']}=%' AND `referred` NOT LIKE '{$search_engine_list[$search_engine]['sqlpattern']}{$search_engine_list[$search_engine]['querykey']}=&%' AND `referred` NOT LIKE '{$search_engine_list[$search_engine]['sqlpattern']}{$search_engine_list[$search_engine]['querykey']}=')";
 			}
 		}
 	}
@@ -1136,43 +1135,6 @@ function wp_statistics_generate_widget_load_javascript( $widget, $container_id =
         });
     </script>
 	<?php
-}
-
-
-/**
- * Get All Browser List For Detecting
- *
- * @param bool $all
- * @area utility
- * @return array|mixed
- */
-function wp_statistics_get_browser_list( $all = true ) {
-
-	//List Of Detect Browser in WP Statistics
-	$list        = array(
-		"chrome"  => __( "Chrome", 'wp-statistics' ),
-		"firefox" => __( "Firefox", 'wp-statistics' ),
-		"msie"    => __( "Internet Explorer", 'wp-statistics' ),
-		"edge"    => __( "Edge", 'wp-statistics' ),
-		"opera"   => __( "Opera", 'wp-statistics' ),
-		"safari"  => __( "Safari", 'wp-statistics' )
-	);
-	$browser_key = array_keys( $list );
-
-	//Return All Browser List
-	if ( $all === true ) {
-		return $list;
-		//Return Browser Keys For detect
-	} elseif ( $all == "key" ) {
-		return $browser_key;
-	} else {
-		//Return Custom Browser Name by key
-		if ( array_search( strtolower( $all ), $browser_key ) !== false ) {
-			return $list[ strtolower( $all ) ];
-		} else {
-			return __( "Unknown", 'wp-statistics' );
-		}
-	}
 }
 
 /**

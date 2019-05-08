@@ -47,6 +47,21 @@ class Country {
 	}
 
 	/**
+	 * Get Country name by Code
+	 *
+	 * @param $code
+	 * @return mixed
+	 */
+	public static function getName( $code ) {
+		$list_country = self::getList();
+		if ( array_key_exists( $code, $list_country ) ) {
+			return $list_country[ $code ];
+		}
+
+		return $list_country[ self::$unknown_location ];
+	}
+
+	/**
 	 * get Top Country List
 	 *
 	 * @param int $number

@@ -21,7 +21,7 @@ function wp_statistics_generate_top_visitors_postbox_content(
 	}
 
 	?>
-    <div class="wp-statistics-table">
+    <div class="wp-statistics-responsive-table">
     <table width="100%" class="widefat table-stats wps-report-table">
         <tr>
             <td><?php _e( 'Rank', 'wp-statistics' ); ?></td>

@@ -57,7 +57,7 @@ function wp_statistics_generate_map_postbox_content( $ISOCountryCode ) {
 
 					$flag = "<img src='" . plugins_url( 'wp-statistics/assets/images/flags/' . strtoupper( $markets['location'] ) . '.png' ) . "' title='{$ISOCountryCode[strtoupper($markets['location'])]}' class='log-tools'/> {$ISOCountryCode[strtoupper($markets['location'])]}";
 
-					if ( array_search( strtolower( $markets['agent'] ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
+					if ( array_search( strtolower( $markets['agent'] ), WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 						$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $markets['agent'] . ".png' class='log-tools' title='{$markets['agent']}'/>";
 					} else {
 						$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/unknown.png' ) . "' class='log-tools' title='{$markets['agent']}'/>";

@@ -153,7 +153,7 @@ if ( isset( $_REQUEST['country'] ) ) {
 							foreach ( $result as $items ) {
 								echo "<tr>";
 								echo "<td style=\"text-align: left\">";
-								if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
+								if ( array_search( strtolower( $items->agent ), WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 									$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 								} else {
 									$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );

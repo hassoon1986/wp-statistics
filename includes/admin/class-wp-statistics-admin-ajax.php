@@ -13,7 +13,6 @@ class Ajax {
 		 * List Of Setup Ajax request in Wordpress
 		 */
 		$list = array(
-			//'test',
 			'close_notice',
 			'delete_agents',
 			'delete_platforms',

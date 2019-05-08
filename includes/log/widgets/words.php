@@ -7,27 +7,11 @@ use WP_STATISTICS\Referred;
 function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count = 10 ) {
 	global $wpdb;
 
-	// Retrieve MySQL data for the search words.
 	$search_query = wp_statistics_searchword_query( 'all' );
-
-	// Determine if we're using the old or new method of storing search engine info and build the appropriate table name.
-	$tablename = $wpdb->prefix . 'statistics_';
-
-	if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-		$tabletwo  = $tablename . 'visitor';
-		$tablename .= 'search';
-		$result    = $wpdb->get_results(
-			"SELECT * FROM `{$tablename}` INNER JOIN `{$tabletwo}` on {$tablename}.`visitor` = {$tabletwo}.`ID` WHERE {$search_query} ORDER BY `{$tablename}`.`ID` DESC  LIMIT 0, {$count}"
-		);
-	} else {
-		$tablename .= 'visitor';
-		$result    = $wpdb->get_results(
-			"SELECT * FROM `{$tablename}` WHERE {$search_query} ORDER BY `{$tablename}`.`ID` DESC  LIMIT 0, {$count}"
-		);
-	}
+	$result       = $wpdb->get_results( "SELECT * FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE {$search_query} ORDER BY `{" . \WP_STATISTICS\DB::table( 'visitor' ) . "}`.`ID` DESC  LIMIT 0, {$count}" );
 
 	if ( sizeof( $result ) > 0 ) {
-		echo "<div class=\"wp-statistics-table\">";
+		echo "<div class=\"wp-statistics-responsive-table\">";
 		echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\">
 		  <tr>";
 		echo "<td>" . __( 'Word', 'wp-statistics' ) . "</td>";
@@ -55,18 +39,15 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 				continue;
 			}
 
-			if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-				$this_search_engine = WP_STATISTICS\SearchEngine::get( $items->engine );
-				$words              = $items->words;
-			} else {
-				$this_search_engine = WP_STATISTICS\SearchEngine::getByUrl( $items->referred );
-				$words              = WP_STATISTICS\SearchEngine::getByQueryString( $items->referred );
-			}
+
+			$words              = WP_STATISTICS\SearchEngine::getByQueryString( $items->referred );
+
 
 			echo "<tr>";
 			echo "<td style=\"text-align: left\"><span title='{$words}' class='wps-cursor-default wps-text-wrap'>" . $words . "</span></td>";
+
 			echo "<td style=\"text-align: left\">";
-			if ( array_search( strtolower( $items->agent ), wp_statistics_get_browser_list( 'key' ) ) !== false ) {
+			if ( array_search( strtolower( $items->agent ), \WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 				$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 			} else {
 				$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );

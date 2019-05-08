@@ -45,7 +45,7 @@ $browser_color = array();
 foreach ( $BrowserVisits as $key => $value ) {
 	if ( $value > 0 ) {
 		$i ++;
-		$browser_name[]  = "'" . wp_statistics_get_browser_list( strtolower( $key ) ) . "'";
+		$browser_name[]  = "'" . WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) ) . "'";
 		$browser_value[] = $value;
 		$browser_color[] = \WP_STATISTICS\Helper::GenerateRgbaColor( $i, '0.4' );
 	}
@@ -265,7 +265,7 @@ function wp_statistics_browser_version_stats( $Browser, $rangestartdate, $rangee
 	}
 	?>
     <div class="postbox">
-		<?php $paneltitle = sprintf( __( '%s Version', 'wp-statistics' ), wp_statistics_get_browser_list( strtolower( $Browser ) ) ); ?>
+		<?php $paneltitle = sprintf( __( '%s Version', 'wp-statistics' ), WP_STATISTICS\UserAgent::BrowserList( strtolower( $Browser ) ) ); ?>
         <button class="handlediv" type="button" aria-expanded="true">
 			<span class="screen-reader-text"><?php printf(
 					__( 'Toggle panel: %s', 'wp-statistics' ),

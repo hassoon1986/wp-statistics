@@ -197,8 +197,8 @@ class Admin_Assets {
 			'user_online' => ( Option::get( 'useronline' ) ? 1 : 0 ),
 			'visitors'    => ( Option::get( 'visitors' ) ? 1 : 0 ),
 			'visits'      => ( Option::get( 'visits' ) ? 1 : 0 ),
-			'geo_ip'      => ( Option::get( 'geoip' ) ? 1 : 0 ),
-			'geo_city'    => ( Option::get( 'geoip_city' ) ? 1 : 0 ),
+			'geo_ip'      => ( GeoIP::active() ? 1 : 0 ),
+			'geo_city'    => ( GeoIP::active( 'geoip_city' ) ? 1 : 0 ),
 		);
 
 		// Global Lang
