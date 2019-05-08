@@ -392,17 +392,24 @@ class SearchEngine {
 	/**
 	 * Get Last Search Word
 	 *
-	 * @param string $search_engine
-	 * @param int $count
+	 * @param array $arg
 	 * @return array
 	 * @throws \Exception
 	 */
-	public static function getLastSearchWord( $search_engine = 'all', $count = 10 ) {
+	public static function getLastSearchWord( $arg = array() ) {
 		global $wpdb;
 
+		// Define the array of defaults
+		$defaults = array(
+			'search_engine' => 'all',
+			'per_page'      => 10,
+			'paged'         => 1,
+		);
+		$args     = wp_parse_args( $arg, $defaults );
+
 		// Prepare Query
-		$search_query = wp_statistics_searchword_query( $search_engine );
-		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'visitor' ) . "` WHERE {$search_query} ORDER BY `{" . DB::table( 'visitor' ) . "}`.`ID` DESC  LIMIT 0, {$count}" );
+		$search_query = wp_statistics_searchword_query( $args['search_engine'] );
+		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'search' ) . "` INNER JOIN `" . DB::table( 'visitor' ) . "` on `" . DB::table( 'search' ) . "`.`visitor` = " . DB::table( 'visitor' ) . ".`ID` WHERE {$search_query} ORDER BY `" . DB::table( 'search' ) . "`.`ID` DESC  LIMIT 0, {$args['per_page']}" );
 
 		// Get List
 		$list = array();
@@ -414,8 +421,8 @@ class SearchEngine {
 			}
 
 			$item = array(
-				'word'     => self::getByQueryString( $items->referred ),
-				'referred' => $items->referred,
+				'word'     => $items->words,
+				'referred' => Referred::get_referrer_link( $items->referred ),
 				'browser'  => array(
 					'name' => $items->agent,
 					'logo' => UserAgent::getBrowserLogo( $items->agent ),

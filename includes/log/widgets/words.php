@@ -1,5 +1,7 @@
 <?php
 
+//TODO Remove At last
+
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Menus;
 use WP_STATISTICS\Referred;
@@ -8,7 +10,7 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 	global $wpdb;
 
 	$search_query = wp_statistics_searchword_query( 'all' );
-	$result       = $wpdb->get_results( "SELECT * FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE {$search_query} ORDER BY `{" . \WP_STATISTICS\DB::table( 'visitor' ) . "}`.`ID` DESC  LIMIT 0, {$count}" );
+	$result       = $wpdb->get_results( "SELECT * FROM `" . \WP_STATISTICS\DB::table( 'search' ) . "` INNER JOIN `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` on `" . \WP_STATISTICS\DB::table( 'search' ) . "`.`visitor` = " . \WP_STATISTICS\DB::table( 'visitor' ) . ".`ID` WHERE {$search_query} ORDER BY `" . \WP_STATISTICS\DB::table( 'search' ) . "`.`ID` DESC  LIMIT 0, {$count}" );
 
 	if ( sizeof( $result ) > 0 ) {
 		echo "<div class=\"wp-statistics-responsive-table\">";
@@ -39,8 +41,7 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 				continue;
 			}
 
-
-			$words              = WP_STATISTICS\SearchEngine::getByQueryString( $items->referred );
+			$words = WP_STATISTICS\SearchEngine::getByQueryString( $items->referred );
 
 
 			echo "<tr>";
@@ -54,6 +55,8 @@ function wp_statistics_generate_words_postbox_content( $ISOCountryCode, $count =
 			}
 			echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 			echo "</td>";
+
+
 			$city = '';
 			if ( WP_STATISTICS\Option::get( 'geoip_city' ) ) {
 				if ( $geoip_reader != false ) {

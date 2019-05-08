@@ -225,7 +225,12 @@ class Admin_Assets {
 			'id'            => __( 'ID', 'wp-statistics' ),
 			'title'         => __( 'Title', 'wp-statistics' ),
 			'link'          => __( 'Link', 'wp-statistics' ),
-			'address'       => __( 'Address', 'wp-statistics' )
+			'address'       => __( 'Address', 'wp-statistics' ),
+			'word'          => __( 'Word', 'wp-statistics' ),
+			'browser'       => __( 'Browser', 'wp-statistics' ),
+			'city'          => __( 'City', 'wp-statistics' ),
+			'ip'            => __( 'IP', 'wp-statistics' ),
+			'referrer'      => __( 'Referrer', 'wp-statistics' ),
 		);
 
 		// Rest-API Meta Box Url
