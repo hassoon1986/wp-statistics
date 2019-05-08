@@ -40,9 +40,7 @@ function wp_statistics_generate_top_visitors_postbox_content(
         </tr>
 
 		<?php
-		$result = $wpdb->get_results(
-			"SELECT * FROM `{$wpdb->prefix}statistics_visitor` WHERE last_counter = '{$sql_time}' ORDER BY hits DESC"
-		);
+		$result = $wpdb->get_results( "SELECT * FROM `{$wpdb->prefix}statistics_visitor` WHERE last_counter = '{$sql_time}' ORDER BY hits DESC" );
 
 		$i = 0;
 

@@ -165,5 +165,67 @@ class Visitor {
 		return $wpdb->insert_id;
 	}
 
+	/**
+	 * Get Top Visitors
+	 *
+	 * @param array $arg
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getTop( $arg = array() ) {
+		global $wpdb;
+
+		// Define the array of defaults
+		$defaults = array(
+			'day'      => 'today',
+			'per_page' => 10,
+			'paged'    => 1,
+		);
+		$args     = wp_parse_args( $arg, $defaults );
+
+		// Prepare time
+		if ( $args['day'] == 'today' ) {
+			$sql_time = TimeZone::getCurrentDate( 'Y-m-d' );
+		} else {
+			$sql_time = date( 'Y-m-d', strtotime( $args['day'] ) );
+		}
+
+		// Prepare Query
+		$result = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'visitor' ) . "` WHERE last_counter = '{$sql_time}' ORDER BY hits DESC LIMIT 0, {$args['per_page']}" );
+
+		// Get List
+		$list = array();
+		foreach ( $result as $items ) {
+
+			$item = array( 'hits' => (int) $items->hits );
+
+			// Push Agent
+			$item['agent']    = $items->agent;
+			$item['platform'] = $items->platform;
+			$item['version']  = $items->version;
+
+			// Push IP
+			if ( IP::IsHashIP( $items->ip ) ) {
+				$item['hash_ip'] = IP::$hash_ip_prefix;
+			} else {
+				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+			}
+
+			// Push Country
+			if ( GeoIP::active() ) {
+				$item['country'] = array( 'location' => $items->location, 'flag' => Country::flag( $items->location ), 'name' => Country::getName( $items->location ) );
+			}
+
+			// Push City
+			if ( GeoIP::active( 'geoip_city' ) ) {
+				$item['city'] = GeoIP::getCity( $items->ip );
+			}
+
+			$list[] = $item;
+		}
+
+		return $list;
+	}
+
 
 }

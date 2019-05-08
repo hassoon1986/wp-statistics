@@ -130,6 +130,11 @@ class GeoIP {
 			}
 		}
 
+		// Sanitize IP
+		if ( IP::isIP( $ip ) === false ) {
+			return $default_country;
+		}
+
 		// Load GEO-IP
 		$reader = self::Loader( 'country' );
 
@@ -409,6 +414,11 @@ class GeoIP {
 
 		// Get User IP
 		$ip = ( $ip === false ? IP::getIP() : $ip );
+
+		// Sanitize IP
+		if ( IP::isIP( $ip ) === false ) {
+			return $default_city;
+		}
 
 		// Load GEO-IP
 		$reader = self::Loader( 'city' );

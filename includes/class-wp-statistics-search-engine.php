@@ -409,7 +409,7 @@ class SearchEngine {
 
 		// Prepare Query
 		$search_query = wp_statistics_searchword_query( $args['search_engine'] );
-		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'search' ) . "` INNER JOIN `" . DB::table( 'visitor' ) . "` on `" . DB::table( 'search' ) . "`.`visitor` = " . DB::table( 'visitor' ) . ".`ID` WHERE {$search_query} ORDER BY `" . DB::table( 'search' ) . "`.`ID` DESC  LIMIT 0, {$args['per_page']}" );
+		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'search' ) . "` INNER JOIN `" . DB::table( 'visitor' ) . "` on `" . DB::table( 'search' ) . "`.`visitor` = " . DB::table( 'visitor' ) . ".`ID` WHERE {$search_query} ORDER BY `" . DB::table( 'search' ) . "`.`ID` DESC LIMIT 0, {$args['per_page']}" );
 
 		// Get List
 		$list = array();
