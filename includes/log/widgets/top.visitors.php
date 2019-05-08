@@ -1,4 +1,7 @@
 <?php
+
+//TODO Remove at last
+
 function wp_statistics_generate_top_visitors_postbox_content(
 	$ISOCountryCode,
 	$day = 'today',

@@ -12,7 +12,6 @@ class top_visitors {
 		try {
 			$response = Visitor::getTop( $args );
 		} catch ( \Exception $e ) {
-			print_r($e);
 			$response = array();
 		}
 

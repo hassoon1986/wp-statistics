@@ -173,7 +173,6 @@ class Visitor {
 	 * @throws \Exception
 	 */
 	public static function getTop( $arg = array() ) {
-		global $wpdb;
 
 		// Define the array of defaults
 		$defaults = array(
@@ -191,18 +190,60 @@ class Visitor {
 		}
 
 		// Prepare Query
-		$result = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'visitor' ) . "` WHERE last_counter = '{$sql_time}' ORDER BY hits DESC LIMIT 0, {$args['per_page']}" );
+		$args['sql'] = "SELECT * FROM `" . DB::table( 'visitor' ) . "` WHERE last_counter = '{$sql_time}' ORDER BY hits DESC";
+
+		// Get Visitors Data
+		return self::get( $args );
+	}
+
+	/**
+	 * Get Visitors List By Custom Query
+	 *
+	 * @param array $arg
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function get( $arg = array() ) {
+		global $wpdb;
+
+		// Define the array of defaults
+		$defaults = array(
+			'sql'      => '',
+			'per_page' => 10,
+			'paged'    => 1
+		);
+		$args     = wp_parse_args( $arg, $defaults );
+
+		// Prepare Query
+		if ( empty( $args['sql'] ) ) {
+			$args['sql'] = "SELECT * FROM `" . DB::table( 'visitor' ) . "` ORDER BY ID DESC";
+		}
+
+		// Set Pagination
+		$args['sql'] = $args['sql'] . " LIMIT 0, {$args['per_page']}";
+
+		// Send Request
+		$result = $wpdb->get_results( $args['sql'] );
 
 		// Get List
 		$list = array();
 		foreach ( $result as $items ) {
 
-			$item = array( 'hits' => (int) $items->hits );
+			$item = array(
+				'hits'     => (int) $items->hits,
+				'referred' => Referred::get_referrer_link( $items->referred ),
+				'date'     => date_i18n( get_option( 'date_format' ), strtotime( $items->last_counter ) ),
+				'agent'    => $items->agent,
+				'platform' => $items->platform,
+				'version'  => $items->version
+			);
 
-			// Push Agent
-			$item['agent']    = $items->agent;
-			$item['platform'] = $items->platform;
-			$item['version']  = $items->version;
+			// Push Browser
+			$item['browser'] = array(
+				'name' => $items->agent,
+				'logo' => UserAgent::getBrowserLogo( $items->agent ),
+				'link' => Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) )
+			);
 
 			// Push IP
 			if ( IP::IsHashIP( $items->ip ) ) {
@@ -226,6 +267,5 @@ class Visitor {
 
 		return $list;
 	}
-
 
 }
