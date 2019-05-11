@@ -37,7 +37,7 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 							return ( in_array( $value, array_keys( \WP_STATISTICS\Meta_Box::getList() ) ) and \WP_STATISTICS\Meta_Box::IsExistMetaBoxClass( $value ) );
 						}
 					)
-				),
+				),//TODO Remove Comment at last
 //				'permission_callback' => function () {
 //					return User::Access( 'read' );
 //				}

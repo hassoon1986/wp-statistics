@@ -157,22 +157,27 @@ wps_js.run_meta_box = function (key, params = false) {
         // Get Meta Box Method
         let method = wps_js.get_meta_box_method(key);
 
-        // Check PlaceHolder Method
-        if ("placeholder" in wps_js[method]) {
-            main.html(wps_js[method]["placeholder"]());
-        } else {
-            main.html(wps_js.placeholder());
-        }
+        // Check Exist Method name
+        if (method in wps_js) {
 
-        // Add Custom Button
-        wps_js.meta_box_button(key);
+            // Check PlaceHolder Method
+            if ("placeholder" in wps_js[method]) {
+                main.html(wps_js[method]["placeholder"]());
+            } else {
+                main.html(wps_js.placeholder());
+            }
 
-        // Get Meta Box Data
-        let arg = {'name': key};
-        if (params !== false) {
-            arg = jQuery.extend({}, params, arg);
+            // Add Custom Button
+            wps_js.meta_box_button(key);
+
+            // Get Meta Box Data
+            let arg = {'name': key};
+            if (params !== false) {
+                arg = jQuery.extend({}, params, arg);
+            }
+            wps_js.ajaxQ('metabox', arg, method, 'error_meta_box_data');
+
         }
-        wps_js.ajaxQ('metabox', arg, method, 'error_meta_box_data');
     }
 };
 

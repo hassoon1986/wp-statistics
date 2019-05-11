@@ -37,6 +37,7 @@ class Meta_Box {
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-recent.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-hitsmap.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-useronline.php';
+		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-about.php';
 	}
 
 	/**
@@ -55,6 +56,7 @@ class Meta_Box {
 		 * require           : the Condition From Wp-statistics Option if == true
 		 * show_on_dashboard : Show Meta Box in WordPress Dashboard
 		 * hidden            : if set true , Default Hidden Dashboard in Wordpress Admin
+		 * js                : if set false, Load without RestAPI Request.
 		 *
 		 */
 		$list = array(
@@ -144,7 +146,12 @@ class Meta_Box {
 				'require'           => array( 'useronline' => true ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
-			)
+			),
+			'about'        => array(
+				'name'              => sprintf( __( 'WP Statistics - Version %s', 'wp-statistics' ), WP_STATISTICS_VERSION ),
+				'show_on_dashboard' => false,
+				'js'                => false
+			),
 		);
 
 		//Print List of Meta Box
@@ -177,6 +184,29 @@ class Meta_Box {
 	 */
 	public static function IsExistMetaBoxClass( $meta_box ) {
 		return class_exists( self::getMetaBoxClass( $meta_box ) );
+	}
+
+	/**
+	 * Load MetaBox
+	 *
+	 * @param $key
+	 * @return null
+	 */
+	public static function LoadMetaBox( $key ) {
+
+		// Get MetaBox by Key
+		$metaBox = self::getList( $key );
+		if ( count( $metaBox ) > 0 ) {
+
+			// Check Load Rest-API or Manually
+			if ( isset( $metaBox['js'] ) and $metaBox['js'] === false ) {
+				$class = self::getMetaBoxClass( $key );
+				return array( $class, 'get' );
+			}
+		}
+
+		return function () {
+		};
 	}
 
 }
