@@ -23,8 +23,7 @@ class Meta_Box {
 	/**
 	 * Load WordPress Meta Box
 	 */
-	public static function load() {
-
+	public static function includes() {
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-quickstats.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-summary.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-browsers.php';
@@ -37,6 +36,7 @@ class Meta_Box {
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-top-visitors.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-recent.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-hitsmap.php';
+		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-useronline.php';
 	}
 
 	/**
@@ -137,8 +137,14 @@ class Meta_Box {
 				'require'           => array( 'geoip' => true, 'visitors' => true, 'disable_map' => false ),
 				'hidden'            => true,
 				'show_on_dashboard' => true
+			),
+			'useronline'   => array(
+				'name'              => __( 'Online Users', 'wp-statistics' ),
+				'page_url'          => 'online',
+				'require'           => array( 'useronline' => true ),
+				'hidden'            => true,
+				'show_on_dashboard' => true
 			)
-			//TODO add users-online meta box
 		);
 
 		//Print List of Meta Box

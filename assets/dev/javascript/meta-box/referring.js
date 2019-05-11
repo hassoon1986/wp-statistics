@@ -2,7 +2,7 @@ wps_js.referring_meta_box = {
 
     view: function (args = []) {
         let t = '';
-        t += `<table width="100%" class="widefat table-stats wps-report-table">
+        t += `<table width="100%" class="widefat table-stats wps-report-table"><tbody>
         <tr>
             <td width="50%">${wps_js._('address')}</td>
             <td width="40%">${wps_js.meta_box_lang('referring', 'server_ip')}</td>
@@ -17,7 +17,7 @@ wps_js.referring_meta_box = {
 			</tr>`;
         });
 
-        t += `</table>`;
+        t += `</tbody></table>`;
         return t;
     }
 

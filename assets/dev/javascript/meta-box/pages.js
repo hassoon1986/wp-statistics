@@ -2,7 +2,7 @@ wps_js.pages_meta_box = {
 
     view: function (args = []) {
         let t = '';
-        t += `<table width="100%" class="widefat table-stats wps-report-table">
+        t += `<table width="100%" class="widefat table-stats wps-report-table"><tbody>
         <tr>
             <td width='10%'>${wps_js._('id')}</td>
             <td width='40%'>${wps_js._('title')}</td>
@@ -21,7 +21,7 @@ wps_js.pages_meta_box = {
             i++;
         });
 
-        t += `</table>`;
+        t += `</tbody></table>`;
         return t;
     }
 

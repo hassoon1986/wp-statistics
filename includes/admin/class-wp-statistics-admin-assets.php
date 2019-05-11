@@ -235,6 +235,7 @@ class Admin_Assets {
 			'agent'         => __( 'Agent', 'wp-statistics' ),
 			'platform'      => __( 'Platform', 'wp-statistics' ),
 			'version'       => __( 'Version', 'wp-statistics' ),
+			'page'          => __( 'Page', 'wp-statistics' ),
 		);
 
 		// Rest-API Meta Box Url

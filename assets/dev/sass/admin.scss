@@ -62,6 +62,11 @@ $image_path: "../images";
   text-align: center;
 }
 
+table.wps-table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
+
 .wps-report-table tr {
   text-align: left;
 }

@@ -12,24 +12,27 @@ wps_js.hitsmap_meta_box = {
         let pin = Array();
 
         // Prepare Country Pin
-        Object.keys(args['country']).forEach(function (key) {
-            let t = `<div class='map-html-marker'><img src='${args['country'][key]['flag']}' alt="${args['country'][key]['name']}" title='${args['country'][key]['name']}' class='log-tools'/> ${args['country'][key]['name']} [${args['total_country'][key]}]<hr />`;
+        if (args.hasOwnProperty('country')) {
+            Object.keys(args['country']).forEach(function (key) {
+                let t = `<div class='map-html-marker'><img src='${args['country'][key]['flag']}' alt="${args['country'][key]['name']}" title='${args['country'][key]['name']}' class='log-tools'/> ${args['country'][key]['name']} [${args['total_country'][key]}]<hr />`;
 
-            // Get List visitors
-            Object.keys(args['visitor'][key]).forEach(function (visitor_id) {
-                t += `<p><img src='${args['visitor'][key][visitor_id]['browser']['logo']}' alt="${args['visitor'][key][visitor_id]['browser']['name']}" class='log-tools' title='${args['visitor'][key][visitor_id]['browser']['name']}'/> ${args['visitor'][key][visitor_id]['ip']} ` + (args['visitor'][key][visitor_id]['city'] !=="Unknown" ? '- ' + args['visitor'][key][visitor_id]['city'] : '') + `</p>`;
+                // Get List visitors
+                Object.keys(args['visitor'][key]).forEach(function (visitor_id) {
+                    t += `<p><img src='${args['visitor'][key][visitor_id]['browser']['logo']}' alt="${args['visitor'][key][visitor_id]['browser']['name']}" class='log-tools' title='${args['visitor'][key][visitor_id]['browser']['name']}'/> ${args['visitor'][key][visitor_id]['ip']} ` + (args['visitor'][key][visitor_id]['city'] !== "Unknown" ? '- ' + args['visitor'][key][visitor_id]['city'] : '') + `</p>`;
+                });
+                t += `</div>`;
+
+                pin[key] = t;
             });
-            t += `</div>`;
-
-            pin[key] = t;
-        });
+        }
 
         // Load Jquery Map
         jQuery('#wp-statistics-visitors-map').vectorMap({
             map: 'world_en',
             backgroundColor: '#fff',
-            borderColor: '#9b9b9b',
-            borderOpacity: 0.50,
+            borderColor: '#7e7e7e',
+            borderOpacity: 0.60,
+            color: '#e6e5e2',
             hoverColor: '#c3403c',
             colors: args['color'],
             onLabelShow: function (element, label, code) {

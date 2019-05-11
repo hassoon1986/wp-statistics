@@ -1,8 +1,6 @@
 <?php
 
 # Exit if accessed directly
-use WP_STATISTICS\Country;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -169,7 +167,7 @@ final class WP_Statistics {
 		}
 
 		// Meta Box List
-		\WP_STATISTICS\Meta_Box::load();
+		\WP_STATISTICS\Meta_Box::includes();
 
 		// Rest-Api
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
@@ -268,13 +266,13 @@ final class WP_Statistics {
 		$this->container['hits'] = new \WP_STATISTICS\Hits();
 
 		# Get Country Codes
-		$this->container['country_codes'] = Country::getList();
+		$this->container['country_codes'] = \WP_STATISTICS\Country::getList();
 
 		# Get User Detail
 		$this->container['user_id'] = \WP_STATISTICS\User::get_user_id();
 
 		# Set Options
-		$this->container['option'] = \WP_STATISTICS\Option::getOptions();
+		$this->container['option'] = new \WP_STATISTICS\Option();
 
 		# User IP
 		$this->container['ip'] = \WP_STATISTICS\IP::getIP();

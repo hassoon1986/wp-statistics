@@ -197,5 +197,77 @@ class UserOnline {
 		do_action( 'wp_statistics_after_update_user_online', $user_id );
 	}
 
+	/**
+	 * Get User Online List By Custom Query
+	 *
+	 * @param array $arg
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function get( $arg = array() ) {
+		global $wpdb;
+
+		// Define the array of defaults
+		$defaults = array(
+			'sql'      => '',
+			'per_page' => 10,
+			'paged'    => 1,
+			'fields'   => 'all',
+			'order'    => 'DESC',
+			'orderby'  => 'ID'
+		);
+		$args     = wp_parse_args( $arg, $defaults );
+
+		// Prepare Query
+		if ( empty( $args['sql'] ) ) {
+			$args['sql'] = "SELECT * FROM `" . DB::table( 'useronline' ) . "` ORDER BY ID DESC";
+		}
+
+		// Set Pagination
+		$args['sql'] = $args['sql'] . " LIMIT 0, {$args['per_page']}";
+
+		// Send Request
+		$result = $wpdb->get_results( $args['sql'] );
+
+		// Get List
+		$list = array();
+		foreach ( $result as $items ) {
+
+			$item = array(
+				'referred' => Referred::get_referrer_link( $items->referred ),
+				'date'     => date_i18n( get_option( 'date_format' ), strtotime( $items->last_counter ) ),
+				'agent'    => $items->agent,
+				'platform' => $items->platform,
+				'version'  => $items->version
+			);
+
+			// Page info
+			$item['page'] = Pages::get_page_info( $items->page_id, $items->type );
+
+			// Push Browser
+			$item['browser'] = array(
+				'name' => $items->agent,
+				'logo' => UserAgent::getBrowserLogo( $items->agent ),
+				'link' => Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) )
+			);
+
+			// Push IP
+			if ( IP::IsHashIP( $items->ip ) ) {
+				$item['hash_ip'] = IP::$hash_ip_prefix;
+			} else {
+				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+			}
+
+			// Push Country
+			if ( GeoIP::active() ) {
+				$item['country'] = array( 'location' => $items->location, 'flag' => Country::flag( $items->location ), 'name' => Country::getName( $items->location ) );
+			}
+
+			$list[] = $item;
+		}
+
+		return $list;
+	}
+
 
 }

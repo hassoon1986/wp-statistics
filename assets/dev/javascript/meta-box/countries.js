@@ -2,7 +2,7 @@ wps_js.countries_meta_box = {
 
     view: function (args = []) {
         let t = '';
-        t += ` <table width="100%" class="widefat table-stats wps-report-table">
+        t += ` <table width="100%" class="widefat table-stats wps-report-table"><tbody>
         <tr>
             <td width="10%" style='text-align: left'>${wps_js._('rank')}</td>
             <td width="10%" style='text-align: left'>${wps_js._('flag')}</td>
@@ -21,7 +21,7 @@ wps_js.countries_meta_box = {
             i++;
         });
 
-        t += `</table>`;
+        t += `</tbody></table>`;
         return t;
     }
 

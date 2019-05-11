@@ -3,7 +3,7 @@ wps_js.recent_meta_box = {
     view: function (args = []) {
         let t = '';
         t += `<div class="wp-statistics-responsive-table">`;
-        t += ` <table width="100%" class="widefat table-stats wps-report-table">
+        t += `<table width="100%" class="widefat table-stats wps-report-table"><tbody>
         <tr>
             <td>${wps_js._('browser')}</td>
             ` + (wps_js.is_active('geo_ip') ? `<td>${wps_js._('country')}</td>` : ``) + `
@@ -24,7 +24,7 @@ wps_js.recent_meta_box = {
 			</tr>`;
         });
 
-        t += `</table>`;
+        t += `</tbody></table>`;
         t += `</div>`;
         return t;
     }

@@ -148,9 +148,6 @@ class Visitor {
 	public static function save_visitors_relationships( $page_id, $visitor_id ) {
 		global $wpdb;
 
-		// Action Before Save Visitor Relation Ship
-		do_action( 'wp_statistics_before_save_visitor_relationship', $page_id, $visitor_id );
-
 		// Save To DB
 		$wpdb->insert(
 			DB::table( 'visitor_relationships' ),
@@ -161,8 +158,12 @@ class Visitor {
 			),
 			array( '%d', '%d', '%s' )
 		);
+		$insert_id = $wpdb->insert_id;
 
-		return $wpdb->insert_id;
+		// Save visitor Relationship Action
+		do_action( 'wp_statistics_save_visitor_relationship', $page_id, $visitor_id, $insert_id );
+
+		return $insert_id;
 	}
 
 	/**

@@ -383,10 +383,10 @@ class SearchEngine {
 		global $wpdb;
 
 		# Save to Database
-		$insert_id = $wpdb->insert( DB::table( 'search' ), $data );
+		$wpdb->insert( DB::table( 'search' ), $data );
 
 		# Action after Save Search Engine Word
-		do_action( 'wp_statistics_after_save_search_word', $data, $insert_id );
+		do_action( 'wp_statistics_after_save_search_word', $data, $wpdb->insert_id );
 	}
 
 	/**
