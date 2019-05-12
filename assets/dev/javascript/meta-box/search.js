@@ -5,7 +5,7 @@ wps_js.search_meta_box = {
     },
 
     view: function (args = []) {
-        return `<canvas id="` + wps_js.chart_id('search') + `" height="210"></canvas>`;
+        return `<canvas id="` + wps_js.chart_id('search') + `" height="` + (wps_js.is_active('overview_page') ? 110 : 210) + `"></canvas>`;
     },
 
     meta_box_init: function (args = []) {

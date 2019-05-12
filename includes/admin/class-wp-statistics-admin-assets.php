@@ -167,17 +167,12 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ), array( 'jquery' ), self::version() );
 		}
 
-		// Load Overview Script
-		if ( Menus::in_page( 'overview' ) ) {
-			wp_enqueue_script( self::$prefix . '-overview', self::url( 'overview.js' ), array( 'jquery' ), self::version() );
-		}
-
 		// Load Editors Script
 		if ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) {
 			wp_enqueue_script( self::$prefix . '-editor', self::url( 'editor.js' ), array( 'jquery' ), self::version() );
 		}
 
-		//TODO Mix overview.js and editor.js in admin.js file at latest
+		//TODO Remove Editor.js
 	}
 
 	/**
@@ -193,12 +188,13 @@ class Admin_Assets {
 
 		//Global Option
 		$list['options'] = array(
-			'rtl'         => ( is_rtl() ? 1 : 0 ),
-			'user_online' => ( Option::get( 'useronline' ) ? 1 : 0 ),
-			'visitors'    => ( Option::get( 'visitors' ) ? 1 : 0 ),
-			'visits'      => ( Option::get( 'visits' ) ? 1 : 0 ),
-			'geo_ip'      => ( GeoIP::active() ? 1 : 0 ),
-			'geo_city'    => ( GeoIP::active( 'geoip_city' ) ? 1 : 0 ),
+			'rtl'           => ( is_rtl() ? 1 : 0 ),
+			'user_online'   => ( Option::get( 'useronline' ) ? 1 : 0 ),
+			'visitors'      => ( Option::get( 'visitors' ) ? 1 : 0 ),
+			'visits'        => ( Option::get( 'visits' ) ? 1 : 0 ),
+			'geo_ip'        => ( GeoIP::active() ? 1 : 0 ),
+			'geo_city'      => ( GeoIP::active( 'geoip_city' ) ? 1 : 0 ),
+			'overview_page' => ( Menus::in_page( 'overview' ) ? 1 : 0 )
 		);
 
 		// Global Lang

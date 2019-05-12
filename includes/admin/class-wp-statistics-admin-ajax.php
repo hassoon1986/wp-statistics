@@ -3,9 +3,8 @@
 namespace WP_STATISTICS;
 
 class Ajax {
-
 	/**
-	 * WP_Statistics_Ajax constructor.
+	 * WP-Statistics Ajax
 	 */
 	function __construct() {
 
@@ -32,7 +31,7 @@ class Ajax {
 	 */
 	public function close_notice_action_callback() {
 
-		if ( User::Access('manage') and isset( $_REQUEST['notice'] ) ) {
+		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) and isset( $_REQUEST['notice'] ) ) {
 			switch ( $_REQUEST['notice'] ) {
 				case 'donate':
 					Option::update( 'disable_donation_nag', true );
@@ -55,7 +54,7 @@ class Ajax {
 	public function delete_agents_action_callback() {
 		global $wpdb;
 
-		if ( User::Access('manage') ) {
+		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
 			$agent = $_POST['agent-name'];
 
 			if ( $agent ) {
@@ -80,7 +79,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die(); 
+		wp_die();
 	}
 
 	/**
@@ -89,7 +88,7 @@ class Ajax {
 	public function delete_platforms_action_callback() {
 		global $wpdb;
 
-		if ( User::Access('manage') ) {
+		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
 			$platform = $_POST['platform-name'];
 
 			if ( $platform ) {
@@ -113,7 +112,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die(); 
+		wp_die();
 	}
 
 	/**
@@ -122,7 +121,7 @@ class Ajax {
 	public function delete_ip_action_callback() {
 		global $wpdb;
 
-		if ( User::Access('manage') ) {
+		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
 			$ip_address = sanitize_text_field( $_POST['ip-address'] );
 
 			if ( $ip_address ) {
@@ -146,13 +145,18 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die(); 
+		wp_die();
 	}
 
 	/**
 	 * Setup an AJAX action to empty a table in the optimization page.
 	 */
 	public function empty_table_action_callback() {
+
+		// Check Ajax Request
+		if ( ! Helper::is_request( 'ajax' ) ) {
+			exit;
+		}
 
 		//Check isset Table-post
 		if ( ! isset( $_POST['table-name'] ) ) {
@@ -168,7 +172,7 @@ class Ajax {
 			exit;
 		}
 
-		if ( User::Access('manage') ) {
+		if ( User::Access( 'manage' ) ) {
 
 			if ( $table_name == "all" ) {
 				$x_tbl = 1;
@@ -193,7 +197,7 @@ class Ajax {
 	 */
 	public function purge_data_action_callback() {
 
-		if ( User::Access('manage') ) {
+		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
 			$purge_days = 0;
 
 			if ( array_key_exists( 'purge-days', $_POST ) ) {
@@ -206,7 +210,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die(); 
+		wp_die();
 	}
 
 	/**
@@ -214,7 +218,7 @@ class Ajax {
 	 */
 	public function purge_visitor_hits_action_callback() {
 
-		if ( User::Access('manage') ) {
+		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
 			$purge_hits = 10;
 
 			if ( array_key_exists( 'purge-hits', $_POST ) ) {
@@ -231,7 +235,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die(); 
+		wp_die();
 	}
 
 	/**
@@ -268,7 +272,7 @@ class Ajax {
 		}
 
 
-		if ( User::Access('read') ) {
+		if ( User::Access( 'read' ) ) {
 			$widget = '';
 
 			if ( array_key_exists( 'widget', $_POST ) ) {
@@ -376,6 +380,6 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die(); 
+		wp_die();
 	}
 }

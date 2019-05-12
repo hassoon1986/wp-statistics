@@ -1,0 +1,6 @@
+/* Remove About Meta Box and Column */
+body.toplevel_page_wps_overview_page {
+  fieldset.columns-prefs, label[for=wp-statistics-about-widget-hide] {
+    display: none !important;
+  }
+}

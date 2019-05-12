@@ -5,7 +5,7 @@ wps_js.hits_meta_box = {
     },
 
     view: function (args = []) {
-        return '<canvas id="' + wps_js.chart_id('hits') + '" height="210"></canvas>';
+        return '<canvas id="' + wps_js.chart_id('hits') + '" height="' + (wps_js.is_active('overview_page') ? 110 : 210) + '"></canvas>';
     },
 
     meta_box_init: function (args = []) {

@@ -348,13 +348,10 @@ class Menus {
 					add_submenu_page( self::get_page_slug( $menu['sub'] ), '', '', $capability, 'wps_break_menu', array( '\WP_STATISTICS\\' . $method . '_page', $method ) );
 				}
 			} else {
-				add_menu_page( $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', $method ), $menu['icon'] );
+				add_menu_page( $menu['title'], $name, $capability, self::get_page_slug( $menu['page_url'] ), array( '\WP_STATISTICS\\' . $method . '_page', 'view' ), $menu['icon'] );
 			}
 		}
 
-		// Add action to load the meta boxes to the overview page.
-		// TODO Push to OrverView Page Class
-		add_action( 'load-' . self::get_action_menu_slug( 'overview' ), array( '\WP_STATISTICS\Admin_Pages', 'overview' ) );
 	}
 
 	/**

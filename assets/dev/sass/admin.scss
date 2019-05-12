@@ -13,10 +13,11 @@ $image_path: "../images";
 @import "component/meta-box";
 
 // WordPress Admin Page
-@import "pages/setting-page";
-@import "pages/add-one-page";
-@import "pages/welcome-page";
-@import "pages/admin-pages";
+@import "pages/setting";
+@import "pages/add-one";
+@import "pages/welcome";
+@import "pages/admin";
+@import "pages/overview";
 
 // Load WordPress Meta Box
 @import "meta-box/about";

@@ -57,6 +57,8 @@ class Meta_Box {
 		 * show_on_dashboard : Show Meta Box in WordPress Dashboard
 		 * hidden            : if set true , Default Hidden Dashboard in Wordpress Admin
 		 * js                : if set false, Load without RestAPI Request.
+		 * place             : Meta Box Place in Overview Page [ normal | side ]
+		 * disable_overview  : Disable MetaBox From Overview Page [ default : false ]
 		 *
 		 */
 		$list = array(
@@ -64,93 +66,108 @@ class Meta_Box {
 				'page_url'          => 'overview',
 				'name'              => __( 'Quick Stats', 'wp-statistics' ),
 				'show_on_dashboard' => true,
-				'hidden'            => false
+				'hidden'            => false,
+				'place'             => 'side',
+				'disable_overview'  => true
 			),
 			'summary'      => array(
 				'name'              => __( 'Summary', 'wp-statistics' ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'side'
 			),
 			'browsers'     => array(
 				'page_url'          => 'browser',
 				'name'              => __( 'Top 10 Browsers', 'wp-statistics' ),
 				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'side'
 			),
 			'countries'    => array(
 				'page_url'          => 'countries',
 				'name'              => __( 'Top 10 Countries', 'wp-statistics' ),
 				'require'           => array( 'geoip' => true, 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'side'
 			),
 			'hits'         => array(
 				'page_url'          => 'hits',
 				'name'              => __( 'Hit Statistics', 'wp-statistics' ),
 				'require'           => array( 'visits' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'pages'        => array(
 				'page_url'          => 'pages',
 				'name'              => __( 'Top 10 Pages', 'wp-statistics' ),
 				'require'           => array( 'pages' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'referring'    => array(
 				'page_url'          => 'referrers',
 				'name'              => __( 'Top Referring Sites', 'wp-statistics' ),
 				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'side'
 			),
 			'search'       => array(
 				'page_url'          => 'searches',
 				'name'              => __( 'Search Engine Referrals', 'wp-statistics' ),
 				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'words'        => array(
 				'page_url'          => 'words',
 				'name'              => __( 'Latest Search Words', 'wp-statistics' ),
 				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'top-visitors' => array(
 				'page_url'          => 'top-visitors',
 				'name'              => __( 'Top 10 Visitors Today', 'wp-statistics' ),
 				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'recent'       => array(
 				'page_url'          => 'visitors',
 				'name'              => __( 'Recent Visitors', 'wp-statistics' ),
 				'require'           => array( 'visitors' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'hitsmap'      => array(
 				'name'              => __( 'Today\'s Visitors Map', 'wp-statistics' ),
 				'require'           => array( 'geoip' => true, 'visitors' => true, 'disable_map' => false ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'normal'
 			),
 			'useronline'   => array(
 				'name'              => __( 'Online Users', 'wp-statistics' ),
 				'page_url'          => 'online',
 				'require'           => array( 'useronline' => true ),
 				'hidden'            => true,
-				'show_on_dashboard' => true
+				'show_on_dashboard' => true,
+				'place'             => 'side'
 			),
 			'about'        => array(
 				'name'              => sprintf( __( 'WP Statistics - Version %s', 'wp-statistics' ), WP_STATISTICS_VERSION ),
 				'show_on_dashboard' => false,
-				'js'                => false
+				'js'                => false,
+				'place'             => 'side'
 			),
 		);
 
@@ -206,6 +223,7 @@ class Meta_Box {
 		}
 
 		return function () {
+			return null;
 		};
 	}
 

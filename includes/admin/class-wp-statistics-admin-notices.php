@@ -10,7 +10,9 @@ class Admin_Notices {
 	 */
 	private static $core_notices = array(
 		'use_cache_plugin',
-		'enable_rest_api'
+		'enable_rest_api',
+		'active_geo_ip',
+		'donate_plugin'
 	);
 
 	/**
@@ -62,5 +64,17 @@ class Admin_Notices {
 			}
 		}
 
+	}
+
+	public function active_geo_ip() {
+		if ( Menus::in_page( 'overview' ) and ! Option::get( 'geoip' ) ) {
+			Helper::wp_admin_notice( sprintf( __( 'GeoIP collection is not enabled. Please go to <a href="%s">setting page</a> to enable GeoIP for getting more information and location (country) from the visitor.', 'wp-statistics' ), Menus::admin_url( 'settings', array( 'tab' => 'externals-settings' ) ) ), 'warning', true );
+		}
+	}
+
+	public function donate_plugin() {
+		if ( Menus::in_page( 'overview' ) and ! Option::get( 'disable_donation_nag', false ) ) {
+			Helper::wp_admin_notice( __( 'Have you thought about donating to WP Statistics?', 'wp-statistics' ) . ' <a href="http://wp-statistics.com/donate/" target="_blank">' . __( 'Donate Now!', 'wp-statistics' ) . '</a>', 'warning', true, 'wps-donate-notice' );
+		}
 	}
 }

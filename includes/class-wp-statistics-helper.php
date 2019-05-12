@@ -76,13 +76,14 @@ class Helper {
 	 * @param $text
 	 * @param string $model
 	 * @param bool $close_button
+	 * @param bool $id
 	 * @param bool $echo
 	 * @param string $style_extra
 	 * @return string
 	 */
-	public static function wp_admin_notice( $text, $model = "info", $close_button = true, $echo = true, $style_extra = 'padding:12px;' ) {
+	public static function wp_admin_notice( $text, $model = "info", $close_button = true, $id = false, $echo = true, $style_extra = 'padding:12px;' ) {
 		$text = '
-        <div class="notice notice-' . $model . '' . ( $close_button === true ? " is-dismissible" : "" ) . '">
+        <div class="notice notice-' . $model . '' . ( $close_button === true ? " is-dismissible" : "" ) . '"' . ( $id != false ? ' id="' . $id . '"' : '' ) . '>
            <div style="' . $style_extra . '">' . $text . '</div>
         </div>
         ';

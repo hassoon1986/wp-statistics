@@ -16,7 +16,6 @@ function wp_statistics_generate_page_postbox_content(
 	$rangeend = ''
 ) {
 
-
 	if ( ! WP_STATISTICS\Option::get( 'pages' ) ) {
 		return;
 	}

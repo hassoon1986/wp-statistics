@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-    <a href="https://wp-statistics.com" target="_blank"><img src="<?php echo WP_STATISTICS_URL . 'assets/images/logo-250.png'; ?>" alt="WP-Statistics"></a>
+    <a href="https://wp-statistics.com" target="_blank"><img src="<?php echo WP_STATISTICS_URL . 'assets/images/logo-250.png'; ?>" alt="WP-Statistics" class="wps-about-logo"></a>
 </div>
 
 <div id="about-links" style="text-align: center;">

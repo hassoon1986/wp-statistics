@@ -56,7 +56,7 @@ wps_js.summary_meta_box = {
             Object.keys(args['search-engine']).forEach(function (key) {
                 t += `<tr>
                     <th>
-                        <img src="${args['search-engine'][key]['logo']}" alt="${args['search-engine'][key]['name']}">${args['search-engine'][key]['name']}:
+                        <img src="${args['search-engine'][key]['logo']}" alt="${args['search-engine'][key]['name']}" class="wps-engine-logo"> ${args['search-engine'][key]['name']}:
                     </th>
                     <th class="th-center"><span>${args['search-engine'][key]['today']}</span></th>
                     <th class="th-center"><span>${args['search-engine'][key]['yesterday']}</span></th>

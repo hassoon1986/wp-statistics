@@ -17,7 +17,7 @@ wps_js.words_meta_box = {
         let i = 1;
         args.forEach(function (value) {
             t += `<tr>
-            <td style="text-align: left"><span title='${value['word']}' class='wps-cursor-default wps-text-wrap'>${value['word']}</span></td>
+            <td style="text-align: left"><span title='${value['word']}' class='wps-cursor-default wps-text-wrap` + (wps_js.is_active('overview_page') ? ` wps-200-px` : ``) + `'>${value['word']}</span></td>
             <td style="text-align: left"><a href="${value['browser']['link']}" title="${value['browser']['name']}"><img src="${value['browser']['logo']}" alt="${value['browser']['name']}" class='log-tools' title='${value['browser']['name']}'/></a></td>
             ` + (wps_js.is_active('geo_ip') ? `<td style="text-align: left"><img src='${value['country']['flag']}' alt='${value['country']['name']}' title='${value['country']['name']}' class='log-tools'/></td>` : ``) + `
             ` + (wps_js.is_active('geo_city') ? `<td style="text-align: left">${value['city']}</td>` : ``) + `
