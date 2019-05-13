@@ -99,18 +99,11 @@ $total = $search_result[ $referred ];
 								// Determine if we're using the old or new method of storing search engine info and build the appropriate table name.
 								$tablename = $wpdb->prefix . 'statistics_';
 
-								if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-									$tabletwo  = $tablename . 'visitor';
-									$tablename .= 'search';
-									$result    = $wpdb->get_results(
-										"SELECT * FROM `{$tablename}` INNER JOIN `{$tabletwo}` on {$tablename}.`visitor` = {$tabletwo}.`ID` WHERE {$search_query} ORDER BY `{$tablename}`.`ID` DESC  LIMIT {$start}, {$end}"
-									);
-								} else {
-									$tablename .= 'visitor';
-									$result    = $wpdb->get_results(
-										"SELECT * FROM `{$tablename}` WHERE {$search_query} ORDER BY `{$tablename}`.`ID` DESC  LIMIT {$start}, {$end}"
-									);
-								}
+								$tabletwo  = $tablename . 'visitor';
+								$tablename .= 'search';
+								$result    = $wpdb->get_results(
+									"SELECT * FROM `{$tablename}` INNER JOIN `{$tabletwo}` on {$tablename}.`visitor` = {$tabletwo}.`ID` WHERE {$search_query} ORDER BY `{$tablename}`.`ID` DESC  LIMIT {$start}, {$end}"
+								);
 
 								$ISOCountryCode = Country::getList();
 
@@ -142,13 +135,8 @@ $total = $search_result[ $referred ];
 										continue;
 									}
 
-									if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-										$this_search_engine = WP_STATISTICS\SearchEngine::getInfo( $items->engine );
-										$words              = $items->words;
-									} else {
-										$this_search_engine = WP_STATISTICS\SearchEngine::getByUrl( $items->referred );
-										$words              = WP_STATISTICS\SearchEngine::getByQueryString( $items->referred );
-									}
+									$this_search_engine = WP_STATISTICS\SearchEngine::getInfo( $items->engine );
+									$words              = $items->words;
 
 									echo "<tr>";
 									echo "<td style=\"text-align: left\">";

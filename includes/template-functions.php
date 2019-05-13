@@ -728,51 +728,19 @@ function wp_statistics_searchword_query( $search_engine = 'all' ) {
 
 	// Get a complete list of search engines
 	$search_engine_list = WP_STATISTICS\SearchEngine::getList();
-	$search_query      = '';
+	$search_query       = '';
 
-	if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-		// Are we getting results for all search engines or a specific one?
-		if ( strtolower( $search_engine ) == 'all' ) {
-			// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
-			foreach ( $search_engine_list as $key => $se ) {
-				$search_query .= "( `engine` = '{$key}' AND `words` <> '' ) OR ";
-			}
-
-			// Trim off the last ' OR ' for the loop above.
-			$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
-		} else {
-			$search_query .= "`engine` = '{$search_engine}' AND `words` <> ''";
+	// Are we getting results for all search engines or a specific one?
+	if ( strtolower( $search_engine ) == 'all' ) {
+		// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
+		foreach ( $search_engine_list as $key => $se ) {
+			$search_query .= "( `engine` = '{$key}' AND `words` <> '' ) OR ";
 		}
+
+		// Trim off the last ' OR ' for the loop above.
+		$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
 	} else {
-
-		if ( strtolower( $search_engine ) == 'all' ) {
-
-			foreach ( $search_engine_list as $se ) {
-
-				if ( is_array( $se['sqlpattern'] ) ) {
-					foreach ( $se['sqlpattern'] as $subse ) {
-						$search_query .= "(`referred` LIKE '{$subse}{$se['querykey']}=%' AND `referred` NOT LIKE '{$subse}{$se['querykey']}=&%' AND `referred` NOT LIKE '{$subse}{$se['querykey']}=') OR ";
-					}
-				} else {
-					$search_query .= "(`referred` LIKE '{$se['sqlpattern']}{$se['querykey']}=%' AND `referred` NOT LIKE '{$se['sqlpattern']}{$se['querykey']}=&%' AND `referred` NOT LIKE '{$se['sqlpattern']}{$se['querykey']}=')  OR ";
-				}
-			}
-
-			// Trim off the last ' OR ' for the loop above.
-			$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
-		} else {
-			// For just one?  Ok, the SQL pattern for a search engine may be an array if it has to handle multiple domains (like google.com and google.ca) or other factors.
-			if ( is_array( $search_engine_list[ $search_engine ]['sqlpattern'] ) ) {
-				foreach ( $search_engine_list[ $search_engine ]['sqlpattern'] as $se ) {
-					$search_query .= "(`referred` LIKE '{$se}{$search_engine_list[$search_engine]['querykey']}=%' AND `referred` NOT LIKE '{$se}{$search_engine_list[$search_engine]['querykey']}=&%' AND `referred` NOT LIKE '{$se}{$search_engine_list[$search_engine]['querykey']}=') OR ";
-				}
-
-				// Trim off the last ' OR ' for the loop above.
-				$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
-			} else {
-				$search_query .= "(`referred` LIKE '{$search_engine_list[$search_engine]['sqlpattern']}{$search_engine_list[$search_engine]['querykey']}=%' AND `referred` NOT LIKE '{$search_engine_list[$search_engine]['sqlpattern']}{$search_engine_list[$search_engine]['querykey']}=&%' AND `referred` NOT LIKE '{$search_engine_list[$search_engine]['sqlpattern']}{$search_engine_list[$search_engine]['querykey']}=')";
-			}
-		}
+		$search_query .= "`engine` = '{$search_engine}' AND `words` <> ''";
 	}
 
 	return $search_query;
@@ -785,57 +753,21 @@ function wp_statistics_searchengine_query( $search_engine = 'all' ) {
 	$searchengine_list = WP_STATISTICS\SearchEngine::getList();
 	$search_query      = '';
 
-	if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-		// Are we getting results for all search engines or a specific one?
-		if ( strtolower( $search_engine ) == 'all' ) {
-			// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
-			foreach ( $searchengine_list as $key => $se ) {
-				$key          = esc_sql( $key );
-				$search_query .= "`engine` = '{$key}' OR ";
-			}
-
-			// Trim off the last ' OR ' for the loop above.
-			$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
-		} else {
-			$search_engine = esc_sql( $search_engine );
-			$search_query  .= "`engine` = '{$search_engine}'";
+	// Are we getting results for all search engines or a specific one?
+	if ( strtolower( $search_engine ) == 'all' ) {
+		// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
+		foreach ( $searchengine_list as $key => $se ) {
+			$key          = esc_sql( $key );
+			$search_query .= "`engine` = '{$key}' OR ";
 		}
+
+		// Trim off the last ' OR ' for the loop above.
+		$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
 	} else {
-		// Are we getting results for all search engines or a specific one?
-		if ( strtolower( $search_engine ) == 'all' ) {
-			// For all of them?  Ok, look through the search engine list and create a SQL query string to get them all from the database.
-			// NOTE:  This SQL query can be long.
-			foreach ( $searchengine_list as $se ) {
-				// The SQL pattern for a search engine may be an array if it has to handle multiple domains (like google.com and google.ca) or other factors.
-				if ( is_array( $se['sqlpattern'] ) ) {
-					foreach ( $se['sqlpattern'] as $subse ) {
-						$subse        = esc_sql( $subse );
-						$search_query .= "`referred` LIKE '{$subse}' OR ";
-					}
-				} else {
-					$se['sqlpattern'] = esc_sql( $se['sqlpattern'] );
-					$search_query     .= "`referred` LIKE '{$se['sqlpattern']}' OR ";
-				}
-			}
-
-			// Trim off the last ' OR ' for the loop above.
-			$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
-		} else {
-			// For just one?  Ok, the SQL pattern for a search engine may be an array if it has to handle multiple domains (like google.com and google.ca) or other factors.
-			if ( is_array( $searchengine_list[ $search_engine ]['sqlpattern'] ) ) {
-				foreach ( $searchengine_list[ $search_engine ]['sqlpattern'] as $se ) {
-					$se           = esc_sql( $se );
-					$search_query .= "`referred` LIKE '{$se}' OR ";
-				}
-
-				// Trim off the last ' OR ' for the loop above.
-				$search_query = substr( $search_query, 0, strlen( $search_query ) - 4 );
-			} else {
-				$searchengine_list[ $search_engine ]['sqlpattern'] = esc_sql( $searchengine_list[ $search_engine ]['sqlpattern'] );
-				$search_query                                      .= "`referred` LIKE '{$searchengine_list[$search_engine]['sqlpattern']}'";
-			}
-		}
+		$search_engine = esc_sql( $search_engine );
+		$search_query  .= "`engine` = '{$search_engine}'";
 	}
+
 
 	return $search_query;
 }
@@ -853,11 +785,7 @@ function wp_statistics_get_search_engine_query( $search_engine = 'all', $time = 
 
 	//Prepare Table Name
 	$table_name = $wpdb->prefix . 'statistics_';
-	if ( WP_STATISTICS\Option::get( 'search_converted' ) ) {
-		$table_name .= 'search';
-	} else {
-		$table_name .= 'visitor';
-	}
+	$table_name .= 'search';
 
 	//Date Column table
 	$date_column = 'last_counter';

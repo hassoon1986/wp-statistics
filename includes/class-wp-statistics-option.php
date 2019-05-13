@@ -37,7 +37,6 @@ class Option {
 
 		$options                          = array();
 		$options['robotlist']             = Helper::get_robots_list();
-		$options['search_converted']      = 1; //TODO Check and Remvoe it
 		$options['anonymize_ips']         = false;
 		$options['geoip']                 = false;
 		$options['useronline']            = true;
