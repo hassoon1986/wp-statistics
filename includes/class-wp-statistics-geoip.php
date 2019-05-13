@@ -451,4 +451,14 @@ class GeoIP {
 		return $default_city;
 	}
 
+	/**
+	 * Geo IP Tools Link
+	 *
+	 * @param $ip
+	 * @return string
+	 */
+	public static function geoIPTools( $ip ) {
+		return "http://www.geoiptool.com/en/?IP={$ip}";
+	}
+
 }

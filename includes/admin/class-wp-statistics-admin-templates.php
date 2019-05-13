@@ -109,12 +109,12 @@ class Admin_Templates {
 		$args            = wp_parse_args( $args, $defaults );
 		$total_page      = ceil( $args['total'] / $args['item_per_page'] );
 		$args['current'] = ( $args['current'] < 1 ? self::getCurrentPaged() : 1 );
-		ob_start();
+		$export = '';
 
 		//Show Pagination Ui
 		if ( $total_page > 1 ) {
-			echo '<div class="' . $args['container'] . '">';
-			echo paginate_links( array(
+			$export .= '<div class="' . $args['container'] . '">';
+			$export .= paginate_links( array(
 				'base'      => add_query_arg( $args['query_var'], '%#%' ),
 				'format'    => '',
 				'type'      => 'list',
@@ -126,17 +126,15 @@ class Admin_Templates {
 			) );
 
 			if ( $args['show_now_page'] ) {
-				echo '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
+				$export .= '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
 			}
-
-			echo '</div>';
-			$output = ob_get_contents();
+			$export .= '</div>';
 
 			// Export Data
 			if ( $args['echo'] ) {
-				echo $output;
+				echo $export;
 			} else {
-				return $output;
+				return $export;
 			}
 		}
 	}
@@ -169,7 +167,6 @@ class Admin_Templates {
         <div class="metabox-holder">
             <div class="meta-box-sortables">
                 <div class="postbox">
-					' . $title . '
                     <button class="handlediv" type="button" aria-expanded="true">
                         <span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s', 'wp-statistics' ), $title ) . '</span>
                         <span class="toggle-indicator" aria-hidden="true"></span>

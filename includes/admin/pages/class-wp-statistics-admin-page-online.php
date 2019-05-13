@@ -9,7 +9,6 @@ class online_page {
 	 * @throws \Exception
 	 */
 	public static function view() {
-		global $wpdb;
 
 		// Page title
 		$page_title = __( 'Online Users', 'wp-statistics' );

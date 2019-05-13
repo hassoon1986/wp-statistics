@@ -253,7 +253,6 @@ class UserOnline {
 
 			$item = array(
 				'referred' => Referred::get_referrer_link( $items->referred ),
-				'date'     => date_i18n( get_option( 'date_format' ), strtotime( $items->last_counter ) ),
 				'agent'    => $items->agent,
 				'platform' => $items->platform,
 				'version'  => $items->version
@@ -272,10 +271,9 @@ class UserOnline {
 			// Push IP
 			if ( IP::IsHashIP( $items->ip ) ) {
 				$item['hash_ip'] = IP::$hash_ip_prefix;
-				$item['map']     = '';
 			} else {
 				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
-				$item['map'] = "<a class='wps-text-muted' href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . Admin_Templates::icons( 'dashicons-location-alt', 'map' ) . "</a>";
+				$item['map'] = GeoIP::geoIPTools( $items->ip );
 			}
 
 			// Push Country
@@ -287,7 +285,6 @@ class UserOnline {
 			if ( GeoIP::active( 'geoip_city' ) ) {
 				$item['city'] = GeoIP::getCity( $items->ip );
 			}
-
 
 			// Online For Time
 			$time_diff = ( $items->timestamp - $items->created );
