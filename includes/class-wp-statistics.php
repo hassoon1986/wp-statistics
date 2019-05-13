@@ -145,6 +145,7 @@ final class WP_Statistics {
 		// Admin classes
 		if ( is_admin() ) {
 
+			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-install.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-templates.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-pages.php';
@@ -241,10 +242,10 @@ final class WP_Statistics {
 	 *
 	 * @global object $wpdb
 	 */
-	public static function install() {
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
+	public static function install( $network_wide ) {
+		require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-install.php';
 		$installer = new \WP_STATISTICS\Install();
-		$installer->install();
+		$installer->install( $network_wide );
 	}
 
 	/**

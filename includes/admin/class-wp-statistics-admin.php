@@ -31,9 +31,6 @@ class Admin {
 		if ( Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
 			add_action( 'post_submitbox_misc_actions', array( $this, 'post_init' ) );
 		}
-
-		//Check Require update page type in database
-		Install::_init_page_type_updater();
 	}
 
 	/**

@@ -296,7 +296,6 @@ class UserOnline {
 				$item['online_for'] = "00:00:" . date( "s", ( $items->timestamp - $items->created ) );
 			}
 
-
 			$list[] = $item;
 		}
 

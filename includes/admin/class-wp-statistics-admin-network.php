@@ -7,8 +7,6 @@ class Network {
 	 * Network constructor.
 	 */
 	public function __construct() {
-
-		# Load WP-Statistics MultiSite Admin Menu
 		add_action( 'network_admin_menu', array( $this, 'wp_admin_menu' ) );
 	}
 
@@ -27,18 +25,11 @@ class Network {
 		// Add the sub items.
 		add_submenu_page( WP_STATISTICS_MAIN_FILE, __( 'Overview', 'wp-statistics' ), __( 'Overview', 'wp-statistics' ), $read_cap, WP_STATISTICS_MAIN_FILE, array( $this, 'overview') );
 
-		$count = 0;
+		// Add sub Menu for All Blog
 		$sites = Helper::get_wp_sites_list();
-
 		foreach ( $sites as $blog_id ) {
 			$details = get_blog_details( $blog_id );
 			add_submenu_page( WP_STATISTICS_MAIN_FILE, $details->blogname, $details->blogname, $manage_cap, 'wp_statistics_blogid_' . $blog_id, array( $this, 'goto_blog') );
-
-			# TODO Create List Of WebSite in Page
-			$count ++;
-			if ( $count > 15 ) {
-				break;
-			}
 		}
 	}
 
@@ -77,8 +68,7 @@ class Network {
 					__( 'Settings', 'wp-statistics' )           => Menus::get_page_slug( 'settings' ),
 				);
 
-				$sites = WP_STATISTICS\Helper::get_wp_sites_list();
-
+				$sites = Helper::get_wp_sites_list();
 				foreach ( $sites as $blog_id ) {
 					$details   = get_blog_details( $blog_id );
 					$url       = get_admin_url( $blog_id, '/' ) . 'admin.php?page=';
@@ -127,5 +117,4 @@ class Network {
 		$url = get_admin_url( $blog_id ) . '/admin.php?page=' . Menus::get_page_slug( 'overview' );
 		echo "<script>window.location.href = '$url';</script>";
 	}
-
 }

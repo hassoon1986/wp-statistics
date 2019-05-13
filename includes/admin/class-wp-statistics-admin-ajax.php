@@ -184,7 +184,6 @@ class Ajax {
 				echo DB::EmptyTable( DB::table( $table_name ) );
 			}
 
-			Install::Primary_Values();
 		} else {
 			_e( 'Access denied!', 'wp-statistics' );
 		}

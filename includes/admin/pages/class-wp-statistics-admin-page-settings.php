@@ -116,7 +116,7 @@ class settings_page {
 
 				//Add Visitor RelationShip Table
 				if ( isset( $_POST['wps_visitors_log'] ) and $_POST['wps_visitors_log'] == 1 ) {
-					Install::setup_visitor_relationship_table();
+					Install::create_visitor_relationship_table();
 				}
 
 				//Flush Rewrite Use Cache Plugin
