@@ -22,13 +22,6 @@ class Admin {
 		//Add Custom MetaBox in Wp-statistics Admin Page
 		add_action( 'add_meta_boxes', array( '\WP_STATISTICS\Editor', 'add_meta_box' ) );
 
-		// Display the admin notices if we should.
-		if ( isset( $pagenow ) && array_key_exists( 'page', $_GET ) ) {
-			if ( $pagenow == "admin.php" && substr( $_GET['page'], 0, 14 ) == 'wp-statistics/' ) {
-				add_action( 'admin_notices', array( $this, 'not_enable' ) );
-			}
-		}
-
 		//Change Plugin Action link in Plugin.php admin
 		add_filter( 'plugin_action_links_' . plugin_basename( WP_STATISTICS_MAIN_FILE ), array( $this, 'settings_links' ), 10, 2 );
 		add_filter( 'plugin_row_meta', array( $this, 'add_meta_links' ), 10, 2 );
@@ -61,70 +54,6 @@ class Admin {
 				?></p>
         </div>
 		<?php
-	}
-
-	/**
-	 * This function outputs error messages in the admin interface
-	 * if the primary components of WP Statistics are enabled.
-	 */
-	public function not_enable() {
-
-		// If the user had told us to be quite, do so.
-		if ( ! Option::get( 'hide_notices' ) ) {
-
-			if ( ! User::Access( 'manage' ) ) {
-				return;
-			}
-
-			$get_bloginfo_url = Menus::admin_url( 'settings' );
-
-			$itemstoenable = array();
-			if ( ! Option::get( 'useronline' ) ) {
-				$itemstoenable[] = __( 'online user tracking', 'wp-statistics' );
-			}
-			if ( ! Option::get( 'visits' ) ) {
-				$itemstoenable[] = __( 'hit tracking', 'wp-statistics' );
-			}
-			if ( ! Option::get( 'visitors' ) ) {
-				$itemstoenable[] = __( 'visitor tracking', 'wp-statistics' );
-			}
-			if ( ! Option::get( 'geoip' ) && GeoIp::IsSupport() ) {
-				$itemstoenable[] = __( 'geoip collection', 'wp-statistics' );
-			}
-
-			if ( count( $itemstoenable ) > 0 ) {
-				echo '<div class="update-nag">' . sprintf( __( 'The following features are disabled, please go to %ssettings page%s and enable them: %s', 'wp-statistics' ), '<a href="' . $get_bloginfo_url . '">', '</a>', implode( __( ',', 'wp-statistics' ), $itemstoenable ) ) . '</div>';
-			}
-
-
-			$get_bloginfo_url = Menus::admin_url( 'optimization', array( 'tab' => 'database' ) );
-			$dbupdatestodo    = array();
-
-			if ( ! Option::get( 'search_converted' ) ) {
-				$dbupdatestodo[] = __( 'search table', 'wp-statistics' );
-			}
-
-			// Check to see if there are any database changes the user hasn't done yet.
-			$dbupdates = Option::get( 'pending_db_updates', false );
-
-			// The database updates are stored in an array so loop thorugh it and output some notices.
-			if ( is_array( $dbupdates ) ) {
-				$dbstrings = array(
-					'date_ip_agent' => __( 'countries database index', 'wp-statistics' ),
-					'unique_date'   => __( 'visit database index', 'wp-statistics' ),
-				);
-
-				foreach ( $dbupdates as $key => $update ) {
-					if ( $update == true ) {
-						$dbupdatestodo[] = $dbstrings[ $key ];
-					}
-				}
-
-				if ( count( $dbupdatestodo ) > 0 ) {
-					echo '<div class="update-nag">' . sprintf( __( 'Database updates are required, please go to %soptimization page%s and update the following: %s', 'wp-statistics' ), '<a href="' . $get_bloginfo_url . '">', '</a>', implode( __( ',', 'wp-statistics' ), $dbupdatestodo ) ) . '</div>';
-				}
-			}
-		}
 	}
 
 	/**

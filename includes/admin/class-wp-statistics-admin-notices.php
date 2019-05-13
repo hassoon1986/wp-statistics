@@ -12,15 +12,14 @@ class Admin_Notices {
 		'use_cache_plugin',
 		'enable_rest_api',
 		'active_geo_ip',
-		'donate_plugin'
+		'donate_plugin',
+		'active_collation'
 	);
 
 	/**
 	 * Admin Notice constructor.
 	 */
 	public function __construct() {
-
-		// Instantiate the Admin Notice
 		add_action( 'admin_notices', array( $this, "setup" ), 20, 2 );
 	}
 
@@ -67,7 +66,7 @@ class Admin_Notices {
 	}
 
 	public function active_geo_ip() {
-		if ( Menus::in_page( 'overview' ) and ! Option::get( 'geoip' ) ) {
+		if ( Menus::in_plugin_page() and ! Option::get( 'geoip' ) and GeoIp::IsSupport() and User::Access( 'manage' ) and ! Option::get( 'hide_notices' ) ) {
 			Helper::wp_admin_notice( sprintf( __( 'GeoIP collection is not enabled. Please go to <a href="%s">setting page</a> to enable GeoIP for getting more information and location (country) from the visitor.', 'wp-statistics' ), Menus::admin_url( 'settings', array( 'tab' => 'externals-settings' ) ) ), 'warning', true );
 		}
 	}
@@ -75,6 +74,33 @@ class Admin_Notices {
 	public function donate_plugin() {
 		if ( Menus::in_page( 'overview' ) and ! Option::get( 'disable_donation_nag', false ) ) {
 			Helper::wp_admin_notice( __( 'Have you thought about donating to WP Statistics?', 'wp-statistics' ) . ' <a href="http://wp-statistics.com/donate/" target="_blank">' . __( 'Donate Now!', 'wp-statistics' ) . '</a>', 'warning', true, 'wps-donate-notice' );
+		}
+	}
+
+	public function active_collation() {
+		if ( Menus::in_plugin_page() and User::Access( 'manage' ) and ! Option::get( 'hide_notices' ) ) {
+
+			// Create Default Active List item
+			$active_collation = array();
+
+			// Check Active User Online
+			if ( ! Option::get( 'useronline' ) ) {
+				$active_collation[] = __( 'online user tracking', 'wp-statistics' );
+			}
+
+			// Check Active visits
+			if ( ! Option::get( 'visits' ) ) {
+				$active_collation[] = __( 'hit tracking', 'wp-statistics' );
+			}
+
+			// Check Active Visitors
+			if ( ! Option::get( 'visitors' ) ) {
+				$active_collation[] = __( 'visitor tracking', 'wp-statistics' );
+			}
+
+			if ( count( $active_collation ) > 0 ) {
+				Helper::wp_admin_notice( sprintf( __( 'The following features are disabled, please go to %ssettings page%s and enable them: %s', 'wp-statistics' ), '<a href="' . Menus::admin_url( 'settings' ) . '">', '</a>', implode( __( ',', 'wp-statistics' ), $active_collation ) ), 'info', true );
+			}
 		}
 	}
 }
