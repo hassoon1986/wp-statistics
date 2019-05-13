@@ -130,3 +130,17 @@ wps_js.chart_id = function (meta_box) {
 wps_js.site_icon = function (domain) {
     return `<img src="https://www.google.com/s2/favicons?domain=${domain}" width="16" height="16" alt="${domain}" style="vertical-align: -3px;" />`;
 };
+
+/**
+ * Enable/Disable WordPress Admin PostBox Ajax Request
+ *
+ * @param type
+ */
+wps_js.wordpress_postbox_ajax = function (type = 'enable') {
+    let wordpress_postbox = jQuery('.postbox .hndle, .postbox .handlediv');
+    if(type ==='enable') {
+        wordpress_postbox.on('click', window.postboxes.handle_click);
+    } else {
+        wordpress_postbox.off('click', window.postboxes.handle_click);
+    }
+};

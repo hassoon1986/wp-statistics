@@ -41,7 +41,7 @@
 		$date[] = "'" . \WP_STATISTICS\TimeZone::getRealCurrentDate( 'M j', '-' . $i, $rangeend_utime ) . "'";
 	}
 	?>
-    <div class="postbox-container" id="last-log">
+    <div class="postbox-container" id="wps-big-postbox">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
                 <div class="postbox">

@@ -164,6 +164,7 @@ class Menus {
 				'require'  => array( 'useronline' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Online', 'wp-statistics' ),
+				'method'   => 'online',
 				'page_url' => 'online',
 			),
 			'referrers'    => array(

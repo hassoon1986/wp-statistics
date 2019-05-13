@@ -105,7 +105,7 @@ $ISOCountryCode = Country::getList();
                     <span class="count">(<?php echo number_format_i18n( $total ); ?>)</span></a></li>
 		<?php } ?>
     </ul>
-    <div class="postbox-container" id="last-log">
+    <div class="postbox-container" id="wps-big-postbox">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
                 <div class="postbox">

@@ -1,8 +1,3 @@
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        postboxes.add_postbox_toggles(pagenow);
-    });
-</script>
 <div class="wrap wps-wrap">
 	<?php use WP_STATISTICS\Admin_Helper;
 	use WP_STATISTICS\Country;
@@ -12,7 +7,7 @@
 	use WP_STATISTICS\Referred;
 
 	Admin_Templates::show_page_title( __( 'Online Users', 'wp-statistics' ) ); ?>
-    <div class="postbox-container" id="last-log">
+    <div class="postbox-container" id="wps-big-postbox">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
                 <div class="postbox">

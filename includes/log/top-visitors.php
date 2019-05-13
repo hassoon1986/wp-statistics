@@ -32,7 +32,7 @@ include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 	echo '<input type="hidden" name="statsdate" id="date-stats" value="' . $rang_start . '">';
 	echo '</form>' . "\r\n";
 	?>
-    <div class="postbox-container" id="last-log" style="width: 100%;">
+    <div class="postbox-container" id="wps-big-postbox" style="width: 100%;">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
                 <div class="postbox">

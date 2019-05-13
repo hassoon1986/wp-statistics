@@ -211,12 +211,30 @@ class UserOnline {
 		$defaults = array(
 			'sql'      => '',
 			'per_page' => 10,
-			'paged'    => 1,
+			'offset'   => 0,
 			'fields'   => 'all',
 			'order'    => 'DESC',
 			'orderby'  => 'ID'
 		);
 		$args     = wp_parse_args( $arg, $defaults );
+
+		// Prepare SQL
+		$SQL = "SELECT";
+
+		// Check Fields
+		if ( $args['fields'] == "count" ) {
+			$SQL .= " COUNT(*)";
+		} elseif ( $args['fields'] == "all" ) {
+			$SQL .= " *";
+		} else {
+			$SQL .= $args['fields'];
+		}
+		$SQL .= " FROM `" . DB::table( 'useronline' ) . "`";
+
+		// Check Count
+		if ( $args['fields'] == "count" ) {
+			return $wpdb->get_var( $SQL );
+		}
 
 		// Prepare Query
 		if ( empty( $args['sql'] ) ) {
@@ -224,7 +242,7 @@ class UserOnline {
 		}
 
 		// Set Pagination
-		$args['sql'] = $args['sql'] . " LIMIT 0, {$args['per_page']}";
+		$args['sql'] = $args['sql'] . " LIMIT {$args['offset']}, {$args['per_page']}";
 
 		// Send Request
 		$result = $wpdb->get_results( $args['sql'] );
@@ -254,14 +272,33 @@ class UserOnline {
 			// Push IP
 			if ( IP::IsHashIP( $items->ip ) ) {
 				$item['hash_ip'] = IP::$hash_ip_prefix;
+				$item['map']     = '';
 			} else {
-				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+				$item['map'] = "<a class='wps-text-muted' href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . Admin_Templates::icons( 'dashicons-location-alt', 'map' ) . "</a>";
 			}
 
 			// Push Country
 			if ( GeoIP::active() ) {
 				$item['country'] = array( 'location' => $items->location, 'flag' => Country::flag( $items->location ), 'name' => Country::getName( $items->location ) );
 			}
+
+			// Push City
+			if ( GeoIP::active( 'geoip_city' ) ) {
+				$item['city'] = GeoIP::getCity( $items->ip );
+			}
+
+
+			// Online For Time
+			$time_diff = ( $items->timestamp - $items->created );
+			if ( $time_diff > 3600 ) {
+				$item['online_for'] = date( "H:i:s", ( $items->timestamp - $items->created ) );
+			} else if ( $time_diff > 60 ) {
+				$item['online_for'] = "00:" . date( "i:s", ( $items->timestamp - $items->created ) );
+			} else {
+				$item['online_for'] = "00:00:" . date( "s", ( $items->timestamp - $items->created ) );
+			}
+
 
 			$list[] = $item;
 		}

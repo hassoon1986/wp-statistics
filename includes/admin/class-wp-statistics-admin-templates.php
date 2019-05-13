@@ -4,6 +4,19 @@ namespace WP_STATISTICS;
 
 class Admin_Templates {
 	/**
+	 * Default Pagination GET name
+	 *
+	 * @var string
+	 */
+	public static $paginate_link_name = 'pagination-page';
+	/**
+	 * Default Item Per Page in Pagination
+	 *
+	 * @var int
+	 */
+	public static $item_per_page = 10;
+
+	/**
 	 * Show Page title
 	 *
 	 * @param string $title
@@ -53,6 +66,28 @@ class Admin_Templates {
 	}
 
 	/**
+	 * Get Current Paged
+	 *
+	 * @return float|int
+	 */
+	public static function getCurrentPaged() {
+		return isset( $_GET[ Admin_Templates::$paginate_link_name ] ) ? abs( (int) $_GET[ Admin_Templates::$paginate_link_name ] ) : 1;
+	}
+
+	/**
+	 * Get Current Offset
+	 *
+	 * @param bool $page
+	 * @param $item_per_page
+	 * @return float|int
+	 */
+	public static function getCurrentOffset( $page = false, $item_per_page = false ) {
+		$page          = ( $page === false ? self::getCurrentPaged() : $page );
+		$item_per_page = ( $item_per_page === false ? Admin_Templates::$item_per_page : $item_per_page );
+		return ( $page * $item_per_page ) - $item_per_page;
+	}
+
+	/**
 	 * Pagination Link
 	 *
 	 * @param array $args
@@ -62,16 +97,19 @@ class Admin_Templates {
 	public static function paginate_links( $args = array() ) {
 
 		//Prepare Arg
-		$defaults   = array(
-			'item_per_page' => 10,
+		$defaults        = array(
+			'item_per_page' => self::$item_per_page,
 			'container'     => 'pagination-wrap',
-			'query_var'     => 'pagination-page',
+			'query_var'     => self::$paginate_link_name,
 			'total'         => 0,
 			'current'       => 0,
-			'show_now_page' => true
+			'show_now_page' => true,
+			'echo'          => false
 		);
-		$args       = wp_parse_args( $args, $defaults );
-		$total_page = ceil( $args['total'] / $args['item_per_page'] );
+		$args            = wp_parse_args( $args, $defaults );
+		$total_page      = ceil( $args['total'] / $args['item_per_page'] );
+		$args['current'] = ( $args['current'] < 1 ? self::getCurrentPaged() : 1 );
+		ob_start();
 
 		//Show Pagination Ui
 		if ( $total_page > 1 ) {
@@ -92,6 +130,14 @@ class Admin_Templates {
 			}
 
 			echo '</div>';
+			$output = ob_get_contents();
+
+			// Export Data
+			if ( $args['echo'] ) {
+				echo $output;
+			} else {
+				return $output;
+			}
 		}
 	}
 
@@ -108,6 +154,56 @@ class Admin_Templates {
 		}
 
 		return '<span class="dashicons ' . $dashicons . '"></span>';
+	}
+
+	/**
+	 * Create WordPress Big Post Box
+	 *
+	 * @param $title
+	 * @param $content
+	 * @param string $bottom
+	 */
+	public static function PostBox( $title, $content, $bottom = '' ) {
+		echo '
+		<div class="postbox-container" id="wps-big-postbox">
+        <div class="metabox-holder">
+            <div class="meta-box-sortables">
+                <div class="postbox">
+					' . $title . '
+                    <button class="handlediv" type="button" aria-expanded="true">
+                        <span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s', 'wp-statistics' ), $title ) . '</span>
+                        <span class="toggle-indicator" aria-hidden="true"></span>
+                    </button>
+                    <h2 class="hndle"><span>' . $title . '</span></h2>
+                    <div class="inside">
+						' . $content . '
+                    </div>
+                </div>
+				' . $bottom . '
+            </div>
+        </div>
+    </div>';
+		$jQuery = '
+		if (typeof pagenow !== \'undefined\') {
+        	postboxes.add_postbox_toggles(pagenow);
+        }';
+		echo self::JQuery( $jQuery );
+	}
+
+	/**
+	 * insert JQuery Code
+	 *
+	 * @param $code
+	 * @return string
+	 */
+	public static function JQuery( $code ) {
+		return '
+		 	<script type="text/javascript">
+			    jQuery(document).ready(function ($) {
+			        ' . $code . '
+			    });
+			</script>
+		';
 	}
 
 	/**

@@ -199,11 +199,10 @@ wps_js.run_meta_boxes = function (list = false) {
  * @see wp-admin/js/postbox.js:107
  */
 jQuery(document).on('mouseenter mouseleave', '.wps-refresh, .wps-more', function (ev) {
-    let wordpress_postbox = jQuery('.postbox .hndle, .postbox .handlediv');
     if (ev.type === 'mouseenter') {
-        wordpress_postbox.off('click', window.postboxes.handle_click);
+        wps_js.wordpress_postbox_ajax('disable');
     } else {
-        wordpress_postbox.on('click', window.postboxes.handle_click);
+        wps_js.wordpress_postbox_ajax('enable');
     }
 });
 
