@@ -49,7 +49,7 @@ class optimization_page {
 
 		// Re-install All DB Table
 		if ( isset( $_GET['install'] ) and intval( $_GET['install'] ) == 1 ) {
-			//TODO Create new method for re-install DB
+			Install::create_table( false );
 			Helper::wp_admin_notice( __( 'Install routine complete.', "wp-statistics" ), "success" );
 		}
 

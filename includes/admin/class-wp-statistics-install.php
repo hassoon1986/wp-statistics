@@ -40,12 +40,14 @@ class Install {
 
 	/**
 	 * Adding new MYSQL Table in Activation Plugin
+     *
+	 * @param $network_wide
 	 */
 	public static function create_table( $network_wide ) {
 		global $wpdb;
 
 		if ( is_multisite() && $network_wide ) {
-			$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+			$blog_ids = $wpdb->get_col( "SELECT `blog_id` FROM $wpdb->blogs" );
 			foreach ( $blog_ids as $blog_id ) {
 
 				switch_to_blog( $blog_id );
