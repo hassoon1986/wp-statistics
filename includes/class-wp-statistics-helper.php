@@ -552,4 +552,20 @@ class Helper {
 		}
 	}
 
+	/**
+	 * Send SMS With WP-SMS Plugin
+	 *
+	 * @param $to
+	 * @param $text
+	 */
+	public static function send_sms( $to, $text ) {
+		global $sms;
+
+		if ( class_exists( get_option( 'wp_webservice' ) ) and is_plugin_active( 'wp-sms/wp-sms.php' ) ) {
+			$sms->to  = $to;
+			$sms->msg = $text;
+			$sms->SendSMS();
+		}
+	}
+
 }

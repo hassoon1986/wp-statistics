@@ -131,7 +131,7 @@ class Schedule {
 		global $wpdb;
 
 		$wpdb->insert(
-			DB::table('visit'),
+			DB::table( 'visit' ),
 			array(
 				'last_visit'   => TimeZone::getCurrentDate( null, '+1' ),
 				'last_counter' => TimeZone::getCurrentDate( 'Y-m-d', '+1' ),
@@ -185,28 +185,23 @@ class Schedule {
 	 * Send Wp-Statistics Report
 	 */
 	public function send_report() {
-		global $sms;
 
 		// apply Filter ShortCode for email content
 		$final_text_report = Option::get( 'content_report' );
 		$final_text_report = do_shortcode( $final_text_report );
 		$final_text_report = apply_filters( 'wp_statistics_final_text_report_email', $final_text_report );
 
-		// Check Email or SMS
-		if ( Option::get( 'send_report' ) == 'mail' ) {
+		// Type Send Report
+		$type = Option::get( 'send_report' );
 
-			// Send Mail
+		// If Email
+		if ( $type == 'mail' ) {
 			Helper::send_mail( Option::getEmailNotification(), __( 'Statistical reporting', 'wp-statistics' ), $final_text_report );
+		}
 
-		} else if ( Option::get( 'send_report' ) == 'sms' ) {
-
-			// Send SMS
-			if ( class_exists( get_option( 'wp_webservice' ) ) and is_plugin_active( 'wp-sms/wp-sms.php' ) ) {
-				$sms->to  = array( get_option( 'wp_admin_mobile' ) );
-				$sms->msg = $final_text_report;
-				$sms->SendSMS();
-			}
-
+		// If SMS
+		if ( $type == 'sms' ) {
+			Helper::send_sms( array( get_option( 'wp_admin_mobile' ) ), $final_text_report );
 		}
 	}
 
