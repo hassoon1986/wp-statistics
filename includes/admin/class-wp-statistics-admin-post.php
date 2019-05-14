@@ -2,78 +2,80 @@
 
 namespace WP_STATISTICS;
 
-class Editor {
+class Admin_Post {
+
+	public function __construct() {
+
+		// Get List Of WordPress Post-Type
+		$post_types = Helper::get_list_post_type();
+
+		// Add Hits Column in All Admin Post-Type Wp_List_Table
+		if ( User::Access( 'read' ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
+			foreach ( $post_types as $type ) {
+				add_action( 'manage_' . $type . '_posts_columns', array( $this, 'add_hit_column' ), 10, 2 );
+				add_action( 'manage_' . $type . '_posts_custom_column', array( $this, 'render_hit_column' ), 10, 2 );
+			}
+		}
+
+		// Add WordPress Post/Page Hit Chart Meta Box in edit Page
+		if ( User::Access( 'read' ) and ! Option::get( 'disable_editor' ) and ! Option::get( 'hit_post_metabox' ) ) {
+			foreach ( $post_types as $screen ) {
+				add_meta_box( 'wp_statistics_editor_meta_box', __( 'Hit Statistics', 'wp-statistics' ), array( $this, 'hit_chart_meta_box' ), $screen, 'normal', 'high', array( '__block_editor_compatible_meta_box' => true, '__back_compat_meta_box' => false, ) );
+			}
+		}
+
+		// Add Post Hit Number in Publish Meta Box in WordPress Edit a post/page
+		if ( Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
+			add_action( 'post_submitbox_misc_actions', array( $this, 'post_hit_misc' ) );
+		}
+
+	}
 
 	/**
-	 * Adds a box to the main column on the Post and Page edit screens.
+	 * Add a custom column to post/pages for hit statistics.
+	 *
+	 * @param array $columns Columns
+	 * @return array Columns
 	 */
-	public static function add_meta_box() {
+	public function add_hit_column( $columns ) {
+		$columns['wp-statistics'] = __( 'Hits', 'wp-statistics' );
+		return $columns;
+	}
 
-		// We need to fudge the display settings for first time users so not all of the widgets are displayed, we only want to do this on
-		// the first time they visit the dashboard though so check to see if we've been here before.
-		if ( ! Option::getUserOption( 'editor_set' ) ) {
-			Option::update_user_option( 'editor_set', WP_STATISTICS_VERSION );
-
-			$hidden_widgets = get_user_meta( User::get_user_id(), 'metaboxhidden_post', true );
-			if ( ! is_array( $hidden_widgets ) ) {
-				$hidden_widgets = array();
-			}
-
-			if ( ! in_array( 'wp_statistics_editor_meta_box', $hidden_widgets ) ) {
-				$hidden_widgets[] = 'wp_statistics_editor_meta_box';
-			}
-
-			update_user_meta( User::get_user_id(), 'metaboxhidden_post', $hidden_widgets );
-
-			$hidden_widgets = get_user_meta( User::get_user_id(), 'metaboxhidden_page', true );
-			if ( ! is_array( $hidden_widgets ) ) {
-				$hidden_widgets = array();
-			}
-
-			if ( ! in_array( 'wp_statistics_editor_meta_box', $hidden_widgets ) ) {
-				$hidden_widgets[] = 'wp_statistics_editor_meta_box';
-			}
-
-			update_user_meta( User::get_user_id(), 'metaboxhidden_page', $hidden_widgets );
-		}
-
-		// If the user does not have at least read access to the status plugin, just return without adding the widgets.
-		if ( User::Access( 'read' ) === false ) {
-			return;
-		}
-
-		// If the admin has disabled the widgets don't display them.
-		if ( Option::get( 'disable_editor' ) ) {
-			return;
-		}
-
-		// If the admin has disabled the Hit Post MetaBox.
-		if ( ! Option::get( 'hit_post_metabox' ) ) {
-			return;
-		}
-
-		//Show Hit Column in All Post Type in Wordpress
-		$screens = Helper::get_list_post_type();
-		foreach ( $screens as $screen ) {
-			add_meta_box( 'wp_statistics_editor_meta_box', __( 'Hit Statistics', 'wp-statistics' ), 'WP_Statistics_Editor::meta_box', $screen, 'normal', 'high',
-				array(
-					'__block_editor_compatible_meta_box' => true,
-					'__back_compat_meta_box'             => false,
-				)
-			);
+	/**
+	 * Render the custom column on the post/pages lists.
+	 *
+	 * @param string $column_name Column Name
+	 * @param string $post_id Post ID
+	 */
+	public function render_hit_column( $column_name, $post_id ) {
+		if ( $column_name == 'wp-statistics' ) {
+			echo "<a href='" . Menus::admin_url( 'pages', array( 'page-id' => $post_id ) ) . "'>" . wp_statistics_pages( 'total', "", $post_id ) . "</a>";
 		}
 	}
 
+	/**
+	 * Add Post Hit Number in Publish Meta Box in WordPress Edit a post/page
+	 */
+	public function post_hit_misc() {
+		global $post;
+		if ( $post->post_status == 'publish' ) {
+			echo "<div class='misc-pub-section'>" . __( 'WP Statistics - Hits', 'wp-statistics' ) . ": <b><a href='" . Menus::admin_url( 'pages', array( 'page-id' => $post->ID ) ) . "'>" . wp_statistics_pages( 'total', "", $post->ID ) . "</a></b></div>";
+		}
+	}
 
-	static function meta_box( $post ) {
-		// If the post isn't published yet, don't output the stats as they take too much memory and CPU to compute for no reason.
+	/**
+	 * Hit Chart Meta Box
+	 *
+	 * @param $post
+	 */
+	public function hit_chart_meta_box( $post ) {
 		if ( $post->post_status != 'publish' && $post->post_status != 'private' ) {
 			_e( 'This post is not yet published.', 'wp-statistics' );
-			return;
+		} else {
+			add_action( 'admin_footer', array( $this, 'inline_javascript') );
+			self::generate_postbox_contents( $post->ID, array( 'args' => array( 'widget' => 'page' ) ) );
 		}
-
-		add_action( 'admin_footer', 'WP_Statistics_Editor::inline_javascript' );
-		Editor::generate_postbox_contents( $post->ID, array( 'args' => array( 'widget' => 'page' ) ) );
 	}
 
 	static function generate_postbox_contents( $post, $args ) {
@@ -95,7 +97,7 @@ class Editor {
 		}
 	}
 
-	static function inline_javascript() {
+	public function inline_javascript() {
 		$screen = get_current_screen();
 
 		$screens = Helper::get_list_post_type();
@@ -168,4 +170,7 @@ class Editor {
 		<?php
 	}
 
+
 }
+
+new Admin_Post;

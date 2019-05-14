@@ -149,13 +149,13 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-ajax.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-dashboard.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-editor.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-export.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-uninstall.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-network.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-purge.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-assets.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-notices.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-post.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/TinyMCE/class-wp-statistics-tinymce.php';
 
 			// Admin Pages List

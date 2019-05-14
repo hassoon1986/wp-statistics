@@ -475,6 +475,16 @@ class Helper {
 	}
 
 	/**
+	 * Check WordPress Post is Published
+	 *
+	 * @param $ID
+	 * @return bool
+	 */
+	public static function IsPostPublished( $ID ) {
+		return get_post_status ( $ID ) == 'public';
+	}
+
+	/**
 	 * Generate RGBA colors
 	 *
 	 * @param        $num
