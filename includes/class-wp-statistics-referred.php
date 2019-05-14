@@ -18,6 +18,13 @@ class Referred {
 	public static $referral_detail_opt = 'wp_statistics_referrals_detail';
 
 	/**
+	 * Referrer Spam List
+	 *
+	 * @var string
+	 */
+	public static $referrer_spam_link = 'https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt';
+
+	/**
 	 * Get referer URL
 	 *
 	 * @return string
@@ -153,16 +160,12 @@ class Referred {
 	 */
 	public static function download_referrer_spam() {
 
-		// If referrer spam is disabled, bail out.
 		if ( Option::get( 'referrerspam' ) == false ) {
 			return '';
 		}
 
-		// This is the location of the file to download.
-		$download_url = 'https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt';
-
 		// Download the file from MaxMind, this places it in a temporary location.
-		$response = wp_remote_get( $download_url, array( 'timeout' => 30 ) );
+		$response = wp_remote_get( self::$referrer_spam_link, array( 'timeout' => 60 ) );
 		if ( is_wp_error( $response ) ) {
 			return false;
 		}
