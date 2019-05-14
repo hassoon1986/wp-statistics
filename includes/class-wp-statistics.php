@@ -147,7 +147,6 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-install.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-templates.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-pages.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-ajax.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-dashboard.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-editor.php';
