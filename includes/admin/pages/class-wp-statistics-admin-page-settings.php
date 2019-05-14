@@ -370,16 +370,6 @@ class settings_page {
 					$wp_statistics_options[ $new_option ] = $value;
 				}
 
-
-				// Prepare Removal
-				if ( array_key_exists( 'wps_remove_plugin', $_POST ) ) {
-					if ( is_super_admin() ) {
-						update_option( 'wp_statistics_removal', 'true' );
-						wp_redirect( admin_url( 'plugins.php' ) );
-						exit;
-					}
-				}
-
 				if ( array_key_exists( 'wps_reset_plugin', $_POST ) ) {
 
 					$default_options   = Option::defaultOption();
