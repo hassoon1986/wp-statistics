@@ -13,7 +13,8 @@ class Admin_Notices {
 		'enable_rest_api',
 		'active_geo_ip',
 		'donate_plugin',
-		'active_collation'
+		'active_collation',
+		'removal_plugin'
 	);
 
 	/**
@@ -101,6 +102,14 @@ class Admin_Notices {
 			if ( count( $active_collation ) > 0 ) {
 				Helper::wp_admin_notice( sprintf( __( 'The following features are disabled, please go to %ssettings page%s and enable them: %s', 'wp-statistics' ), '<a href="' . Menus::admin_url( 'settings' ) . '">', '</a>', implode( __( ',', 'wp-statistics' ), $active_collation ) ), 'info', true );
 			}
+		}
+	}
+
+	public function removal_plugin() {
+
+		$screen_id = Helper::get_screen_id();
+		if ( 'plugins' == $screen_id ) {
+			Helper::wp_admin_notice( __( 'WP Statistics has been removed, please disable and delete it.', 'wp-statistics' ), 'error', true );
 		}
 	}
 }

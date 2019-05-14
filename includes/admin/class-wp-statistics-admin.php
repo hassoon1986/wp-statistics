@@ -13,12 +13,6 @@ class Admin {
 			new Uninstall;
 		}
 
-		// If we've been removed, return without doing anything else.
-		if ( get_option( 'wp_statistics_removal' ) == 'done' ) {
-			add_action( 'admin_notices', array( $this, 'removal_admin_notice' ), 10, 2 );
-			return;
-		}
-
 		//Add Custom MetaBox in Wp-statistics Admin Page
 		add_action( 'add_meta_boxes', array( '\WP_STATISTICS\Editor', 'add_meta_box' ) );
 
@@ -31,26 +25,6 @@ class Admin {
 		if ( Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
 			add_action( 'post_submitbox_misc_actions', array( $this, 'post_init' ) );
 		}
-	}
-
-	/**
-	 * This adds a row after WP Statistics in the plugin page
-	 * IF we've been removed via the settings page.
-	 */
-	public function removal_admin_notice() {
-		$screen = get_current_screen();
-
-		if ( 'plugins' !== $screen->id ) {
-			return;
-		}
-
-		?>
-        <div class="error">
-            <p style="max-width:800px;"><?php
-				echo '<p>' . __( 'WP Statistics has been removed, please disable and delete it.', 'wp-statistics' ) . '</p>';
-				?></p>
-        </div>
-		<?php
 	}
 
 	/**
