@@ -146,7 +146,6 @@ final class WP_Statistics {
 
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-install.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-templates.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-ajax.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-dashboard.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-export.php';
@@ -252,7 +251,6 @@ final class WP_Statistics {
 	 * @return void
 	 */
 	public static function uninstall() {
-		delete_option( 'wp_statistics_removal' );
 	}
 
 	/**
@@ -301,9 +299,6 @@ final class WP_Statistics {
 
 		# Run in Admin
 		if ( is_admin() ) {
-
-			// TODO Seperate All Classes
-			new \WP_STATISTICS\Admin;
 
 			# Admin Menu
 			new \WP_STATISTICS\Menus;

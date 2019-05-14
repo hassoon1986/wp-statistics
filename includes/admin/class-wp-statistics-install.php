@@ -10,6 +10,10 @@ class Install {
 		add_action( 'wpmu_new_blog', array( $this, 'add_table_on_create_blog' ), 10, 1 );
 		add_filter( 'wpmu_drop_tables', array( $this, 'remove_table_on_delete_blog' ) );
 
+		// Change Plugin Action link in Plugin.php admin
+		add_filter( 'plugin_action_links_' . plugin_basename( WP_STATISTICS_MAIN_FILE ), array( $this, 'settings_links' ), 10, 2 );
+		add_filter( 'plugin_row_meta', array( $this, 'add_meta_links' ), 10, 2 );
+
 		// Page Type Updater @since 12.6
 		Install::init_page_type_updater();
 	}
@@ -254,8 +258,6 @@ class Install {
 		$default_options = Option::defaultOption();
 		$store_options   = Option::getOptions();
 
-		// If this is an upgrade, we need to check to see if we need to convert anything from old to new formats.
-		// Check to see if the "new" settings code is in place or not, if not, upgrade the old settings to the new system.
 		if ( get_option( Option::$opt_name ) === false ) {
 
 			$core_options   = array(
@@ -380,7 +382,7 @@ class Install {
 	 * @param $blog_id
 	 */
 	public function add_table_on_create_blog( $blog_id ) {
-		if ( is_plugin_active_for_network( 'wp-statistics/wp-statistics.php' ) ) {
+		if ( is_plugin_active_for_network( plugin_basename( WP_STATISTICS_MAIN_FILE ) ) ) {
 			switch_to_blog( $blog_id );
 			self::table_sql();
 			restore_current_blog();
@@ -396,6 +398,39 @@ class Install {
 	public function remove_table_on_delete_blog( $tables ) {
 		$tables[] = array_merge( $tables, DB::table( 'all' ) );
 		return $tables;
+	}
+
+	/**
+	 * Add a settings link to the plugin list.
+	 *
+	 * @param string $links Links
+	 * @param string $file Not Used!
+	 * @return string Links
+	 */
+	public function settings_links( $links, $file ) {
+		if ( User::Access( 'manage' ) ) {
+			array_unshift( $links, '<a href="' . Menus::admin_url( 'settings' ) . '">' . __( 'Settings', 'wp-statistics' ) . '</a>' );
+		}
+		return $links;
+	}
+
+	/**
+	 * Add a WordPress plugin page and rating links to the meta information to the plugin list.
+	 *
+	 * @param string $links Links
+	 * @param string $file File
+	 * @return string
+	 */
+	public function add_meta_links( $links, $file ) {
+		if ( $file == plugin_basename( WP_STATISTICS_MAIN_FILE ) ) {
+			$plugin_url = 'http://wordpress.org/plugins/wp-statistics/';
+
+			$links[]  = '<a href="' . $plugin_url . '" target="_blank" title="' . __( 'Click here to visit the plugin on WordPress.org', 'wp-statistics' ) . '">' . __( 'Visit WordPress.org page', 'wp-statistics' ) . '</a>';
+			$rate_url = 'https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post';
+			$links[]  = '<a href="' . $rate_url . '" target="_blank" title="' . __( 'Click here to rate and review this plugin on WordPress.org', 'wp-statistics' ) . '">' . __( 'Rate this plugin', 'wp-statistics' ) . '</a>';
+		}
+
+		return $links;
 	}
 
 	/**

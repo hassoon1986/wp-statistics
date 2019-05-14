@@ -21,8 +21,9 @@ class Uninstall {
 				$this->wp_statistics_site_removal();
 
 			}
-			// Make sure we don't try and remove the data more than once.
-			update_option( 'wp_statistics_removal', 'done' );
+
+
+
 		}
 
 	}

@@ -6,12 +6,9 @@ class Admin_Post {
 
 	public function __construct() {
 
-		// Get List Of WordPress Post-Type
-		$post_types = Helper::get_list_post_type();
-
 		// Add Hits Column in All Admin Post-Type Wp_List_Table
 		if ( User::Access( 'read' ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
-			foreach ( $post_types as $type ) {
+			foreach ( Helper::get_list_post_type() as $type ) {
 				add_action( 'manage_' . $type . '_posts_columns', array( $this, 'add_hit_column' ), 10, 2 );
 				add_action( 'manage_' . $type . '_posts_custom_column', array( $this, 'render_hit_column' ), 10, 2 );
 			}
@@ -19,9 +16,7 @@ class Admin_Post {
 
 		// Add WordPress Post/Page Hit Chart Meta Box in edit Page
 		if ( User::Access( 'read' ) and ! Option::get( 'disable_editor' ) and ! Option::get( 'hit_post_metabox' ) ) {
-			foreach ( $post_types as $screen ) {
-				add_meta_box( 'wp_statistics_editor_meta_box', __( 'Hit Statistics', 'wp-statistics' ), array( $this, 'hit_chart_meta_box' ), $screen, 'normal', 'high', array( '__block_editor_compatible_meta_box' => true, '__back_compat_meta_box' => false, ) );
-			}
+			add_action( 'add_meta_boxes', array( $this, 'define_post_meta_box' ) );
 		}
 
 		// Add Post Hit Number in Publish Meta Box in WordPress Edit a post/page
@@ -65,6 +60,15 @@ class Admin_Post {
 	}
 
 	/**
+	 * Define Hit Chart Meta Box
+	 */
+	public function define_post_meta_box() {
+		foreach ( Helper::get_list_post_type() as $screen ) {
+			add_meta_box( 'wp_statistics_editor_meta_box', __( 'Hit Statistics', 'wp-statistics' ), array( $this, 'hit_chart_meta_box' ), $screen, 'normal', 'high', array( '__block_editor_compatible_meta_box' => true, '__back_compat_meta_box' => false ) );
+		}
+	}
+
+	/**
 	 * Hit Chart Meta Box
 	 *
 	 * @param $post
@@ -73,7 +77,7 @@ class Admin_Post {
 		if ( $post->post_status != 'publish' && $post->post_status != 'private' ) {
 			_e( 'This post is not yet published.', 'wp-statistics' );
 		} else {
-			add_action( 'admin_footer', array( $this, 'inline_javascript') );
+			add_action( 'admin_footer', array( $this, 'inline_javascript' ) );
 			self::generate_postbox_contents( $post->ID, array( 'args' => array( 'widget' => 'page' ) ) );
 		}
 	}

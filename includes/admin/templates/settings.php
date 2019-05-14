@@ -1,8 +1,5 @@
 <div class="wrap wps-wrap wp-statistics-settings">
-	<?php use WP_STATISTICS\Admin_Helper;
-	use WP_STATISTICS\Admin_Templates;
-
-	Admin_Templates::show_page_title( __( 'Settings', 'wp-statistics' ) ); ?>
+	<?php WP_STATISTICS\Admin_Templates::show_page_title( __( 'Settings', 'wp-statistics' ) ); ?>
 
     <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-2">
@@ -21,7 +18,7 @@
                                 <li class="tab-link" data-tab="exclusions-settings"><?php _e( 'Exclusions', 'wp-statistics' ); ?></li>
                                 <li class="tab-link" data-tab="externals-settings"><?php _e( 'Externals', 'wp-statistics' ); ?></li>
                                 <li class="tab-link" data-tab="maintenance-settings"><?php _e( 'Maintenance', 'wp-statistics' ); ?></li>
-                                <li class="tab-link" data-tab="removal-settings"><?php _e( 'Removal', 'wp-statistics' ); ?></li>
+                                <li class="tab-link" data-tab="reset-settings"><?php _e( 'Reset', 'wp-statistics' ); ?></li>
 							<?php } ?>
                             <li class="tab-link" data-tab="about"><?php _e( 'About', 'wp-statistics' ); ?></li>
                         </ul>
@@ -54,8 +51,8 @@
                             <div id="maintenance-settings" class="tab-content">
 								<?php include WP_STATISTICS_DIR . 'includes/admin/templates/settings/maintenance.php'; ?>
                             </div>
-                            <div id="removal-settings" class="tab-content">
-								<?php include WP_STATISTICS_DIR . 'includes/admin/templates/settings/removal.php'; ?>
+                            <div id="reset-settings" class="tab-content">
+								<?php include WP_STATISTICS_DIR . 'includes/admin/templates/settings/reset.php'; ?>
                             </div>
 						<?php } ?>
                         <div id="about" class="tab-content">
