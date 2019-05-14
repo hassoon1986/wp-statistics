@@ -511,13 +511,16 @@ class Helper {
 	 * @param $to
 	 * @param $subject
 	 * @param $content
+	 * @param bool $email_template
 	 * @param array $args
 	 * @return bool
 	 */
-	public static function send_mail( $to, $subject, $content, $args = array() ) {
+	public static function send_mail( $to, $subject, $content, $email_template = false, $args = array() ) {
 
 		// Email Template
-		$email_template = wp_normalize_path( WP_STATISTICS_DIR . 'includes/admin/templates/email.php' );
+		if ( ! $email_template ) {
+			$email_template = wp_normalize_path( WP_STATISTICS_DIR . 'includes/admin/templates/email.php' );
+		}
 
 		// Set To Admin
 		if ( $to == "admin" ) {
