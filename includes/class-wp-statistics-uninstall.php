@@ -4,28 +4,21 @@ namespace WP_STATISTICS;
 
 class Uninstall {
 
-	function __construct() {
-		if ( is_admin() ) {
+	public function __construct() {
+		global $wpdb;
 
-			// Handle multi site implementations
 			if ( is_multisite() ) {
 
-				// Loop through each of the sites.
-				$sites = Helper::get_wp_sites_list();
-				foreach ( $sites as $blog_id ) {
+				$blog_ids = $wpdb->get_col( "SELECT `blog_id` FROM $wpdb->blogs" );
+				foreach ( $blog_ids as $blog_id ) {
 					switch_to_blog( $blog_id );
 					$this->wp_statistics_site_removal();
+					restore_current_blog();
 				}
-				restore_current_blog();
+
 			} else {
 				$this->wp_statistics_site_removal();
-
 			}
-
-
-
-		}
-
 	}
 
 	/**

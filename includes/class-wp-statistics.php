@@ -56,7 +56,7 @@ final class WP_Statistics {
 		 * Install And Upgrade plugin
 		 */
 		register_activation_hook( __FILE__, array( $this, 'install' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'uninstall' ) );
+		register_uninstall_hook( __FILE__, array( $this, 'uninstall' ) );
 
 		/**
 		 * wp-statistics loaded
@@ -144,12 +144,11 @@ final class WP_Statistics {
 		// Admin classes
 		if ( is_admin() ) {
 
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-install.php';
+			require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-templates.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-ajax.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-dashboard.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-export.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-uninstall.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-network.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-purge.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-assets.php';
@@ -179,7 +178,7 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-frontend.php';
 		}
 
-		// WP-Cli
+		// WP-CLI
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-cli.php';
 		}
@@ -237,10 +236,11 @@ final class WP_Statistics {
 	/**
 	 * Create tables on plugin activation
 	 *
-	 * @global object $wpdb
+	 * @param object $network_wide
 	 */
 	public static function install( $network_wide ) {
-		require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-install.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-db.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
 		$installer = new \WP_STATISTICS\Install();
 		$installer->install( $network_wide );
 	}
@@ -251,6 +251,9 @@ final class WP_Statistics {
 	 * @return void
 	 */
 	public static function uninstall() {
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-db.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-uninstall.php';
+		new \WP_STATISTICS\Uninstall();
 	}
 
 	/**
