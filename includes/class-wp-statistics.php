@@ -56,7 +56,7 @@ final class WP_Statistics {
 		 * Install And Upgrade plugin
 		 */
 		register_activation_hook( __FILE__, array( $this, 'install' ) );
-		register_uninstall_hook( __FILE__, array( $this, 'uninstall' ) );
+		register_uninstall_hook( __FILE__, array( 'WP_Statistics', 'uninstall' ) );
 
 		/**
 		 * wp-statistics loaded
