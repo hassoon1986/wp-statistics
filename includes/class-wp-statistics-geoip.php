@@ -304,22 +304,11 @@ class GeoIP {
 			}
 		}
 
+		// Send Email
 		if ( Option::get( 'geoip_report' ) == true ) {
-			$blogname  = get_bloginfo( 'name' );
-			$blogemail = get_bloginfo( 'admin_email' );
-
-			$headers[] = "From: $blogname <$blogemail>";
-			$headers[] = "MIME-Version: 1.0";
-			$headers[] = "Content-type: text/html; charset=utf-8";
-
-			if ( Option::get( 'email_list' ) == '' ) {
-				Option::update( 'email_list', $blogemail );
-			}
-
-			wp_mail( Option::get( 'email_list' ), __( 'GeoIP update on', 'wp-statistics' ) . ' ' . $blogname, $result['notice'], $headers );
+			Helper::send_mail( Option::getEmailNotification(), __( 'GeoIP update on', 'wp-statistics' ) . ' ' . get_bloginfo( 'name' ), $result['notice'] );
 		}
 
-		// All of the messages displayed above are stored in a string, now it's time to actually output the messages.
 		return $result;
 	}
 

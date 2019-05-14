@@ -4,11 +4,8 @@ namespace WP_STATISTICS;
 
 class Schedule {
 
-	/**
-	 * Schedule constructor.
-	 */
 	public function __construct() {
-		
+
 		// Define New Cron Schedules Time in WordPress
 		add_filter( 'cron_schedules', array( $this, 'define_schedules_time' ) );
 
@@ -16,7 +13,7 @@ class Schedule {
 		if ( is_admin() ) {
 
 			//Disable Run to Ajax
-			if ( ! Helper::is_request('ajax') ) {
+			if ( ! Helper::is_request( 'ajax' ) ) {
 
 				// Add the GeoIP update schedule if it doesn't exist and it should be.
 				if ( ! wp_next_scheduled( 'wp_statistics_geoip_hook' ) && Option::get( 'schedule_geoip' ) && Option::get( 'geoip' ) ) {
@@ -127,16 +124,14 @@ class Schedule {
 		return $schedules;
 	}
 
-
 	/**
 	 * adds a record for tomorrow to the visit table to avoid a race condition.
-	 *
 	 */
 	public function add_visit_event() {
 		global $wpdb;
 
 		$wpdb->insert(
-			$wpdb->prefix . 'statistics_visit',
+			DB::table('visit'),
 			array(
 				'last_visit'   => TimeZone::getCurrentDate( null, '+1' ),
 				'last_counter' => TimeZone::getCurrentDate( 'Y-m-d', '+1' ),
@@ -151,32 +146,21 @@ class Schedule {
 	 */
 	public function geoip_event() {
 
-		// Maxmind updates the geoip database on the first Tuesday of the month, to make sure we don't update before they post
-		// the update, download it two days later.
-		$thisupdate = strtotime( __( 'First Tuesday of this month', 'wp-statistics' ) ) + ( 86400 * 2 );
+		// Max-mind updates the geo-ip database on the first Tuesday of the month, to make sure we don't update before they post
+		$this_update = strtotime( __( 'First Tuesday of this month', 'wp-statistics' ) ) + ( 86400 * 2 );
+		$last_update = Option::get( 'last_geoip_dl' );
 
-		$lastupdate = Option::get( 'last_geoip_dl' );
-
-		$upload_dir = wp_upload_dir();
-
-		// We're also going to look to see if our filesize is to small, this means the plugin stub still exists and should
-		// be replaced with a proper file.
 		$is_require_update = false;
-		foreach ( GeoIP::$library as $geoip_name => $geoip_array ) {
-			$file_path = $upload_dir['basedir'] . '/wp-statistics/' . GeoIP::$library[ $geoip_name ]['file'] . '.mmdb';
+		foreach ( GeoIP::$library as $geo_ip => $value ) {
+			$file_path = GeoIP::get_geo_ip_path( $geo_ip );
 			if ( file_exists( $file_path ) ) {
-				if ( $lastupdate < $thisupdate ) {
+				if ( $last_update < $this_update ) {
 					$is_require_update = true;
 				}
 			}
 		}
 
-
 		if ( $is_require_update === true ) {
-
-			// We can't fire the download function directly here as we rely on some functions that haven't been loaded yet
-			// in WordPress, so instead just set the flag in the options table and the shutdown hook will take care of the
-			// actual download at the end of the page.
 			Option::update( 'update_geoip', true );
 		}
 	}
@@ -198,38 +182,26 @@ class Schedule {
 	}
 
 	/**
-	 * Sends the statistics report to the selected users.
+	 * Send Wp-Statistics Report
 	 */
 	public function send_report() {
 		global $sms;
 
-		// Retrieve the template from the options.
+		// apply Filter ShortCode for email content
 		$final_text_report = Option::get( 'content_report' );
-
-		// Process shortcodes in the template.  Note that V8.0 upgrade script replaced the old %option% codes with the appropriate short codes.
 		$final_text_report = do_shortcode( $final_text_report );
 		$final_text_report = apply_filters( 'wp_statistics_final_text_report_email', $final_text_report );
 
-		// Send the report through the selected transport agent.
+		// Check Email or SMS
 		if ( Option::get( 'send_report' ) == 'mail' ) {
 
-			$blogname  = get_bloginfo( 'name' );
-			$blogemail = get_bloginfo( 'admin_email' );
-
-			$headers[] = "From: $blogname <$blogemail>";
-			$headers[] = "MIME-Version: 1.0";
-			$headers[] = "Content-type: text/html; charset=utf-8";
-
-			if ( Option::get( 'email_list' ) == '' ) {
-				Option::update( 'email_list', $blogemail );
-			}
-
-			wp_mail( Option::get( 'email_list' ), __( 'Statistical reporting', 'wp-statistics' ), $final_text_report, $headers );
+			// Send Mail
+			Helper::send_mail( Option::getEmailNotification(), __( 'Statistical reporting', 'wp-statistics' ), $final_text_report );
 
 		} else if ( Option::get( 'send_report' ) == 'sms' ) {
 
+			// Send SMS
 			if ( class_exists( get_option( 'wp_webservice' ) ) and is_plugin_active( 'wp-sms/wp-sms.php' ) ) {
-
 				$sms->to  = array( get_option( 'wp_admin_mobile' ) );
 				$sms->msg = $final_text_report;
 				$sms->SendSMS();

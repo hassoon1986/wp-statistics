@@ -481,7 +481,7 @@ class Helper {
 	 * @return bool
 	 */
 	public static function IsPostPublished( $ID ) {
-		return get_post_status ( $ID ) == 'public';
+		return get_post_status( $ID ) == 'public';
 	}
 
 	/**
@@ -503,6 +503,50 @@ class Helper {
 			hexdec( substr( $hash, 4, 2 ) ),
 			$opacity
 		);
+	}
+
+	/**
+	 * Send Email
+	 *
+	 * @param $to
+	 * @param $subject
+	 * @param $content
+	 * @param array $args
+	 * @return bool
+	 */
+	public static function send_mail( $to, $subject, $content, $args = array() ) {
+
+		// Email Template
+		$email_template = wp_normalize_path( WP_STATISTICS_DIR . 'includes/admin/templates/email.php' );
+
+		// Set To Admin
+		if ( $to == "admin" ) {
+			$to = get_bloginfo( 'admin_email' );
+		}
+
+		// Email from
+		$from_name  = get_bloginfo( 'name' );
+		$from_email = get_bloginfo( 'admin_email' );
+
+		//Template Arg
+		$template_arg = array(
+			'title'       => $subject,
+			'logo'        => '',
+			'content'     => $content,
+			'site_url'    => home_url(),
+			'site_title'  => get_bloginfo( 'name' ),
+			'footer_text' => '',
+			'is_rtl'      => ( is_rtl() ? true : false )
+		);
+		$arg          = wp_parse_args( $args, $template_arg );
+
+		//Send Email
+		try {
+			\WP_Statistics_Mail::init()->from( '' . $from_name . ' <' . $from_email . '>' )->to( $to )->subject( $subject )->template( $email_template, $arg )->send();
+			return true;
+		} catch ( \Exception $e ) {
+			return false;
+		}
 	}
 
 }

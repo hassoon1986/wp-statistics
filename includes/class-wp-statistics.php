@@ -119,6 +119,7 @@ final class WP_Statistics {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-option.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-helper.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-mail.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-schedule.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-shortcode.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-widget.php';

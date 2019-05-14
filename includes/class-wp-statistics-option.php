@@ -223,4 +223,17 @@ class Option {
 		return $condition;
 	}
 
+	/**
+	 * Get Email For Send notification
+	 *
+	 * @return string
+	 */
+	public static function getEmailNotification() {
+		if ( Option::get( 'email_list' ) == '' ) {
+			Option::update( 'email_list', get_bloginfo( 'admin_email' ) );
+		}
+
+		return Option::get( 'email_list' );
+	}
+
 }
