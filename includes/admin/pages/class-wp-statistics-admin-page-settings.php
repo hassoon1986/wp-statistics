@@ -87,6 +87,16 @@ class settings_page {
 	}
 
 	/**
+	 * Convert input name to Option
+	 *
+	 * @param $name
+	 * @return mixed
+	 */
+	public static function input_name_to_option( $name ) {
+		return str_replace( "wps_", "", $name );
+	}
+
+	/**
 	 * Save Privacy Option
 	 *
 	 * @param $wp_statistics_options
@@ -106,13 +116,7 @@ class settings_page {
 		}
 
 		foreach ( $wps_option_list as $option ) {
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$new_option                           = str_replace( "wps_", "", $option );
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
 
 		return $wp_statistics_options;
@@ -150,15 +154,7 @@ class settings_page {
 		);
 
 		foreach ( $wps_option_list as $option ) {
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$value = stripslashes( $value );
-
-			$new_option                           = str_replace( "wps_", "", $option );
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? stripslashes( $_POST[ $option ] ) : '' );
 		}
 
 		return $wp_statistics_options;
@@ -171,20 +167,10 @@ class settings_page {
 	 * @return mixed
 	 */
 	public static function save_dashboard_option( $wp_statistics_options ) {
-
 		$wps_option_list = array( 'wps_disable_map', 'wps_disable_dashboard', 'wps_disable_editor' );
-
 		foreach ( $wps_option_list as $option ) {
-			$new_option = str_replace( 'wps_', '', $option );
-
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
-
 
 		return $wp_statistics_options;
 	}
@@ -196,22 +182,14 @@ class settings_page {
 	 * @return mixed
 	 */
 	public static function save_maintenance_option( $wp_statistics_options ) {
-
 		$wps_option_list = array(
 			'wps_schedule_dbmaint',
 			'wps_schedule_dbmaint_days',
 			'wps_schedule_dbmaint_visitor',
 			'wps_schedule_dbmaint_visitor_hits',
 		);
-
 		foreach ( $wps_option_list as $option ) {
-			$new_option = str_replace( "wps_", "", $option );
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
 
 		return $wp_statistics_options;
@@ -248,13 +226,7 @@ class settings_page {
 		}
 
 		foreach ( $wps_option_list as $option ) {
-			$new_option = str_replace( "wps_", "", $option );
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
 
 		// Check Is Checked GEO-IP and Download
@@ -293,16 +265,8 @@ class settings_page {
 
 		// Save Exclude Role
 		foreach ( User::get_role_list() as $role ) {
-			$role_post = 'wps_exclude_' . str_replace( " ", "_", strtolower( $role ) );
-
-			if ( array_key_exists( $role_post, $_POST ) ) {
-				$value = $_POST[ $role_post ];
-			} else {
-				$value = '';
-			}
-
-			$new_option                           = str_replace( "wps_", "", $role_post );
-			$wp_statistics_options[ $new_option ] = $value;
+			$role_post                                                         = 'wps_exclude_' . str_replace( " ", "_", strtolower( $role ) );
+			$wp_statistics_options[ self::input_name_to_option( $role_post ) ] = ( isset( $_POST[ $role_post ] ) ? $_POST[ $role_post ] : '' );
 		}
 
 		// Save HoneyPot
@@ -339,14 +303,7 @@ class settings_page {
 		);
 
 		foreach ( $wps_option_list as $option ) {
-			$new_option = str_replace( "wps_", "", $option );
-
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
 
 		return $wp_statistics_options;
@@ -359,17 +316,9 @@ class settings_page {
 	 * @return mixed
 	 */
 	public static function save_access_level_option( $wp_statistics_options ) {
-
 		$wps_option_list = array( 'wps_read_capability', 'wps_manage_capability' );
 		foreach ( $wps_option_list as $option ) {
-			$new_option = str_replace( "wps_", "", $option );
-
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
 
 		return $wp_statistics_options;
@@ -418,13 +367,7 @@ class settings_page {
 		foreach ( $selist as $se ) {
 			$se_post = 'wps_disable_se_' . $se['tag'];
 
-			if ( array_key_exists( $se_post, $_POST ) ) {
-				$value = $_POST[ $se_post ];
-			} else {
-				$value = '';
-			}
-			$new_option                           = str_replace( "wps_", "", $se_post );
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $se_post ) ] = ( isset( $_POST[ $se_post ] ) ? $_POST[ $se_post ] : '' );
 		}
 
 		$wps_option_list = array(
@@ -455,13 +398,7 @@ class settings_page {
 		}
 
 		foreach ( $wps_option_list as $option ) {
-			if ( array_key_exists( $option, $_POST ) ) {
-				$value = $_POST[ $option ];
-			} else {
-				$value = '';
-			}
-			$new_option                           = str_replace( "wps_", "", $option );
-			$wp_statistics_options[ $new_option ] = $value;
+			$wp_statistics_options[ self::input_name_to_option( $option ) ] = ( isset( $_POST[ $option ] ) ? $_POST[ $option ] : '' );
 		}
 
 		//Add Visitor RelationShip Table
