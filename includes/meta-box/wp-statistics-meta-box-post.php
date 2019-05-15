@@ -3,19 +3,30 @@
 namespace WP_STATISTICS\MetaBox;
 
 use WP_STATISTICS\Option;
+use WP_STATISTICS\RestApi;
 use WP_STATISTICS\TimeZone;
 
 class post {
 
 	public static function get( $args = array() ) {
-		global $post;
+
+		// Set Not Publish Content
+		$not_publish = array( 'content' => __( 'This post is not yet published.', 'wp-statistics' ) );
+
+		// Check Isset POST ID
+		if ( ! isset( $args['ID'] ) || $args['ID'] < 1 ) {
+			return $not_publish;
+		}
+
+		// Get Post Information
+		$post = get_post( $args['ID'] );
 
 		// Check Number Days
 		$days = ( isset( $args['days'] ) ? $args['days'] : 20 );
 
 		// Check Not Publish Post
 		if ( $post->post_status != 'publish' && $post->post_status != 'private' ) {
-			return array( 'content' => __( 'This post is not yet published.', 'wp-statistics' ) );
+			return $not_publish;
 		}
 
 		// Prepare Object
@@ -47,7 +58,7 @@ class post {
 		);
 
 		// Check For No Data Meta Box
-		if ( count( array_filter( $response['state'] ) ) ) {
+		if ( count( array_filter( $response['state'] ) ) < 1 ) {
 			$response['no_data'] = 1;
 		}
 

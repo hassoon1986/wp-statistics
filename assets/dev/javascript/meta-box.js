@@ -173,10 +173,16 @@ wps_js.run_meta_box = function (key, params = false) {
             // Get Meta Box Data
             let arg = {'name': key};
             if (params !== false) {
-                arg = jQuery.extend({}, params, arg);
+                arg = Object.assign(params, arg);
             }
-            wps_js.ajaxQ('metabox', arg, method, 'error_meta_box_data');
 
+            // Check Request Params in Meta box
+            if ("params" in wps_js[method]) {
+                arg = Object.assign(arg, wps_js[method]['params']());
+            }
+
+            // Run
+            wps_js.ajaxQ('metabox', arg, method, 'error_meta_box_data');
         }
     }
 };

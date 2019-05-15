@@ -29,7 +29,7 @@ gulp.task('script', function () {
         './assets/dev/javascript/pages/*.js',
         './assets/dev/javascript/run.js',
     ])
-        .pipe(concat('admin.js'))
+        .pipe(concat('admin.min.js'))
         .pipe(insert.prepend('jQuery(document).ready(function ($) {'))
         .pipe(insert.append('});'))
         .pipe(gulp.dest('./assets/js/'))
@@ -43,16 +43,18 @@ gulp.task('script', function () {
 
 // Gulp Gutenberg Script
 gulp.task('gutenberg', function () {
-    return gulp.src(['./assets/dev/javascript/gutenberg/gutenberg.js'])
-        .pipe(concat('gutenberg.js'))
-        .pipe(gulp.dest('./assets/js/'))
-        .pipe(babel({presets: ['@babel/env']}))
-        .pipe(replace("\\n", ''))
-        .pipe(replace("\\t", ''))
-        .pipe(replace("  ", ''))
-        .pipe(uglify())
-        .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest('./assets/js/'));
+    return gulp.src(['./assets/dev/javascript/gutenberg/*.js'])
+        .pipe(concat('gutenberg.min.js'))
+        .pipe(insert.prepend('document.addEventListener(\'DOMContentLoaded\', function(){'))
+        .pipe(insert.append('});'))
+        .pipe(gulp.dest('./assets/js/')).pipe(babel({presets: ['@babel/env']})).pipe(replace("\\n", '')).pipe(replace("\\t", '')).pipe(replace("  ", '')).pipe(uglify()).pipe(gulp.dest('./assets/js/'));
+});
+
+// Gulp TinyMce Script
+gulp.task('mce', function () {
+    return gulp.src(['./assets/dev/javascript/Tinymce/*.js'])
+        .pipe(concat('tinymce.min.js'))
+        .pipe(gulp.dest('./assets/js/')).pipe(babel({presets: ['@babel/env']})).pipe(replace("\\n", '')).pipe(replace("\\t", '')).pipe(replace("  ", '')).pipe(uglify()).pipe(gulp.dest('./assets/js/'));
 });
 
 // Gulp Script Minify
@@ -80,4 +82,4 @@ gulp.task('css', function () {
 });
 
 // global Task
-gulp.task('default', gulp.parallel('sass', 'script'));
+gulp.task('default', gulp.parallel('sass', 'script', 'gutenberg', 'mce'));

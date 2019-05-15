@@ -174,7 +174,6 @@ class Meta_Box {
 				'name'              => __( 'Hit Statistics', 'wp-statistics' ),
 				'page_url'          => 'pages',
 				'show_on_dashboard' => false,
-				'js'                => ( Helper::is_gutenberg() ? false : true ),
 				'disable_overview'  => true
 			)
 		);

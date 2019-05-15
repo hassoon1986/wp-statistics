@@ -2,8 +2,6 @@
 
 namespace WP_STATISTICS;
 
-use WP_STATISTICS\MetaBox\post;
-
 class Admin_Post {
 	/**
 	 * Hits Chart Post/page Meta Box
