@@ -159,7 +159,7 @@ class Admin_Assets {
 		}
 
 		// Load Admin Js
-		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $hook, array( 'post.php', 'edit.php' ) ) and ! Option::get( 'disable_editor' ) ) ) {
+		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $hook, array( 'post.php', 'edit.php' ) ) and ! Option::get( 'disable_editor' ) and ! Helper::is_gutenberg() ) ) {
 			wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
 			wp_localize_script( self::$prefix, 'wps_global', self::wps_global( $hook ) );
 		}
@@ -169,12 +169,11 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.js' ), array( 'jquery' ), self::version() );
 		}
 
-		// Load Editors Script
-		if ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) {
-			wp_enqueue_script( self::$prefix . '-editor', self::url( 'editor.js' ), array( 'jquery' ), self::version() );
+		// Load Gutenberg Script
+		if ( in_array( $hook, array( 'post.php', 'edit.php' ) ) and ! Option::get( 'disable_editor' ) ) {
+			wp_enqueue_script( self::$prefix . '-gutenberg', self::url( 'gutenberg.min.js' ), self::version() );
 		}
 
-		//TODO Remove Editor.js
 	}
 
 	/**
@@ -184,6 +183,7 @@ class Admin_Assets {
 	 * @return mixed
 	 */
 	public static function wps_global( $hook ) {
+		global $post;
 
 		// Date Format
 		$list['date_format'] = array(
@@ -255,8 +255,13 @@ class Admin_Assets {
 				$value['page_url'] = Menus::admin_url( $value['page_url'] );
 			}
 
+			// Add Post ID Params To Post Widget Link
+			if ( $meta_box == "post" and isset( $post ) and in_array( $post->post_status, array( "publish", "private" ) ) ) {
+				$value['page_url'] = add_query_arg( 'page-id', $post->ID, $value['page_url'] );
+			}
+
 			// Remove unnecessary params
-			foreach ( array( 'show_on_dashboard', 'hidden', 'place', 'require', 'js' ) as $param ) {
+			foreach ( array( 'show_on_dashboard', 'hidden', 'place', 'require', 'js', 'disable_overview' ) as $param ) {
 				unset( $value[ $param ] );
 			}
 

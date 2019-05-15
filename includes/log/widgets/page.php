@@ -40,11 +40,7 @@ function wp_statistics_generate_page_postbox_content(
 		$urlfields .= "&page-uri={$pageuri}";
 	}
 
-	list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_range_calculator(
-		$days,
-		$rangestart,
-		$rangeend
-	);
+	list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_range_calculator( $days, $rangestart, $rangeend );
 	$daysInThePast = round( ( time() - $rangeend_utime ) / 86400, 0 );
 
 	for ( $i = $days; $i >= 0; $i -- ) {

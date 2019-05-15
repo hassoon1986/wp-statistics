@@ -41,6 +41,20 @@ gulp.task('script', function () {
         .pipe(gulp.dest('./assets/js/'));
 });
 
+// Gulp Gutenberg Script
+gulp.task('gutenberg', function () {
+    return gulp.src(['./assets/dev/javascript/gutenberg/gutenberg.js'])
+        .pipe(concat('gutenberg.js'))
+        .pipe(gulp.dest('./assets/js/'))
+        .pipe(babel({presets: ['@babel/env']}))
+        .pipe(replace("\\n", ''))
+        .pipe(replace("\\t", ''))
+        .pipe(replace("  ", ''))
+        .pipe(uglify())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest('./assets/js/'));
+});
+
 // Gulp Script Minify
 gulp.task('js', function () {
     return gulp.src(['./assets/js/*.js', '!./assets/js/*.min.js'])

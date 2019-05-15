@@ -38,6 +38,7 @@ class Meta_Box {
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-hitsmap.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-useronline.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-about.php';
+		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-post.php';
 	}
 
 	/**
@@ -169,6 +170,13 @@ class Meta_Box {
 				'js'                => false,
 				'place'             => 'side'
 			),
+			'post'         => array(
+				'name'              => __( 'Hit Statistics', 'wp-statistics' ),
+				'page_url'          => 'pages',
+				'show_on_dashboard' => false,
+				'js'                => ( Helper::is_gutenberg() ? false : true ),
+				'disable_overview'  => true
+			)
 		);
 
 		//Print List of Meta Box

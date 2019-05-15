@@ -2,8 +2,19 @@
 
 namespace WP_STATISTICS;
 
-class Admin_Post {
+use WP_STATISTICS\MetaBox\post;
 
+class Admin_Post {
+	/**
+	 * Hits Chart Post/page Meta Box
+	 *
+	 * @var string
+	 */
+	public static $hits_chart_post_meta_box = 'post';
+
+	/**
+	 * Admin_Post constructor.
+	 */
 	public function __construct() {
 
 		// Add Hits Column in All Admin Post-Type Wp_List_Table
@@ -63,8 +74,16 @@ class Admin_Post {
 	 * Define Hit Chart Meta Box
 	 */
 	public function define_post_meta_box() {
+
+		// Get MetaBox information
+		$metaBox = Meta_Box::getList( self::$hits_chart_post_meta_box );
+
+		// Check Method to run Post Hits Meta Box
+		$method = ( Helper::is_gutenberg() ? array( $this, 'hit_chart_meta_box' ) : Meta_Box::LoadMetaBox( self::$hits_chart_post_meta_box ) );
+
+		// Add MEtaBox To all Post Type
 		foreach ( Helper::get_list_post_type() as $screen ) {
-			add_meta_box( 'wp_statistics_editor_meta_box', __( 'Hit Statistics', 'wp-statistics' ), array( $this, 'hit_chart_meta_box' ), $screen, 'normal', 'high', array( '__block_editor_compatible_meta_box' => true, '__back_compat_meta_box' => false ) );
+			add_meta_box( Meta_Box::getMetaBoxKey( self::$hits_chart_post_meta_box ), $metaBox['name'], $method, $screen, 'normal', 'high', array( '__block_editor_compatible_meta_box' => true, '__back_compat_meta_box' => false ) );
 		}
 	}
 
@@ -75,30 +94,24 @@ class Admin_Post {
 	 */
 	public function hit_chart_meta_box( $post ) {
 		if ( $post->post_status != 'publish' && $post->post_status != 'private' ) {
-			_e( 'This post is not yet published.', 'wp-statistics' );
+			echo '<div class="wps-center" style="padding: 15px;">' . __( 'This post is not yet published.', 'wp-statistics' ) . '</div>';
 		} else {
-			add_action( 'admin_footer', array( $this, 'inline_javascript' ) );
-			self::generate_postbox_contents( $post->ID, array( 'args' => array( 'widget' => 'page' ) ) );
+			self::post_hits_chart_meta_box( $post, array( 'args' => array( 'widget' => 'page' ) ) );
 		}
 	}
 
-	static function generate_postbox_contents( $post, $args ) {
-		if ( Helper::is_gutenberg() ) {
-			//If Gutenberg Editor
-			if ( isset( $_GET['post'] ) and ! empty( $_GET['post'] ) ) {
-				echo '<div class="wps-gutenberg-chart-js">';
-				require( WP_STATISTICS_DIR . 'includes/log/widgets/page.php' );
-				wp_statistics_generate_page_postbox_content( null, $_GET['post'] );
-				echo '</div>';
-				echo '<style>button#wp_statistics_editor_meta_box_more_button { z-index: 9999;position: absolute;top: 1px;right: 3%;}</style>';
-			}
-		} else {
-			$widget       = $args['args']['widget'];
-			$container_id = 'wp-statistics-' . str_replace( '.', '-', $widget ) . '-div';
-			echo '<div id="' . $container_id . '">' . Admin_Templates::loading_meta_box() . '</div>';
-			echo '<script type="text/javascript">var wp_statistics_current_id = \'' . $post . '\';</script>';
-			wp_statistics_generate_widget_load_javascript( $widget, $container_id );
-		}
+	/**
+	 * Show Post Hits Chart
+	 *
+	 * @param $post
+	 * @param $args
+	 */
+	public static function post_hits_chart_meta_box( $post, $args ) {
+		echo '<div class="' . ( Helper::is_gutenberg() ? 'wps-gutenberg-chart-js' : '' ) . '">';
+
+
+		echo '</div>';
+		echo '<style>button#wp_statistics_editor_meta_box_more_button { z-index: 9999;position: absolute;top: 1px;right: 3%;}</style>';
 	}
 
 	public function inline_javascript() {
