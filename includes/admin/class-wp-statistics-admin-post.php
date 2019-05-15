@@ -7,7 +7,7 @@ class Admin_Post {
 	public function __construct() {
 
 		// Add Hits Column in All Admin Post-Type Wp_List_Table
-		if ( User::Access( 'read' ) && Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
+		if ( User::Access( 'read' ) and Option::get( 'pages' ) and ! Option::get( 'disable_column' ) ) {
 			foreach ( Helper::get_list_post_type() as $type ) {
 				add_action( 'manage_' . $type . '_posts_columns', array( $this, 'add_hit_column' ), 10, 2 );
 				add_action( 'manage_' . $type . '_posts_custom_column', array( $this, 'render_hit_column' ), 10, 2 );
@@ -15,12 +15,12 @@ class Admin_Post {
 		}
 
 		// Add WordPress Post/Page Hit Chart Meta Box in edit Page
-		if ( User::Access( 'read' ) and ! Option::get( 'disable_editor' ) and ! Option::get( 'hit_post_metabox' ) ) {
+		if ( User::Access( 'read' ) and ! Option::get( 'disable_editor' ) ) {
 			add_action( 'add_meta_boxes', array( $this, 'define_post_meta_box' ) );
 		}
 
 		// Add Post Hit Number in Publish Meta Box in WordPress Edit a post/page
-		if ( Option::get( 'pages' ) && ! Option::get( 'disable_column' ) ) {
+		if ( Option::get( 'pages' ) and Option::get( 'hit_post_metabox' ) ) {
 			add_action( 'post_submitbox_misc_actions', array( $this, 'post_hit_misc' ) );
 		}
 

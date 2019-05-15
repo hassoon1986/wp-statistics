@@ -126,14 +126,16 @@ class Admin_Assets {
 
 	/**
 	 * Enqueue scripts.
+	 *
+	 * @param $hook [ Page Now ]
 	 */
-	public function admin_scripts() {
+	public function admin_scripts( $hook ) {
 
 		// Get Current Screen ID
 		$screen_id = Helper::get_screen_id();
 
 		// Load Chart Js Library [ Load in <head> Tag ]
-		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and Option::get( 'hit_post_metabox' ) ) ) {
+		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $hook, array( 'post.php', 'edit.php' ) ) and ! Option::get( 'disable_editor' ) ) ) {
 			wp_enqueue_script( self::$prefix . '-chart.js', self::url( 'chartjs/chart.bundle.min.js' ), false, '2.8.0', false );
 		}
 
@@ -157,9 +159,9 @@ class Admin_Assets {
 		}
 
 		// Load Admin Js
-		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $screen_id, array( 'post', 'page' ) ) and ! Option::get( 'disable_editor' ) ) ) {
+		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $hook, array( 'post.php', 'edit.php' ) ) and ! Option::get( 'disable_editor' ) ) ) {
 			wp_enqueue_script( self::$prefix, self::url( 'admin.js' ), array( 'jquery' ), self::version() );
-			wp_localize_script( self::$prefix, 'wps_global', self::wps_global() );
+			wp_localize_script( self::$prefix, 'wps_global', self::wps_global( $hook ) );
 		}
 
 		// Load TinyMCE for Widget Page
@@ -177,8 +179,11 @@ class Admin_Assets {
 
 	/**
 	 * Prepare global WP-Statistics data for use Admin Js
+	 *
+	 * @param $hook
+	 * @return mixed
 	 */
-	public static function wps_global() {
+	public static function wps_global( $hook ) {
 
 		// Date Format
 		$list['date_format'] = array(
@@ -194,7 +199,9 @@ class Admin_Assets {
 			'visits'        => ( Option::get( 'visits' ) ? 1 : 0 ),
 			'geo_ip'        => ( GeoIP::active() ? 1 : 0 ),
 			'geo_city'      => ( GeoIP::active( 'geoip_city' ) ? 1 : 0 ),
-			'overview_page' => ( Menus::in_page( 'overview' ) ? 1 : 0 )
+			'overview_page' => ( Menus::in_page( 'overview' ) ? 1 : 0 ),
+			'gutenberg'     => ( Helper::is_gutenberg() ? 1 : 0 ),
+			'page_now'      => $hook
 		);
 
 		// Global Lang
@@ -249,8 +256,9 @@ class Admin_Assets {
 			}
 
 			// Remove unnecessary params
-			unset( $value['show_on_dashboard'] );
-			unset( $value['hidden'] );
+			foreach ( array( 'show_on_dashboard', 'hidden', 'place', 'require', 'js' ) as $param ) {
+				unset( $value[ $param ] );
+			}
 
 			// Add Meta Box Lang
 			$class = Meta_Box::getMetaBoxClass( $meta_box );

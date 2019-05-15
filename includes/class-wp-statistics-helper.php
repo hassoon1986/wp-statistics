@@ -245,10 +245,7 @@ class Helper {
 	 */
 	public static function is_gutenberg() {
 		$current_screen = get_current_screen();
-		if ( ( method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor() ) || ( function_exists( 'is_gutenberg_page' ) ) && is_gutenberg_page() ) {
-			return true;
-		}
-		return false;
+		return ( ( method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor() ) || ( function_exists( 'is_gutenberg_page' ) ) && is_gutenberg_page() );
 	}
 
 	/**
@@ -557,15 +554,15 @@ class Helper {
 	 *
 	 * @param $to
 	 * @param $text
+	 * @return bool
 	 */
 	public static function send_sms( $to, $text ) {
-		global $sms;
-
-		if ( class_exists( get_option( 'wp_webservice' ) ) and is_plugin_active( 'wp-sms/wp-sms.php' ) ) {
-			$sms->to  = $to;
-			$sms->msg = $text;
-			$sms->SendSMS();
+		if ( function_exists( 'wp_sms_send' ) ) {
+			$run = wp_sms_send( $to, $text );
+			return ( is_wp_error( $run ) ? false : true );
 		}
+
+		return false;
 	}
 
 }

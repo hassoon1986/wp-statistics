@@ -7,9 +7,7 @@
 <table class="form-table">
     <tbody>
     <tr valign="top">
-        <th scope="row" colspan="2"><h3><?php use WP_STATISTICS\RestApi;
-
-		        _e( 'Online Users', 'wp-statistics' ); ?></h3></th>
+        <th scope="row" colspan="2"><h3><?php _e( 'Online Users', 'wp-statistics' ); ?></h3></th>
     </tr>
 
     <tr valign="top">
@@ -169,6 +167,19 @@
 		<?php
 	}
 	?>
+
+    <tr valign="top">
+        <th scope="row">
+            <label for="disable_column"><?php _e( 'Hits chart', 'wp-statistics' ); ?></label>
+        </th>
+
+        <td>
+            <input id="disable-editor" type="checkbox" value="1" name="wps_disable_editor" <?php echo WP_STATISTICS\Option::get( 'disable_editor' ) == true ? "checked='checked'" : ''; ?>>
+            <label for="disable-editor"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
+            <p class="description"><?php _e( 'Show Hit Chart in the WordPress page/post editor.', 'wp-statistics' ); ?></p>
+        </td>
+    </tr>
+
     <tr valign="top">
         <th scope="row">
             <label for="disable_column"><?php _e( 'Hits column', 'wp-statistics' ); ?></label>
@@ -178,22 +189,19 @@
             <input id="disable_column" type="checkbox" value="1" name="wps_disable_column" <?php echo WP_STATISTICS\Option::get( 'disable_column' ) == true
 				? "checked='checked'" : ''; ?>>
             <label for="disable_column"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
+            <p class="description"><?php _e( 'Enable or disable show page/post hits number column.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
-
     <tr valign="top">
         <th scope="row">
-            <label for="hit_post_metabox"><?php _e( 'Hit metabox chart:', 'wp-statistics' ); ?></label>
+            <label for="hit_post_metabox"><?php _e( 'Hits in submit box:', 'wp-statistics' ); ?></label>
         </th>
 
         <td>
             <input id="hit_post_metabox" type="checkbox" value="1" name="wps_hit_post_metabox" <?php echo WP_STATISTICS\Option::get( 'hit_post_metabox' ) == true ? "checked='checked'" : ''; ?>>
             <label for="hit_post_metabox"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e( 'Show hits meta box chart in the edit of all post types page.', 'wp-statistics' ); ?></p>
+            <p class="description"><?php _e( 'Show hits number in the page/post submit box.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -260,7 +268,7 @@
             <label for="use_cache_plugin"><?php _e( 'Yes', 'wp-statistics' ); ?></label>
 
             <p class="description"><?php _e( 'If you use WordPress Cache Plugins, enable this option.', 'wp-statistics' ); ?></p>
-            <p class="description"><?php echo sprintf( __( 'To register WP-Statistics REST API endpoint  ( %s ) , go to the <a href="%s">Permalink page</a> and update the permalink with press Save Changes.', 'wp-statistics' ), RestApi::$namespace, admin_url( 'options-permalink.php' ) ); ?></p>
+            <p class="description"><?php echo sprintf( __( 'To register WP-Statistics REST API endpoint  ( %s ) , go to the <a href="%s">Permalink page</a> and update the permalink with press Save Changes.', 'wp-statistics' ),  WP_STATISTICS\RestApi::$namespace, admin_url( 'options-permalink.php' ) ); ?></p>
             <p class="description"><?php echo __( 'Don\'t forget to clear your enabled plugin cache.', 'wp-statistics' ); ?></p>
         </td>
     </tr>

@@ -31,32 +31,6 @@ if ( $wps_admin ) {
         </tr>
 
         <tr valign="top">
-            <th scope="row" colspan="2"><h3><?php _e( 'Page/Post Editor', 'wp-statistics' ); ?></h3></th>
-        </tr>
-
-        <tr valign="top">
-            <td scope="row" colspan="2"><?php _e(
-					'The following items are global to all users.',
-					'wp-statistics'
-				); ?></td>
-        </tr>
-
-        <tr valign="top">
-            <th scope="row">
-                <label for="disable-map"><?php _e( 'Disable post/page editor widget:', 'wp-statistics' ); ?></label>
-            </th>
-
-            <td>
-                <input id="disable-editor" type="checkbox" value="1"
-                       name="wps_disable_editor" <?php echo WP_STATISTICS\Option::get( 'disable_editor' ) == true
-					? "checked='checked'" : ''; ?>>
-                <label for="disable-editor"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
-
-                <p class="description"><?php _e( 'Disable the page/post editor widget.', 'wp-statistics' ); ?></p>
-            </td>
-        </tr>
-
-        <tr valign="top">
             <th scope="row" colspan="2"><h3><?php _e( 'Map', 'wp-statistics' ); ?></h3></th>
         </tr>
 
