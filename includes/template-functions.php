@@ -1046,26 +1046,6 @@ function wp_statistics_date_range_calculator( $days, $start, $end ) {
 }
 
 /**
- * // TODO Remove At last
- * This function creates a small JavaScript that will load the contents of a overview or dashboard widget.
- *
- * @param $widget
- * @param null $container_id
- */
-function wp_statistics_generate_widget_load_javascript( $widget, $container_id = null ) {
-	if ( null == $container_id ) {
-		$container_id = str_replace( '.', '_', $widget . '_postbox' );
-	}
-	?>
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            wp_statistics_get_widget_contents('<?php echo $widget; ?>', '<?php echo $container_id; ?>');
-        });
-    </script>
-	<?php
-}
-
-/**
  * Modify For IGNORE insert Query
  *
  * @hook add_action('query', function_name, 10);

@@ -159,7 +159,7 @@ class Admin_Assets {
 		}
 
 		// Load Admin Js
-		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $hook, array( 'post.php', 'edit.php', 'post-new.php' ) ) and ! Option::get( 'disable_editor' ) and ! Helper::is_gutenberg() ) ) {
+		if ( Menus::in_plugin_page() || ( in_array( $screen_id, array( 'dashboard' ) ) and ! Option::get( 'disable_dashboard' ) ) || ( in_array( $hook, array( 'post.php', 'edit.php', 'post-new.php' ) ) and ! Option::get( 'disable_editor' ) ) ) {
 			wp_enqueue_script( self::$prefix, self::url( 'admin.min.js' ), array( 'jquery' ), self::version() );
 			wp_localize_script( self::$prefix, 'wps_global', self::wps_global( $hook ) );
 		}
@@ -170,9 +170,10 @@ class Admin_Assets {
 		}
 
 		// Load Gutenberg Script
-		if ( in_array( $hook, array( 'post.php', 'edit.php', 'post-new.php' ) ) and ! Option::get( 'disable_editor' ) and Helper::is_gutenberg() ) {
-			wp_enqueue_script( self::$prefix . '-gutenberg', self::url( 'gutenberg.min.js' ), self::version() );
-		}
+//		if ( in_array( $hook, array( 'post.php', 'edit.php', 'post-new.php' ) ) and ! Option::get( 'disable_editor' ) and Helper::is_gutenberg() ) {
+//			wp_enqueue_script( self::$prefix . '-gutenberg', self::url( 'gutenberg.min.js' ), false, self::version() );
+//			wp_localize_script( self::$prefix . '-gutenberg', 'wps_global', self::wps_global( $hook ) );
+//		}
 
 	}
 
@@ -206,7 +207,7 @@ class Admin_Assets {
 		// WordPress Current Page
 		$list['page'] = array(
 			'file' => $hook,
-			'ID'       => ( isset( $post ) ? $post->ID : 0 )
+			'ID'   => ( isset( $post ) ? $post->ID : 0 )
 		);
 
 		// Global Lang

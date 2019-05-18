@@ -128,15 +128,18 @@ wps_js.meta_box_button = function (key) {
     let selector = "#" + wps_js.getMetaBoxKey(key) + " button[class=handlediv]";
     let meta_box_info = wps_js.get_meta_box_info(key);
 
+    // Gutenberg Button Style
+    let gutenberg_style = 'z-index: 9999;position: absolute;top: 1px;';
+
     // Clean Button
     jQuery("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh], #" + wps_js.getMetaBoxKey(key) + " button[class*=wps-more]").remove();
 
     // Add Refresh Button
-    jQuery(`<button class="handlediv button-link wps-refresh" type="button"><span class="dashicons dashicons-update"></span> <span class="screen-reader-text">` + wps_js._('reload') + `</span></button>`).insertAfter(selector);
+    jQuery(`<button class="handlediv button-link wps-refresh"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 3%;" ` : '') + ` type="button"><span class="dashicons dashicons-update"></span> <span class="screen-reader-text">` + wps_js._('reload') + `</span></button>`).insertAfter(selector);
 
     // Check Page Url Button
     if ("page_url" in meta_box_info) {
-        jQuery(`<button class="handlediv button-link wps-more" type="button" onclick="location.href = '` + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
+        jQuery(`<button class="handlediv button-link wps-more"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 7%;" ` : '') + ` type="button" onclick="location.href = '` + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
     }
 };
 
@@ -149,7 +152,7 @@ wps_js.meta_box_button = function (key) {
 wps_js.run_meta_box = function (key, params = false) {
 
     // Check Exist Meta Box div
-    if (wps_js.exist_tag("#" + wps_js.getMetaBoxKey(key)) && jQuery("#" + wps_js.getMetaBoxKey(key)).is(":visible")) {
+    if (wps_js.exist_tag("#" + wps_js.getMetaBoxKey(key)) && (wps_js.is_active('gutenberg') || (!wps_js.is_active('gutenberg') && jQuery("#" + wps_js.getMetaBoxKey(key)).is(":visible")))) {
 
         // Meta Box Main
         let main = jQuery(wps_js.meta_box_inner(key));

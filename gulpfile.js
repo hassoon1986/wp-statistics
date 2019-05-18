@@ -41,15 +41,6 @@ gulp.task('script', function () {
         .pipe(gulp.dest('./assets/js/'));
 });
 
-// Gulp Gutenberg Script
-gulp.task('gutenberg', function () {
-    return gulp.src(['./assets/dev/javascript/gutenberg/*.js'])
-        .pipe(concat('gutenberg.min.js'))
-        .pipe(insert.prepend('document.addEventListener(\'DOMContentLoaded\', function(){'))
-        .pipe(insert.append('});'))
-        .pipe(gulp.dest('./assets/js/')).pipe(babel({presets: ['@babel/env']})).pipe(replace("\\n", '')).pipe(replace("\\t", '')).pipe(replace("  ", '')).pipe(uglify()).pipe(gulp.dest('./assets/js/'));
-});
-
 // Gulp TinyMce Script
 gulp.task('mce', function () {
     return gulp.src(['./assets/dev/javascript/Tinymce/*.js'])
@@ -82,4 +73,4 @@ gulp.task('css', function () {
 });
 
 // global Task
-gulp.task('default', gulp.parallel('sass', 'script', 'gutenberg', 'mce'));
+gulp.task('default', gulp.parallel('sass', 'script', 'mce'));
