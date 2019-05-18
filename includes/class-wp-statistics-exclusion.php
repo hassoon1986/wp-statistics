@@ -36,7 +36,7 @@ class Exclusion {
 	 *
 	 * @return mixed
 	 */
-	public static function active() {
+	public static function record_active() {
 		return Option::get( 'record_exclusions' );
 	}
 
@@ -73,18 +73,13 @@ class Exclusion {
 		global $wpdb;
 
 		// If we're not storing exclusions, just return.
-		if ( self::active() != true ) {
+		if ( self::record_active() != true ) {
 			return;
 		}
 
 		// Check Exist this Exclusion in this day
 		$result = $wpdb->query( "UPDATE " . DB::table( 'exclusions' ) . " SET `count` = `count` + 1 WHERE `date` = '" . TimeZone::getCurrentDate( 'Y-m-d' ) . "' AND `reason` = '{$exclusion['exclusion_reason']}'" );
 		if ( ! $result ) {
-
-			// Action Before Save Exclusion
-			do_action( 'wp_statistics_before_save_exclusion', $exclusion );
-
-			// Add to DB
 			$wpdb->insert( DB::table( 'exclusions' ),
 				array(
 					'date'   => TimeZone::getCurrentDate( 'Y-m-d' ),
@@ -92,6 +87,8 @@ class Exclusion {
 					'count'  => 1,
 				)
 			);
+
+			do_action( 'wp_statistics_save_exclusion', $exclusion, $wpdb->insert_id );
 		}
 	}
 
@@ -99,7 +96,7 @@ class Exclusion {
 	 * Detect if we're running an ajax request.
 	 */
 	public static function exclusion_ajax() {
-		return defined( 'DOING_AJAX' ) && DOING_AJAX;
+		return ( Option::get( 'exclude_ajax' ) and defined( 'DOING_AJAX' ) and DOING_AJAX );
 	}
 
 	/**
@@ -113,28 +110,22 @@ class Exclusion {
 	 * Detect if WordPress Feed.
 	 */
 	public static function exclusion_feed() {
-		return Option::get( 'exclude_feeds' ) and is_feed();
+		return ( Option::get( 'exclude_feeds' ) and is_feed() );
 	}
 
 	/**
 	 * Detect if WordPress 404 Page.
 	 */
 	public static function exclusion_404() {
-		return Option::get( 'exclude_404s' ) and is_404();
+		return ( Option::get( 'exclude_404s' ) and is_404() );
 	}
 
 	/**
 	 * Detect if honeypot.
 	 */
 	public static function exclusion_honeypot() {
-
-		// Get Current Page detail
 		$current_page = Pages::get_page_type();
-		if ( Option::get( 'use_honeypot' ) && Option::get( 'honeypot_postid' ) > 0 && Option::get( 'honeypot_postid' ) == $current_page['id'] && $current_page['id'] > 0 ) {
-			return true;
-		}
-
-		return false;
+		return ( Option::get( 'use_honeypot' ) && Option::get( 'honeypot_postid' ) > 0 && Option::get( 'honeypot_postid' ) == $current_page['id'] && $current_page['id'] > 0 );
 	}
 
 	/**
@@ -249,16 +240,22 @@ class Exclusion {
 	public static function exclusion_login_page() {
 
 		if ( Option::get( 'exclude_loginpage' ) ) {
+
+			// Check From global WordPress
+			if ( isset( $GLOBALS['pagenow'] ) and $GLOBALS['pagenow'] == "wp-login.php" ) {
+				return true;
+			}
+
+			// Check Native php
 			$protocol = strpos( strtolower( $_SERVER['SERVER_PROTOCOL'] ), 'https' ) === false ? 'http' : 'https';
 			$host     = $_SERVER['HTTP_HOST'];
 			$script   = $_SERVER['SCRIPT_NAME'];
-
 			$currentURL = $protocol . '://' . $host . $script;
 			$loginURL   = wp_login_url();
-
 			if ( $currentURL == $loginURL ) {
 				return true;
 			}
+
 		}
 
 		return false;

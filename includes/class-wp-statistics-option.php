@@ -35,31 +35,36 @@ class Option {
 	 */
 	public static function defaultOption( $option_name = null ) {
 
-		$options                          = array();
-		$options['robotlist']             = Helper::get_robots_list();
-		$options['anonymize_ips']         = false;
-		$options['geoip']                 = false;
-		$options['useronline']            = true;
-		$options['visits']                = true;
-		$options['visitors']              = true;
-		$options['pages']                 = true;
-		$options['check_online']          = UserOnline::$reset_user_time;
-		$options['menu_bar']              = false;
-		$options['coefficient']           = Visitor::$coefficient;
-		$options['stats_report']          = false;
-		$options['time_report']           = 'daily';
-		$options['send_report']           = 'mail';
-		$options['content_report']        = '';
-		$options['update_geoip']          = true;
-		$options['store_ua']              = false;
-		$options['exclude_administrator'] = true;
-		$options['disable_se_clearch']    = true;
-		$options['disable_se_qwant']      = true;
-		$options['disable_se_baidu']      = true;
-		$options['disable_se_ask']        = true;
-		$options['map_type']              = 'jqvmap';
-		$options['force_robot_update']    = true;
-		$options['ip_method']             = 'REMOTE_ADDR';
+		$options = array(
+			'robotlist'             => Helper::get_robots_list(),
+			'anonymize_ips'         => false,
+			'geoip'                 => false,
+			'useronline'            => true,
+			'visits'                => true,
+			'visitors'              => true,
+			'pages'                 => true,
+			'check_online'          => UserOnline::$reset_user_time,
+			'menu_bar'              => false,
+			'coefficient'           => Visitor::$coefficient,
+			'stats_report'          => false,
+			'time_report'           => 'daily',
+			'send_report'           => 'mail',
+			'content_report'        => '',
+			'update_geoip'          => true,
+			'store_ua'              => false,
+			'exclude_administrator' => true,
+			'disable_se_clearch'    => true,
+			'disable_se_qwant'      => true,
+			'disable_se_baidu'      => true,
+			'disable_se_ask'        => true,
+			'map_type'              => 'jqvmap',
+			'force_robot_update'    => true,
+			'ip_method'             => 'REMOTE_ADDR',
+			'exclude_ajax'          => true,
+			'exclude_loginpage'     => true,
+			'exclude_adminpage'     => true,
+			'exclude_404s'          => true,
+		);
 
 		if ( $option_name and isset( $options[ $option_name ] ) ) {
 			return $options[ $option_name ];
