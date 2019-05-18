@@ -36,36 +36,6 @@ class Admin_Templates {
 	}
 
 	/**
-	 * //TODO Remove At Last
-	 * Show MetaBox button Refresh/Direct Button Link in Top of Meta Box
-	 *
-	 * @param string $export
-	 * @return string
-	 */
-	public static function meta_box_button( $export = 'all' ) {
-
-		//Prepare button
-		$refresh = '</button><button class="handlediv button-link wps-refresh" type="button">' . Admin_Templates::icons( 'dashicons-update' ) . '<span class="screen-reader-text">' . __( 'Reload', 'wp-statistics' ) . '</span></button>';
-		$more    = '<button class="handlediv button-link wps-more" type="button">' . Admin_Templates::icons( 'dashicons-external' ) . '<span class="screen-reader-text">' . __( 'More Details', 'wp-statistics' ) . '</span></button>';
-
-		//Export
-		if ( $export == 'all' ) {
-			return $refresh . $more;
-		} else {
-			return $$export;
-		}
-	}
-
-	/**
-	 *  //TODO Remove At Last
-	 * Show Loading Meta Box
-	 */
-	public static function loading_meta_box() {
-		$loading = '<div class="wps_loading_box"><img src=" ' . plugins_url( 'wp-statistics/assets/images/' ) . 'loading.svg" alt="' . __( 'Reloading...', 'wp-statistics' ) . '"></div>';
-		return $loading;
-	}
-
-	/**
 	 * Get Current Paged
 	 *
 	 * @return float|int
