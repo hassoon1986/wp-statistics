@@ -104,3 +104,5 @@ class Admin_Notices {
 		}
 	}
 }
+
+new Admin_Notices;

@@ -169,12 +169,6 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.min.js' ), array( 'jquery' ), self::version() );
 		}
 
-		// Load Gutenberg Script
-//		if ( in_array( $hook, array( 'post.php', 'edit.php', 'post-new.php' ) ) and ! Option::get( 'disable_editor' ) and Helper::is_gutenberg() ) {
-//			wp_enqueue_script( self::$prefix . '-gutenberg', self::url( 'gutenberg.min.js' ), false, self::version() );
-//			wp_localize_script( self::$prefix . '-gutenberg', 'wps_global', self::wps_global( $hook ) );
-//		}
-
 	}
 
 	/**
@@ -285,3 +279,5 @@ class Admin_Assets {
 	}
 
 }
+
+new Admin_Assets;

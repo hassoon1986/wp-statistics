@@ -364,3 +364,5 @@ class Menus {
 	}
 
 }
+
+new Menus;

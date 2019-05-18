@@ -86,3 +86,5 @@ class AdminBar {
 		}
 	}
 }
+
+new AdminBar;

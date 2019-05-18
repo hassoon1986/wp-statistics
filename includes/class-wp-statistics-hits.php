@@ -269,3 +269,5 @@ class Hits {
 	}
 
 }
+
+new Hits;

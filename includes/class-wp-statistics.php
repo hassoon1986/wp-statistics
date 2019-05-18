@@ -116,16 +116,14 @@ final class WP_Statistics {
 		// Utility classes.
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-db.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-timezone.php';
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-option.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-helper.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-mail.php';
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-schedule.php';
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-shortcode.php';
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-widget.php';
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-meta-box.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-menus.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-meta-box.php';
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-admin-bar.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
 
 		// Hits Class
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-country.php';
@@ -166,13 +164,19 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-online.php';
 		}
 
+		// WordPress ShortCode and Widget
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-shortcode.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-widget.php';
+
 		// Meta Box List
 		\WP_STATISTICS\Meta_Box::includes();
 
 		// Rest-Api
-		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-rest-api.php';
 		require_once WP_STATISTICS_DIR . 'includes/api/v2/class-wp-statistics-api-hit.php';
 		require_once WP_STATISTICS_DIR . 'includes/api/v2/class-wp-statistics-api-meta-box.php';
+
+		// WordPress Cron
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-schedule.php';
 
 		// Front Class.
 		if ( ! is_admin() ) {
@@ -265,9 +269,6 @@ final class WP_Statistics {
 	 */
 	public function instantiate() {
 
-		# Sanitize WP-Statistics Data
-		$this->container['hits'] = new \WP_STATISTICS\Hits();
-
 		# Get Country Codes
 		$this->container['country_codes'] = \WP_STATISTICS\Country::getList();
 
@@ -291,65 +292,6 @@ final class WP_Statistics {
 
 		# Referer
 		$this->container['referred'] = \WP_STATISTICS\Referred::get();
-
-		# Load WordPress ShortCode
-		new \WP_STATISTICS\Shortcode;
-
-		# Load WordPress Cron
-		new \WP_STATISTICS\Schedule;
-
-		# Admin Bar
-		new \WP_STATISTICS\AdminBar;
-
-		# Run in Admin
-		if ( is_admin() ) {
-
-			# Admin Menu
-			new \WP_STATISTICS\Menus;
-
-			# Admin Asset
-			new \WP_STATISTICS\Admin_Assets;
-
-			# Admin Export Class
-			new \WP_STATISTICS\Export;
-
-			# Admin Ajax
-			new \WP_STATISTICS\Ajax;
-
-			# Admin Meta Box
-			new \WP_STATISTICS\Meta_Box;
-
-			# Admin Dashboard Widget
-			new \WP_STATISTICS\Admin_Dashboard;
-
-			# MultiSite Admin
-			if ( is_multisite() ) {
-				$this->container['admin_network'] = new \WP_STATISTICS\Network;
-			}
-
-			# Welcome Screen
-			new \WP_STATISTICS\Welcome;
-
-			# Setting Pages
-			new \WP_STATISTICS\settings_page;
-
-			# optimization Page
-			new \WP_STATISTICS\optimization_page;
-
-			# Admin Notice
-			new \WP_STATISTICS\Admin_Notices;
-		}
-
-		# Rest API
-		new \WP_STATISTICS\RestApi;
-		new \WP_STATISTICS\Api\v2\Hit;
-		new \WP_STATISTICS\Api\v2\Meta_Box;
-
-
-		# Run in Frontend
-		if ( ! is_admin() ) {
-			new WP_STATISTICS\Frontend;
-		}
 	}
 
 }

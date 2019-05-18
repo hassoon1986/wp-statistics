@@ -82,3 +82,5 @@ class Admin_Dashboard {
 		update_user_meta( User::get_user_id(), $hidden_opt, $hidden_widgets );
 	}
 }
+
+new Admin_Dashboard;

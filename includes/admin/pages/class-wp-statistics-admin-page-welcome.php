@@ -122,3 +122,5 @@ class Welcome {
 		}
 	}
 }
+
+new Welcome;

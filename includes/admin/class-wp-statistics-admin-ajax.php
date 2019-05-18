@@ -59,7 +59,7 @@ class Ajax {
 			if ( $agent ) {
 
 				$result = $wpdb->query(
-					$wpdb->prepare( "DELETE FROM {$wpdb->prefix}statistics_visitor WHERE `agent` = %s", $agent )
+					$wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `agent` = %s", $agent )
 				);
 
 				if ( $result ) {
@@ -93,7 +93,7 @@ class Ajax {
 			if ( $platform ) {
 
 				$result = $wpdb->query(
-					$wpdb->prepare( "DELETE FROM {$wpdb->prefix}statistics_visitor WHERE `platform` = %s", $platform )
+					$wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `platform` = %s", $platform )
 				);
 
 				if ( $result ) {
@@ -237,3 +237,5 @@ class Ajax {
 	}
 
 }
+
+new Ajax;

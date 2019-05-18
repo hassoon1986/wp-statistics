@@ -58,3 +58,5 @@ class Meta_Box extends \WP_STATISTICS\RestApi {
 	}
 
 }
+
+new Meta_Box;

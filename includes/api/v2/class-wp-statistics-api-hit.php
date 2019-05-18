@@ -105,3 +105,5 @@ class Hit extends \WP_STATISTICS\RestApi {
 		return self::response( 'Missing connect parameter.', 400 );
 	}
 }
+
+new Hit;

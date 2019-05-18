@@ -69,3 +69,5 @@ class optimization_page {
 	}
 
 }
+
+new optimization_page;

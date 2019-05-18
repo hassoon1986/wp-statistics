@@ -510,3 +510,5 @@ class settings_page {
 
 	}
 }
+
+new settings_page;

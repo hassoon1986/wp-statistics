@@ -118,3 +118,5 @@ class Network {
 		echo "<script>window.location.href = '$url';</script>";
 	}
 }
+
+new Network;

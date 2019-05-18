@@ -720,4 +720,4 @@ class Install {
 	}
 }
 
-new Install();
+new Install;

@@ -117,3 +117,5 @@ class Export {
 	}
 
 }
+
+new Export;

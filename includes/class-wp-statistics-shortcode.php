@@ -23,7 +23,7 @@ class ShortCode {
 	 * it. provider = the search provider to get stats on. format = i18n, english, none. id = the page/post id to get
 	 * stats on.
 	 *
-	 *  @param $atts
+	 * @param $atts
 	 * @return array|false|int|null|object|string|void
 	 */
 	public function shortcodes( $atts ) {
@@ -133,7 +133,7 @@ class ShortCode {
 
 		// ShortCake support if loaded.
 		if ( function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
-			$se_list =SearchEngine::getList();
+			$se_list = SearchEngine::getList();
 
 			$se_options = array( '' => 'None' );
 
@@ -223,3 +223,5 @@ class ShortCode {
 		}
 	}
 }
+
+new ShortCode;

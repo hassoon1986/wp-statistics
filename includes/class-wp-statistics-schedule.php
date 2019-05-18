@@ -205,5 +205,6 @@ class Schedule {
 		}
 	}
 
-
 }
+
+new Schedule;

@@ -139,4 +139,4 @@ class TinyMCE {
 	}
 }
 
-new TinyMCE();
+new TinyMCE;

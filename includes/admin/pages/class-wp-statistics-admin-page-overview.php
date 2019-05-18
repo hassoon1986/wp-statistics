@@ -5,7 +5,6 @@ namespace WP_STATISTICS;
 class log_page {
 
 	public function __construct() {
-
 		add_action( 'load-' . Menus::get_action_menu_slug( 'overview' ), array( $this, 'meta_box_init' ) );
 	}
 
