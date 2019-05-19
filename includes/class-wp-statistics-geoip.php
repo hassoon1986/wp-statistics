@@ -16,13 +16,15 @@ class GeoIP {
 			'cdn'    => 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz',
 			'github' => 'https://raw.githubusercontent.com/wp-statistics/GeoLite2-Country/master/GeoLite2-Country.mmdb.gz',
 			'file'   => 'GeoLite2-Country',
-			'opt'    => 'geoip'
+			'opt'    => 'geoip',
+			'cache'  => 31536000 //1 Year
 		),
 		'city'    => array(
 			'cdn'    => 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz',
 			'github' => 'https://raw.githubusercontent.com/wp-statistics/GeoLite2-City/master/GeoLite2-City.mmdb.gz',
 			'file'   => 'GeoLite2-City',
-			'opt'    => 'geoip_city'
+			'opt'    => 'geoip_city',
+			'cache'  => 13996000 //6 Month
 		)
 	);
 
@@ -117,6 +119,19 @@ class GeoIP {
 	 */
 	public static function getCountry( $ip = false, $return = 'isoCode' ) {
 
+		// Check in WordPress Cache
+		$user_country = wp_cache_get( 'user-country', 'wp-statistics' );
+		if ( $user_country != false ) {
+			return $user_country;
+		}
+
+		// Check in WordPress Database
+		$user_country = self::getUserCountryFromDB( $ip );
+		if ( $user_country != false ) {
+			wp_cache_set( 'user-country', $user_country, 'wp-statistics', 30 );
+			return $user_country;
+		}
+
 		// Default Country Name
 		$default_country = self::getDefaultCountryCode();
 
@@ -160,10 +175,28 @@ class GeoIP {
 
 		# Check Has Location
 		if ( isset( $location ) and ! empty( $location ) ) {
+			wp_cache_set( 'user-country', $location, 'wp-statistics', 30 );
 			return $location;
 		}
 
 		return $default_country;
+	}
+
+	/**
+	 * Get User Country From Database
+	 *
+	 * @param $ip
+	 * @return false|string
+	 */
+	public static function getUserCountryFromDB( $ip ) {
+		global $wpdb;
+		$date = date( 'Y-m-d', current_time( 'timestamp' ) - self::$library['country']['cache'] );
+		$user = $wpdb->get_row( "SELECT `location` FROM " . DB::table( 'visitor' ) . " WHERE `ip` = '{$ip}' and `last_counter` >= '{$date}' ORDER BY `ID` DESC LIMIT 1" );
+		if ( null !== $user ) {
+			return $user->location;
+		}
+
+		return false;
 	}
 
 	/**
@@ -398,6 +431,12 @@ class GeoIP {
 	 */
 	public static function getCity( $ip = false, $return = 'name' ) {
 
+		// Check in WordPress Cache
+		$user_city = wp_cache_get( 'user-city', 'wp-statistics' );
+		if ( $user_city != false ) {
+			return $user_city;
+		}
+
 		// Default City Name
 		$default_city = __( 'Unknown', 'wp-statistics' );
 
@@ -434,6 +473,7 @@ class GeoIP {
 
 		# Check Has Location
 		if ( isset( $location ) and ! empty( $location ) ) {
+			wp_cache_set( 'user-city', $location, 'wp-statistics', 30 );
 			return $location;
 		}
 
