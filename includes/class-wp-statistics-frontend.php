@@ -130,8 +130,6 @@ class Frontend {
 	 * @throws \Exception
 	 */
 	public function record_hits() {
-
-		// Disable if User Active cache Plugin
 		if ( ! Option::get( 'use_cache_plugin' ) ) {
 			Hits::record();
 		}

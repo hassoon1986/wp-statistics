@@ -71,6 +71,31 @@ class Helper {
 	}
 
 	/**
+	 * Check is Login Page
+	 *
+	 * @return bool
+	 */
+	public static function is_login_page() {
+
+		// Check From global WordPress
+		if ( isset( $GLOBALS['pagenow'] ) and $GLOBALS['pagenow'] == "wp-login.php" ) {
+			return true;
+		}
+
+		// Check Native php
+		$protocol   = strpos( strtolower( $_SERVER['SERVER_PROTOCOL'] ), 'https' ) === false ? 'http' : 'https';
+		$host       = $_SERVER['HTTP_HOST'];
+		$script     = $_SERVER['SCRIPT_NAME'];
+		$currentURL = $protocol . '://' . $host . $script;
+		$loginURL   = wp_login_url();
+		if ( $currentURL == $loginURL ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Show Admin Wordpress Ui Notice
 	 *
 	 * @param $text

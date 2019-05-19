@@ -89,6 +89,11 @@ class Pages {
 			$current_page['type'] = "404";
 		}
 
+		// Add WordPress Feed
+		if ( is_feed() ) {
+			$current_page['type'] = "feed";
+		}
+
 		return apply_filters( 'wp_statistics_current_page', $current_page );
 	}
 
@@ -318,6 +323,9 @@ class Pages {
 						'link'      => get_author_posts_url( $page_id ),
 						'edit_link' => get_edit_user_link( $page_id ),
 					);
+					break;
+				case "feed":
+					$result['title'] = __( 'Feed', 'wp-statistics' );
 					break;
 				case "search":
 					$result['title'] = __( 'Search Page', 'wp-statistics' );

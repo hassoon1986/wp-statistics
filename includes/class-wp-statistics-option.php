@@ -60,10 +60,9 @@ class Option {
 			'map_type'              => 'jqvmap',
 			'force_robot_update'    => true,
 			'ip_method'             => 'REMOTE_ADDR',
-			'exclude_ajax'          => true,
 			'exclude_loginpage'     => true,
-			'exclude_adminpage'     => true,
 			'exclude_404s'          => true,
+			'exclude_feeds'         => true,
 		);
 
 		if ( $option_name and isset( $options[ $option_name ] ) ) {

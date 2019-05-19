@@ -287,7 +287,6 @@ class settings_page {
 			'wps_robotlist',
 			'wps_exclude_ip',
 			'wps_exclude_loginpage',
-			'wps_exclude_adminpage',
 			'wps_force_robot_update',
 			'wps_excluded_countries',
 			'wps_included_countries',
@@ -299,7 +298,6 @@ class settings_page {
 			'wps_excluded_urls',
 			'wps_exclude_404s',
 			'wps_corrupt_browser_info',
-			'wps_exclude_ajax'
 		);
 
 		foreach ( $wps_option_list as $option ) {

@@ -96,7 +96,7 @@ class Exclusion {
 	 * Detect if we're running an ajax request.
 	 */
 	public static function exclusion_ajax() {
-		return ( Option::get( 'exclude_ajax' ) and defined( 'DOING_AJAX' ) and DOING_AJAX );
+		return ( defined( 'DOING_AJAX' ) and DOING_AJAX );
 	}
 
 	/**
@@ -132,14 +132,8 @@ class Exclusion {
 	 * Detect if robot threshold.
 	 */
 	public static function exclusion_robot_threshold() {
-
-		// Check Current visitor
 		$visitor = Visitor::exist_ip_in_day( ( IP::getHashIP() != false ? IP::getHashIP() : IP::StoreIP() ) );
-		if ( $visitor != false and Option::get( 'robot_threshold' ) > 0 && $visitor->hits + 1 > Option::get( 'robot_threshold' ) ) {
-			return true;
-		}
-
-		return false;
+		return ( $visitor != false and Option::get( 'robot_threshold' ) > 0 && $visitor->hits + 1 > Option::get( 'robot_threshold' ) );
 	}
 
 	/**
@@ -238,27 +232,7 @@ class Exclusion {
 	 * Detect if WordPress Login Page.
 	 */
 	public static function exclusion_login_page() {
-
-		if ( Option::get( 'exclude_loginpage' ) ) {
-
-			// Check From global WordPress
-			if ( isset( $GLOBALS['pagenow'] ) and $GLOBALS['pagenow'] == "wp-login.php" ) {
-				return true;
-			}
-
-			// Check Native php
-			$protocol = strpos( strtolower( $_SERVER['SERVER_PROTOCOL'] ), 'https' ) === false ? 'http' : 'https';
-			$host     = $_SERVER['HTTP_HOST'];
-			$script   = $_SERVER['SCRIPT_NAME'];
-			$currentURL = $protocol . '://' . $host . $script;
-			$loginURL   = wp_login_url();
-			if ( $currentURL == $loginURL ) {
-				return true;
-			}
-
-		}
-
-		return false;
+		return ( Option::get( 'exclude_loginpage' ) and Helper::is_login_page() );
 	}
 
 	/**
@@ -266,7 +240,7 @@ class Exclusion {
 	 */
 	public static function exclusion_admin_page() {
 
-		if ( Option::get( 'exclude_adminpage' ) and isset( $_SERVER['SERVER_NAME'] ) and isset( $_SERVER['REQUEST_URI'] ) ) {
+		if ( isset( $_SERVER['SERVER_NAME'] ) and isset( $_SERVER['REQUEST_URI'] ) ) {
 			if ( stristr( $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], "wp-admin" ) ) {
 				return true;
 			}

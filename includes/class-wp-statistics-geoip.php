@@ -56,7 +56,7 @@ class GeoIP {
 	 * @return mixed
 	 */
 	public static function get_geo_ip_path( $pack ) {
-		return path_join( Helper::get_uploads_dir( WP_STATISTICS_UPLOADS_DIR ), self::$library[ strtolower( $pack ) ]['file'] . '.' . self::$file_extension );
+		return wp_normalize_path( path_join( Helper::get_uploads_dir( WP_STATISTICS_UPLOADS_DIR ), self::$library[ strtolower( $pack ) ]['file'] . '.' . self::$file_extension ) );
 	}
 
 	/**
@@ -69,6 +69,7 @@ class GeoIP {
 	public static function active( $which = false, $CheckDBFile = true ) {
 
 		//Default Geo-Ip Option name
+		$which = ( $which === false ? 'country' : $which );
 		$opt   = ( $which == "city" ? 'geoip_city' : 'geoip' );
 		$value = Option::get( $opt );
 

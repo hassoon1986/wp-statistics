@@ -169,14 +169,6 @@
         </td>
     </tr>
     <tr valign="top">
-        <th scope="row"><?php _e( 'Excluded Admin page:', 'wp-statistics' ); ?></th>
-        <td>
-            <input id="wps-exclude-adminpage" type="checkbox" value="1" name="wps_exclude_adminpage" <?php echo WP_STATISTICS\Option::get( 'exclude_adminpage' ) == true ? "checked='checked'" : ''; ?>><label for="wps-exclude-adminpage"><?php _e( 'Exclude', 'wp-statistics' ); ?></label>
-            <p class="description"><?php _e( 'Exclude any call to the WordPress Admin pages.', 'wp-statistics' ); ?></p>
-        </td>
-    </tr>
-
-    <tr valign="top">
         <th scope="row"><?php _e( 'Excluded RSS feeds:', 'wp-statistics' ); ?></th>
         <td>
             <input id="wps-exclude-feeds" type="checkbox" value="1" name="wps_exclude_feeds" <?php echo WP_STATISTICS\Option::get( 'exclude_feeds' ) == true ? "checked='checked'" : ''; ?>><label for="wps-exclude-feeds"><?php _e( 'Exclude', 'wp-statistics' ); ?></label>
@@ -188,13 +180,6 @@
         <td>
             <input id="wps-exclude-404s" type="checkbox" value="1" name="wps_exclude_404s" <?php echo WP_STATISTICS\Option::get( 'exclude_404s' ) == true ? "checked='checked'" : ''; ?>><label for="wps-exclude-404s"><?php _e( 'Exclude', 'wp-statistics' ); ?></label>
             <p class="description"><?php _e( 'Exclude any URL that returns a "404 - Not Found" message.', 'wp-statistics' ); ?></p>
-        </td>
-    </tr>
-    <tr valign="top">
-        <th scope="row"><?php _e( 'Excluded AJAX calls:', 'wp-statistics' ); ?></th>
-        <td>
-            <input id="wps-exclude-ajax" type="checkbox" value="1" name="wps_exclude_ajax" <?php echo WP_STATISTICS\Option::get( 'exclude_ajax' ) == true ? "checked='checked'" : ''; ?>><label for="wps-exclude-ajax"><?php _e( 'Exclude', 'wp-statistics' ); ?></label>
-            <p class="description"><?php _e( 'Exclude any call to the WordPress AJAX system.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
     <tr valign="top">
