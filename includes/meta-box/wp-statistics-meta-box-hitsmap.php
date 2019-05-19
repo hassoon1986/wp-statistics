@@ -59,7 +59,7 @@ class hitsmap {
 				}
 
 				// Push City
-				if ( GeoIP::active( 'geoip_city' ) ) {
+				if ( GeoIP::active( 'city' ) ) {
 					try {
 						$visitor['city'] = GeoIP::getCity( $markets->ip );
 					} catch ( \Exception $e ) {

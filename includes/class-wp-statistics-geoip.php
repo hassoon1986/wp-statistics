@@ -63,16 +63,26 @@ class GeoIP {
 	 * Check Is Active Geo-ip
 	 *
 	 * @param bool $which
+	 * @param bool $CheckDBFile
 	 * @return boolean
 	 */
-	public static function active( $which = false ) {
+	public static function active( $which = false, $CheckDBFile = true ) {
 
 		//Default Geo-Ip Option name
-		$opt = ( $which == "city" ? 'geoip_city' : 'geoip' );
-		//TODO Check Exist DATABASE FILE CHECKSUM
+		$opt   = ( $which == "city" ? 'geoip_city' : 'geoip' );
+		$value = Option::get( $opt );
+
+		//Check Exist GEO-IP file
+		$file = self::get_geo_ip_path( $which );
+		if ( $CheckDBFile and ! file_exists( $file ) ) {
+			if ( $value ) {
+				Option::update( $opt, false );
+			}
+			return false;
+		}
 
 		// Return
-		return Option::get( $opt );
+		return $value;
 	}
 
 	/**

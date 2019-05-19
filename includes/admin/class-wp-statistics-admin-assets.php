@@ -193,7 +193,7 @@ class Admin_Assets {
 			'visitors'      => ( Option::get( 'visitors' ) ? 1 : 0 ),
 			'visits'        => ( Option::get( 'visits' ) ? 1 : 0 ),
 			'geo_ip'        => ( GeoIP::active() ? 1 : 0 ),
-			'geo_city'      => ( GeoIP::active( 'geoip_city' ) ? 1 : 0 ),
+			'geo_city'      => ( GeoIP::active( 'city' ) ? 1 : 0 ),
 			'overview_page' => ( Menus::in_page( 'overview' ) ? 1 : 0 ),
 			'gutenberg'     => ( Helper::is_gutenberg() ? 1 : 0 )
 		);

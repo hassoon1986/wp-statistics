@@ -282,7 +282,7 @@ class UserOnline {
 			}
 
 			// Push City
-			if ( GeoIP::active( 'geoip_city' ) ) {
+			if ( GeoIP::active( 'city' ) ) {
 				$item['city'] = GeoIP::getCity( $items->ip );
 			}
 
