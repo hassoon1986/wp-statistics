@@ -240,7 +240,7 @@ class Hits {
 
 		# Record Visitor Detail
 		if ( Visitor::active() ) {
-			$visitor_id = Visitor::record( array_merge( $exclusion ) );
+			$visitor_id = Visitor::record( $exclusion );
 		}
 
 		# Record Search Engine

@@ -386,7 +386,7 @@ class SearchEngine {
 		$wpdb->insert( DB::table( 'search' ), $data );
 
 		# Action after Save Search Engine Word
-		do_action( 'wp_statistics_after_save_search_word', $data, $wpdb->insert_id );
+		do_action( 'wp_statistics_save_search_word', $data, $wpdb->insert_id );
 	}
 
 	/**

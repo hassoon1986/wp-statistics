@@ -251,7 +251,7 @@ class Pages {
 		remove_filter( 'query', 'wp_statistics_ignore_insert', 10 );
 
 		# Do Action After Save New Visitor
-		do_action( 'wp_statistics_after_save_page', $page_id, $page );
+		do_action( 'wp_statistics_save_page', $page_id, $page );
 
 		return $page_id;
 	}
