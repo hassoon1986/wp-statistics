@@ -154,8 +154,9 @@ class Referred {
 	}
 
 	/**
-	 * Downloads the referrer spam database from https://github.com/matomo-org/referrer-spam-blacklist.
+	 * Downloads the referrer spam database
 	 *
+	 * @see https://github.com/matomo-org/referrer-spam-blacklist.
 	 * @return string
 	 */
 	public static function download_referrer_spam() {

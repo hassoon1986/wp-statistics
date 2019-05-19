@@ -6,13 +6,16 @@ class Install {
 
 	public function __construct() {
 
-	    // Create or Remove WordPress DB Table in Multi Site
+		// Create or Remove WordPress DB Table in Multi Site
 		add_action( 'wpmu_new_blog', array( $this, 'add_table_on_create_blog' ), 10, 1 );
 		add_filter( 'wpmu_drop_tables', array( $this, 'remove_table_on_delete_blog' ) );
 
 		// Change Plugin Action link in Plugin.php admin
 		add_filter( 'plugin_action_links_' . plugin_basename( WP_STATISTICS_MAIN_FILE ), array( $this, 'settings_links' ), 10, 2 );
 		add_filter( 'plugin_row_meta', array( $this, 'add_meta_links' ), 10, 2 );
+
+		// Upgrades WordPress Plugin
+		add_action( 'init', array( $this, 'plugin_upgrades' ) );
 
 		// Page Type Updater @since 12.6
 		Install::init_page_type_updater();
@@ -25,26 +28,19 @@ class Install {
 	 */
 	public function install( $network_wide ) {
 
-		// Check installed plugin version
-		$installed_version = get_option( 'wp_statistics_plugin_version' );
-		if ( $installed_version == WP_STATISTICS_VERSION ) {
-			return;
-		}
-
 		// Create MySQL Table
 		self::create_table( $network_wide );
 
 		// Create Default Option in Database
 		self::create_options();
 
-		// Store the new version information.
+		// Set Version information
 		update_option( 'wp_statistics_plugin_version', WP_STATISTICS_VERSION );
-		update_option( 'wp_statistics_db_version', WP_STATISTICS_VERSION );
 	}
 
 	/**
 	 * Adding new MYSQL Table in Activation Plugin
-     *
+	 *
 	 * @param $network_wide
 	 */
 	public static function create_table( $network_wide ) {
@@ -68,7 +64,6 @@ class Install {
 	 * Create Database Table
 	 */
 	public static function table_sql() {
-		global $wpdb;
 
 		// Load dbDelta WordPress
 		self::load_dbDelta();
@@ -86,15 +81,12 @@ class Install {
 						platform varchar(255),
 						version varchar(255),
 						location varchar(10),
+						`user_id` BIGINT(48) NOT NULL,
+						`page_id` BIGINT(48) NOT NULL,
+						`type` VARCHAR(100) NOT NULL
 						PRIMARY KEY  (ID)
 					) CHARSET=utf8" );
 		dbDelta( $create_user_online_table );
-
-		// Added User_id and Page_id in user online table
-		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'useronline' ) . " LIKE 'user_id'" );
-		if ( $result == 0 ) {
-			$wpdb->query( "ALTER TABLE `" . DB::table( 'useronline' ) . "` ADD `user_id` BIGINT(48) NOT NULL AFTER `location`, ADD `page_id` BIGINT(48) NOT NULL AFTER `user_id`, ADD `type` VARCHAR(100) NOT NULL AFTER `page_id`;" );
-		}
 
 		// Visit Table
 		$create_visit_table = ( "
@@ -131,18 +123,6 @@ class Install {
 					) CHARSET=utf8" );
 		dbDelta( $create_visitor_table );
 
-		// Check if the date_ip index still exists, then removed.
-		$result = $wpdb->query( "SHOW INDEX FROM " . DB::table( 'visitor' ) . " WHERE Key_name = 'date_ip'" );
-		if ( $result > 1 ) {
-			$wpdb->query( "DROP INDEX `date_ip` ON " . DB::table( 'table' ) );
-		}
-
-		// drop the 'AString' column from visitors if it exists.
-		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'visitor' ) . " LIKE 'AString'" );
-		if ( $result > 0 ) {
-			$wpdb->query( "ALTER TABLE `" . DB::table( 'visitor' ) . "` DROP `AString`" );
-		}
-
 		// Exclusion Table
 		$create_exclusion_table = ( "
 					CREATE TABLE " . DB::table( 'exclusions' ) . " (
@@ -159,6 +139,7 @@ class Install {
 		// Pages Table
 		$create_pages_table = ( "
 					CREATE TABLE " . DB::table( 'pages' ) . " (
+					    page_id BIGINT(20) NOT NULL AUTO_INCREMENT,
 						uri varchar(255) NOT NULL,
 						type varchar(255) NOT NULL,
 						date date NOT NULL,
@@ -168,15 +149,10 @@ class Install {
 						KEY url (uri),
 						KEY date (date),
 						KEY id (id),
-						KEY `uri` (`uri`,`count`,`id`)
+						KEY `uri` (`uri`,`count`,`id`),
+						ADD PRIMARY KEY (`page_id`)
 					) CHARSET=utf8" );
 		dbDelta( $create_pages_table );
-
-		//Added page_id column in statistics_pages if not exist
-		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'pages' ) . " LIKE 'page_id'" );
-		if ( $result == 0 ) {
-			$wpdb->query( "ALTER TABLE `" . DB::table( 'pages' ) . "` ADD `page_id` BIGINT(20) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`page_id`);" );
-		}
 
 		// Historical Table
 		$create_historical_table = ( "
@@ -252,128 +228,15 @@ class Install {
 	 * Create Default Option
 	 */
 	public static function create_options() {
-		global $wpdb;
 
-		// Get List Default
-		$default_options = Option::defaultOption();
-		$store_options   = Option::getOptions();
+		//Require File For Create Default Option
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-option.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-helper.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-user-online.php';
+		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-visitor.php';
 
-		if ( get_option( Option::$opt_name ) === false ) {
-
-			$core_options   = array(
-				'wps_disable_map',
-				'wps_map_location',
-				'wps_google_coordinates',
-				'wps_schedule_dbmaint',
-				'wps_schedule_dbmaint_days',
-				'wps_geoip',
-				'wps_update_geoip',
-				'wps_schedule_geoip',
-				'wps_last_geoip_dl',
-				'wps_auto_pop',
-				'wps_useronline',
-				'wps_check_online',
-				'wps_visits',
-				'wps_visitors',
-				'wps_visitors_log',
-				'wps_store_ua',
-				'wps_coefficient',
-				'wps_pages',
-				'wps_track_all_pages',
-				'wps_use_cache_plugin',
-				'wps_geoip_city',
-				'wps_disable_column',
-				'wps_hit_post_metabox',
-				'wps_menu_bar',
-				'wps_hide_notices',
-				'wps_chart_totals',
-				'wps_stats_report',
-				'wps_time_report',
-				'wps_send_report',
-				'wps_content_report',
-				'wps_read_capability',
-				'wps_manage_capability',
-				'wps_record_exclusions',
-				'wps_robotlist',
-				'wps_exclude_ip',
-				'wps_exclude_loginpage',
-				'wps_exclude_adminpage',
-			);
-			$var_options    = array( 'wps_disable_se_%', 'wps_exclude_%' );
-			$widget_options = array(
-				'name_widget',
-				'useronline_widget',
-				'tvisit_widget',
-				'tvisitor_widget',
-				'yvisit_widget',
-				'yvisitor_widget',
-				'wvisit_widget',
-				'mvisit_widget',
-				'ysvisit_widget',
-				'ttvisit_widget',
-				'ttvisitor_widget',
-				'tpviews_widget',
-				'ser_widget',
-				'select_se',
-				'tp_widget',
-				'tpg_widget',
-				'tc_widget',
-				'ts_widget',
-				'tu_widget',
-				'ap_widget',
-				'ac_widget',
-				'au_widget',
-				'lpd_widget',
-				'select_lps',
-			);
-
-			// Handle the core options, we're going to strip off the 'wps_' header as we store them in the new settings array.
-			foreach ( $core_options as $option ) {
-				$new_name                   = substr( $option, 4 );
-				$store_options[ $new_name ] = get_option( $option );
-				delete_option( $option );
-			}
-
-			$widget = array();
-			foreach ( $widget_options as $option ) {
-				$widget[ $option ] = get_option( $option );
-				delete_option( $option );
-			}
-			$store_options['widget'] = $widget;
-
-
-			foreach ( $var_options as $option ) {
-
-				$result = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}options WHERE option_name LIKE '{$option}'" );
-				foreach ( $result as $opt ) {
-					$new_name                   = substr( $opt->option_name, 4 );
-					$store_options[ $new_name ] = $opt->option_value;
-					delete_option( $opt->option_name );
-				}
-			}
-
-			Option::save_options( $store_options );
-		}
-
-		// Get Robot List if Empty
-		$wps_temp_robots_list = Option::get( 'robotlist' );
-		if ( trim( $wps_temp_robots_list ) == "" || Option::get( 'force_robot_update' ) == true ) {
-			Option::update( 'robotlist', $default_options['robotlist'] );
-		}
-
-		// We've already handled some of the default or need to do more logic checks on them so create a list to exclude from the next loop.
-		$excluded_defaults = array( 'force_robot_update', 'robot_list' );
-		foreach ( $default_options as $key => $value ) {
-			if ( ! in_array( $key, $excluded_defaults ) && false === Option::get( $key ) ) {
-				$store_options[ $key ] = $value;
-			}
-		}
-		Option::save_options( $store_options );
-
-		// Update Send Upgrade
-		if ( Option::get( 'upgrade_report' ) == true ) {
-			Option::update( 'send_upgrade_email', true );
-		}
+		// Create Default Option
+		update_option( Option::$opt_name, Option::defaultOption() );
 	}
 
 	/**
@@ -431,6 +294,66 @@ class Install {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Plugin Upgrades
+	 */
+	public function plugin_upgrades() {
+		global $wpdb;
+
+		// Check installed plugin version
+		$installed_version = get_option( 'wp_statistics_plugin_version' );
+		if ( $installed_version == WP_STATISTICS_VERSION ) {
+			return;
+		}
+
+		/**
+		 * Added new Fields to user_online Table
+		 *
+		 * @version 12.6.1
+		 */
+		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'useronline' ) . " LIKE 'user_id'" );
+		if ( $result == 0 ) {
+			$wpdb->query( "ALTER TABLE `" . DB::table( 'useronline' ) . "` ADD `user_id` BIGINT(48) NOT NULL AFTER `location`, ADD `page_id` BIGINT(48) NOT NULL AFTER `user_id`, ADD `type` VARCHAR(100) NOT NULL AFTER `page_id`;" );
+		}
+
+		/**
+		 * Added page_id column in statistics_pages
+		 *
+		 * @version 12.5.3
+		 */
+		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'pages' ) . " LIKE 'page_id'" );
+		if ( $result == 0 ) {
+			$wpdb->query( "ALTER TABLE `" . DB::table( 'pages' ) . "` ADD `page_id` BIGINT(20) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`page_id`);" );
+		}
+
+		/**
+		 * removed date_ip from visitor table
+		 * drop the 'AString' column from visitors if it exists.
+		 *
+		 * @version 6.0
+		 */
+		$result = $wpdb->query( "SHOW INDEX FROM " . DB::table( 'visitor' ) . " WHERE Key_name = 'date_ip'" );
+		if ( $result > 1 ) {
+			$wpdb->query( "DROP INDEX `date_ip` ON " . DB::table( 'table' ) );
+		}
+		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'visitor' ) . " LIKE 'AString'" );
+		if ( $result > 0 ) {
+			$wpdb->query( "ALTER TABLE `" . DB::table( 'visitor' ) . "` DROP `AString`" );
+		}
+
+		/**
+		 * Force Update robots List after Update Plugin
+		 *
+		 * @version 9.6.2
+		 */
+		if ( Option::get( 'force_robot_update' ) ) {
+		    Referred::download_referrer_spam();
+		}
+
+		// Store the new version information.
+		update_option( 'wp_statistics_plugin_version', WP_STATISTICS_VERSION );
 	}
 
 	/**

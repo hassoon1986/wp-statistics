@@ -67,23 +67,6 @@
     </tr>
 
     <tr valign="top">
-        <td scope="row">
-            <label for="upgrade-report"><?php _e( 'Upgrade:', 'wp-statistics' ); ?></label>
-        </td>
-
-        <td>
-            <input id="upgrade-report" type="checkbox" value="1" name="wps_upgrade_report" <?php echo WP_STATISTICS\Option::get( 'upgrade_report' ) == true
-				? "checked='checked'" : ''; ?>>
-            <label for="upgrade-report"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e(
-					'Send a report whenever the plugin is upgraded.',
-					'wp-statistics'
-				); ?></p>
-        </td>
-    </tr>
-
-    <tr valign="top">
         <th scope="row" colspan="2"><h3><?php _e( 'Statistical reporting', 'wp-statistics' ); ?></h3></th>
     </tr>
 

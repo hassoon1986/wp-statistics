@@ -441,9 +441,8 @@ class settings_page {
 	public static function reset_option() {
 		global $wpdb;
 
-		$default_options   = Option::defaultOption();
-		$excluded_defaults = array( 'force_robot_update', 'robot_list' );
-		$again_options     = array();
+		// Get Default Option
+		$default_options = Option::defaultOption();
 
 		// Delete the wp_statistics option.
 		update_option( Option::$opt_name, array() );
@@ -451,18 +450,11 @@ class settings_page {
 		// Delete the user options.
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}usermeta WHERE meta_key LIKE 'wp_statistics%'" );
 
-		// Set some intelligent defaults.
-		foreach ( $default_options as $key => $value ) {
-			if ( ! in_array( $key, $excluded_defaults ) ) {
-				$again_options[ $key ] = $value;
-			}
-		}
-
 		// Disable Show Welcome Page Again
-		$again_options['first_show_welcome_page'] = true;
-		$again_options['show_welcome_page']       = false;
+		$default_options['first_show_welcome_page'] = true;
+		$default_options['show_welcome_page']       = false;
 
-		update_option( Option::$opt_name, $again_options );
+		update_option( Option::$opt_name, $default_options );
 	}
 
 	/**

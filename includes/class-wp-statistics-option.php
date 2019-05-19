@@ -30,10 +30,9 @@ class Option {
 	/**
 	 * WP-Statistics Default Option
 	 *
-	 * @param null $option_name
 	 * @return array
 	 */
-	public static function defaultOption( $option_name = null ) {
+	public static function defaultOption() {
 
 		$options = array(
 			'robotlist'             => Helper::get_robots_list(),
@@ -64,10 +63,6 @@ class Option {
 			'exclude_404s'          => true,
 			'exclude_feeds'         => true,
 		);
-
-		if ( $option_name and isset( $options[ $option_name ] ) ) {
-			return $options[ $option_name ];
-		}
 
 		return $options;
 	}

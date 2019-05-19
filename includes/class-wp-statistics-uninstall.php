@@ -29,7 +29,6 @@ class Uninstall {
 
 		// Delete the options from the WordPress options table.
 		delete_option( 'wp_statistics' );
-		delete_option( 'wp_statistics_db_version' );
 		delete_option( 'wp_statistics_plugin_version' );
 		delete_option( 'wp_statistics_referrals_detail' );
 		delete_option( 'wp_statistics_users_city' );

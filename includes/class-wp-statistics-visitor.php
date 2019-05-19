@@ -127,7 +127,7 @@ class Visitor {
 				if ( $args['exclusion_reason'] != 'Honeypot' and $args['exclusion_reason'] != 'Robot threshold' ) {
 
 					// Action Before Visitor Update
-					do_action( 'wp_statistics_before_update_visitor_hits', $visitor_id, $same_visitor );
+					do_action( 'wp_statistics_update_visitor_hits', $visitor_id, $same_visitor );
 
 					// Update Visitor Count in DB
 					$wpdb->query( $wpdb->prepare( 'UPDATE `' . DB::table( 'visitor' ) . '` SET `hits` = `hits` + %d WHERE `ID` = %d', 1, $visitor_id ) );
