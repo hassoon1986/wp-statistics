@@ -52,10 +52,7 @@ class DB {
 	 */
 	public static function ExistTable( $tbl_name ) {
 		global $wpdb;
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$tbl_name'" ) == $tbl_name ) {
-			return true;
-		}
-		return false;
+		return ( $wpdb->get_var( "SHOW TABLES LIKE '$tbl_name'" ) == $tbl_name );
 	}
 
 	/**
@@ -115,6 +112,19 @@ class DB {
 		}
 
 		return sprintf( __( 'Error, %s not emptied!', 'wp-statistics' ), $table_name );
+	}
+
+	/**
+	 * Modify For IGNORE insert Query
+	 *
+	 * @hook add_filter('query', function_name, 10);
+	 * @param $query
+	 * @return string
+	 */
+	public static function insert_ignore( $query ) {
+		$count = 0;
+		$query = preg_replace( '/^(INSERT INTO)/i', 'INSERT IGNORE INTO', $query, 1, $count );
+		return $query;
 	}
 
 }

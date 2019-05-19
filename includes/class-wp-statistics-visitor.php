@@ -37,7 +37,7 @@ class Visitor {
 		global $wpdb;
 
 		# Add Filter Insert ignore
-		add_filter( 'query', 'wp_statistics_ignore_insert', 10 );
+		add_filter( 'query', array( '\WP_STATISTICS\DB', 'insert_ignore' ), 10 );
 
 		# Save to WordPress Database
 		$wpdb->insert( DB::table( 'visitor' ), $visitor, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' ) );
@@ -46,7 +46,7 @@ class Visitor {
 		$visitor_id = $wpdb->insert_id;
 
 		# Remove ignore filter
-		remove_filter( 'query', 'wp_statistics_ignore_insert', 10 );
+		remove_filter( 'query', array( '\WP_STATISTICS\DB', 'insert_ignore' ), 10 );
 
 		# Do Action After Save New Visitor
 		do_action( 'wp_statistics_after_save_visitor', $visitor_id, $visitor );

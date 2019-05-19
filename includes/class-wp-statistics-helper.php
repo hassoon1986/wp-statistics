@@ -254,7 +254,7 @@ class Helper {
 			);
 		} else {
 			$earlier = new \DateTime( $first_day );
-			$later   = new \DateTime( WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d' ) );
+			$later   = new \DateTime( TimeZone::getCurrentDate( 'Y-m-d' ) );
 			$result  = array(
 				'days'      => $later->diff( $earlier )->format( "%a" ),
 				'timestamp' => strtotime( $first_day ),

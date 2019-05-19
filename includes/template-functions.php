@@ -1045,16 +1045,3 @@ function wp_statistics_date_range_calculator( $days, $start, $end ) {
 	return array( $daysToDisplay, $rangestart_utime, $rangeend_utime );
 }
 
-/**
- * Modify For IGNORE insert Query
- *
- * @hook add_action('query', function_name, 10);
- * @param $query
- * @return string
- */
-function wp_statistics_ignore_insert( $query ) {
-	$count = 0;
-	$query = preg_replace( '/^(INSERT INTO)/i', 'INSERT IGNORE INTO', $query, 1, $count );
-	return $query;
-}
-
