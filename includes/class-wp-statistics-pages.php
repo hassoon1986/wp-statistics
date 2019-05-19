@@ -94,6 +94,11 @@ class Pages {
 			$current_page['type'] = "feed";
 		}
 
+		// Add WordPress Login Page
+		if ( Helper::is_login_page() ) {
+			$current_page['type'] = "loginpage";
+		}
+
 		return apply_filters( 'wp_statistics_current_page', $current_page );
 	}
 
@@ -175,6 +180,11 @@ class Pages {
 			$page_uri = "?s=" . $current_page['search_query'];
 		}
 
+		// Sanitize for WordPress Login Page
+		if ( $current_page['type'] == "loginpage" ) {
+			$page_uri = Helper::RemoveQueryStringUrl( $page_uri );
+		}
+
 		// Check Strip Url Parameter
 		if ( Option::get( 'strip_uri_parameters' ) and array_key_exists( "search_query", $current_page ) === false ) {
 			$temp = explode( '?', $page_uri );
@@ -184,9 +194,7 @@ class Pages {
 		}
 
 		// Limit the URI length to 255 characters, otherwise we may overrun the SQL field size.
-		$page_uri = substr( $page_uri, 0, 255 );
-
-		return $page_uri;
+		return substr( $page_uri, 0, 255 );
 	}
 
 	/**
@@ -326,6 +334,9 @@ class Pages {
 					break;
 				case "feed":
 					$result['title'] = __( 'Feed', 'wp-statistics' );
+					break;
+				case "loginpage":
+					$result['title'] = __( 'Login Page', 'wp-statistics' );
 					break;
 				case "search":
 					$result['title'] = __( 'Search Page', 'wp-statistics' );

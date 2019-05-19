@@ -78,7 +78,7 @@ class Helper {
 	public static function is_login_page() {
 
 		// Check From global WordPress
-		if ( isset( $GLOBALS['pagenow'] ) and $GLOBALS['pagenow'] == "wp-login.php" ) {
+		if ( isset( $GLOBALS['pagenow'] ) and in_array( $GLOBALS['pagenow'], array( 'wp-login.php', 'wp-register.php' ) ) ) {
 			return true;
 		}
 
@@ -525,6 +525,16 @@ class Helper {
 			hexdec( substr( $hash, 4, 2 ) ),
 			$opacity
 		);
+	}
+
+	/**
+	 * Remove Query String From Url
+	 *
+	 * @param $url
+	 * @return bool|string
+	 */
+	public static function RemoveQueryStringUrl( $url ) {
+		return substr( $url, 0, strrpos( $url, "?" ) );
 	}
 
 	/**

@@ -241,7 +241,10 @@ class Exclusion {
 	public static function exclusion_admin_page() {
 
 		if ( isset( $_SERVER['SERVER_NAME'] ) and isset( $_SERVER['REQUEST_URI'] ) ) {
-			if ( stristr( $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], "wp-admin" ) ) {
+
+			// Remove Query From Url
+			$url = Helper::RemoveQueryStringUrl( $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] );
+			if ( stristr( $url, "wp-admin" ) != false ) {
 				return true;
 			}
 		}

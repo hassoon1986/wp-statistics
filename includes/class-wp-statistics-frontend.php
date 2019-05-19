@@ -15,9 +15,6 @@ class Frontend {
 		# Enqueue scripts & styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		# Get Visitor information and Save To Database
-		add_action( 'wp', array( $this, 'record_hits' ) );
-
 		# Add inline Rest Request
 		add_action( 'wp_head', array( $this, 'add_inline_rest_js' ) );
 
@@ -122,17 +119,6 @@ class Frontend {
 
 		//return Json Data
 		return Helper::standard_json_encode( $params );
-	}
-
-	/**
-	 * Record WP-Statistics Hits in Frontend
-	 *
-	 * @throws \Exception
-	 */
-	public function record_hits() {
-		if ( ! Option::get( 'use_cache_plugin' ) ) {
-			Hits::record();
-		}
 	}
 
 	/**
