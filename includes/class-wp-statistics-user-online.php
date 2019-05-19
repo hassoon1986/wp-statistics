@@ -80,12 +80,12 @@ class UserOnline {
 			update_option( self::$check_user_online_opt, $now );
 		}
 	}
-
-
+	
 	/**
 	 * Record Users Online
 	 *
 	 * @param array $args
+	 * @throws \Exception
 	 */
 	public static function record( $args = array() ) {
 
@@ -124,6 +124,7 @@ class UserOnline {
 	 * Add User Online to Database
 	 *
 	 * @param array $args
+	 * @throws \Exception
 	 */
 	public static function add_user_online( $args = array() ) {
 		global $wpdb;
@@ -144,15 +145,12 @@ class UserOnline {
 			'agent'     => $user_agent['browser'],
 			'platform'  => $user_agent['platform'],
 			'version'   => $user_agent['version'],
-			'location'  => GeoIP::getDefaultCountryCode(),
+			'location'  => GeoIP::getCountry( IP::getIP() ),
 			'user_id'   => User::get_user_id(),
 			'page_id'   => $current_page['id'],
 			'type'      => $current_page['type']
 		);
 		$user_online = apply_filters( 'wp_statistics_user_online_information', wp_parse_args( $args, $user_online ) );
-
-		# Action Before Save User Online
-		do_action( 'wp_statistics_before_save_user_online', $user_online );
 
 		# Insert the user in to the database.
 		$wpdb->insert( DB::table( 'useronline' ), $user_online );
@@ -161,7 +159,7 @@ class UserOnline {
 		$user_online_id = $wpdb->insert_id;
 
 		# Action After Save User Online
-		do_action( 'wp_statistics_after_save_user_online', $user_online_id, $user_online );
+		do_action( 'wp_statistics_save_user_online', $user_online_id, $user_online );
 	}
 
 	/**
@@ -187,14 +185,11 @@ class UserOnline {
 		);
 		$user_online = apply_filters( 'wp_statistics_update_user_online_data', $user_online );
 
-		# Action Before Update User Online
-		do_action( 'wp_statistics_before_update_user_online', $user_id, $user_online );
-
 		# Update the database with the new information.
 		$wpdb->update( DB::table( 'useronline' ), $user_online, array( 'ip' => IP::getHashIP() ? IP::getHashIP() : IP::StoreIP() ) );
 
 		# Action After Update User Online
-		do_action( 'wp_statistics_after_update_user_online', $user_id );
+		do_action( 'wp_statistics_update_user_online', $user_id, $user_online );
 	}
 
 	/**

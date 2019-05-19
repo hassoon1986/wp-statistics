@@ -72,6 +72,7 @@ class Visitor {
 	 *
 	 * @param array $arg
 	 * @return bool|INT
+	 * @throws \Exception
 	 */
 	public static function record( $arg = array() ) {
 		global $wpdb;
@@ -107,7 +108,7 @@ class Visitor {
 					'platform'     => $user_agent['platform'],
 					'version'      => $user_agent['version'],
 					'ip'           => $user_ip,
-					'location'     => $args['location'],
+					'location'     => GeoIP::getCountry( IP::getIP() ),
 					'UAString'     => ( Option::get( 'store_ua' ) == true ? UserAgent::getHttpUserAgent() : '' ),
 					'hits'         => 1,
 					'honeypot'     => ( $args['exclusion_reason'] == 'Honeypot' ? 1 : 0 ),
@@ -129,8 +130,7 @@ class Visitor {
 					do_action( 'wp_statistics_before_update_visitor_hits', $visitor_id, $same_visitor );
 
 					// Update Visitor Count in DB
-					$sql = $wpdb->prepare( 'UPDATE `' . DB::table( 'visitor' ) . '` SET `hits` = `hits` + %d WHERE `ID` = %d', 1, $visitor_id );
-					$wpdb->query( $sql );
+					$wpdb->query( $wpdb->prepare( 'UPDATE `' . DB::table( 'visitor' ) . '` SET `hits` = `hits` + %d WHERE `ID` = %d', 1, $visitor_id ) );
 				}
 			}
 		}
