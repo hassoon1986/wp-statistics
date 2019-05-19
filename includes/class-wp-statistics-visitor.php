@@ -49,7 +49,7 @@ class Visitor {
 		remove_filter( 'query', array( '\WP_STATISTICS\DB', 'insert_ignore' ), 10 );
 
 		# Do Action After Save New Visitor
-		do_action( 'wp_statistics_after_save_visitor', $visitor_id, $visitor );
+		do_action( 'wp_statistics_save_visitor', $visitor_id, $visitor, User::get_user_id() );
 
 		return $visitor_id;
 	}
