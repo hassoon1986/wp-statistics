@@ -32,13 +32,14 @@ class Uninstall {
 		delete_option( 'wp_statistics_db_version' );
 		delete_option( 'wp_statistics_plugin_version' );
 		delete_option( 'wp_statistics_referrals_detail' );
+		delete_option( 'wp_statistics_users_city' );
 
 		// Delete the transients.
 		delete_transient( 'wps_top_referring' );
 		delete_transient( 'wps_excluded_hostname_to_ip_cache' );
 
 		// Delete the user options.
-		$wpdb->query( "DELETE FROM {$wpdb->prefix}usermeta WHERE meta_key LIKE 'wp_statistics%'" );
+		$wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE `meta_key` LIKE 'wp_statistics%'" );
 
 		// Drop the tables
 		foreach ( DB::table() as $tbl ) {

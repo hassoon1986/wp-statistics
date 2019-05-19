@@ -24,7 +24,7 @@ class GeoIP {
 			'github' => 'https://raw.githubusercontent.com/wp-statistics/GeoLite2-City/master/GeoLite2-City.mmdb.gz',
 			'file'   => 'GeoLite2-City',
 			'opt'    => 'geoip_city',
-			'cache'  => 13996000 //6 Month
+			'cache'  => 6998000 //3 Month
 		)
 	);
 
@@ -41,6 +41,13 @@ class GeoIP {
 	 * @var String
 	 */
 	public static $private_country = '000';
+
+	/**
+	 * Cache Option name For Store User City
+	 *
+	 * @var string
+	 */
+	public static $city_cache_object_name = 'wp_statistics_users_city';
 
 	/**
 	 * Get Geo IP Path
@@ -120,7 +127,7 @@ class GeoIP {
 	public static function getCountry( $ip = false, $return = 'isoCode' ) {
 
 		// Check in WordPress Cache
-		$user_country = wp_cache_get( 'user-country', 'wp-statistics' );
+		$user_country = wp_cache_get( 'country-' . $ip, 'wp-statistics' );
 		if ( $user_country != false ) {
 			return $user_country;
 		}
@@ -128,7 +135,7 @@ class GeoIP {
 		// Check in WordPress Database
 		$user_country = self::getUserCountryFromDB( $ip );
 		if ( $user_country != false ) {
-			wp_cache_set( 'user-country', $user_country, 'wp-statistics', 30 );
+			wp_cache_set( 'country-' . $ip, $user_country, 'wp-statistics', 30 );
 			return $user_country;
 		}
 
@@ -175,7 +182,7 @@ class GeoIP {
 
 		# Check Has Location
 		if ( isset( $location ) and ! empty( $location ) ) {
-			wp_cache_set( 'user-country', $location, 'wp-statistics', 30 );
+			wp_cache_set( 'country-' . $ip, $location, 'wp-statistics', 30 );
 			return $location;
 		}
 
@@ -431,9 +438,16 @@ class GeoIP {
 	 */
 	public static function getCity( $ip = false, $return = 'name' ) {
 
-		// Check in WordPress Cache
-		$user_city = wp_cache_get( 'user-city', 'wp-statistics' );
+		// Check in WordPress WP_Cache
+		$user_city = wp_cache_get( 'city-' . $ip, 'wp-statistics' );
 		if ( $user_city != false ) {
+			return $user_city;
+		}
+
+		// Check in WordPress Persist Cache
+		$user_city = self::getCacheCity( $ip );
+		if ( $user_city != false ) {
+			self::setCacheCity( $ip, $user_city );
 			return $user_city;
 		}
 
@@ -473,11 +487,66 @@ class GeoIP {
 
 		# Check Has Location
 		if ( isset( $location ) and ! empty( $location ) ) {
-			wp_cache_set( 'user-city', $location, 'wp-statistics', 30 );
+			self::setCacheCity( $ip, $location );
 			return $location;
 		}
 
 		return $default_city;
+	}
+
+	/**
+	 * Set Cache User City
+	 *
+	 * @param $ip
+	 * @param $city
+	 * @param bool $opt
+	 */
+	public static function setCacheCity( $ip, $city, $opt = false ) {
+		if ( ! $opt ) {
+			$opt = get_option( self::$city_cache_object_name );
+		}
+		if ( empty( $opt ) || ! is_array( $opt ) ) {
+			$opt = array();
+		}
+		$opt[ $ip ] = array( $city, current_time( 'timestamp' ) );
+		wp_cache_set( 'city-' . $ip, $city, 'wp-statistics', 30 );
+		$opt = self::cleanCacheCity( $opt );
+		update_option( self::$city_cache_object_name, $opt, 'no' );
+	}
+
+	/**
+	 * Clean Cache City
+	 *
+	 * @param bool $option
+	 * @param bool $save
+	 * @return bool
+	 */
+	public static function cleanCacheCity( $option = false, $save = false ) {
+		if ( ! $option ) {
+			$option = get_option( self::$city_cache_object_name );
+		}
+		if ( ! empty( $option ) and is_array( $option ) and count( $option ) > 0 ) {
+			foreach ( $option as $ip => $value ) {
+				if ( isset( $value[1] ) ) {
+					$expire_time = (int) $value[1] + self::$library['city']['cache'];
+					if ( $expire_time <= current_time( 'timestamp' ) ) {
+						unset( $option[ $ip ] );
+					}
+				}
+			}
+		}
+		if ( $save ) {
+			update_option( self::$city_cache_object_name, $option, 'no' );
+		}
+		return $option;
+	}
+
+	/*
+	 * Get City with IP From WordPress Option Cache
+	 */
+	public static function getCacheCity( $ip ) {
+		$opt = get_option( self::$city_cache_object_name );
+		return ( isset( $opt[ $ip ] ) ? $opt[ $ip ][0] : false );
 	}
 
 	/**
