@@ -6,7 +6,7 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Admin_Template;
 
 if ( array_key_exists( 'page-uri', $_GET ) ) {
 	$pageuri = $_GET['page-uri'];
@@ -33,7 +33,7 @@ if ( is_object( $post ) ) {
 }
 
 //Set Default Time Picker Option
-list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
+list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Template::prepare_range_time_picker();
 
 //Check Page
 if ( array_key_exists( 'page-id', $_GET ) ) {
@@ -67,8 +67,8 @@ $html .= ' <input type="submit" value="' . __( 'Select', 'wp-statistics' ) . '" 
 $html .= '<br>';
 ?>
 <div class="wrap wps-wrap">
-	<?php Admin_Templates::show_page_title( sprintf( __( 'Page Trend for Post ID %s', 'wp-statistics' ), $pageid ) . ' - ' . $title ); ?>
-	<?php Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
+	<?php Admin_Template::show_page_title( sprintf( __( 'Page Trend for Post ID %s', 'wp-statistics' ), $pageid ) . ' - ' . $title ); ?>
+	<?php Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
     <div class="postbox-container" id="wps-big-postbox">
         <div class="metabox-holder">
             <div class="meta-box-sortables">

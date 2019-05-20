@@ -8,12 +8,12 @@
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
-use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Admin_Template;
 use WP_STATISTICS\Referred;
 
 $date_args = '';
 //Set Default Time Picker Option
-list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
+list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Template::prepare_range_time_picker();
 if ( isset( $_GET['hitdays'] ) and $_GET['hitdays'] > 0 ) {
 	$date_args .= '&hitdays=' . $daysToDisplay;
 }
@@ -79,8 +79,8 @@ $ISOCountryCode = Country::getList();
 
 ?>
 <div class="wrap wps-wrap">
-	<?php Admin_Templates::show_page_title( __( 'Top Referring Sites', 'wp-statistics' ) ); ?>
-    <div><?php Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('referrers'), $daysToDisplay, null, null, $referr_field ); ?></div>
+	<?php Admin_Template::show_page_title( __( 'Top Referring Sites', 'wp-statistics' ) ); ?>
+    <div><?php Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('referrers'), $daysToDisplay, null, null, $referr_field ); ?></div>
     <br class="clear"/>
 
     <ul class="subsubsub">
@@ -159,7 +159,7 @@ $ISOCountryCode = Country::getList();
 											$map_string = "";
 										} else {
 											$ip_string  = "{$items->ip}";
-											$map_string = "<a class='wps-text-muted' href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . \WP_STATISTICS\Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
+											$map_string = "<a class='wps-text-muted' href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) . "'>" . \WP_STATISTICS\Admin_Template::icons( 'dashicons-visibility' ) . "</a><a class='show-map wps-text-muted' href='http://www.geoiptool.com/en/?IP={$items->ip}' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . wp_statistics_icons( 'dashicons-location-alt', 'map' ) . "</a>";
 										}
 
 										echo "<tr>";
@@ -179,7 +179,7 @@ $ISOCountryCode = Country::getList();
 										if ( array_search( strtolower( $items->agent ), WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 											$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 										} else {
-											$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
+											$agent = \WP_STATISTICS\Admin_Template::icons( 'dashicons-editor-help' );
 										}
 										echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 										echo "</td>";
@@ -280,7 +280,7 @@ $ISOCountryCode = Country::getList();
                 </div>
 				<?php
 				if ( $total > 0 ) {
-					\WP_STATISTICS\Admin_Templates::paginate_links( array(
+					\WP_STATISTICS\Admin_Template::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,

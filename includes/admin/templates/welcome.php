@@ -10,13 +10,13 @@
 
         <div class="wp-badge"><?php printf( __( 'Version %s', 'wp-statistics' ), WP_STATISTICS_VERSION ); ?></div>
 
-        <h2 class="nav-tab-wrapper wp-clearfix">
+        <nav class="nav-tab-wrapper wp-clearfix" aria-label="wp-statistics-welcome-nav-tab">
             <a href="#" class="nav-tab nav-tab-active" data-tab="whats-news"><?php _e( 'What&#8217;s New', 'wp-statistics' ); ?></a>
             <a href="#" class="nav-tab" data-tab="addons"><?php _e( 'Add-Ons', 'wp-statistics' ); ?></a>
             <a href="#" class="nav-tab" data-tab="credit"><?php _e( 'Credits', 'wp-statistics' ); ?></a>
             <a href="#" class="nav-tab" data-tab="changelog"><?php _e( 'Changelog', 'wp-statistics' ); ?></a>
             <a href="<?php echo \WP_STATISTICS\Menus::$donate; ?>" class="nav-tab donate" data-tab="link" target="_blank"><?php _e( 'Donate', 'wp-statistics' ); ?></a>
-        </h2>
+        </nav>
 
         <div data-content="whats-news" class="tab-content current">
             <section class="center-section">

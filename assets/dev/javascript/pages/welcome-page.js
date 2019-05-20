@@ -1,4 +1,4 @@
-// Check about page
+// Check welcome page
 if (jQuery('.wp-statistics-welcome').length) {
     jQuery('.nav-tab-wrapper a').click(function () {
         var tab_id = jQuery(this).attr('data-tab');

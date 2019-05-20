@@ -3,6 +3,14 @@
 namespace WP_STATISTICS;
 
 class plugins_page {
+
+	public function __construct() {
+
+		if ( Menus::in_page( 'plugins' ) ) {
+			add_filter( 'screen_options_show_screen', '__return_false' );
+		}
+	}
+
 	/**
 	 * This function displays the HTML for the page.
 	 */
@@ -31,23 +39,9 @@ class plugins_page {
 			}
 		}
 
-		$response      = wp_remote_get( Welcome::$addone );
-		$response_code = wp_remote_retrieve_response_code( $response );
-		$error         = null;
-		$plugins       = array();
-
-		// Check response
-		if ( is_wp_error( $response ) ) {
-			$error = $response->get_error_message();
-		} else {
-			if ( $response_code == '200' ) {
-				$plugins = json_decode( $response['body'] );
-			} else {
-				$error = $response['body'];
-			}
-		}
-
-		include WP_STATISTICS_DIR . 'includes/admin/templates/plugins.php';
+		Admin_Template::get_template( array( 'plugins' ), Welcome::get_list_addons() );
 	}
 
 }
+
+new plugins_page;

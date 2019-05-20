@@ -2,13 +2,14 @@
 
 namespace WP_STATISTICS;
 
-class Admin_Templates {
+class Admin_Template {
 	/**
 	 * Default Pagination GET name
 	 *
 	 * @var string
 	 */
 	public static $paginate_link_name = 'pagination-page';
+
 	/**
 	 * Default Item Per Page in Pagination
 	 *
@@ -17,7 +18,40 @@ class Admin_Templates {
 	public static $item_per_page = 10;
 
 	/**
+	 * Get Template File
+	 *
+	 * @param $template
+	 * @param array $args
+	 */
+	public static function get_template( $template, $args = array() ) {
+
+		// Push Args
+		if ( is_array( $args ) && isset( $args ) ) :
+			extract( $args );
+		endif;
+
+		// Check Load single file or array list
+		if ( is_string( $template ) ) {
+			$template = explode( " ", $template );
+		}
+
+		// Load File
+		foreach ( $template as $file ) {
+
+			$template_file = WP_STATISTICS_DIR . "includes/admin/templates/" . $file . ".php";
+			if ( ! file_exists( $template_file ) ) {
+				Helper::doing_it_wrong( __FUNCTION__, __( 'Template not found.', 'wp-statistics' ), '12.6.5' );
+				return;
+			}
+
+			// include File
+			include $template_file;
+		}
+	}
+
+	/**
 	 * Show Page title
+	 * //TODO Remove at last
 	 *
 	 * @param string $title
 	 */
@@ -41,7 +75,7 @@ class Admin_Templates {
 	 * @return float|int
 	 */
 	public static function getCurrentPaged() {
-		return isset( $_GET[ Admin_Templates::$paginate_link_name ] ) ? abs( (int) $_GET[ Admin_Templates::$paginate_link_name ] ) : 1;
+		return isset( $_GET[ Admin_Template::$paginate_link_name ] ) ? abs( (int) $_GET[ Admin_Template::$paginate_link_name ] ) : 1;
 	}
 
 	/**
@@ -53,7 +87,7 @@ class Admin_Templates {
 	 */
 	public static function getCurrentOffset( $page = false, $item_per_page = false ) {
 		$page          = ( $page === false ? self::getCurrentPaged() : $page );
-		$item_per_page = ( $item_per_page === false ? Admin_Templates::$item_per_page : $item_per_page );
+		$item_per_page = ( $item_per_page === false ? Admin_Template::$item_per_page : $item_per_page );
 		return ( $page * $item_per_page ) - $item_per_page;
 	}
 
@@ -79,7 +113,7 @@ class Admin_Templates {
 		$args            = wp_parse_args( $args, $defaults );
 		$total_page      = ceil( $args['total'] / $args['item_per_page'] );
 		$args['current'] = ( $args['current'] < 1 ? self::getCurrentPaged() : 1 );
-		$export = '';
+		$export          = '';
 
 		//Show Pagination Ui
 		if ( $total_page > 1 ) {
@@ -110,51 +144,13 @@ class Admin_Templates {
 	}
 
 	/**
-	 * This function handle's the Dash icons in the overview page.
+	 * Show WordPress DashIcons
 	 *
 	 * @param $dashicons
-	 * @param null $icon_name
 	 * @return string
 	 */
-	public static function icons( $dashicons, $icon_name = null ) {
-		if ( null == $icon_name ) {
-			$icon_name = $dashicons;
-		}
-
+	public static function icons( $dashicons ) {
 		return '<span class="dashicons ' . $dashicons . '"></span>';
-	}
-
-	/**
-	 * Create WordPress Big Post Box
-	 *
-	 * @param $title
-	 * @param $content
-	 * @param string $bottom
-	 */
-	public static function PostBox( $title, $content, $bottom = '' ) {
-		echo '
-		<div class="postbox-container" id="wps-big-postbox">
-        <div class="metabox-holder">
-            <div class="meta-box-sortables">
-                <div class="postbox">
-                    <button class="handlediv" type="button" aria-expanded="true">
-                        <span class="screen-reader-text">' . sprintf( __( 'Toggle panel: %s', 'wp-statistics' ), $title ) . '</span>
-                        <span class="toggle-indicator" aria-hidden="true"></span>
-                    </button>
-                    <h2 class="hndle"><span>' . $title . '</span></h2>
-                    <div class="inside">
-						' . $content . '
-                    </div>
-                </div>
-				' . $bottom . '
-            </div>
-        </div>
-    </div>';
-		$jQuery = '
-		if (typeof pagenow !== \'undefined\') {
-        	postboxes.add_postbox_toggles(pagenow);
-        }';
-		echo self::JQuery( $jQuery );
 	}
 
 	/**
@@ -410,7 +406,7 @@ class Admin_Templates {
 		}
 
 		//Print Time Range Select Ui
-		echo '<input type="text" size="18" name="rangestart" wps-date-picker="from" value="' . $rangestart . '" placeholder="' . __( Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '" autocomplete="off"> ' . __( 'to', 'wp-statistics' ) . ' <input type="text" size="18" name="rangeend" wps-date-picker="to" value="' . $rangeend . '" placeholder="' . __( self::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '" autocomplete="off"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
+		echo '<input type="text" size="18" name="rangestart" wps-date-picker="from" value="' . $rangestart . '" placeholder="' . __( Admin_Template::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '" autocomplete="off"> ' . __( 'to', 'wp-statistics' ) . ' <input type="text" size="18" name="rangeend" wps-date-picker="to" value="' . $rangeend . '" placeholder="' . __( self::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '" autocomplete="off"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
 
 		//Sanitize Time Request
 		echo '<input type="hidden" name="rangestart" id="date-from" value="' . TimeZone::getLocalDate( "Y-m-d", $rangestart_utime ) . '">';
@@ -433,7 +429,7 @@ class Admin_Templates {
 		//List Of Pages For show 20 Days as First Parameter
 		$list_of_pages = array( 'hits', 'searches', 'pages', 'countries', 'categories', 'tags', 'authors', 'browser', 'exclusions' );
 		foreach ( $list_of_pages as $page ) {
-			if ( isset( $_GET['page'] ) and $_GET['page'] == Menus::get_page_slug( $page ) ) {
+			if ( Menus::in_page( $page ) ) {
 				$daysToDisplay = 30;
 			}
 		}

@@ -6,14 +6,14 @@
 <?php
 
 use WP_STATISTICS\Admin_Helper;
-use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Admin_Template;
 use WP_STATISTICS\Country;
 
 $ISOCountryCode = Country::getList();
 include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 ?>
 <div class="wrap wps-wrap">
-	<?php Admin_Templates::show_page_title( __( 'Top 100 Visitors Today', 'wp-statistics' ) ); ?>
+	<?php Admin_Template::show_page_title( __( 'Top 100 Visitors Today', 'wp-statistics' ) ); ?>
 	<?php
 
 	$current    = 0;
@@ -28,7 +28,7 @@ include( WP_STATISTICS_DIR . 'includes/log/widgets/top.visitors.php' );
 	echo ' ' . __( 'Date', 'wp-statistics' ) . ': ';
 
 	echo '<input type="hidden" name="page" value="' . \WP_STATISTICS\Menus::get_page_slug( 'top-visitors' ) . '">' . "\r\n";
-	echo '<input type="text" size="18" name="statsdate" wps-date-picker="stats" value="' . htmlentities( $statsdate, ENT_QUOTES ) . '" autocomplete="off" placeholder="' . __( Admin_Templates::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
+	echo '<input type="text" size="18" name="statsdate" wps-date-picker="stats" value="' . htmlentities( $statsdate, ENT_QUOTES ) . '" autocomplete="off" placeholder="' . __( Admin_Template::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
 	echo '<input type="hidden" name="statsdate" id="date-stats" value="' . $rang_start . '">';
 	echo '</form>' . "\r\n";
 	?>

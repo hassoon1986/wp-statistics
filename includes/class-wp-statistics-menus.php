@@ -159,6 +159,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Hits', 'wp-statistics' ),
 				'page_url' => 'hits',
+				'method'   => 'hits',
 			),
 			'online'       => array(
 				'require'  => array( 'useronline' => true ),

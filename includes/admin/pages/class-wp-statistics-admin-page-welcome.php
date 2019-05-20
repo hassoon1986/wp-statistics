@@ -8,7 +8,7 @@ class Welcome {
 	 *
 	 * @var string
 	 */
-	public static $addone = 'https://wp-statistics.com/wp-json/plugin/addons';
+	public static $addons = 'https://wp-statistics.com/wp-json/plugin/addons';
 
 	/**
 	 * Get Change Log of Last Version Wp-Statistics
@@ -31,6 +31,7 @@ class Welcome {
 	 */
 	public function init() {
 
+		// Check Show Welcome Page
 		if ( Option::get( 'show_welcome_page', false ) and ( strpos( $_SERVER['REQUEST_URI'], '/wp-admin/index.php' ) !== false or ( isset( $_GET['page'] ) and $_GET['page'] == 'wps_overview_page' ) ) ) {
 
 			// Disable show welcome page
@@ -38,7 +39,7 @@ class Welcome {
 			Option::update( 'show_welcome_page', false );
 
 			// Redirect to welcome page
-			wp_redirect( Menus::admin_url( 'wps_welcome' ) );
+			wp_redirect( Menus::admin_url( 'wps_welcome_page' ) );
 			exit;
 		}
 
@@ -51,30 +52,37 @@ class Welcome {
 	 * Register menu
 	 */
 	public function menu() {
-		add_submenu_page( __( 'WP-Statistics Welcome', 'wp-statistics' ), __( 'WP-Statistics Welcome', 'wp-statistics' ), __( 'WP-Statistics Welcome', 'wp-statistics' ), 'administrator', 'wps_welcome', array( $this, 'page_callback' ) );
+		add_submenu_page( __( 'WP-Statistics Welcome', 'wp-statistics' ), __( 'WP-Statistics Welcome', 'wp-statistics' ), __( 'WP-Statistics Welcome', 'wp-statistics' ), 'administrator', 'wps_welcome_page', array( $this, 'page_callback' ) );
 	}
 
 	/**
 	 * Welcome page
 	 */
 	public function page_callback() {
-		$response      = wp_remote_get( self::$addone );
-		$response_code = wp_remote_retrieve_response_code( $response );
-		$error         = null;
-		$plugins       = array();
+		Admin_Template::get_template( array( 'welcome' ), self::get_list_addons() );
+	}
+
+	/**
+	 * Get List WP-Statistics addons
+	 */
+	public static function get_list_addons() {
+		$response        = wp_remote_get( self::$addons );
+		$response_code   = wp_remote_retrieve_response_code( $response );
+		$error           = null;
+		$args['plugins'] = array();
 
 		// Check response
 		if ( is_wp_error( $response ) ) {
-			$error = $response->get_error_message();
+			$args['error'] = $response->get_error_message();
 		} else {
 			if ( $response_code == '200' ) {
-				$plugins = json_decode( $response['body'] );
+				$args['plugins'] = json_decode( $response['body'] );
 			} else {
-				$error = $response['body'];
+				$args['error'] = $response['body'];
 			}
 		}
 
-		include( WP_STATISTICS_DIR . "includes/admin/templates/welcome.php" );
+		return $args;
 	}
 
 	/**

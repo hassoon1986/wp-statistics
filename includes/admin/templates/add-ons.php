@@ -2,9 +2,7 @@
     <div id="post-body" class="metabox-holder">
         <div class="wp-list-table widefat widefat plugin-install">
             <div id="the-list">
-                <?php use WP_STATISTICS\Admin_Helper;
-                use WP_STATISTICS\Menus;
-
+                <?php
                 foreach ( $plugins->items as $plugin ) : ?>
                     <div class="plugin-card">
                         <?php if ( $plugin->is_feature and $plugin->featured_label ) : ?>
@@ -47,11 +45,11 @@
                             </div>
                             <div class="column-compatibility">
                                 <?php if ( is_plugin_active( $plugin->slug . '/' . $plugin->slug . '.php' ) ) { ?>
-                                    <a href="<?php echo Menus::admin_url( 'plugins', array( 'action' => 'deactivate', 'plugin' => $plugin->slug ) ); ?>" class="button"><?php _e( 'Deactivate Add-On', 'wp-statistics' ); ?></a>
+                                    <a href="<?php echo WP_STATISTICS\Menus::admin_url( 'plugins', array( 'action' => 'deactivate', 'plugin' => $plugin->slug ) ); ?>" class="button"><?php _e( 'Deactivate Add-On', 'wp-statistics' ); ?></a>
                                 <?php } else { ?><?php if ( file_exists(
                                     WP_PLUGIN_DIR . '/' . $plugin->slug . '/' . $plugin->slug . '.php'
                                 ) ) { ?>
-                                    <a href="<?php echo Menus::admin_url( 'plugins', array( 'action' => 'activate', 'plugin' => $plugin->slug ) ); ?>" class="button"><?php _e( 'Activate Add-On', 'wp-statistics' ); ?></a>
+                                    <a href="<?php echo WP_STATISTICS\Menus::admin_url( 'plugins', array( 'action' => 'activate', 'plugin' => $plugin->slug ) ); ?>" class="button"><?php _e( 'Activate Add-On', 'wp-statistics' ); ?></a>
                                 <?php } else { ?>
                                     <div class="column-price">
                                         <strong>$<?php echo $plugin->price; ?></strong>

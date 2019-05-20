@@ -5,28 +5,29 @@ namespace WP_STATISTICS;
 class optimization_page {
 
 	public function __construct() {
+
+		// Add Notice Save
 		add_action( 'admin_notices', array( $this, 'save' ) );
+
+		// Check Access Level
+		if ( Menus::in_page( 'optimization' ) and ! User::Access( 'manage' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
 	}
 
 	/**
 	 * This function displays the HTML for the settings page.
 	 */
 	public static function view() {
-		global $wpdb;
 
-		// Check the current user has the rights to be here.
-		if ( ! User::Access( 'manage' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-		}
+		// Add Class inf
+		$args['class'] = 'wp-statistics-settings';
 
-		// Get the row count for each of the tables, we'll use this later on in the wps_optimization.php file.
-		$list_table = DB::table( 'all' );
-		$result     = array();
-		foreach ( $list_table as $tbl_key => $tbl_name ) {
-			$result[ $tbl_name ] = $wpdb->get_var( "SELECT COUNT(*) FROM `$tbl_name`" );
-		}
+		// Get List Table
+		$args['list_table'] = DB::table( 'all' );
+		$args['result']     = DB::getTableRows();
 
-		include WP_STATISTICS_DIR . "includes/admin/templates/optimization.php";
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'optimization', 'layout/footer' ), $args );
 	}
 
 	/**

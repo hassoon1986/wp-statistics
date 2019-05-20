@@ -8,7 +8,7 @@
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
-use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Admin_Template;
 use WP_STATISTICS\Referred;
 
 $ISOCountryCode = Country::getList();
@@ -42,7 +42,7 @@ if ( $_get != '%' ) {
 
 ?>
 <div class="wrap wps-wrap">
-	<?php Admin_Templates::show_page_title( __( 'Recent Visitors', 'wp-statistics' ) ); ?>
+	<?php Admin_Template::show_page_title( __( 'Recent Visitors', 'wp-statistics' ) ); ?>
     <br/>
     <ul class="subsubsub">
         <li class="all"><a <?php if ( $_get == '%' ) {
@@ -148,7 +148,7 @@ if ( $_get != '%' ) {
 							if ( array_search( strtolower( $items->agent ), WP_STATISTICS\UserAgent::BrowserList( 'key' ) ) !== false ) {
 								$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 							} else {
-								$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
+								$agent = \WP_STATISTICS\Admin_Template::icons( 'dashicons-editor-help' );
 							}
 							echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 							echo "</td>";
@@ -205,7 +205,7 @@ if ( $_get != '%' ) {
                 </div>
 				<?php
 				//Show Pagination
-				\WP_STATISTICS\Admin_Templates::paginate_links( array(
+				\WP_STATISTICS\Admin_Template::paginate_links( array(
 					'item_per_page' => $items_per_page,
 					'total'         => $total,
 					'current'       => $page,

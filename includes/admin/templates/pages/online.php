@@ -1,46 +1,58 @@
-<div class="wrap wps-wrap">
-	<?php
-	WP_STATISTICS\Admin_Templates::show_page_title( $page_title );
+<div class="postbox-container" id="wps-big-postbox">
+    <div class="metabox-holder">
+        <div class="meta-box-sortables">
+            <div class="postbox">
+                <button class="handlediv" type="button" aria-expanded="true">
+                    <span class="screen-reader-text"><?php echo sprintf( __( 'Toggle panel: %s', 'wp-statistics' ), $title ); ?></span>
+                    <span class="toggle-indicator" aria-hidden="true"></span>
+                </button>
+                <h2 class="hndle"><span><?php echo $title; ?></span></h2>
+                <div class="inside">
+					<?php if ( ! is_array( $user_online_list ) ) { ?>
+                        <div class='wps-center'><?php echo $user_online_list; ?></div>
+					<?php } else { ?>
+                        <table width="100%" class="widefat table-stats">
+                            <tr>
+                                <td><?php _e( 'Browser', 'wp-statistics' ); ?></td>
+								<?php if ( WP_STATISTICS\GeoIP::active() ) { ?>
+                                    <td><?php _e( 'Country', 'wp-statistics' ); ?></td>
+								<?php } ?>
+								<?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
+                                    <td><?php _e( 'City', 'wp-statistics' ); ?></td>
+								<?php } ?>
+                                <td><?php _e( 'IP', 'wp-statistics' ); ?></td>
+                                <td><?php _e( 'Online For', 'wp-statistics' ); ?></td>
+                                <td><?php _e( 'Page', 'wp-statistics' ); ?></td>
+                                <td><?php _e( 'Referrer', 'wp-statistics' ); ?></td>
+                                <td></td>
+                            </tr>
 
-	if ( ! is_array( $user_online_list ) ) {
-		$content = "<div class='wps-center'>" . $user_online_list . "</div>";
-	} else {
-		$content = '<table width="100%" class="widefat table-stats"><tr>';
-		$content .= '<td>' . __( 'Browser', 'wp-statistics' ) . '</td>';
-		if ( WP_STATISTICS\GeoIP::active() ) {
-			$content .= "<td>" . __( 'Country', 'wp-statistics' ) . "</td>";
-		}
-		if ( WP_STATISTICS\GeoIP::active( 'city' ) ) {
-			$content .= "<td>" . __( 'City', 'wp-statistics' ) . "</td>";
-		}
-		$content .= "<td>" . __( 'IP', 'wp-statistics' ) . "</td>";
-		$content .= "<td>" . __( 'Online For', 'wp-statistics' ) . "</td>";
-		$content .= "<td>" . __( 'Page', 'wp-statistics' ) . "</td>";
-		$content .= "<td>" . __( 'Referrer', 'wp-statistics' ) . "</td>";
-		$content .= "<td></td>";
-		$content .= "</tr>";
+							<?php foreach ( $user_online_list as $item ) { ?>
+                                <tr>
+                                    <td style="text-align: left">
+                                        <a href="<?php echo $item['browser']['link']; ?>" title="<?php echo $item['browser']['name']; ?>"><img src="<?php echo $item['browser']['logo']; ?>" alt="<?php echo $item['browser']['name']; ?>" class="log-tools" title="<?php echo $item['browser']['name']; ?>"/></a>
+                                    </td>
+									<?php if ( WP_STATISTICS\GeoIP::active() ) { ?>
+                                        <td style="text-align: left">
+                                            <img src="<?php echo $item['country']['flag']; ?>" alt="<?php echo $item['country']['name']; ?>" title="<?php echo $item['country']['name']; ?>" class="log-tools"/>
+                                        </td>
+									<?php } ?>
+									<?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
+                                        <td><?php echo $item['city']; ?></td>
+									<?php } ?>
+                                    <td style='text-align: left'><?php echo( isset( $item['hash_ip'] ) ? $item['hash_ip'] : "<a href='" . $item['ip']['link'] . "'>" . $item['ip']['value'] . "</a>" ); ?></td>
+                                    <td style='text-align: left'><span><?php echo $item['online_for']; ?></span></td>
+                                    <td style='text-align: left'><?php echo ( $item['page']['link'] != '' ? '<a href="' . $item['page']['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . $item['page']['title'] . ( $item['page']['link'] != '' ? '</a>' : '' ); ?></td>
+                                    <td style='text-align: left'><?php echo $item['referred']; ?></td>
+                                    <td style='text-align: center'><?php echo( isset( $item['map'] ) ? "<a class='wps-text-muted' href='" . $item['ip']['link'] . "'>" . WP_STATISTICS\Admin_Template::icons( 'dashicons-visibility' ) . "</a><a class='show-map wps-text-muted' href='" . $item['map'] . "' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . WP_STATISTICS\Admin_Template::icons( 'dashicons-location-alt' ) . "</a>" : "" ); ?></td>
+                                </tr>
+							<?php } ?>
 
-		foreach ( $user_online_list as $item ) {
-
-			$content .= "<tr>";
-			$content .= '<td style="text-align: left"><a href="' . $item['browser']['link'] . '" title="' . $item['browser']['name'] . '"><img src="' . $item['browser']['logo'] . '" alt="' . $item['browser']['name'] . '" class="log-tools" title="' . $item['browser']['name'] . '"/></a></td>';
-			if ( WP_STATISTICS\GeoIP::active() ) {
-				$content .= '<td style="text-align: left"><img src="' . $item['country']['flag'] . '" alt="' . $item['country']['name'] . '" title="' . $item['country']['name'] . '" class="log-tools"/></td>';
-			}
-			if ( WP_STATISTICS\GeoIP::active( 'city' ) ) {
-				$content .= '<td>' . $item['city'] . '</td>';
-			}
-			$content .= "<td style='text-align: left'>" . ( isset( $item['hash_ip'] ) ? $item['hash_ip'] : "<a href='" . $item['ip']['link'] . "'>" . $item['ip']['value'] . "</a>" ) . "</td>";
-			$content .= "<td style='text-align: left'><span>" . $item['online_for'] . "</span></td>";
-			$content .= "<td style='text-align: left'>" . ( $item['page']['link'] != '' ? '<a href="' . $item['page']['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . $item['page']['title'] . ( $item['page']['link'] != '' ? '</a>' : '' ) . "</td>";
-			$content .= "<td style='text-align: left'>" . $item['referred'] . "</td>";
-			$content .= "<td style='text-align: center'>" . ( isset( $item['map'] ) ? "<a class='wps-text-muted' href='" .  $item['ip']['link'] . "'>" . WP_STATISTICS\Admin_Templates::icons( 'dashicons-visibility', 'visibility' ) . "</a><a class='show-map wps-text-muted' href='".$item['map']."' target='_blank' title='" . __( 'Map', 'wp-statistics' ) . "'>" . WP_STATISTICS\Admin_Templates::icons( 'dashicons-location-alt', 'map' ) . "</a>" : "" ) . "</td>";
-			$content .= '</tr>';
-		}
-
-		$content .= "</table>";
-	}
-
-	WP_STATISTICS\Admin_Templates::PostBox( $page_title, $content, $pagination );
-	?>
+                        </table>
+					<?php } ?>
+                </div>
+            </div>
+			<?php echo isset( $pagination ) ? $pagination : ''; ?>
+        </div>
+    </div>
 </div>

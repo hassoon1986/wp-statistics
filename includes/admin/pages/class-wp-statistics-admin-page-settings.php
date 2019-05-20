@@ -6,8 +6,16 @@ class settings_page {
 
 	public function __construct() {
 
+		// Save Setting Action
 		add_action( 'admin_init', array( $this, 'save' ) );
+
+		// Admin Notice
 		add_action( 'admin_notices', array( $this, 'notice' ) );
+
+		// Check Access Level
+		if ( Menus::in_page( 'settings' ) and ! User::Access( 'manage' ) ) {
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
 	}
 
 	/**
@@ -15,34 +23,39 @@ class settings_page {
 	 */
 	public static function view() {
 
-		// Check the current user has the rights to be here.
-		if ( ! User::Access( 'read' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-		}
-
 		// Check admin notices.
 		if ( Option::get( 'admin_notices' ) == true ) {
 			Option::update( 'disable_donation_nag', false );
 			Option::update( 'disable_suggestion_nag', false );
 		}
 
-		// Check User Access To Save Setting
-		$wps_admin = false;
-		if ( User::Access( 'manage' ) ) {
-			$wps_admin = true;
-		}
-		if ( $wps_admin === false ) {
-			$wps_admin = 0;
-		}
-		$selist                       = SearchEngine::getList( true );
-		$permalink                    = get_option( 'permalink_structure' );
-		$disable_strip_uri_parameters = false;
-		if ( $permalink == '' || strpos( $permalink, '?' ) !== false ) {
-			$disable_strip_uri_parameters = true;
-		}
-		$wp_statistics_options = Option::getOptions();
+		// Add Class inf
+		$args['class'] = 'wp-statistics-settings';
 
-		include WP_STATISTICS_DIR . "includes/admin/templates/settings.php";
+		// Check User Access To Save Setting
+		$args['wps_admin'] = false;
+		if ( User::Access( 'manage' ) ) {
+			$args['wps_admin'] = true;
+		}
+		if ( $args['wps_admin'] === false ) {
+			$args['wps_admin'] = 0;
+		}
+
+		// Get Search List
+		$args['selist'] = SearchEngine::getList( true );
+
+		// Get Permalink Structure
+		$args['permalink']                    = get_option( 'permalink_structure' );
+		$args['disable_strip_uri_parameters'] = false;
+		if ( $args['permalink'] == '' || strpos( $args['permalink'], '?' ) !== false ) {
+			$args['disable_strip_uri_parameters'] = true;
+		}
+
+		// Get List All Options
+		$args['wp_statistics_options'] = Option::getOptions();
+
+		// Load Template
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'settings', 'layout/footer' ), $args );
 	}
 
 	/**

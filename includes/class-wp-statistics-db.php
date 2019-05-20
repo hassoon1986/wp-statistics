@@ -127,4 +127,17 @@ class DB {
 		return $query;
 	}
 
+	/**
+	 * Get Number of Table Rows
+	 */
+	public static function getTableRows() {
+		global $wpdb;
+		$result = array();
+		foreach ( self::table( 'all' ) as $tbl_key => $tbl_name ) {
+			$result[ $tbl_name ] = $wpdb->get_var( "SELECT COUNT(*) FROM `$tbl_name`" );
+		}
+
+		return $result;
+	}
+
 }

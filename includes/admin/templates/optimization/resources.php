@@ -11,7 +11,7 @@
             </th>
 
             <td>
-                <strong><?php echo number_format_i18n( memory_get_usage() ); ?></strong> <?php _e( 'Bytes', 'wp-statistics' ); ?>
+                <strong><?php echo size_format( memory_get_usage(), 3 ); ?></strong>
                 <p class="description"><?php _e( 'Memory usage in PHP', 'wp-statistics' ); ?></p>
             </td>
         </tr>

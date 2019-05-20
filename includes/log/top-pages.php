@@ -7,9 +7,9 @@
 //Set Default Time Picker Option
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Menus;
-use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Admin_Template;
 
-list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
+list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Template::prepare_range_time_picker();
 list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_range_calculator(
 	$daysToDisplay,
 	$rangestart,
@@ -41,8 +41,8 @@ for ( $i = $daysToDisplay; $i >= 0; $i -- ) {
 }
 ?>
 <div class="wrap wps-wrap">
-	<?php Admin_Templates::show_page_title( __( 'Top Pages', 'wp-statistics' ) ); ?>
-	<?php Admin_Templates::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('pages'), $daysToDisplay ); ?>
+	<?php Admin_Template::show_page_title( __( 'Top Pages', 'wp-statistics' ) ); ?>
+	<?php Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('pages'), $daysToDisplay ); ?>
     <div class="postbox-container" id="wps-big-postbox">
         <div class="metabox-holder">
             <div class="meta-box-sortables">
@@ -169,7 +169,7 @@ for ( $i = $daysToDisplay; $i >= 0; $i -- ) {
                     </div>
                 </div>
 				<?php if ( $total > 0 ) {
-					\WP_STATISTICS\Admin_Templates::paginate_links( array(
+					\WP_STATISTICS\Admin_Template::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,

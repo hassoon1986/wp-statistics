@@ -8,7 +8,7 @@
 use WP_STATISTICS\Admin_Helper;
 use WP_STATISTICS\Country;
 use WP_STATISTICS\Menus;
-use WP_STATISTICS\Admin_Templates;
+use WP_STATISTICS\Admin_Template;
 use WP_STATISTICS\Referred;
 
 $search_engines = WP_STATISTICS\SearchEngine::getList();
@@ -32,7 +32,7 @@ if ( array_key_exists( 'referred', $_GET ) ) {
 $total = $search_result[ $referred ];
 ?>
 <div class="wrap wps-wrap">
-	<?php Admin_Templates::show_page_title( __( 'Latest Search Words', 'wp-statistics' ) ); ?>
+	<?php Admin_Template::show_page_title( __( 'Latest Search Words', 'wp-statistics' ) ); ?>
     <br/>
     <ul class="subsubsub">
 		<?php
@@ -107,7 +107,7 @@ $total = $search_result[ $referred ];
 
 								$ISOCountryCode = Country::getList();
 
-								$dash_icon = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-location-alt', 'map' );
+								$dash_icon = \WP_STATISTICS\Admin_Template::icons( 'dashicons-location-alt' );
 
 								echo "<table width=\"100%\" class=\"widefat table-stats wps-report-table\"><tr>";
 								echo "<td>" . __( 'Word', 'wp-statistics' ) . "</td>";
@@ -147,7 +147,7 @@ $total = $search_result[ $referred ];
 									) {
 										$agent = "<img src='" . plugins_url( 'wp-statistics/assets/images/' ) . $items->agent . ".png' class='log-tools' title='{$items->agent}'/>";
 									} else {
-										$agent = \WP_STATISTICS\Admin_Templates::icons( 'dashicons-editor-help', 'unknown' );
+										$agent = \WP_STATISTICS\Admin_Template::icons( 'dashicons-editor-help' );
 									}
 									echo "<a href='" . Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) ) . "'>{$agent}</a>";
 									echo "</td>";
@@ -207,7 +207,7 @@ $total = $search_result[ $referred ];
                 </div>
 				<?php
 				if ( $total > 0 ) {
-					\WP_STATISTICS\Admin_Templates::paginate_links( array(
+					\WP_STATISTICS\Admin_Template::paginate_links( array(
 						'item_per_page' => $items_per_page,
 						'total'         => $total,
 						'current'       => $page,

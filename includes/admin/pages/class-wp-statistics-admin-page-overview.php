@@ -25,8 +25,8 @@ class log_page {
 	 * Display Html Page
 	 */
 	public static function view() {
-		$overview_page_slug = Menus::get_action_menu_slug( 'overview' );
-		include WP_STATISTICS_DIR . "includes/admin/templates/pages/overview.php";
+		$args['overview_page_slug'] = Menus::get_action_menu_slug( 'overview' );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'pages/overview', 'layout/footer' ), $args );
 	}
 
 }

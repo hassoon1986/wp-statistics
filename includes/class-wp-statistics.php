@@ -144,7 +144,7 @@ final class WP_Statistics {
 		if ( is_admin() ) {
 
 			require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-install.php';
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-templates.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-template.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-ajax.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-dashboard.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-export.php';
@@ -162,6 +162,7 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-plugins.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-overview.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-online.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-hits.php';
 		}
 
 		// WordPress ShortCode and Widget

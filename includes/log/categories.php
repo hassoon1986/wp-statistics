@@ -5,12 +5,12 @@
 </script>
 <div class="wrap wps-wrap">
 	<?php use WP_STATISTICS\Admin_Helper;
-	use WP_STATISTICS\Admin_Templates;
+	use WP_STATISTICS\Admin_Template;
 
-	Admin_Templates::show_page_title( __( 'Category Statistics', 'wp-statistics' ) ); ?>
+	Admin_Template::show_page_title( __( 'Category Statistics', 'wp-statistics' ) ); ?>
 	<?php
 	//Set Default Time Picker Option
-	list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Templates::prepare_range_time_picker();
+	list( $daysToDisplay, $rangestart, $rangeend ) = Admin_Template::prepare_range_time_picker();
 	if ( array_key_exists( 'cat', $_GET ) ) {
 		$category = intval( $_GET['cat'] );
 	} else {
@@ -38,7 +38,7 @@
 		$rangeend
 	);
 
-	Admin_Templates::date_range_selector(
+	Admin_Template::date_range_selector(
 		\WP_STATISTICS\Menus::get_page_slug('categories'),
 		$daysToDisplay,
 		null,

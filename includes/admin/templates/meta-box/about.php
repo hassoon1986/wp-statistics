@@ -13,7 +13,7 @@
         | <p>
             <a href="<?php echo \WP_STATISTICS\Menus::admin_url( 'settings', array( 'tab' => 'about' ) ); ?>"><?php _e( 'More Info', 'wp-statistics' ); ?></a>
         </p>| <p>
-            <a href="<?php echo \WP_STATISTICS\Menus::admin_url( 'wps_welcome' ); ?>"><?php _e( 'What’s New', 'wp-statistics' ); ?>
+            <a href="<?php echo \WP_STATISTICS\Menus::admin_url( 'wps_welcome_page' ); ?>"><?php _e( 'What’s New', 'wp-statistics' ); ?>
                 ?</a></p>
 		<?php
 	}
