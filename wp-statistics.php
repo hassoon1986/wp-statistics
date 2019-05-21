@@ -28,16 +28,3 @@ function WP_Statistics() {
 
 # Global for backwards compatibility.
 $GLOBALS['WP_Statistics'] = WP_Statistics();
-
-add_action('init', function(){
-//	$days = 20;
-//
-//	// Prepare Date time
-//	for ( $i = $days; $i >= 0; $i -- ) {
-//		$date[] = \WP_STATISTICS\TimeZone::getCurrentDate( 'M j', '-' . $i );
-//	}
-//
-//	print_r($date);
-//	exit;
-
-});
