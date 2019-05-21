@@ -18,6 +18,13 @@ class Admin_Template {
 	public static $item_per_page = 10;
 
 	/**
+	 * Jquery UI Datepicker Format in PHP
+	 *
+	 * @var string
+	 */
+	public static $datepicker_format = 'Y-m-d';
+
+	/**
 	 * Get Template File
 	 *
 	 * @param $template
@@ -363,8 +370,8 @@ class Admin_Template {
 		$today         = TimeZone::getCurrentDate( 'm/d/Y' );
 
 		// Re-create the range start/end strings from our utime's to make sure we get ride of any cruft and have them in the format we want.
-		$rangestart = TimeZone::getLocalDate( get_option( "date_format" ), $rangestart_utime );
-		$rangeend   = TimeZone::getLocalDate( get_option( "date_format" ), $rangeend_utime );
+		$rangestart = TimeZone::getLocalDate( self::$datepicker_format, $rangestart_utime );
+		$rangeend   = TimeZone::getLocalDate( self::$datepicker_format, $rangeend_utime );
 
 		//Calculate hit day if range is exist
 		if ( isset( $_GET['rangeend'] ) and isset( $_GET['rangestart'] ) and strtotime( $_GET['rangestart'] ) != false and strtotime( $_GET['rangeend'] ) != false ) {
@@ -406,11 +413,11 @@ class Admin_Template {
 		}
 
 		//Print Time Range Select Ui
-		echo '<input type="text" size="18" name="rangestart" wps-date-picker="from" value="' . $rangestart . '" placeholder="' . __( Admin_Template::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '" autocomplete="off"> ' . __( 'to', 'wp-statistics' ) . ' <input type="text" size="18" name="rangeend" wps-date-picker="to" value="' . $rangeend . '" placeholder="' . __( self::convert_php_to_jquery_datepicker( get_option( "date_format" ) ), 'wp-statistics' ) . '" autocomplete="off"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
+		echo '<input type="text" size="18" name="rangestart" wps-date-picker="from" value="' . $rangestart . '" placeholder="' . self::$datepicker_format . '" autocomplete="off"> ' . __( 'to', 'wp-statistics' ) . ' <input type="text" size="18" name="rangeend" wps-date-picker="to" value="' . $rangeend . '" placeholder="' . self::$datepicker_format . '" autocomplete="off"> <input type="submit" value="' . __( 'Go', 'wp-statistics' ) . '" class="button-primary">' . "\r\n";
 
 		//Sanitize Time Request
-		echo '<input type="hidden" name="rangestart" id="date-from" value="' . TimeZone::getLocalDate( "Y-m-d", $rangestart_utime ) . '">';
-		echo '<input type="hidden" name="rangeend" id="date-to" value="' . TimeZone::getLocalDate( "Y-m-d", $rangeend_utime ) . '">';
+		echo '<input type="hidden" name="rangestart" id="date-from" value="' . TimeZone::getLocalDate( self::$datepicker_format, $rangestart_utime ) . '">';
+		echo '<input type="hidden" name="rangeend" id="date-to" value="' . TimeZone::getLocalDate( self::$datepicker_format, $rangeend_utime ) . '">';
 
 		// Output any extra HTML we've been passed after the date selector but before the submit button.
 		echo $post_extra;

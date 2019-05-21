@@ -9,13 +9,20 @@ wps_js.exist_tag = function (tag) {
  * Jquery UI Picker
  */
 wps_js.date_picker = function (input, mask) {
-    if (jQuery.fn.datepicker) {
+    if (jQuery.fn.datepicker && typeof wps_i18n_jquery_datepicker !== 'undefined') {
         jQuery("input[wps-date-picker]").datepicker({
-            dateFormat: this.global.date_format.jquery_ui,
+            monthNames: wps_i18n_jquery_datepicker.monthNames,
+            monthNamesShort: wps_i18n_jquery_datepicker.monthNamesShort,
+            dayNames: wps_i18n_jquery_datepicker.dayNames,
+            dayNamesShort: wps_i18n_jquery_datepicker.dayNamesShort,
+            dayNamesMin: wps_i18n_jquery_datepicker.dayNamesMin,
+            dateFormat: wps_i18n_jquery_datepicker.dateFormat,
+            firstDay: wps_i18n_jquery_datepicker.firstDay,
+            isRTL: wps_i18n_jquery_datepicker.isRTL,
             onSelect: function (selectedDate) {
                 let ID = $(this).attr("wps-date-picker");
                 if (selectedDate.length > 0) {
-                    $("input[id=date-" + ID + "]").val(moment(selectedDate, wps_js.global.date_format.moment_js).format('YYYY-MM-DD'));
+                    $("input[id=date-" + ID + "]").val(selectedDate);
                 }
             }
         });

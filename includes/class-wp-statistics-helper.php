@@ -538,6 +538,21 @@ class Helper {
 	}
 
 	/**
+	 * Format array for the datepicker
+	 *
+	 * @param $array_to_strip
+	 * @return array
+	 */
+	public static function strip_array_indices( $array_to_strip ) {
+		$NewArray = array();
+		foreach( $array_to_strip as $objArrayItem) {
+			$NewArray[] =  $objArrayItem;
+		}
+
+		return( $NewArray );
+	}
+
+	/**
 	 * Send Email
 	 *
 	 * @param $to

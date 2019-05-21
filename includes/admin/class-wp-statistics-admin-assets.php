@@ -147,8 +147,8 @@ class Admin_Assets {
 
 		// Load Jquery UI and Moment Js
 		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
-			wp_enqueue_script( self::$prefix . '-momentjs', self::url( 'moment-js/moment.min.js' ), true, '2.24.0' );
 			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_localize_script( 'jquery-ui-datepicker', 'wps_i18n_jquery_datepicker', self::localize_jquery_datepicker() );
 		}
 
 		// Load WordPress PostBox Script
@@ -283,6 +283,28 @@ class Admin_Assets {
 		return $list;
 	}
 
+	/**
+	 * Localize jquery datepicker
+	 *
+	 * @see https://gist.github.com/mehrshaddarzi/7f661baeb5d801961deb8b821157e820
+	 */
+	public static function localize_jquery_datepicker() {
+		global $wp_locale;
+
+		return array(
+			'closeText'       => __( 'Done', 'wp-statistics' ),
+			'currentText'     => __( 'Today', 'wp-statistics' ),
+			'monthNames'      => Helper::strip_array_indices( $wp_locale->month ),
+			'monthNamesShort' => Helper::strip_array_indices( $wp_locale->month_abbrev ),
+			'monthStatus'     => __( 'Show a different month', 'wp-statistics' ),
+			'dayNames'        => Helper::strip_array_indices( $wp_locale->weekday ),
+			'dayNamesShort'   => Helper::strip_array_indices( $wp_locale->weekday_abbrev ),
+			'dayNamesMin'     => Helper::strip_array_indices( $wp_locale->weekday_initial ),
+			'dateFormat'      => 'yy-mm-dd', // Format time for Jquery UI
+			'firstDay'        => get_option( 'start_of_week' ),
+			'isRTL'           => (int) $wp_locale->is_rtl(),
+		);
+	}
 }
 
 new Admin_Assets;
