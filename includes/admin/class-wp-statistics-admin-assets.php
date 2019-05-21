@@ -206,7 +206,13 @@ class Admin_Assets {
 
 		// WordPress Admin Page request Params
 		if ( isset( $_GET ) ) {
-			$list['request_params'] = $_GET;
+			foreach ( $_GET as $key => $value ) {
+				if ( $key == "page" ) {
+					$slug = Menus::getPageKeyFromSlug( $value );
+					$value = $slug[0];
+				}
+				$list['request_params'][ $key ] = $value;
+			}
 		}
 
 		// Global Lang

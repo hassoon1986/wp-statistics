@@ -92,13 +92,25 @@ class Menus {
 	public static function in_plugin_page() {
 		global $pagenow;
 		if ( is_admin() and $pagenow == "admin.php" and isset( $_REQUEST['page'] ) ) {
-			$admin_menu_slug = explode( "[slug]", self::$admin_menu_slug );
-			preg_match( '/(?<=' . $admin_menu_slug[0] . ').*?(?=' . $admin_menu_slug[1] . ')/', $_REQUEST['page'], $page_name );
+			$page_name = self::getPageKeyFromSlug( $_REQUEST['page'] );
 			if ( is_array( $page_name ) and count( $page_name ) > 0 ) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Convert Page Slug to Page key
+	 *
+	 * @example wps_hists_pages -> hits
+	 * @param $page_slug
+	 * @return mixed
+	 */
+	public static function getPageKeyFromSlug( $page_slug ) {
+		$admin_menu_slug = explode( "[slug]", self::$admin_menu_slug );
+		preg_match( '/(?<=' . $admin_menu_slug[0] . ').*?(?=' . $admin_menu_slug[1] . ')/', $page_slug, $page_name );
+		return $page_name; # for get use $page_name[0]
 	}
 
 	/**
