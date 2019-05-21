@@ -6,11 +6,11 @@ $image_path: "../images";
 
 // WordPress Admin Component
 @import "component/print";
-@import "component/placeholder/placeholder-loading";
 @import "component/admin-bar";
 @import "component/pagination";
 @import "component/editor";
 @import "component/meta-box";
+@import "component/placeholder/placeholder-loading";
 
 // WordPress Admin Page
 @import "pages/setting";

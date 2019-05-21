@@ -12,9 +12,15 @@ var gulp = require('gulp'),
 // Gulp Sass Compiler
 sass.compiler = require('node-sass');
 gulp.task('sass', function () {
-    return gulp.src('./assets/dev/sass/admin.scss')
-        .pipe(sass.sync().on('error', sass.logError))
-        .pipe(gulp.dest('./assets/css/'));
+    return gulp.src([
+        './assets/dev/sass/admin.scss',
+        './assets/dev/sass/jquery-datepicker/datepicker.scss',
+        './assets/dev/sass/rtl.scss',
+        './assets/dev/sass/frontend.scss',
+    ])
+        .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(['./assets/css/']));
 });
 
 //Gulp Script Concat

@@ -105,11 +105,11 @@ class Admin_Assets {
 		$screen_id = Helper::get_screen_id();
 
 		// Load Admin Css
-		wp_enqueue_style( self::$prefix, self::url( 'admin.css' ), array(), self::version() );
+		wp_enqueue_style( self::$prefix, self::url( 'admin.min.css' ), array(), self::version() );
 
 		// Load Rtl Version Css
 		if ( is_rtl() ) {
-			wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.css' ), array(), self::version() );
+			wp_enqueue_style( self::$prefix . '-rtl', self::url( 'rtl.min.css' ), array(), self::version() );
 		}
 
 		//Load Jquery VMap Css
@@ -119,7 +119,7 @@ class Admin_Assets {
 
 		// Load Jquery-ui theme
 		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
-			wp_enqueue_style( self::$prefix . '-jquery-ui-smooth', self::url( 'jquery-ui/smoothness.min.css' ), array(), '1.11.4' );
+			wp_enqueue_style( self::$prefix . '-jquery-datepicker', self::url( 'datepicker.min.css' ), array(), '1.11.4' );
 		}
 
 	}
@@ -203,6 +203,11 @@ class Admin_Assets {
 			'file' => $hook,
 			'ID'   => ( isset( $post ) ? $post->ID : 0 )
 		);
+
+		// WordPress Admin Page request Params
+		if ( isset( $_GET ) ) {
+			$list['request_params'] = $_GET;
+		}
 
 		// Global Lang
 		$list['i18n'] = array(

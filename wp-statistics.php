@@ -3,7 +3,7 @@
  * Plugin Name: WP Statistics
  * Plugin URI: https://wp-statistics.com/
  * Description: Complete WordPress Analytics and Statistics for your site!
- * Version: 12.6.1
+ * Version: 12.6.4
  * Author: VeronaLabs
  * Author URI: http://veronalabs.com/
  * Text Domain: wp-statistics
@@ -28,3 +28,16 @@ function WP_Statistics() {
 
 # Global for backwards compatibility.
 $GLOBALS['WP_Statistics'] = WP_Statistics();
+
+add_action('init', function(){
+//	$days = 20;
+//
+//	// Prepare Date time
+//	for ( $i = $days; $i >= 0; $i -- ) {
+//		$date[] = \WP_STATISTICS\TimeZone::getCurrentDate( 'M j', '-' . $i );
+//	}
+//
+//	print_r($date);
+//	exit;
+
+});
