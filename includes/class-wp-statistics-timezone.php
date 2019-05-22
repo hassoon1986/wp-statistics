@@ -172,10 +172,10 @@ class TimeZone {
 		$list     = array();
 
 		// Check Now Date
-		$args['to']   = ( $args['to'] === false ? self::getCurrentDate() : $args['to'] );
+		$args['to'] = ( $args['to'] === false ? self::getCurrentDate() : $args['to'] );
 
 		// Get List Of Day
-		$period = new \DatePeriod( new \DateTime( $args['from'] ), new \DateInterval( 'P1D' ), new \DateTime( $args['to'] ) );
+		$period = new \DatePeriod( new \DateTime( $args['from'] ), new \DateInterval( 'P1D' ), new \DateTime( date( 'Y-m-d', strtotime( "+1 day", strtotime( $args['to'] ) ) ) ) );
 		foreach ( $period as $key => $value ) {
 			$list[ $value->format( 'Y-m-d' ) ] = array(
 				'timestamp' => $value->format( 'U' ),

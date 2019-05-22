@@ -10,7 +10,7 @@ wps_js.exist_tag = function (tag) {
  */
 wps_js.date_picker = function (input, mask) {
     if (jQuery.fn.datepicker && typeof wps_i18n_jquery_datepicker !== 'undefined') {
-        jQuery("input[wps-date-picker]").datepicker({
+        jQuery("input[data-wps-date-picker]").datepicker({
             monthNames: wps_i18n_jquery_datepicker.monthNames,
             monthNamesShort: wps_i18n_jquery_datepicker.monthNamesShort,
             dayNames: wps_i18n_jquery_datepicker.dayNames,
@@ -20,7 +20,7 @@ wps_js.date_picker = function (input, mask) {
             firstDay: wps_i18n_jquery_datepicker.firstDay,
             isRTL: wps_i18n_jquery_datepicker.isRTL,
             onSelect: function (selectedDate) {
-                let ID = $(this).attr("wps-date-picker");
+                let ID = $(this).attr("data-wps-date-picker");
                 if (selectedDate.length > 0) {
                     $("input[id=date-" + ID + "]").val(selectedDate);
                 }

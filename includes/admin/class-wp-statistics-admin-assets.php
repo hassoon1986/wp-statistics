@@ -180,12 +180,6 @@ class Admin_Assets {
 	public static function wps_global( $hook ) {
 		global $post;
 
-		// Date Format
-		$list['date_format'] = array(
-			'jquery_ui' => Admin_Template::convert_php_to_jquery_datepicker( get_option( "date_format" ) ),
-			'moment_js' => Admin_Template::convert_php_to_moment_js( get_option( "date_format" ) ),
-		);
-
 		//Global Option
 		$list['options'] = array(
 			'rtl'           => ( is_rtl() ? 1 : 0 ),

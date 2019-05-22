@@ -228,7 +228,7 @@ class Helper {
 	 * Get Number Days From install this plugin
 	 * this method used for `ALL` Option in Time Range Pages
 	 */
-	public static function get_number_days_install_plugin() {
+	public static function get_date_install_plugin() {
 		global $wpdb;
 
 		//Create Empty default Option
@@ -248,21 +248,10 @@ class Helper {
 
 		//Calculate hit day if range is exist
 		if ( empty( $first_day ) ) {
-			$result = array(
-				'days' => 1,
-				'date' => current_time( 'timestamp' )
-			);
+			return false;
 		} else {
-			$earlier = new \DateTime( $first_day );
-			$later   = new \DateTime( TimeZone::getCurrentDate( 'Y-m-d' ) );
-			$result  = array(
-				'days'      => $later->diff( $earlier )->format( "%a" ),
-				'timestamp' => strtotime( $first_day ),
-				'first_day' => $first_day,
-			);
+			return $first_day;
 		}
-
-		return $result;
 	}
 
 	/**
@@ -545,11 +534,11 @@ class Helper {
 	 */
 	public static function strip_array_indices( $array_to_strip ) {
 		$NewArray = array();
-		foreach( $array_to_strip as $objArrayItem) {
-			$NewArray[] =  $objArrayItem;
+		foreach ( $array_to_strip as $objArrayItem ) {
+			$NewArray[] = $objArrayItem;
 		}
 
-		return( $NewArray );
+		return ( $NewArray );
 	}
 
 	/**

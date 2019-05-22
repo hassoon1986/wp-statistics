@@ -8,7 +8,7 @@ list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_
 	$rangeend
 );
 
-\WP_STATISTICS\Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('hits'), $daysToDisplay );
+//\WP_STATISTICS\Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('hits'), $daysToDisplay );
 
 $visit_total   = 0;
 $visitor_total = 0;
