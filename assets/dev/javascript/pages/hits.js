@@ -1,4 +1,4 @@
-if (wps_js.isset(wps_js.global, 'page', 'file') && wps_js.global.page.file === "statistics_page_wps_hits_page") {
+if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.request_params.page === "hits") {
 
     // Create Params
     let params;

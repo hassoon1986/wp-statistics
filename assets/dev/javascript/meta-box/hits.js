@@ -8,7 +8,7 @@ wps_js.hits_meta_box = {
 
         // Check Hit Chart size in Different Page
         let height = wps_js.is_active('overview_page') ? 110 : 210;
-        if (wps_js.isset(wps_js.global, 'page', 'file') && wps_js.global.page.file === "statistics_page_wps_hits_page") {
+        if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.request_params.page === "hits") {
             height = 80;
         }
 
@@ -22,7 +22,7 @@ wps_js.hits_meta_box = {
         this.hits_chart(wps_js.chart_id('hits'), args);
 
         // Set Total For Hits Page
-        if (wps_js.isset(wps_js.global, 'page', 'file') && wps_js.global.page.file === "statistics_page_wps_hits_page") {
+        if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.request_params.page === "hits") {
             ["visits", "visitors"].forEach(function (key) {
                 let tag = "span[id^='number-total-chart-" + key + "']";
                 if (wps_js.exist_tag(tag)) {
