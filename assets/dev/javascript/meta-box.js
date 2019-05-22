@@ -62,9 +62,9 @@ wps_js.circle_placeholder = function () {
 /**
  * Default Circle PlaceHolder
  */
-wps_js.rectangle_placeholder = function () {
+wps_js.rectangle_placeholder = function (cls = '') {
     return `
-<div class="wps-ph-item">
+<div class="wps-ph-item` + (cls.length > 0 ? ' ' + cls : '') + `">
     <div class="wps-ph-col-12">
         <div class="wps-ph-picture"></div>
     </div>
@@ -148,8 +148,9 @@ wps_js.meta_box_button = function (key) {
  *
  * @param key
  * @param params
+ * @param button
  */
-wps_js.run_meta_box = function (key, params = false) {
+wps_js.run_meta_box = function (key, params = false, button = true) {
 
     // Check Exist Meta Box div
     if (wps_js.exist_tag("#" + wps_js.getMetaBoxKey(key)) && (wps_js.is_active('gutenberg') || (!wps_js.is_active('gutenberg') && jQuery("#" + wps_js.getMetaBoxKey(key)).is(":visible")))) {
@@ -171,7 +172,9 @@ wps_js.run_meta_box = function (key, params = false) {
             }
 
             // Add Custom Button
-            wps_js.meta_box_button(key);
+            if (button === true) {
+                wps_js.meta_box_button(key);
+            }
 
             // Get Meta Box Data
             let arg = {'name': key};

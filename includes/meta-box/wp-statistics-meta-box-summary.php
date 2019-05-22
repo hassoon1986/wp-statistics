@@ -178,7 +178,7 @@ class summary {
 
 		// Get Hits chartJs (20 Day Ago)
 		if ( in_array( 'hit-chart', $component ) ) {
-			$data['hits-chart'] = hits::LastHitsChart( ( isset( $component['days'] ) ? $component['days'] : 20 ) );
+			$data['hits-chart'] = hits::HitsChart( ( isset( $component['days'] ) ? array( 'ago' => $component['days'] ) : array( 'ago' => 20 ) ) );
 		}
 
 		return $data;

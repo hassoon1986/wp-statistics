@@ -146,7 +146,7 @@ class TimeZone {
 	 * @return float
 	 */
 	public static function getNumberDayBetween( $from, $to = false ) {
-		$to        = ( $to === false ? self::getCurrentTimestamp() : $to );
+		$to        = ( $to === false ? self::getCurrentTimestamp() : strtotime( $to ) );
 		$from      = strtotime( $from );
 		$date_diff = $to - $from;
 

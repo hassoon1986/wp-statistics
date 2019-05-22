@@ -37,6 +37,10 @@ class hits_page {
 		// Get Date-Range
 		$args['DateRang'] = Admin_Template::DateRange();
 
+		// Get Total Visits and Visitors
+		$args['total_visits']   = ( Option::get( 'visits' ) ? wp_statistics_visit( 'total' ) : 0 );
+		$args['total_visitors'] = ( Option::get( 'visitors' ) ? wp_statistics_visitor( 'total', null, true ) : 0 );
+
 		// Show Template Page
 		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/hits', 'layout/postbox.toggle', 'layout/footer' ), $args );
 	}

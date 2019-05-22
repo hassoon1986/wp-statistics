@@ -215,9 +215,16 @@ function wp_statistics_visit( $time, $daily = null ) {
 	$sum = 0;
 
 	//Check if daily Report
-	if ( $daily == true ) {
+	if ( $daily === true ) {
 
-		$result = $wpdb->get_row( $sql . " WHERE `$date_column` = '" . \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time ) . "'" );
+		// Check Sanitize Datetime
+		if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+			$d = $time;
+		} else {
+			$d = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+		}
+
+		$result = $wpdb->get_row( $sql . " WHERE `$date_column` = '" . $d . "'" );
 		if ( null !== $result ) {
 			$sum = $result->visit;
 		}
@@ -355,8 +362,15 @@ function wp_statistics_visitor( $time, $daily = null, $count_only = false, $opti
 	//Check Date Time report
 	if ( $daily == true ) {
 
+		// Check Sanitize Datetime
+		if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+			$d = $time;
+		} else {
+			$d = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+		}
+
 		//Get Only Current Day Visitors
-		$where[] = "`" . WP_STATISTICS\DB::table( 'visitor' ) . "`.`last_counter` = '" . \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time ) . "'";
+		$where[] = "`" . WP_STATISTICS\DB::table( 'visitor' ) . "`.`last_counter` = '" . $d . "'";
 	} else {
 
 		//Generate MySql Time Conditions

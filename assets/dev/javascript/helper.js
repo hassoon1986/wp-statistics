@@ -145,9 +145,26 @@ wps_js.site_icon = function (domain) {
  */
 wps_js.wordpress_postbox_ajax = function (type = 'enable') {
     let wordpress_postbox = jQuery('.postbox .hndle, .postbox .handlediv');
-    if(type ==='enable') {
+    if (type === 'enable') {
         wordpress_postbox.on('click', window.postboxes.handle_click);
     } else {
         wordpress_postbox.off('click', window.postboxes.handle_click);
     }
+};
+
+/**
+ * Isset Property in Object
+ *
+ * @param obj
+ */
+wps_js.isset = function (obj) {
+    let args = Array.prototype.slice.call(arguments, 1);
+
+    for (let i = 0; i < args.length; i++) {
+        if (!obj || !obj.hasOwnProperty(args[i])) {
+            return false;
+        }
+        obj = obj[args[i]];
+    }
+    return true;
 };
