@@ -113,4 +113,77 @@ class TimeZone {
 		}
 	}
 
+	/**
+	 * Check is Valid date
+	 *
+	 * @param $date
+	 * @return bool
+	 */
+	public static function isValidDate( $date ) {
+		if ( preg_match( "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $date ) and strtotime( $date ) != false ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get List Of days from ago Days
+	 *
+	 * @param int $ago_days
+	 * @param string $format
+	 * @return false|string
+	 */
+	public static function getTimeAgo( $ago_days = 1, $format = 'Y-m-d' ) {
+		return date( $format, strtotime( "- " . $ago_days . " day", self::getCurrentTimestamp() ) );
+	}
+
+	/**
+	 * Get Number Days From Two Days
+	 *
+	 * @example 2019-05-18, 2019-05-22 -> 5 days
+	 * @param $from
+	 * @param bool $to
+	 * @return float
+	 */
+	public static function getNumberDayBetween( $from, $to = false ) {
+		$to        = ( $to === false ? self::getCurrentTimestamp() : $to );
+		$from      = strtotime( $from );
+		$date_diff = $to - $from;
+
+		return ceil( $date_diff / ( 60 * 60 * 24 ) );
+	}
+
+	/**
+	 * Get List Of Two Days
+	 *
+	 * @param array $args
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getListDays( $args = array() ) {
+
+		// Get Default
+		$defaults = array(
+			'from'   => '',
+			'to'     => false,
+			'format' => "M j"
+		);
+		$args     = wp_parse_args( $args, $defaults );
+		$list     = array();
+
+		// Check Now Date
+		$args['to']   = ( $args['to'] === false ? self::getCurrentDate() : $args['to'] );
+
+		// Get List Of Day
+		$period = new \DatePeriod( new \DateTime( $args['from'] ), new \DateInterval( 'P1D' ), new \DateTime( $args['to'] ) );
+		foreach ( $period as $key => $value ) {
+			$list[ $value->format( 'Y-m-d' ) ] = array(
+				'timestamp' => $value->format( 'U' ),
+				'format'    => $value->format( apply_filters( 'wp_statistics_request_days_format', $args['format'] ) )
+			);
+		}
+
+		return $list;
+	}
+
 }

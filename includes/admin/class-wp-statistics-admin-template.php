@@ -25,6 +25,21 @@ class Admin_Template {
 	public static $datepicker_format = 'Y-m-d';
 
 	/**
+	 * Global Request Date time in Pages
+	 *
+	 * @var string
+	 */
+	public static $request_from_date = 'from';
+	public static $request_to_date = 'to';
+
+	/**
+	 * Default time Ago Days in Pages
+	 *
+	 * @var int
+	 */
+	public static $time_ago_days = 30;
+
+	/**
 	 * Get Template File
 	 *
 	 * @param $template
@@ -54,6 +69,36 @@ class Admin_Template {
 			// include File
 			include $template_file;
 		}
+	}
+
+	/**
+	 * Check is Validation Date time Request in Page
+	 *
+	 * @throws \Exception
+	 */
+	public static function isValidDateRequest() {
+
+		// Get Default Time Ago days
+		$default_days_ago = apply_filters( 'wp_statistics_days_ago_request', self::$time_ago_days );
+
+		// Check if not Request Params
+		if ( ! isset( $_GET[ self::$request_from_date ] ) and ! isset( $_GET[ self::$request_to_date ] ) ) {
+			return array( 'status' => true, 'days' => TimeZone::getListDays( array( 'from' => TimeZone::getTimeAgo( $default_days_ago ) ) ), 'type' => 'ago' );
+		}
+
+		// Check if Not Exist
+		if ( ( isset( $_GET[ self::$request_from_date ] ) and ! isset( $_GET[ self::$request_to_date ] ) ) || ( ! isset( $_GET[ self::$request_from_date ] ) and isset( $_GET[ self::$request_to_date ] ) ) ) {
+			return array( 'status' => false, 'message' => __( "Request is not valid.", "wp-statistics" ) );
+		}
+
+		// Check Validate DateTime
+		if ( TimeZone::isValidDate( $_GET[ self::$request_from_date ] ) === false || TimeZone::isValidDate( $_GET[ self::$request_to_date ] ) ) {
+			return array( 'status' => false, 'message' => __( "Time request is not valid.", "wp-statistics" ) );
+		}
+
+		// Export Days Between
+		$type = ( self::$request_to_date == TimeZone::getCurrentDate( "Y-m-d" ) ? 'ago' : 'between' );
+		return array( 'status' => true, 'days' => TimeZone::getListDays( array( 'from' => $_GET[ self::$request_from_date ], 'to' => $_GET[ self::$request_to_date ] ) ), 'type' => $type );
 	}
 
 	/**
