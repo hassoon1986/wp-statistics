@@ -9,10 +9,21 @@
 
     <!-- Show JQuery DatePicker -->
 	<?php _e( 'Time Frame', 'wp-statistics' ); ?>:
-    <form action="<?php echo admin_url('admin.php'); ?>" method="get" class="wps-inline" id="jquery-datepicker">
+    <form action="<?php echo admin_url( 'admin.php' ); ?>" method="get" class="wps-inline" id="jquery-datepicker">
 
         <!-- Set Page name To Form -->
         <input name="page" type="hidden" value="<?php echo $pageName; ?>">
+
+        <!-- Set Custom Input -->
+		<?php
+		if ( isset( $custom_get ) ) {
+			foreach ( $custom_get as $key => $val ) {
+				?>
+                <input name="<?php echo $key; ?>" type="hidden" value="<?php echo $val; ?>">
+				<?php
+			}
+		}
+		?>
 
         <!-- set Page Pagination To Form -->
 		<?php if ( $pagination > 1 ) { ?>

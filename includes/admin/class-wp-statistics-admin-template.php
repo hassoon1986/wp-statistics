@@ -102,26 +102,6 @@ class Admin_Template {
 	}
 
 	/**
-	 * Show Page title
-	 * //TODO Remove at last
-	 *
-	 * @param string $title
-	 */
-	public static function show_page_title( $title = '' ) {
-
-		//Check if $title not Set
-		if ( empty( $title ) and function_exists( 'get_admin_page_title' ) ) {
-			$title = get_admin_page_title();
-		}
-
-		//show Page title
-		echo '<img src="' . WP_STATISTICS_URL . '/assets/images/title-logo.png" class="wps_page_title" alt="wp-statistics plugin logo"><h2 class="wps_title">' . $title . '</h2>';
-
-		//do_action after wp_statistics
-		do_action( 'wp_statistics_after_title' );
-	}
-
-	/**
 	 * Get Current Paged
 	 *
 	 * @return float|int
@@ -273,6 +253,15 @@ class Admin_Template {
 		}
 
 		return array( 'list' => $list, 'from' => reset( $RequestDateKeys ), 'to' => end( $RequestDateKeys ) );
+	}
+
+	/**
+	 * Unknown Column
+	 *
+	 * @return string
+	 */
+	public static function UnknownColumn() {
+		return '<span aria-hidden="true">—</span><span class="screen-reader-text">' . __( "Unknown", 'wp-statistics' ) . '</span>';
 	}
 
 }

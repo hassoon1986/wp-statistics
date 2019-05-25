@@ -133,24 +133,27 @@ class Referred {
 	 * Get Number Referer Domain
 	 *
 	 * @param $url
+	 * @param string $type [list|number]
 	 * @param array $time_rang
-	 * @return integer
+	 * @param null $limit
+	 * @return array
+	 * @throws \Exception
 	 */
-	public static function get_number_referer_from_domain( $url, $time_rang = array() ) {
+	public static function get_referer_from_domain( $url, $type = 'number', $time_rang = array(), $limit = null ) {
 		global $wpdb;
 
 		//Get Domain Name
-		$search_url = Helper::get_domain_name( esc_url_raw( $url ) );
+		$search_url = Helper::get_domain_name( $url );
 
 		//Prepare SQL
 		$time_sql = '';
 		if ( count( $time_rang ) > 0 and ! empty( $time_rang ) ) {
 			$time_sql = sprintf( "AND `last_counter` BETWEEN '%s' AND '%s'", $time_rang[0], $time_rang[1] );
 		}
-		$sql = $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND (`referred` LIKE  %s OR `referred` LIKE %s OR `referred` LIKE %s OR `referred` LIKE %s) " . $time_sql . " ORDER BY `" . DB::table( 'visitor' ) . "`.`ID` DESC", 'https://www.' . $wpdb->esc_like( $search_url ) . '%', 'https://' . $wpdb->esc_like( $search_url ) . '%', 'http://www.' . $wpdb->esc_like( $search_url ) . '%', 'http://' . $wpdb->esc_like( $search_url ) . '%' );
+		$sql = $wpdb->prepare( "SELECT " . ( $type == 'number' ? 'COUNT(*)' : '*' ) . " FROM `" . DB::table( 'visitor' ) . "` WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND (`referred` LIKE  %s OR `referred` LIKE %s OR `referred` LIKE %s OR `referred` LIKE %s) " . $time_sql . " ORDER BY `" . DB::table( 'visitor' ) . "`.`ID` DESC " . ( $limit != null ? " LIMIT " . $limit : "" ) . "", 'https://www.' . $wpdb->esc_like( $search_url ) . '%', 'https://' . $wpdb->esc_like( $search_url ) . '%', 'http://www.' . $wpdb->esc_like( $search_url ) . '%', 'http://' . $wpdb->esc_like( $search_url ) . '%' );
 
 		//Get Count
-		return $wpdb->get_var( $sql );
+		return ( $type == 'number' ? $wpdb->get_var( $sql ) : Visitor::PrepareData( $wpdb->get_results( $sql ) ) );
 	}
 
 	/**
@@ -229,7 +232,7 @@ class Referred {
 
 			$result = $wpdb->get_results( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND `referred` NOT LIKE '{$site_url}%' GROUP BY domain ORDER BY `number` DESC LIMIT $number" );
 			foreach ( $result as $items ) {
-				$get_urls[ $items->domain ] = self::get_number_referer_from_domain( $items->domain );
+				$get_urls[ $items->domain ] = self::get_referer_from_domain( $items->domain );
 			}
 
 			// Put the results in a transient. Expire after 12 hours.

@@ -201,7 +201,7 @@ class Visitor {
 	 * Get Visitors List By Custom Query
 	 *
 	 * @param array $arg
-	 * @return array
+	 * @return mixed
 	 * @throws \Exception
 	 */
 	public static function get( $arg = array() ) {
@@ -229,13 +229,29 @@ class Visitor {
 		// Send Request
 		$result = $wpdb->get_results( $args['sql'] );
 
-		// Get List
+		// Get Visitor Data
+		return self::PrepareData( $result );
+	}
+
+	/**
+	 * Prepare Visitor Data
+	 *
+	 * @param array $result
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function PrepareData( $result = array() ) {
+
+		// Prepare List
 		$list = array();
+
+		// Push to List
 		foreach ( $result as $items ) {
 
 			$item = array(
 				'hits'     => (int) $items->hits,
 				'referred' => Referred::get_referrer_link( $items->referred ),
+				'refer'    => $items->referred,
 				'date'     => date_i18n( get_option( 'date_format' ), strtotime( $items->last_counter ) ),
 				'agent'    => $items->agent,
 				'platform' => $items->platform,
@@ -254,6 +270,7 @@ class Visitor {
 				$item['hash_ip'] = IP::$hash_ip_prefix;
 			} else {
 				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+				$item['map'] = GeoIP::geoIPTools( $items->ip );
 			}
 
 			// Push Country

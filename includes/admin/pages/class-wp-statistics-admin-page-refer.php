@@ -58,28 +58,39 @@ class refer_page {
 
 			// Total Number
 			$args['total'] = count( $result );
+			$args['list']  = array();
 
 			// Prepare List
-			$chunk        = array_chunk( $result, Admin_Template::$item_per_page );
-			$list_in_page = $chunk[ $args['paged'] - 1 ];
-			$get_urls     = array();
-			foreach ( $list_in_page as $items ) {
-				$get_urls[ $items->domain ] = Referred::get_number_referer_from_domain( $items->domain );
-			}
-			$list = Referred::PrepareReferData( $get_urls );
+			if ( $args['total'] > 0 ) {
+				$chunk        = array_chunk( $result, Admin_Template::$item_per_page );
+				$list_in_page = $chunk[ $args['paged'] - 1 ];
+				$get_urls     = array();
+				foreach ( $list_in_page as $items ) {
+					$get_urls[ $items->domain ] = Referred::get_referer_from_domain( $items->domain );
+				}
+				$list = Referred::PrepareReferData( $get_urls );
 
-			// Push Domain Rate in List
-			$i            = 1;
-			$args['list'] = array();
-			foreach ( $list as $domain_list ) {
-				$args['list'][] = array_merge( $domain_list, array( 'rate' => $i + ( ( $args['paged'] - 1 ) * Admin_Template::$item_per_page ) ) );
-				$i ++;
+				// Push Domain Rate in List
+				$i = 1;
+				foreach ( $list as $domain_list ) {
+					$args['list'][] = array_merge( $domain_list, array( 'rate' => $i + ( ( $args['paged'] - 1 ) * Admin_Template::$item_per_page ) ) );
+					$i ++;
+				}
 			}
-
 
 		} else {
-			// Get Special List
 
+			// Get Special domain Refer List
+			$args['domain']    = trim( $_GET['referr'] );
+			$args['custom_get'] = array( 'referr' => $_GET['referr'] );
+			$args['title']     = sprintf( __( 'Referring site: %s', 'wp-statistics' ), Referred::html_sanitize_referrer( $args['domain'] ) );
+			$args['total']     = Referred::get_referer_from_domain( $args['domain'], 'number', array( $args['DateRang']['from'], $args['DateRang']['to'] ) );
+			$args['list']      = array();
+
+			//Prepare List
+			if ( $args['total'] > 0 ) {
+				$args['list'] = Referred::get_referer_from_domain( $args['domain'], 'list', array( $args['DateRang']['from'], $args['DateRang']['to'] ), ( $args['paged'] - 1 ) * Admin_Template::$item_per_page . "," . Admin_Template::$item_per_page );
+			}
 
 		}
 
