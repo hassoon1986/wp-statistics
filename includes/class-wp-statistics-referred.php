@@ -236,6 +236,22 @@ class Referred {
 			set_transient( self::$top_referring_transient, $get_urls, 20 * HOUR_IN_SECONDS );
 		}
 
+		// Return Data
+		return self::PrepareReferData( $get_urls );
+	}
+
+	/**
+	 * Prepare Refer Data
+	 *
+	 * @param $get_urls
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function PrepareReferData( $get_urls ) {
+
+		//Prepare List
+		$list = array();
+
 		//Load country Code
 		$ISOCountryCode = Country::getList();
 
@@ -247,7 +263,7 @@ class Referred {
 			return array();
 		}
 
-		$list = array();
+		// Check List
 		foreach ( $get_urls as $domain => $number ) {
 
 			//Get Site Link
@@ -270,6 +286,7 @@ class Referred {
 				'title'     => $referrer_list[ $domain ]['title'],
 				'ip'        => ( $referrer_list[ $domain ]['ip'] != "" ? $referrer_list[ $domain ]['ip'] : '-' ),
 				'country'   => ( $referrer_list[ $domain ]['country'] != "" ? $ISOCountryCode[ $referrer_list[ $domain ]['country'] ] : '' ),
+				'flag'      => ( $referrer_list[ $domain ]['country'] != "" ? Country::flag( $referrer_list[ $domain ]['country'] ) : '' ),
 				'page_link' => Menus::admin_url( 'referrers', array( 'referr' => $referrer_html ) ),
 				'number'    => number_format_i18n( $number )
 			);

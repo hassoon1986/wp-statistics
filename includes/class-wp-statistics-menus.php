@@ -185,6 +185,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Referrers', 'wp-statistics' ),
 				'page_url' => 'referrers',
+				'method'   => 'refer',
 			),
 			'words'        => array(
 				'require'  => array( 'visitors' => true ),
