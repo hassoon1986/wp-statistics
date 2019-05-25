@@ -404,12 +404,13 @@ class SearchEngine {
 			'search_engine' => 'all',
 			'per_page'      => 10,
 			'paged'         => 1,
+			'limit'         => null
 		);
 		$args     = wp_parse_args( $arg, $defaults );
 
 		// Prepare Query
 		$search_query = wp_statistics_searchword_query( $args['search_engine'] );
-		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'search' ) . "` INNER JOIN `" . DB::table( 'visitor' ) . "` on `" . DB::table( 'search' ) . "`.`visitor` = " . DB::table( 'visitor' ) . ".`ID` WHERE {$search_query} ORDER BY `" . DB::table( 'search' ) . "`.`ID` DESC LIMIT 0, {$args['per_page']}" );
+		$result       = $wpdb->get_results( "SELECT * FROM `" . DB::table( 'search' ) . "` INNER JOIN `" . DB::table( 'visitor' ) . "` on `" . DB::table( 'search' ) . "`.`visitor` = " . DB::table( 'visitor' ) . ".`ID` WHERE {$search_query} ORDER BY `" . DB::table( 'search' ) . "`.`ID` DESC " . ( $args['limit'] != null ? " LIMIT " . $args['limit'] : " LIMIT 0, {$args['per_page']}" ) );
 
 		// Get List
 		$list = array();
@@ -420,35 +421,11 @@ class SearchEngine {
 				continue;
 			}
 
-			$item = array(
-				'word'     => $items->words,
-				'referred' => Referred::get_referrer_link( $items->referred ),
-				'browser'  => array(
-					'name' => $items->agent,
-					'logo' => UserAgent::getBrowserLogo( $items->agent ),
-					'link' => Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) )
-				),
-				'date'     => date_i18n( get_option( 'date_format' ), strtotime( $items->last_counter ) ),
-			);
-
-			// Push IP
-			if ( IP::IsHashIP( $items->ip ) ) {
-				$item['hash_ip'] = IP::$hash_ip_prefix;
-			} else {
-				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
-			}
-
-			// Push Country
-			if ( GeoIP::active() ) {
-				$item['country'] = array( 'location' => $items->location, 'flag' => Country::flag( $items->location ), 'name' => Country::getName( $items->location ) );
-			}
-
-			// Push City
-			if ( GeoIP::active( 'city' ) ) {
-				$item['city'] = GeoIP::getCity( $items->ip );
-			}
-
-			$list[] = $item;
+			//Prepare Data
+			$array   = array();
+			$array[] = $items;
+			$item    = Visitor::PrepareData( $array );
+			$list[]  = $item[0];
 		}
 
 		return $list;

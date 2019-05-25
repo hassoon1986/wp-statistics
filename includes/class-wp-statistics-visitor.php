@@ -269,7 +269,7 @@ class Visitor {
 			if ( IP::IsHashIP( $items->ip ) ) {
 				$item['hash_ip'] = IP::$hash_ip_prefix;
 			} else {
-				$item['ip'] = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
 				$item['map'] = GeoIP::geoIPTools( $items->ip );
 			}
 
@@ -281,6 +281,11 @@ class Visitor {
 			// Push City
 			if ( GeoIP::active( 'city' ) ) {
 				$item['city'] = GeoIP::getCity( $items->ip );
+			}
+
+			// Check If Search Word
+			if ( isset( $items->words ) ) {
+				$item['word'] = $items->words;
 			}
 
 			$list[] = $item;

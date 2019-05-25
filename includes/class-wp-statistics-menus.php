@@ -192,6 +192,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Search Words', 'wp-statistics' ),
 				'page_url' => 'words',
+				'method'   => 'words',
 			),
 			'searches'     => array(
 				'require'  => array( 'visitors' => true ),
