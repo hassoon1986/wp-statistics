@@ -7,38 +7,82 @@ use WP_STATISTICS\SearchEngine;
 use WP_STATISTICS\TimeZone;
 
 class search {
+	/**
+	 * Get Search Engine Chart
+	 *
+	 * @param array $arg
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function get( $arg = array() ) {
 
-	public static function get( $args = array() ) {
+		// Set Default Params
+		$defaults = array(
+			'ago'  => 0,
+			'from' => '',
+			'to'   => ''
+		);
+		$args     = wp_parse_args( $arg, $defaults );
 
-		$days           = ( isset( $args['number'] ) ? $args['number'] : 10 );
-		$total_stats    = Option::get( 'chart_totals' );
-		$date           = $stats = $total_daily = $search_engine_list = array();
-		$search_engines = SearchEngine::getList();
+		// Set Default Params
+		$date = $stats = $total_daily = $search_engine_list = array();
 
-		for ( $i = $days; $i >= 0; $i -- ) {
-			$date[] = TimeZone::getCurrentDate( 'M j', '-' . $i );
+		// Check Default
+		if ( empty( $args['from'] ) and empty( $args['to'] ) and $args['ago'] < 1 ) {
+			$args['ago'] = 15;
 		}
 
+		// Get time ago Days Or Between Two Days
+		if ( $args['ago'] > 0 ) {
+			$days_list = TimeZone::getListDays( array( 'from' => TimeZone::getTimeAgo( $args['ago'] ) ) );
+		} else {
+			$days_list = TimeZone::getListDays( array( 'from' => $args['from'], 'to' => $args['to'] ) );
+		}
+
+		// Get List Of Days
+		$days_time_list = array_keys( $days_list );
+		foreach ( $days_list as $k => $v ) {
+			$date[]            = $v['format'];
+			$total_daily[ $k ] = 0;
+		}
+
+		// Prepare title Hit Chart
+		if ( $args['ago'] > 0 ) {
+			$count_day = $args['ago'];
+		} else {
+			$count_day = TimeZone::getNumberDayBetween( $args['from'], $args['to'] );
+		}
+
+		// Set Title
+		if ( end( $days_time_list ) == TimeZone::getCurrentDate( "Y-m-d" ) ) {
+			$title = sprintf( __( 'Search engine referrals in the last %s days', 'wp-statistics' ), $count_day );
+		} else {
+			$title = sprintf( __( 'Search engine referrals from %s to %s', 'wp-statistics' ), $args['from'], $args['to'] );
+		}
+
+		//Check Chart total is activate
+		$total_stats = Option::get( 'chart_totals' );
+
+		// Get List Of Search Engine
+		$search_engines = SearchEngine::getList();
+
+		// Push List to data
 		foreach ( $search_engines as $se ) {
 
 			// Get Search engine information
 			$search_engine_list[] = $se;
 
-			// Get Number of Search
-			for ( $i = $days; $i >= 0; $i -- ) {
-				if ( ! array_key_exists( $i, $total_daily ) ) {
-					$total_daily[ $i ] = 0;
-				}
-
-				$stat                   = wp_statistics_searchengine( $se['tag'], '-' . $i );
-				$stats[ $se['name'] ][] = $stat;
-				$total_daily[ $i ]      += $stat;
+			// Get Number Search every Days
+			foreach ( $days_time_list as $d ) {
+				$getStatic = wp_statistics_searchengine( $se['tag'], $d );
+				$stats[ $se['name'] ][] = $getStatic;
+				$total_daily[ $d ] = $total_daily[ $d ] + $getStatic;
 			}
 		}
 
 		// Prepare Response
 		$response = array(
-			'title'         => sprintf( __( 'Search engine referrals in the last %s days', 'wp-statistics' ), $days ),
+			'title'         => $title,
 			'date'          => $date,
 			'stat'          => $stats,
 			'search-engine' => $search_engine_list,

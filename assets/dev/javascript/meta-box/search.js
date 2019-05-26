@@ -5,7 +5,14 @@ wps_js.search_meta_box = {
     },
 
     view: function (args = []) {
-        return `<canvas id="` + wps_js.chart_id('search') + `" height="` + (wps_js.is_active('overview_page') ? 110 : 210) + `"></canvas>`;
+
+        // Check Hit Chart size in Different Page
+        let height = wps_js.is_active('overview_page') ? 110 : 210;
+        if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.request_params.page === "searches") {
+            height = 80;
+        }
+
+        return `<canvas id="` + wps_js.chart_id('search') + `" height="` + height + `"></canvas>`;
     },
 
     meta_box_init: function (args = []) {

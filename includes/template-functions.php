@@ -172,8 +172,12 @@ function wp_statistics_mysql_time_conditions( $field = 'date', $time = 'total', 
 		default:
 			if ( array_key_exists( 'is_day', $range ) ) {
 				//Check a day
-				$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
-				$where          = "`$field` = '{$getCurrentDate}'";
+				if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+					$where = "`$field` = '{$time}'";
+				} else {
+					$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+					$where          = "`$field` = '{$getCurrentDate}'";
+				}
 			} elseif ( array_key_exists( 'start', $range ) and array_key_exists( 'end', $range ) ) {
 				//Check Between Two Time
 				$getCurrentDate    = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['start'] ) );
@@ -812,17 +816,22 @@ function wp_statistics_get_search_engine_query( $search_engine = 'all', $time = 
 	}
 
 	//Generate Base Sql
-	$sql = "SELECT * FROM {$table_name} WHERE ({$search_query})";
+	$sql = "SELECT COUNT(*) FROM {$table_name} WHERE ({$search_query})";
+
+	// Check Sanitize Datetime
+	if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+		$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time, array( 'is_day' => true ) );
+	} else {
+		$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time, array( 'current_date' => true ) );
+	}
 
 	//Generate MySql Time Conditions
-	$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time, array( 'current_date' => true ) );
 	if ( ! empty( $mysql_time_sql ) ) {
 		$sql = $sql . ' AND (' . $mysql_time_sql . ')';
 	}
 
 	//Request Data
-	$result = $wpdb->query( $sql );
-	return $result;
+	return $wpdb->get_var( $sql );
 }
 
 /**

@@ -199,6 +199,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Search Engines', 'wp-statistics' ),
 				'page_url' => 'searches',
+				'method'   => 'searches',
 			),
 			'pages'        => array(
 				'require'  => array( 'pages' => true ),
