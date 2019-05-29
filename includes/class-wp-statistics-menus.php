@@ -206,6 +206,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Pages', 'wp-statistics' ),
 				'page_url' => 'pages',
+				'method'   => 'pages',
 			),
 			'visitors'     => array(
 				'require'  => array( 'visitors' => true ),

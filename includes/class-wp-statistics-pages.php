@@ -356,15 +356,22 @@ class Pages {
 	/**
 	 * Get Top number of Hits Pages
 	 *
-	 * @param int $number
+	 * @param array $args
 	 * @return array
 	 */
-	public static function getTop( $number = 10 ) {
+	public static function getTop( $args = array() ) {
 		global $wpdb;
+
+		// Define the array of defaults
+		$defaults = array(
+			'per_page' => 10,
+			'paged'    => 1
+		);
+		$args     = wp_parse_args( $args, $defaults );
 
 		// Get List Of Pages
 		$list   = array();
-		$result = $wpdb->get_results( "SELECT `pages`.`uri`,`pages`.`id`,`pages`.`type`, SUM(`pages`.`count`) + IFNULL(`historical`.`value`, 0) AS `count_sum` FROM `" . DB::table( 'pages' ) . "` `pages` LEFT JOIN `" . DB::table( 'historical' ) . "` `historical` ON `pages`.`uri`=`historical`.`uri` AND `historical`.`category`='uri' GROUP BY `uri` ORDER BY `count_sum` DESC LIMIT " . $number );
+		$result = $wpdb->get_results( "SELECT `pages`.`uri`,`pages`.`id`,`pages`.`type`, SUM(`pages`.`count`) + IFNULL(`historical`.`value`, 0) AS `count_sum` FROM `" . DB::table( 'pages' ) . "` `pages` LEFT JOIN `" . DB::table( 'historical' ) . "` `historical` ON `pages`.`uri`=`historical`.`uri` AND `historical`.`category`='uri' GROUP BY `uri` ORDER BY `count_sum` DESC LIMIT " . ( $args['paged'] - 1 ) * $args['per_page'] . "," . $args['per_page'] );
 		foreach ( $result as $item ) {
 
 			// Lookup the post title.
@@ -381,5 +388,16 @@ class Pages {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Count Number Page in DB Table
+	 *
+	 * @param string $group_by
+	 * @return mixed
+	 */
+	public static function TotalCount( $group_by = 'uri' ) {
+		global $wpdb;
+		return $wpdb->get_var( "SELECT COUNT(*) FROM `" . DB::table( 'pages' ) . "` `pages` GROUP BY `{$group_by}`" );
 	}
 }

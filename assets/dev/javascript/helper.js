@@ -132,6 +132,17 @@ wps_js.chart_id = function (meta_box) {
 };
 
 /**
+ * Generate Flat Random Color
+ */
+wps_js.random_color = function () {
+    let color = {};
+    ['r', 'g', 'b'].forEach(function (key) {
+        color[key] = Math.floor(Math.random() * 255);
+    });
+    return color;
+};
+
+/**
  * Show Domain Icon
  */
 wps_js.site_icon = function (domain) {

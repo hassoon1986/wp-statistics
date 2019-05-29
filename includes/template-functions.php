@@ -457,7 +457,7 @@ function wp_statistics_pages( $time, $page_uri = '', $id = - 1, $rangestartdate 
 
 	//Prepare Time
 	$time_array = array();
-	if ( is_numeric( $time ) ) {
+	if ( is_numeric( $time ) || \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
 		$time_array['is_day'] = true;
 	}
 	if ( ! is_null( $rangestartdate ) and ! is_null( $rangeenddate ) ) {
@@ -510,15 +510,22 @@ function wp_stats_compare_uri_hits( $a, $b ) {
 	return $a[1] < $b[1];
 }
 
-// This function returns a multi-dimensional array, with the total number of pages and an array or URI's sorted in order with their URI, count, id and title.
-function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = null ) {
+/**
+ * Get top Pages between Time
+ *
+ * @param null $rangestartdate
+ * @param null $rangeenddate
+ * @param null $limit
+ * @return array
+ */
+function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = null, $limit = null ) {
 	global $wpdb;
 
 	// Get every unique URI from the pages database.
 	if ( $rangestartdate != null && $rangeenddate != null ) {
-		$result = $wpdb->get_results( $wpdb->prepare( "SELECT `uri`,`id`,`type` FROM {$wpdb->prefix}statistics_pages WHERE `date` BETWEEN %s AND %s GROUP BY `uri`", $rangestartdate, $rangeenddate ), ARRAY_N );
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT `uri`,`id`,`type` FROM {$wpdb->prefix}statistics_pages WHERE `date` BETWEEN %s AND %s GROUP BY `uri`" . ( $limit != null ? ' LIMIT ' . $limit : '' ), $rangestartdate, $rangeenddate ), ARRAY_N );
 	} else {
-		$result = $wpdb->get_results( "SELECT `uri`,`id`,`type` FROM {$wpdb->prefix}statistics_pages GROUP BY `uri`", ARRAY_N );
+		$result = $wpdb->get_results( "SELECT `uri`,`id`,`type` FROM {$wpdb->prefix}statistics_pages GROUP BY `uri`" . ( $limit != null ? ' LIMIT ' . $limit : '' ), ARRAY_N );
 	}
 
 	$total = 0;

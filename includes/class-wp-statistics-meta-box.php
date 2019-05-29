@@ -39,6 +39,7 @@ class Meta_Box {
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-useronline.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-about.php';
 		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-post.php';
+		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-top-pages-chart.php';
 	}
 
 	/**
@@ -173,6 +174,11 @@ class Meta_Box {
 			'post'         => array(
 				'name'              => __( 'Hit Statistics', 'wp-statistics' ),
 				'page_url'          => 'pages',
+				'show_on_dashboard' => false,
+				'disable_overview'  => true
+			),
+			'top-pages-chart'         => array(
+				'name'              => __( 'Top 5 Pages Trends', 'wp-statistics' ),
 				'show_on_dashboard' => false,
 				'disable_overview'  => true
 			)

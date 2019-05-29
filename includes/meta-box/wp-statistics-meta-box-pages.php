@@ -11,11 +11,8 @@ class pages {
 	 */
 	public static function get( $args = array() ) {
 
-		// Check Number of Pages
-		$number = ( isset( $args['number'] ) ? $args['number'] : 10 );
-
 		// Get List Top Page
-		$response = \WP_STATISTICS\Pages::getTop( $number );
+		$response = \WP_STATISTICS\Pages::getTop( $args );
 
 		// Check For No Data Meta Box
 		if ( count( $response ) < 1 ) {

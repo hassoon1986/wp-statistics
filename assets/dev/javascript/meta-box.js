@@ -3,9 +3,10 @@
  *
  * @param meta_box
  * @returns {*|void|string|never}
+ * @see https://www.designcise.com/web/tutorial/how-to-replace-all-occurrences-of-a-word-in-a-javascript-string
  */
 wps_js.sanitize_meta_box_name = function (meta_box) {
-    return (meta_box.replace("-", "_"));
+    return (meta_box.replace(new RegExp('-', 'g'), "_"));
 };
 
 /**
