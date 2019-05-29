@@ -6,14 +6,27 @@ use WP_STATISTICS\Option;
 use WP_STATISTICS\TimeZone;
 
 class hits {
+	/**
+	 * Default Number day in Hits Chart
+	 *
+	 * @var int
+	 */
+	public static $default_days_ago = 20;
 
+	/**
+	 * Show Chart Hit
+	 *
+	 * @param array $args
+	 * @return array
+	 * @throws \Exception
+	 */
 	public static function get( $args = array() ) {
 
 		// Check Number Days Or Between
 		if ( isset( $args['from'] ) and isset( $args['to'] ) ) {
 			$params = array( 'from' => $args['from'], 'to' => $args['to'] );
 		} else {
-			$days   = ( isset( $args['days'] ) ? $args['days'] : 20 );
+			$days   = ( isset( $args['ago'] ) ? $args['ago'] : self::$default_days_ago );
 			$params = array( 'ago' => $days );
 		}
 
@@ -80,6 +93,9 @@ class hits {
 		// Push Basic Chart Data
 		$data = array(
 			'days'  => $count_day,
+			'from'  => reset( $days_time_list ),
+			'to'    => end( $days_time_list ),
+			'type'  => ( ( $args['from'] != "" and $args['to'] != "" and $args['ago'] != self::$default_days_ago ) ? 'between' : 'ago' ),
 			'title' => $title,
 			'date'  => $date
 		);

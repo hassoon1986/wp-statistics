@@ -8,6 +8,13 @@ use WP_STATISTICS\TimeZone;
 
 class search {
 	/**
+	 * Default Number day in Search Chart
+	 *
+	 * @var int
+	 */
+	public static $default_days_ago = 15;
+
+	/**
 	 * Get Search Engine Chart
 	 *
 	 * @param array $arg
@@ -29,7 +36,7 @@ class search {
 
 		// Check Default
 		if ( empty( $args['from'] ) and empty( $args['to'] ) and $args['ago'] < 1 ) {
-			$args['ago'] = 15;
+			$args['ago'] = self::$default_days_ago;
 		}
 
 		// Get time ago Days Or Between Two Days
@@ -82,6 +89,10 @@ class search {
 
 		// Prepare Response
 		$response = array(
+			'days'  => $count_day,
+			'from'  => reset( $days_time_list ),
+			'to'    => end( $days_time_list ),
+			'type'  => ( ( $args['from'] != "" and $args['to'] != "" and $args['ago'] != self::$default_days_ago ) ? 'between' : 'ago' ),
 			'title'         => $title,
 			'date'          => $date,
 			'stat'          => $stats,

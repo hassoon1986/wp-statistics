@@ -7,7 +7,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
     if (wps_js.isset(wps_js.global, 'request_params', 'from') && wps_js.isset(wps_js.global, 'request_params', 'to')) {
         params = {'from': wps_js.global.request_params.from, 'to': wps_js.global.request_params.to};
     } else {
-        params = {'days': 30};
+        params = {'ago': 30};
     }
 
     // Set PlaceHolder For Total

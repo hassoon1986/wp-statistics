@@ -249,3 +249,82 @@ jQuery(document).on("click", 'input[type=checkbox][id^="wp-statistics-"][id$="-w
         wps_js.run_meta_box(meta_box_name);
     }
 });
+
+/**
+ * Show Select Date Time For Chart MetaBox
+ */
+wps_js.btn_group_chart = function (chart, args = false) {
+
+    // Datetime Select List
+    let select_list = {
+        7: wps_js._('str_week'),
+        30: wps_js._('str_month'),
+        365: wps_js._('str_year')
+    };
+
+    // Check Active time
+    var active;
+    if (args.type == "ago") {
+        active = parseInt(args.days);
+    }
+
+    // Create Html Data
+    let html = `<div class="wps-btn-group"><div class="btn-group" role="group">`;
+
+    // Show Data
+    Object.keys(select_list).forEach(function (key) {
+        html += `<button type="button" class="btn ` + (key == active ? 'btn-primary' : 'btn-default') + `" data-chart-time="${chart}" data-time="${key}">${select_list[key]}</button>`;
+    });
+
+    // Add Custom
+    html += `<button type="button" class="btn ` + (args.type == "between" ? 'btn-primary' : 'btn-default') + `" data-custom-date-picker="${chart}">${wps_js._('custom')}</button>`;
+    html += `</div></div>`;
+
+    // Show Jquery Date Picker
+    html += `
+    <div data-chart-date-picker="${chart}"` + (args.type == "ago" ? ' style="display:none;"' : '') + `>
+        <input type="text" size="18" name="date-from" data-wps-date-picker="from" value="${args['from']}" placeholder="YYYY-MM-DD" autocomplete="off">
+        ` + wps_js._('to') + `
+        <input type="text" size="18" name="date-to" data-wps-date-picker="to" value="${args['to']}" placeholder="YYYY-MM-DD" autocomplete="off">
+        <input type="submit" value="` + wps_js._('go') + `" data-between-chart-show="${chart}" class="button-primary">
+        <input type="hidden" name="" id="date-from" value="${args['from']}">
+        <input type="hidden" name="" id="date-to" value="${args['to']}">
+    </div>
+    `;
+
+    // Show HTMl
+    return html;
+};
+
+/**
+ * Seat Active Class after Click Btn Group
+ */
+jQuery(document).on("click", '.wps-btn-group button', function () {
+    jQuery('.wps-btn-group button').attr('class', 'btn btn-default');
+    jQuery(this).attr('class', 'btn btn-primary');
+});
+
+/**
+ * SlideToggle Click on Custom Date Range
+ */
+jQuery(document).on("click", 'button[data-custom-date-picker]', function () {
+    jQuery('div[data-chart-date-picker= ' + jQuery(this).attr('data-custom-date-picker') + ']').slideDown();
+});
+
+/**
+ * Button Group Handle Chart time Show
+ */
+jQuery(document).on("click", 'button[data-chart-time]', function () {
+    wps_js.run_meta_box(jQuery(this).attr('data-chart-time'), {'ago': jQuery(this).attr('data-time')});
+});
+
+/**
+ * Send From/To Chart
+ */
+jQuery(document).on("click", 'input[data-between-chart-show]', function () {
+    let chart = jQuery(this).attr('data-between-chart-show');
+    wps_js.run_meta_box(chart, {
+        'from': jQuery("div[data-chart-date-picker=" + chart + "] input[id=date-from]").val(),
+        'to': jQuery("div[data-chart-date-picker=" + chart + "] input[id=date-to]").val()
+    });
+});

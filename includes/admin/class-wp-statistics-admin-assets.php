@@ -118,7 +118,7 @@ class Admin_Assets {
 		}
 
 		// Load Jquery-ui theme
-		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
+		if ( Menus::in_plugin_page() and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_style( self::$prefix . '-jquery-datepicker', self::url( 'datepicker.min.css' ), array(), '1.11.4' );
 		}
 
@@ -146,7 +146,7 @@ class Admin_Assets {
 		}
 
 		// Load Jquery UI and Moment Js
-		if ( Menus::in_plugin_page() and Menus::in_page( 'overview' ) === false and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
+		if ( Menus::in_plugin_page() and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 			wp_localize_script( 'jquery-ui-datepicker', 'wps_i18n_jquery_datepicker', self::localize_jquery_datepicker() );
 		}
@@ -202,7 +202,7 @@ class Admin_Assets {
 		if ( isset( $_GET ) ) {
 			foreach ( $_GET as $key => $value ) {
 				if ( $key == "page" ) {
-					$slug = Menus::getPageKeyFromSlug( $value );
+					$slug  = Menus::getPageKeyFromSlug( $value );
 					$value = $slug[0];
 				}
 				$list['request_params'][ $key ] = $value;
@@ -244,6 +244,12 @@ class Admin_Assets {
 			'platform'      => __( 'Platform', 'wp-statistics' ),
 			'version'       => __( 'Version', 'wp-statistics' ),
 			'page'          => __( 'Page', 'wp-statistics' ),
+			'str_week'      => __( 'Week', 'wp-statistics' ),
+			'str_month'     => __( 'Month', 'wp-statistics' ),
+			'str_year'      => __( 'Year', 'wp-statistics' ),
+			'custom'        => __( 'Custom', 'wp-statistics' ),
+			'to'            => __( 'to', 'wp-statistics' ),
+			'go'            => __( 'Go', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url
