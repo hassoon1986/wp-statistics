@@ -315,7 +315,7 @@ jQuery(document).on("click", 'button[data-custom-date-picker]', function () {
  * Button Group Handle Chart time Show
  */
 jQuery(document).on("click", 'button[data-chart-time]', function () {
-    wps_js.run_meta_box(jQuery(this).attr('data-chart-time'), {'ago': jQuery(this).attr('data-time')});
+    wps_js.run_meta_box(jQuery(this).attr('data-chart-time'), {'ago': jQuery(this).attr('data-time'), 'no-data': 'no'});
 });
 
 /**
@@ -325,6 +325,7 @@ jQuery(document).on("click", 'input[data-between-chart-show]', function () {
     let chart = jQuery(this).attr('data-between-chart-show');
     wps_js.run_meta_box(chart, {
         'from': jQuery("div[data-chart-date-picker=" + chart + "] input[id=date-from]").val(),
-        'to': jQuery("div[data-chart-date-picker=" + chart + "] input[id=date-to]").val()
+        'to': jQuery("div[data-chart-date-picker=" + chart + "] input[id=date-to]").val(),
+        'no-data': 'no'
     });
 });

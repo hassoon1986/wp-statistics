@@ -81,18 +81,18 @@ class search {
 
 			// Get Number Search every Days
 			foreach ( $days_time_list as $d ) {
-				$getStatic = wp_statistics_searchengine( $se['tag'], $d );
+				$getStatic              = wp_statistics_searchengine( $se['tag'], $d );
 				$stats[ $se['name'] ][] = $getStatic;
-				$total_daily[ $d ] = $total_daily[ $d ] + $getStatic;
+				$total_daily[ $d ]      = $total_daily[ $d ] + $getStatic;
 			}
 		}
 
 		// Prepare Response
 		$response = array(
-			'days'  => $count_day,
-			'from'  => reset( $days_time_list ),
-			'to'    => end( $days_time_list ),
-			'type'  => ( ( $args['from'] != "" and $args['to'] != "" and $args['ago'] != self::$default_days_ago ) ? 'between' : 'ago' ),
+			'days'          => $count_day,
+			'from'          => reset( $days_time_list ),
+			'to'            => end( $days_time_list ),
+			'type'          => ( ( $args['from'] != "" and $args['to'] != "" and $args['ago'] != self::$default_days_ago ) ? 'between' : 'ago' ),
 			'title'         => $title,
 			'date'          => $date,
 			'stat'          => $stats,
@@ -105,7 +105,7 @@ class search {
 		);
 
 		// Check For No Data Meta Box
-		if ( count( array_filter( $total_daily ) ) < 1 ) {
+		if ( count( array_filter( $total_daily ) ) < 1 and ! isset( $args['no-data'] ) ) {
 			$response['no_data'] = 1;
 		}
 
