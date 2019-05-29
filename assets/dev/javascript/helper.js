@@ -8,7 +8,7 @@ wps_js.exist_tag = function (tag) {
 /**
  * Jquery UI Picker
  */
-wps_js.date_picker = function (input, mask) {
+wps_js.date_picker = function () {
     if (jQuery.fn.datepicker && typeof wps_i18n_jquery_datepicker !== 'undefined') {
         jQuery("input[data-wps-date-picker]").datepicker({
             monthNames: wps_i18n_jquery_datepicker.monthNames,
@@ -20,9 +20,9 @@ wps_js.date_picker = function (input, mask) {
             firstDay: wps_i18n_jquery_datepicker.firstDay,
             isRTL: wps_i18n_jquery_datepicker.isRTL,
             onSelect: function (selectedDate) {
-                let ID = $(this).attr("data-wps-date-picker");
+                let ID = jQuery(this).attr("data-wps-date-picker");
                 if (selectedDate.length > 0) {
-                    $("input[id=date-" + ID + "]").val(selectedDate);
+                    jQuery("input[id=date-" + ID + "]").val(selectedDate);
                 }
             }
         });
@@ -64,7 +64,7 @@ wps_js.line_chart = function (tag_id, title, label, data) {
                 position: 'bottom',
             },
             animation: {
-                duration: 0,
+                duration: 1500,
             },
             title: {
                 display: true,
@@ -111,7 +111,7 @@ wps_js.bar_chart = function (tag_id, label, data, label_callback) {
                 position: 'bottom',
             },
             animation: {
-                duration: 0,
+                duration: 1500,
             },
             tooltips: {
                 callbacks: {
