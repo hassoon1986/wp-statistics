@@ -32,6 +32,8 @@ class visitors_page {
 		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => $wpdb->get_var( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "`" ), 'active' => ( isset( $_GET['referred'] ) || isset( $_GET['ip'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
 		if ( isset( $_GET['ip'] ) ) {
 			$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `ip` LIKE %s", $_GET['ip'] ) ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( 'ip', $_GET['ip'], Menus::admin_url( 'visitors' ) ) );
+		} elseif ( $_GET['location'] ) {
+			$args['sub'][ $_GET['location'] ] = array( 'title' => $_GET['location'], 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `location` LIKE %s", $_GET['location'] ) ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( 'location', $_GET['location'], Menus::admin_url( 'visitors' ) ) );
 		} else {
 			$browsers = UserAgent::BrowserList();
 			foreach ( $browsers as $key => $se ) {
@@ -48,7 +50,7 @@ class visitors_page {
 		$args['total'] = $CurrentView[ key( $CurrentView ) ]['count'];
 		$args['list']  = array();
 		if ( $args['total'] > 0 ) {
-			$where        = ( isset( $_GET['ip'] ) ? "WHERE `ip` LIKE '{$_GET['ip']}'" : ( isset( $_GET['agent'] ) ? "WHERE `agent` LIKE '{$_GET['agent']}'" : '' ) );
+			$where        = ( isset( $_GET['ip'] ) ? "WHERE `ip` LIKE '{$_GET['ip']}'" : ( isset( $_GET['agent'] ) ? "WHERE `agent` LIKE '{$_GET['agent']}'" : ( isset( $_GET['location'] ) ? "WHERE `location` LIKE '{$_GET['location']}'" : '' ) ) );
 			$args['list'] = Visitor::get( array(
 				'sql'      => "SELECT * FROM `" . DB::table( 'visitor' ) . "` " . $where . " ORDER BY ID DESC",
 				'per_page' => Admin_Template::$item_per_page,
