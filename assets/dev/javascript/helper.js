@@ -134,12 +134,24 @@ wps_js.chart_id = function (meta_box) {
 /**
  * Generate Flat Random Color
  */
-wps_js.random_color = function () {
-    let color = {};
-    ['r', 'g', 'b'].forEach(function (key) {
-        color[key] = Math.floor(Math.random() * 255);
-    });
-    return color;
+wps_js.random_color = function (i = false) {
+    let colors = [
+        [243, 156, 18, "#f39c12"],
+        [52, 152, 219, "#3498db"],
+        [192, 57, 43, "#c0392b"],
+        [155, 89, 182, "#9b59b6"],
+        [39, 174, 96, "#27ae60"],
+        [230, 126, 34, "#e67e22"],
+        [142, 68, 173, "#8e44ad"],
+        [46, 204, 113, "#2ecc71"],
+        [41, 128, 185, "#2980b9"],
+        [22, 160, 133, "#16a085"],
+        [211, 84, 0, "#d35400"],
+        [44, 62, 80, "#2c3e50"],
+        [241, 196, 15, "#f1c40f"],
+        [231, 76, 60, "#e74c3c"]
+    ];
+    return colors[(i === false ? Math.floor(Math.random() * colors.length) : i)];
 };
 
 /**

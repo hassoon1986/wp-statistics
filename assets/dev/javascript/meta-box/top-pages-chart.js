@@ -23,23 +23,25 @@ wps_js.top_pages_chart_meta_box = {
     },
 
     meta_box_init: function (args = []) {
-       this.top_pages_chart(wps_js.chart_id('top-pages-chart'), args);
+        this.top_pages_chart(wps_js.chart_id('top-pages-chart'), args);
     },
 
     top_pages_chart: function (tag_id, args = []) {
 
         // Prepare Chart Data
         let datasets = [];
+        let i = 0;
         Object.keys(args['stat']).forEach(function (key) {
-            let color = wps_js.random_color();
+            let color = wps_js.random_color(i);
             datasets.push({
                 label: key,
                 data: args['stat'][key],
-                backgroundColor: 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + '0.2)',
-                borderColor: 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + '1)',
+                backgroundColor: 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + '0.3)',
+                borderColor: 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + '1)',
                 borderWidth: 1,
                 fill: true
             });
+            i++;
         });
 
         wps_js.line_chart(tag_id, args['title'], args['date'], datasets);
