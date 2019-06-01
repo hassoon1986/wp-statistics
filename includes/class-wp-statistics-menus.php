@@ -213,6 +213,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Visitors', 'wp-statistics' ),
 				'page_url' => 'visitors',
+				'method'   => 'visitors',
 			),
 			'countries'    => array(
 				'require'  => array( 'geoip' => true, 'visitors' => true ),

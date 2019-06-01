@@ -224,7 +224,7 @@ class Visitor {
 		}
 
 		// Set Pagination
-		$args['sql'] = $args['sql'] . " LIMIT 0, {$args['per_page']}";
+		$args['sql'] = $args['sql'] . " LIMIT " . ( ( $args['paged'] - 1 ) * $args['per_page'] ) . ", {$args['per_page']}";
 
 		// Send Request
 		$result = $wpdb->get_results( $args['sql'] );
