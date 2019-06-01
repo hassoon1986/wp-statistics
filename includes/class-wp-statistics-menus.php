@@ -220,6 +220,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Countries', 'wp-statistics' ),
 				'page_url' => 'countries',
+				'method'   => 'country'
 			),
 			'categories'   => array(
 				'require'  => array( 'pages' => true ),

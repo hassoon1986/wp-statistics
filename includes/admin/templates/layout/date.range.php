@@ -26,7 +26,7 @@
 		?>
 
         <!-- set Page Pagination To Form -->
-		<?php if ( $pagination > 1 ) { ?>
+		<?php if ( isset( $pagination ) and $pagination > 1 ) { ?>
             <input name="<?php echo \WP_STATISTICS\Admin_Template::$paginate_link_name; ?>" type="hidden" value="<?php echo $pagination; ?>">
 		<?php } ?>
 

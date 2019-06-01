@@ -23,7 +23,7 @@
                 <h2 class="hndle"><span><?php echo $title; ?></span></h2>
                 <div class="inside">
 	                <?php if ( ! is_array( $list ) ) { ?>
-                        <div class='wps-center'><?php echo $list; ?></div>
+                        <div class='wps-center'><?php _e( "No information is available.", "wp-statistics" ); ?></div>
 	                <?php } else { ?>
                         <table width="100%" class="widefat table-stats">
                             <tr>
