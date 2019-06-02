@@ -527,6 +527,23 @@ class Helper {
 	}
 
 	/**
+	 * Sort associative array
+	 *
+	 * @param $array
+	 * @param $subfield
+	 * @param int $type
+	 * @return void
+	 * @see https://stackoverflow.com/questions/1597736/how-to-sort-an-array-of-associative-arrays-by-value-of-a-given-key-in-php
+	 */
+	public static function SortByKeyValue( &$array, $subfield, $type = SORT_DESC ) {
+		$sort_array = array();
+		foreach ( $array as $key => $row ) {
+			$sort_array[ $key ] = $row[ $subfield ];
+		}
+		array_multisort( $sort_array, $type, $array );
+	}
+
+	/**
 	 * Format array for the datepicker
 	 *
 	 * @param $array_to_strip

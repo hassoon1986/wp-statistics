@@ -230,9 +230,7 @@
 								?>
                                 <tr>
                                     <th>
-                                        <a href="<?php echo get_permalink(
-											$post_obj
-										); ?>"><?php echo $post_obj->post_title; ?></a>
+                                        <a href="<?php echo get_permalink( $post_obj ); ?>"><?php echo $post_obj->post_title; ?></a>
                                     </th>
                                     <th class="th-center"><span><?php echo number_format_i18n( $post_stat ); ?></span>
                                     </th>

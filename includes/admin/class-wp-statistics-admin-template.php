@@ -186,22 +186,6 @@ class Admin_Template {
 	}
 
 	/**
-	 * insert JQuery Code
-	 *
-	 * @param $code
-	 * @return string
-	 */
-	public static function JQuery( $code ) {
-		return '
-		 	<script type="text/javascript">
-			    jQuery(document).ready(function ($) {
-			        ' . $code . '
-			    });
-			</script>
-		';
-	}
-
-	/**
 	 * Create Date Range
 	 *
 	 * @param bool $page_link

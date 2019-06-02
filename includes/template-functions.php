@@ -428,8 +428,8 @@ function wp_statistics_pages( $time, $page_uri = '', $id = - 1, $rangestartdate 
 	$where = false;
 
 	//Check Query By Page ID or Page Url
-	if ( $type != false and $id != - 1 ) {
-		$where[] = "`type`='" . $type . "' AND `id` = " . $id;
+	if ( $type != false ) {
+		$where[] = "`type`='" . $type . "'" . ( $id != - 1 ? ' AND `id` = ' . $id : '' );
 	} else {
 
 		// If no page URI has been passed in, get the current page URI.

@@ -234,12 +234,14 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Tags', 'wp-statistics' ),
 				'page_url' => 'tags',
+				'method'   => 'tags',
 			),
 			'authors'      => array(
 				'require'  => array( 'pages' => true ),
 				'sub'      => 'overview',
 				'title'    => __( 'Authors', 'wp-statistics' ),
 				'page_url' => 'authors',
+				'method'   => 'authors'
 			),
 			'browsers'     => array(
 				'require'  => array( 'visitors' => true ),
