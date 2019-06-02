@@ -227,6 +227,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Categories', 'wp-statistics' ),
 				'page_url' => 'categories',
+				'method'   => 'category',
 			),
 			'tags'         => array(
 				'require'  => array( 'pages' => true ),
