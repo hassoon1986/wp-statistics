@@ -318,7 +318,7 @@ class Install {
 		 * Change Charset All Table To New WordPress Collate
 		 *
 		 * @see https://developer.wordpress.org/reference/classes/wpdb/has_cap/
-         * @version 13.0.0
+		 * @version 13.0.0
 		 */
 		$list_table = DB::table( 'all' );
 		foreach ( $list_table as $k => $name ) {
