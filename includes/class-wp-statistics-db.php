@@ -35,6 +35,16 @@ class DB {
 	}
 
 	/**
+	 * Get WordPress Table Collate
+	 *
+	 * @return mixed
+	 */
+	public static function charset_collate() {
+		global $wpdb;
+		return $wpdb->get_charset_collate();
+	}
+
+	/**
 	 * Get WP-Statistics Table name
 	 *
 	 * @param $tbl
@@ -138,6 +148,17 @@ class DB {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Get Table information
+	 *
+	 * @param $table_name
+	 * @return mixed
+	 */
+	public static function getTableInformation( $table_name ) {
+		global $wpdb;
+		return $wpdb->get_row( "show table status like '$table_name';", ARRAY_A );
 	}
 
 }

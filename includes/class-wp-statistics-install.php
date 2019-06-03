@@ -68,6 +68,9 @@ class Install {
 		// Load dbDelta WordPress
 		self::load_dbDelta();
 
+		// Charset Collate
+		$collate = DB::charset_collate();
+
 		// Users Online Table
 		$create_user_online_table = ( "
 					CREATE TABLE " . DB::table( 'useronline' ) . " (
@@ -85,7 +88,7 @@ class Install {
 						`page_id` BIGINT(48) NOT NULL,
 						`type` VARCHAR(100) NOT NULL
 						PRIMARY KEY  (ID)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_user_online_table );
 
 		// Visit Table
@@ -97,7 +100,7 @@ class Install {
 						visit int(10) NOT NULL,
 						PRIMARY KEY  (ID),
 						UNIQUE KEY unique_date (last_counter)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_visit_table );
 
 		// Visitor Table
@@ -120,7 +123,7 @@ class Install {
 						KEY platform (platform),
 						KEY version (version),
 						KEY location (location)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_visitor_table );
 
 		// Exclusion Table
@@ -133,7 +136,7 @@ class Install {
 						PRIMARY KEY  (ID),
 						KEY date (date),
 						KEY reason (reason)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_exclusion_table );
 
 		// Pages Table
@@ -151,7 +154,7 @@ class Install {
 						KEY id (id),
 						KEY `uri` (`uri`,`count`,`id`),
 						ADD PRIMARY KEY (`page_id`)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_pages_table );
 
 		// Historical Table
@@ -166,7 +169,7 @@ class Install {
 						KEY category (category),
 						UNIQUE KEY page_id (page_id),
 						UNIQUE KEY uri (uri)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_historical_table );
 
 		// Search Table
@@ -182,7 +185,7 @@ class Install {
 						KEY last_counter (last_counter),
 						KEY engine (engine),
 						KEY host (host)
-					) CHARSET=utf8" );
+					) {$collate}" );
 		dbDelta( $create_search_table );
 	}
 
@@ -197,6 +200,9 @@ class Install {
 		// Get Table name
 		$table_name = DB::table( 'visitor_relationships' );
 
+		// Get charset Collate
+		$collate = DB::charset_collate();
+
 		// if not Found then Create Table
 		if ( DB::ExistTable( $table_name ) === false ) {
 
@@ -209,7 +215,7 @@ class Install {
 				PRIMARY KEY  (ID),
 				KEY visitor_id (visitor_id),
 				KEY page_id (page_id)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			) {$collate}";
 
 			dbDelta( $create_visitor_relationships_table );
 		}
@@ -309,6 +315,20 @@ class Install {
 		}
 
 		/**
+		 * Change Charset All Table To New WordPress Collate
+		 *
+		 * @see https://developer.wordpress.org/reference/classes/wpdb/has_cap/
+         * @version 13.0.0
+		 */
+		$list_table = DB::table( 'all' );
+		foreach ( $list_table as $k => $name ) {
+			$tbl_info = DB::getTableInformation( $name );
+			if ( $tbl_info['Collation'] == "utf8_general_ci" ) {
+				$wpdb->query( "ALTER TABLE `{$name}` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci ROW_FORMAT = COMPACT;" );
+			}
+		}
+
+		/**
 		 * Added new Fields to user_online Table
 		 *
 		 * @version 12.6.1
@@ -349,7 +369,7 @@ class Install {
 		 * @version 9.6.2
 		 */
 		if ( Option::get( 'force_robot_update' ) ) {
-		    Referred::download_referrer_spam();
+			Referred::download_referrer_spam();
 		}
 
 		// Store the new version information.
