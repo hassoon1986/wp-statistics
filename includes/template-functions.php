@@ -695,24 +695,12 @@ function wp_statistics_agent_version_list( $agent, $rangestartdate = null, $rang
 	global $wpdb;
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
-		$result = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT DISTINCT version FROM {$wpdb->prefix}statistics_visitor WHERE agent = %s AND `last_counter` BETWEEN %s AND %s",
-				$agent,
-				$rangestartdate,
-				$rangeenddate
-			),
-			ARRAY_N
-		);
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT `version` FROM " . \WP_STATISTICS\DB::table( 'visitor' ) . " WHERE agent = %s AND `last_counter` BETWEEN %s AND %s", $agent, $rangestartdate, $rangeenddate ), ARRAY_N );
 	} else {
-		$result = $wpdb->get_results(
-			$wpdb->prepare( "SELECT DISTINCT version FROM {$wpdb->prefix}statistics_visitor WHERE agent = %s", $agent ),
-			ARRAY_N
-		);
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT `version` FROM " . \WP_STATISTICS\DB::table( 'visitor' ) . " WHERE agent = %s", $agent ), ARRAY_N );
 	}
 
 	$Versions = array();
-
 	foreach ( $result as $out ) {
 		$Versions[] = $out[0];
 	}
@@ -746,7 +734,6 @@ function wp_statistics_agent_version( $agent, $version, $rangestartdate = null, 
 
 	return $result;
 }
-
 
 // This function will return the SQL WHERE clause for getting the search words for a given search engine.
 function wp_statistics_searchword_query( $search_engine = 'all' ) {

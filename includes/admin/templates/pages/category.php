@@ -25,7 +25,7 @@
                 </button>
                 <h2 class="hndle"><span><?php _e( 'Category Statistics Summary', 'wp-statistics' ); ?></span></h2>
                 <div class="inside">
-                    <table width="auto" class="widefat table-stats wps-summary-stats" id="summary-stats">
+                    <table class="widefat table-stats wps-summary-stats" id="summary-stats">
                         <tbody>
                         <tr>
                             <th></th>
@@ -72,7 +72,7 @@
                     </button>
                     <h2 class="hndle"><span><?php echo $top_title; ?></span></h2>
                     <div class="inside">
-                        <table width="auto" class="widefat table-stats wps-summary-stats" id="summary-stats">
+                        <table class="widefat table-stats wps-summary-stats" id="summary-stats">
                             <tbody>
                             <tr>
                                 <th></th>

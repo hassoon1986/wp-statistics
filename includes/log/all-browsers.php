@@ -240,7 +240,6 @@ foreach ( $PlatformVisits as $key => $value ) {
 <?php
 function wp_statistics_browser_version_stats( $Browser, $rangestartdate, $rangeenddate ) {
 	$id            = 'browser-stats-' . $Browser;
-	$browser_tag   = strtolower( preg_replace( '/[^a-zA-Z]/', '', $Browser ) );
 	$versions      = wp_statistics_agent_version_list( $Browser, $rangestartdate, $rangeenddate );
 	$version_name  = array();
 	$version_value = array();

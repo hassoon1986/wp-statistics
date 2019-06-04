@@ -78,5 +78,11 @@ gulp.task('css', function () {
         }));
 });
 
+// Gulp Watch
+gulp.task('watch', function () {
+    gulp.watch('assets/dev/javascript/**/*.js', gulp.series('script'));
+    gulp.watch('/assets/dev/sass/**/*.scss', gulp.series('sass'));
+});
+
 // global Task
 gulp.task('default', gulp.parallel('sass', 'script', 'mce'));
