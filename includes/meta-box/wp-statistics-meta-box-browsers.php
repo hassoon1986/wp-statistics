@@ -19,9 +19,10 @@ class browsers {
 
 		// Set Default Params
 		$defaults = array(
-			'ago'  => 0,
-			'from' => '',
-			'to'   => ''
+			'ago'     => 0,
+			'from'    => '',
+			'to'      => '',
+			'browser' => 'all'
 		);
 		$args     = wp_parse_args( $arg, $defaults );
 
@@ -60,57 +61,90 @@ class browsers {
 			$total_daily[ $k ] = 0;
 		}
 
-		// Get List Browser
-		$Browsers      = wp_statistics_ua_list();
+		// Set Default Value
 		$total         = $count = $top_ten = 0;
-		$BrowserVisits = $top_ten_browser_value = $top_ten_browser_name = array();
+		$BrowserVisits = $lists_value = $lists_name = array();
 
-		// Get List Of Browsers
-		foreach ( $Browsers as $Browser ) {
+		// Check Custom Browsers or ALL Browsers
+		if ( $args['browser'] == "all" ) {
+			$Browsers = wp_statistics_ua_list();
 
-			//Get List Of count Visitor By Agent
+			// Get List Of Browsers
+			foreach ( $Browsers as $Browser ) {
+
+				//Get List Of count Visitor By Agent
+				if ( empty( $args['from'] ) and empty( $args['to'] ) and $args['ago'] == "all" ) {
+
+					// IF All Time
+					$BrowserVisits[ $Browser ] = wp_statistics_useragent( $Browser );
+				} else {
+
+					// IF Custom Time
+					$BrowserVisits[ $Browser ] = wp_statistics_useragent( $Browser, reset( $days_time_list ), end( $days_time_list ) );
+				}
+
+				// Set All
+				$total += $BrowserVisits[ $Browser ];
+			}
+
+			//Add Unknown Agent to total
 			if ( empty( $args['from'] ) and empty( $args['to'] ) and $args['ago'] == "all" ) {
-
-				// IF All Time
-				$BrowserVisits[ $Browser ] = wp_statistics_useragent( $Browser );
+				$total += $other_agent_count = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
 			} else {
-
-				// IF Custom Time
-				$BrowserVisits[ $Browser ] = wp_statistics_useragent( $Browser, reset( $days_time_list ), end( $days_time_list ) );
+				$total += $other_agent_count = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `last_counter` BETWEEN \'' . reset( $days_time_list ) . '\' AND \'' . end( $days_time_list ) . '\' AND `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
 			}
 
-			// Set All
-			$total += $BrowserVisits[ $Browser ];
-		}
+			//Sort Browser List By Visitor ASC
+			arsort( $BrowserVisits );
 
-		//Add Unknown Agent to total
-		if ( empty( $args['from'] ) and empty( $args['to'] ) and $args['ago'] == "all" ) {
-			$total += $other_agent_count = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
+			// Get List Of Browser
+			foreach ( $BrowserVisits as $key => $value ) {
+				$top_ten += $value;
+				$count ++;
+				if ( $count > 9 ) { // Max 10 Browser
+					break;
+				}
+
+				//Get Browser name
+				$browser_name  = \WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
+				$lists_name[]  = $browser_name;
+				$lists_value[] = (int) $value;
+			}
+
+			// Push Other Browser
+			if ( $lists_name and $lists_value and $other_agent_count > 0 ) {
+				$lists_name[]  = __( 'Other', 'wp-statistics' );
+				$lists_value[] = (int) ( $total - $top_ten );
+			}
+
 		} else {
-			$total += $other_agent_count = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `last_counter` BETWEEN \'' . reset( $days_time_list ) . '\' AND \'' . end( $days_time_list ) . '\' AND `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
-		}
 
-		//Sort Browser List By Visitor ASC
-		arsort( $BrowserVisits );
+			// Get List Of Version From Custom Browser
+			$list = $wpdb->get_results( "SELECT version, COUNT(*) as count FROM " . DB::table( 'visitor' ) . " WHERE agent = '" . $args['browser'] . "' AND `last_counter` BETWEEN '" . reset( $days_time_list ) . "' AND '" . end( $days_time_list ) . "' GROUP BY version", ARRAY_A );
 
-		// Get List Of Browser
-		foreach ( $BrowserVisits as $key => $value ) {
-			$top_ten += $value;
-			$count ++;
-			if ( $count > 9 ) { // Max 10 Browser
-				break;
+			// Sort By Count
+			Helper::SortByKeyValue( $list, 'count' );
+
+			// Get Last 20 Version that Max number
+			$Browsers = array_slice( $list, 0, 20 );
+
+			// Push to array
+			foreach ( $Browsers as $l ) {
+
+				// Sanitize Version name
+				$exp          = explode( ".", $l['version'] );
+				if ( count( $exp ) > 2 ) {
+					$lists_name[] = $exp[0] . "." . $exp[1] . "." . substr( $exp[2], 0, 3 );
+				} else {
+					$lists_name[] = $l['version'];
+				}
+
+				// Get List Count
+				$lists_value[] = (int) $l['count'];
+
+				// Add to Total
+				$total += $l['count'];
 			}
-
-			//Get Browser name
-			$browser_name            = \WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
-			$top_ten_browser_name[]  = $browser_name;
-			$top_ten_browser_value[] = (int) $value;
-		}
-
-		// Push Other Browser
-		if ( $top_ten_browser_name and $top_ten_browser_value and $other_agent_count > 0 ) {
-			$top_ten_browser_name[]  = __( 'Other', 'wp-statistics' );
-			$top_ten_browser_value[] = (int) ( $total - $top_ten );
 		}
 
 		// Prepare Response
@@ -119,13 +153,13 @@ class browsers {
 			'from'           => reset( $days_time_list ),
 			'to'             => end( $days_time_list ),
 			'type'           => ( ( $args['from'] != "" and $args['to'] != "" ) ? 'between' : 'ago' ),
-			'browsers_name'  => $top_ten_browser_name,
-			'browsers_value' => $top_ten_browser_value,
+			'browsers_name'  => $lists_name,
+			'browsers_value' => $lists_value,
 			'total'          => $total
 		);
 
 		// Check For No Data Meta Box
-		if ( count( array_filter( $top_ten_browser_value ) ) < 1 and ! isset( $args['no-data'] ) ) {
+		if ( count( array_filter( $lists_value ) ) < 1 and ! isset( $args['no-data'] ) ) {
 			$response['no_data'] = 1;
 		}
 

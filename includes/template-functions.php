@@ -594,19 +594,19 @@ function wp_statistics_ua_list( $rangestartdate = null, $rangeenddate = null ) {
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
 		if ( $rangeenddate == 'CURDATE()' ) {
-			$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT agent FROM {$wpdb->prefix}statistics_visitor WHERE `last_counter` BETWEEN %s AND CURDATE()", $rangestartdate ), ARRAY_N );
+			$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT agent FROM ".\WP_STATISTICS\DB::table('visitor')." WHERE `last_counter` BETWEEN %s AND CURDATE()", $rangestartdate ), ARRAY_N );
 		} else {
-			$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT agent FROM {$wpdb->prefix}statistics_visitor WHERE `last_counter` BETWEEN %s AND %s", $rangestartdate, $rangeenddate ), ARRAY_N );
+			$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT agent FROM ".\WP_STATISTICS\DB::table('visitor')." WHERE `last_counter` BETWEEN %s AND %s", $rangestartdate, $rangeenddate ), ARRAY_N );
 		}
-
 	} else {
-		$result = $wpdb->get_results( "SELECT DISTINCT agent FROM {$wpdb->prefix}statistics_visitor", ARRAY_N );
+		$result = $wpdb->get_results( "SELECT DISTINCT agent FROM ".\WP_STATISTICS\DB::table('visitor'), ARRAY_N );
 	}
 
 	$Browsers        = array();
 	$default_browser = WP_STATISTICS\UserAgent::BrowserList();
 
 	foreach ( $result as $out ) {
+
 		//Check Browser is defined in wp-statistics
 		if ( array_key_exists( strtolower( $out[0] ), $default_browser ) ) {
 			$Browsers[] = $out[0];
@@ -716,21 +716,11 @@ function wp_statistics_agent_version( $agent, $version, $rangestartdate = null, 
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
 		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(version) FROM {$wpdb->prefix}statistics_visitor WHERE agent = %s AND version = %s AND `last_counter` BETWEEN %s AND %s",
-				$agent,
-				$version,
-				$rangestartdate,
-				$rangeenddate
-			)
+			$wpdb->prepare( "SELECT COUNT(version) FROM ".\WP_STATISTICS\DB::table('visitor')." WHERE agent = %s AND version = %s AND `last_counter` BETWEEN %s AND %s", $agent, $version, $rangestartdate, $rangeenddate )
 		);
 	} else {
 		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(version) FROM {$wpdb->prefix}statistics_visitor WHERE agent = %s AND version = %s",
-				$agent,
-				$version
-			)
+			$wpdb->prepare( "SELECT COUNT(version) FROM ".\WP_STATISTICS\DB::table('visitor')." WHERE agent = %s AND version = %s", $agent, $version )
 		);
 	}
 

@@ -243,7 +243,6 @@ function wp_statistics_browser_version_stats( $Browser, $rangestartdate, $rangee
 	$versions      = wp_statistics_agent_version_list( $Browser, $rangestartdate, $rangeenddate );
 	$version_name  = array();
 	$version_value = array();
-	$browser_color = array();
 	$i             = 0;
 
 	if ( count( $versions ) < 10 ) {
