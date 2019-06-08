@@ -18,7 +18,9 @@ wps_js.search_meta_box = {
         // Check Show Button Group
         if (wps_js.is_active('overview_page')) {
             html += wps_js.btn_group_chart('search', args);
-            setTimeout(function(){ wps_js.date_picker(); }, 1000);
+            setTimeout(function () {
+                wps_js.date_picker();
+            }, 1000);
         }
 
         // Add Chart
@@ -32,16 +34,19 @@ wps_js.search_meta_box = {
 
         // Prepare Chart Data
         let datasets = [];
+        let i = 0;
         Object.keys(args['search-engine']).forEach(function (key) {
             let search_engine_name = args['search-engine'][key]['name'];
+            let color = wps_js.random_color(i);
             datasets.push({
                 label: search_engine_name,
                 data: args['stat'][search_engine_name],
-                backgroundColor: 'rgba(' + args['search-engine'][key]['color'] + ', 0.2)',
-                borderColor: 'rgba(' + args['search-engine'][key]['color'] + ', 1)',
+                backgroundColor: 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + '0.3)',
+                borderColor: 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + '1)',
                 borderWidth: 1,
                 fill: true
             });
+            i++;
         });
 
         // Set Total

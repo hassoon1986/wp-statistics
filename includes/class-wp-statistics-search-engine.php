@@ -37,8 +37,7 @@ class SearchEngine {
 				'regexpattern' => 'ask\.com',
 				'querykey'     => 'q',
 				'image'        => 'ask.png',
-				'logo_url'     => self::Asset() . 'ask.png',
-				'color'        => '205, 0, 0'
+				'logo_url'     => self::Asset() . 'ask.png'
 			),
 			'baidu'      => array(
 				'name'         => 'Baidu',
@@ -48,8 +47,7 @@ class SearchEngine {
 				'regexpattern' => 'baidu\.com',
 				'querykey'     => 'wd',
 				'image'        => 'baidu.png',
-				'logo_url'     => self::Asset() . 'baidu.png',
-				'color'        => '35, 25, 220'
+				'logo_url'     => self::Asset() . 'baidu.png'
 			),
 			'bing'       => array(
 				'name'         => 'Bing',
@@ -59,8 +57,7 @@ class SearchEngine {
 				'regexpattern' => 'bing\.com',
 				'querykey'     => 'q',
 				'image'        => 'bing.png',
-				'logo_url'     => self::Asset() . 'bing.png',
-				'color'        => '12, 132, 132'
+				'logo_url'     => self::Asset() . 'bing.png'
 			),
 			'clearch'    => array(
 				'name'         => 'clearch.org',
@@ -70,8 +67,7 @@ class SearchEngine {
 				'regexpattern' => 'clearch\.org',
 				'querykey'     => 'q',
 				'image'        => 'clearch.png',
-				'logo_url'     => self::Asset() . 'clearch.png',
-				'color'        => '13, 0, 76'
+				'logo_url'     => self::Asset() . 'clearch.png'
 			),
 			'duckduckgo' => array(
 				'name'         => 'DuckDuckGo',
@@ -81,8 +77,7 @@ class SearchEngine {
 				'regexpattern' => array( 'duckduckgo\.com', 'ddg\.gg' ),
 				'querykey'     => 'q',
 				'image'        => 'duckduckgo.png',
-				'logo_url'     => self::Asset() . 'duckduckgo.png',
-				'color'        => '222, 88, 51'
+				'logo_url'     => self::Asset() . 'duckduckgo.png'
 			),
 			'google'     => array(
 				'name'         => 'Google',
@@ -92,8 +87,7 @@ class SearchEngine {
 				'regexpattern' => 'google\.',
 				'querykey'     => 'q',
 				'image'        => 'google.png',
-				'logo_url'     => self::Asset() . 'google.png',
-				'color'        => '23, 107, 239'
+				'logo_url'     => self::Asset() . 'google.png'
 			),
 			'yahoo'      => array(
 				'name'         => 'Yahoo!',
@@ -103,8 +97,7 @@ class SearchEngine {
 				'regexpattern' => 'yahoo\.com',
 				'querykey'     => 'p',
 				'image'        => 'yahoo.png',
-				'logo_url'     => self::Asset() . 'yahoo.png',
-				'color'        => '64, 0, 144'
+				'logo_url'     => self::Asset() . 'yahoo.png'
 			),
 			'yandex'     => array(
 				'name'         => 'Yandex',
@@ -114,8 +107,7 @@ class SearchEngine {
 				'regexpattern' => 'yandex\.ru',
 				'querykey'     => 'text',
 				'image'        => 'yandex.png',
-				'logo_url'     => self::Asset() . 'yandex.png',
-				'color'        => '255, 219, 77'
+				'logo_url'     => self::Asset() . 'yandex.png'
 			),
 			'qwant'      => array(
 				'name'         => 'Qwant',
@@ -125,8 +117,7 @@ class SearchEngine {
 				'regexpattern' => 'qwant\.com',
 				'querykey'     => 'q',
 				'image'        => 'qwant.png',
-				'logo_url'     => self::Asset() . 'qwant.png',
-				'color'        => '53, 60, 82'
+				'logo_url'     => self::Asset() . 'qwant.png'
 			)
 		);
 
