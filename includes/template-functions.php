@@ -627,12 +627,14 @@ function wp_statistics_ua_list( $rangestartdate = null, $rangeenddate = null ) {
 function wp_statistics_useragent( $agent, $rangestartdate = null, $rangeenddate = null ) {
 	global $wpdb;
 
-	if ( $rangestartdate != null && $rangeenddate != null ) {
-		$result = $wpdb->get_var(
-			$wpdb->prepare( "SELECT COUNT(agent) FROM {$wpdb->prefix}statistics_visitor WHERE `agent` = %s AND `last_counter` BETWEEN %s AND %s", $agent, $rangestartdate, $rangeenddate )
-		);
+	if ( $rangestartdate != null || $rangeenddate != null ) {
+		if ( $rangeenddate == null ) {
+			$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(agent) FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE `agent` = %s AND `last_counter` = %s", $agent, $rangestartdate ) );
+		} else {
+			$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(agent) FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE `agent` = %s AND `last_counter` BETWEEN %s AND %s", $agent, $rangestartdate, $rangeenddate ) );
+		}
 	} else {
-		$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(agent) FROM {$wpdb->prefix}statistics_visitor WHERE `agent` = %s", $agent ) );
+		$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(agent) FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE `agent` = %s", $agent ) );
 	}
 
 	return $result;
