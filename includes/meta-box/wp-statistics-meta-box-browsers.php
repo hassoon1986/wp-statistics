@@ -12,7 +12,7 @@ class browsers {
 
 		$Browsers      = wp_statistics_ua_list();
 		$total         = $count = $top_ten = 0;
-		$BrowserVisits = $top_ten_browser_color = $top_ten_browser_value = $top_ten_browser_name = array();
+		$BrowserVisits = $top_ten_browser_value = $top_ten_browser_name = array();
 
 		// Get List Of Browsers
 		foreach ( $Browsers as $Browser ) {
@@ -38,24 +38,20 @@ class browsers {
 			}
 
 			//Get Browser name
-			$browser_name = \WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
-
+			$browser_name            = \WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
 			$top_ten_browser_name[]  = $browser_name;
 			$top_ten_browser_value[] = (int) $value;
-			$top_ten_browser_color[] = Helper::GenerateRgbaColor( $count, '0.4', false );
 		}
 
 		if ( $top_ten_browser_name and $top_ten_browser_value and $other_agent_count > 0 ) {
 			$top_ten_browser_name[]  = __( 'Other', 'wp-statistics' );
 			$top_ten_browser_value[] = (int) ( $total - $top_ten );
-			$top_ten_browser_color[] = Helper::GenerateRgbaColor( 10, '0.4', false );
 		}
 
 		// Prepare Response
 		$response = array(
 			'browsers_name'  => $top_ten_browser_name,
-			'browsers_value' => $top_ten_browser_value,
-			'browsers_color' => $top_ten_browser_color
+			'browsers_value' => $top_ten_browser_value
 		);
 
 		// Check For No Data Meta Box

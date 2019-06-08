@@ -10,11 +10,19 @@ wps_js.browsers_meta_box = {
 
     meta_box_init: function (args = []) {
 
+        // Get Background Color
+        let backgroundColor = [];
+        let color;
+        for (let i = 0; i <= 10; i++) {
+            color = wps_js.random_color(i);
+            backgroundColor.push('rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + '0.4)');
+        }
+
         // Prepare Data
         let data = [{
             label: wps_js._('browsers'),
             data: args['browsers_value'],
-            backgroundColor: args['browsers_color'],
+            backgroundColor: backgroundColor
         }];
 
         // Label Callback
