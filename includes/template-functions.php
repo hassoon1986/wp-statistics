@@ -642,24 +642,15 @@ function wp_statistics_useragent( $agent, $rangestartdate = null, $rangeenddate 
 
 // This function returns all unique platform types from the database.
 function wp_statistics_platform_list( $rangestartdate = null, $rangeenddate = null ) {
-
 	global $wpdb;
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
-		$result = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT DISTINCT platform FROM {$wpdb->prefix}statistics_visitor WHERE `last_counter` BETWEEN %s AND %s",
-				$rangestartdate,
-				$rangeenddate
-			),
-			ARRAY_N
-		);
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT platform FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE `last_counter` BETWEEN %s AND %s", $rangestartdate, $rangeenddate ), ARRAY_N );
 	} else {
-		$result = $wpdb->get_results( "SELECT DISTINCT platform FROM {$wpdb->prefix}statistics_visitor", ARRAY_N );
+		$result = $wpdb->get_results( "SELECT DISTINCT platform FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "`", ARRAY_N );
 	}
 
 	$Platforms = array();
-
 	foreach ( $result as $out ) {
 		$Platforms[] = $out[0];
 	}

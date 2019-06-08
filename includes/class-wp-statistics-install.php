@@ -316,6 +316,7 @@ class Install {
 
 		/**
 		 * Change Charset All Table To New WordPress Collate
+         * Reset Overview Order Meta Box View
 		 *
 		 * @see https://developer.wordpress.org/reference/classes/wpdb/has_cap/
 		 * @version 13.0.0
@@ -327,6 +328,7 @@ class Install {
 				$wpdb->query( "ALTER TABLE `{$name}` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci ROW_FORMAT = COMPACT;" );
 			}
 		}
+		$wpdb->query("DELETE FROM `{$wpdb->usermeta}` WHERE `meta_key` = 'meta-box-order_toplevel_page_wps_overview_page'");
 
 		/**
 		 * Added new Fields to user_online Table
@@ -349,8 +351,8 @@ class Install {
 		}
 
 		/**
-		 * removed date_ip from visitor table
-		 * drop the 'AString' column from visitors if it exists.
+		 * Removed date_ip from visitor table
+		 * Drop the 'AString' column from visitors if it exists.
 		 *
 		 * @version 6.0
 		 */

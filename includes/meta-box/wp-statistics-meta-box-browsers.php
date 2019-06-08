@@ -22,7 +22,8 @@ class browsers {
 			'ago'     => 0,
 			'from'    => '',
 			'to'      => '',
-			'browser' => 'all'
+			'browser' => 'all',
+			'number'  => 20
 		);
 		$args     = wp_parse_args( $arg, $defaults );
 
@@ -126,13 +127,13 @@ class browsers {
 			Helper::SortByKeyValue( $list, 'count' );
 
 			// Get Last 20 Version that Max number
-			$Browsers = array_slice( $list, 0, 20 );
+			$Browsers = array_slice( $list, 0, $args['number'] );
 
 			// Push to array
 			foreach ( $Browsers as $l ) {
 
 				// Sanitize Version name
-				$exp          = explode( ".", $l['version'] );
+				$exp = explode( ".", $l['version'] );
 				if ( count( $exp ) > 2 ) {
 					$lists_name[] = $exp[0] . "." . $exp[1] . "." . substr( $exp[2], 0, 3 );
 				} else {

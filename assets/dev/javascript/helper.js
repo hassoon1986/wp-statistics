@@ -177,8 +177,8 @@ wps_js.random_color = function (i = false) {
         [241, 196, 15, "#f1c40f"],
         [230, 126, 34, "#e67e22"],
         [231, 76, 60, "#e74c3c"],
-        [236, 240, 241, "#ecf0f1"],
-        [149, 165, 166, "#95a5a6"]
+        [236, 240, 241, "#9b9e9f"],
+        [149, 165, 166, "#a65d20"]
     ];
     return colors[(i === false ? Math.floor(Math.random() * colors.length) : i)];
 };

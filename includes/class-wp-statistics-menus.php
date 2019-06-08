@@ -15,6 +15,7 @@ class Menus {
 	public static $pages = array(
 		'overview'     => 'overview',
 		'browser'      => 'browsers',
+		'platform'     => 'platforms',
 		'countries'    => 'countries',
 		'exclusions'   => 'exclusions',
 		'hits'         => 'hits',
@@ -248,6 +249,12 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Browsers', 'wp-statistics' ),
 				'page_url' => 'browser',
+			),
+			'platforms'    => array(
+				'require'  => array( 'visitors' => true ),
+				'sub'      => 'overview',
+				'title'    => __( 'Platforms', 'wp-statistics' ),
+				'page_url' => 'platform',
 			),
 			'top.visotors' => array(
 				'require'  => array( 'visitors' => true ),
