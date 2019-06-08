@@ -76,12 +76,7 @@ class browsers {
 			} else {
 
 				// IF Custom Time
-				$getStatic = 0;
-				foreach ( $days_time_list as $d ) {
-					$getStatic += wp_statistics_useragent( $Browser, $d );
-				}
-				$BrowserVisits[ $Browser ] = $getStatic;
-
+				$BrowserVisits[ $Browser ] = wp_statistics_useragent( $Browser, reset( $days_time_list ), end( $days_time_list ) );
 			}
 
 			// Set All
@@ -92,12 +87,7 @@ class browsers {
 		if ( empty( $args['from'] ) and empty( $args['to'] ) and $args['ago'] == "all" ) {
 			$total += $other_agent_count = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
 		} else {
-			$other_agent_count = 0;
-			foreach ( $days_time_list as $d ) {
-				$getStatic         = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `last_counter` = \'' . $d . '\' AND `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
-				$other_agent_count = $other_agent_count + $getStatic;
-			}
-			$total += $other_agent_count;
+			$total += $other_agent_count = $wpdb->get_var( 'SELECT COUNT(*) FROM `' . DB::table( 'visitor' ) . '` WHERE `last_counter` BETWEEN \'' . reset( $days_time_list ) . '\' AND \'' . end( $days_time_list ) . '\' AND `agent` NOT IN (\'' . implode( "','", $Browsers ) . '\')' );
 		}
 
 		//Sort Browser List By Visitor ASC

@@ -249,7 +249,8 @@ class Admin_Assets {
 			'str_year'      => __( 'Year', 'wp-statistics' ),
 			'custom'        => __( 'Custom', 'wp-statistics' ),
 			'to'            => __( 'to', 'wp-statistics' ),
-			'go'            => __( 'Go', 'wp-statistics' )
+			'go'            => __( 'Go', 'wp-statistics' ),
+			'no_data'       => __( 'No data to display', 'wp-statistics' )
 		);
 
 		// Rest-API Meta Box Url

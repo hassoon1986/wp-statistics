@@ -86,9 +86,9 @@ wps_js.line_chart = function (tag_id, title, label, data) {
 };
 
 /**
- * Create Bar Chart JS
+ * Create pie Chart JS
  */
-wps_js.bar_chart = function (tag_id, label, data, label_callback) {
+wps_js.pie_chart = function (tag_id, label, data, label_callback) {
 
     // Get Element By ID
     let ctx = document.getElementById(tag_id).getContext('2d');
@@ -118,7 +118,23 @@ wps_js.bar_chart = function (tag_id, label, data, label_callback) {
                     label: label_callback
                 }
             }
-        }
+        },
+        plugins: [{
+            afterDraw: function (chart) {
+                if (chart.data.datasets[0].data.every(x => x == 0) === true) {
+                    let ctx = chart.chart.ctx;
+                    let width = chart.chart.width;
+                    let height = chart.chart.height;
+                    chart.clear();
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = "14px normal 'tahoma'";
+                    ctx.fillText(wps_js._('no_data'), width / 2, height / 2);
+                    ctx.restore();
+                }
+            }
+        }]
     });
 };
 

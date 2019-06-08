@@ -5,7 +5,23 @@ wps_js.browsers_meta_box = {
     },
 
     view: function (args = []) {
-        return '<canvas id="' + wps_js.chart_id('browsers') + '" height="220"></canvas>';
+
+        // Create Html
+        let html = '';
+
+        // Check Show Button Group
+        if (wps_js.is_active('overview_page')) {
+            html += wps_js.btn_group_chart('browsers', args);
+            setTimeout(function () {
+                wps_js.date_picker();
+            }, 1000);
+        }
+
+        // Add Chart
+        html += '<canvas id="' + wps_js.chart_id('browsers') + '" height="220"></canvas>';
+
+        // show Data
+        return html;
     },
 
     meta_box_init: function (args = []) {
@@ -37,7 +53,7 @@ wps_js.browsers_meta_box = {
         };
 
         // Show Chart
-        wps_js.bar_chart(wps_js.chart_id('browsers'), args['browsers_name'], data, label_callback);
+        wps_js.pie_chart(wps_js.chart_id('browsers'), args['browsers_name'], data, label_callback);
     }
 
 };
