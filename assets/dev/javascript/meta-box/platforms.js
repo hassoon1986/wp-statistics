@@ -41,19 +41,8 @@ wps_js.platforms_meta_box = {
             backgroundColor: backgroundColor
         }];
 
-        // Label Callback
-        let label_callback = function (tooltipItem, data) {
-            let dataset = data.datasets[tooltipItem.datasetIndex];
-            let total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                return previousValue + currentValue;
-            });
-            let currentValue = dataset.data[tooltipItem.index];
-            let percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-            return percentage + "% - " + data.labels[tooltipItem.index];
-        };
-
         // Show Chart
-        wps_js.pie_chart(wps_js.chart_id('platforms'), args['platform_name'], data, label_callback);
+        wps_js.pie_chart(wps_js.chart_id('platforms'), args['platform_name'], data);
     }
 
 };

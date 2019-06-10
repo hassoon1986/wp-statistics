@@ -4,7 +4,9 @@ namespace WP_STATISTICS\MetaBox;
 
 use WP_STATISTICS\DB;
 use WP_STATISTICS\Helper;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\TimeZone;
+use WP_STATISTICS\UserAgent;
 
 class browsers {
 	/**
@@ -23,7 +25,7 @@ class browsers {
 			'from'    => '',
 			'to'      => '',
 			'browser' => 'all',
-			'number'  => 20
+			'number'  => 10
 		);
 		$args     = wp_parse_args( $arg, $defaults );
 
@@ -64,7 +66,7 @@ class browsers {
 
 		// Set Default Value
 		$total         = $count = $top_ten = 0;
-		$BrowserVisits = $lists_value = $lists_name = array();
+		$BrowserVisits = $lists_value = $lists_name = $lists_keys = $lists_logo = array();
 
 		// Check Custom Browsers or ALL Browsers
 		if ( $args['browser'] == "all" ) {
@@ -107,9 +109,11 @@ class browsers {
 				}
 
 				//Get Browser name
-				$browser_name  = \WP_STATISTICS\UserAgent::BrowserList( strtolower( $key ) );
+				$browser_name  = UserAgent::BrowserList( strtolower( $key ) );
 				$lists_name[]  = $browser_name;
 				$lists_value[] = (int) $value;
+				$lists_keys[]  = strtolower( $key );
+				$lists_logo[]  = UserAgent::getBrowserLogo( $key );
 			}
 
 			// Push Other Browser
@@ -119,6 +123,10 @@ class browsers {
 			}
 
 		} else {
+
+			// Set Browser info
+			$lists_keys[] = strtolower( $args['browser'] );
+			$lists_logo[]  = UserAgent::getBrowserLogo( $args['browser'] );
 
 			// Get List Of Version From Custom Browser
 			$list = $wpdb->get_results( "SELECT version, COUNT(*) as count FROM " . DB::table( 'visitor' ) . " WHERE agent = '" . $args['browser'] . "' AND `last_counter` BETWEEN '" . reset( $days_time_list ) . "' AND '" . end( $days_time_list ) . "' GROUP BY version", ARRAY_A );
@@ -148,14 +156,28 @@ class browsers {
 			}
 		}
 
+		// Set Title
+		$subtitle = ( $args['browser'] == "all" ? __( 'Browser', 'wp-statistics' ) : UserAgent::BrowserList( strtolower( $args['browser'] ) ) );
+		if ( end( $days_time_list ) == TimeZone::getCurrentDate( "Y-m-d" ) ) {
+			$title = sprintf( __( '%s Statistics in the last %s days', 'wp-statistics' ), $subtitle, $count_day );
+		} else {
+			$title = sprintf( __( '%s Statistics from %s to %s', 'wp-statistics' ), $subtitle, $args['from'], $args['to'] );
+		}
+
 		// Prepare Response
 		$response = array(
 			'days'           => $count_day,
 			'from'           => reset( $days_time_list ),
 			'to'             => end( $days_time_list ),
 			'type'           => ( ( $args['from'] != "" and $args['to'] != "" ) ? 'between' : 'ago' ),
+			'title'          => $title,
 			'browsers_name'  => $lists_name,
 			'browsers_value' => $lists_value,
+			'info'           => array(
+				'visitor_page' => Menus::admin_url( 'visitors' ),
+				'agent'        => $lists_keys,
+				'logo'         => $lists_logo
+			),
 			'total'          => $total
 		);
 

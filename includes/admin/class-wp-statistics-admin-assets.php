@@ -250,7 +250,10 @@ class Admin_Assets {
 			'custom'        => __( 'Custom', 'wp-statistics' ),
 			'to'            => __( 'to', 'wp-statistics' ),
 			'go'            => __( 'Go', 'wp-statistics' ),
-			'no_data'       => __( 'No data to display', 'wp-statistics' )
+			'no_data'       => __( 'No data to display', 'wp-statistics' ),
+			'count'         => __( 'Count', 'wp-statistics' ),
+			'percentage'    => __( 'Percentage', 'wp-statistics' ),
+			'version_list'  => __( 'Version List', 'wp-statistics' ),
 		);
 
 		// Rest-API Meta Box Url

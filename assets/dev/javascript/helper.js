@@ -88,7 +88,7 @@ wps_js.line_chart = function (tag_id, title, label, data) {
 /**
  * Create pie Chart JS
  */
-wps_js.pie_chart = function (tag_id, label, data, label_callback) {
+wps_js.pie_chart = function (tag_id, label, data, label_callback = false) {
 
     // Get Element By ID
     let ctx = document.getElementById(tag_id).getContext('2d');
@@ -96,6 +96,19 @@ wps_js.pie_chart = function (tag_id, label, data, label_callback) {
     // Check is RTL Mode
     if (wps_js.is_active('rtl')) {
         Chart.defaults.global.defaultFontFamily = "tahoma";
+    }
+
+    // Set Default Label Callback
+    if (label_callback === false) {
+        label_callback = function (tooltipItem, data) {
+            let dataset = data.datasets[tooltipItem.datasetIndex];
+            let total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                return previousValue + currentValue;
+            });
+            let currentValue = dataset.data[tooltipItem.index];
+            let percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+            return percentage + "% - " + data.labels[tooltipItem.index];
+        };
     }
 
     // Create Chart
@@ -219,4 +232,65 @@ wps_js.isset = function (obj) {
         obj = obj[args[i]];
     }
     return true;
+};
+
+/**
+ * Number Format
+ *
+ * @param number
+ * @param decimals
+ * @param dec_point
+ * @param thousands_point
+ * @returns {*}
+ */
+wps_js.number_format = function (number, decimals, dec_point, thousands_point) {
+    if (number == null || !isFinite(number)) {
+        throw new TypeError("number is not valid");
+    }
+    if (!decimals) {
+        let len = number.toString().split('.').length;
+        decimals = len > 1 ? len : 0;
+    }
+    if (!dec_point) {
+        dec_point = '.';
+    }
+    if (!thousands_point) {
+        thousands_point = ',';
+    }
+    number = parseFloat(number).toFixed(decimals);
+    number = number.replace(".", dec_point);
+
+    let splitNum = number.split(dec_point);
+    splitNum[0] = splitNum[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_point);
+    number = splitNum.join(dec_point);
+    return number;
+};
+
+/**
+ * Set Equal Bigger Div Height For WordPress PostBox
+ *
+ * @param Dom_1
+ * @param Dom_2
+ */
+wps_js.set_equal_height = function (Dom_1, Dom_2) {
+    let tbl_h = jQuery(Dom_1).height();
+    let ch_h = jQuery(Dom_2).height();
+    let ex = Dom_2;
+    let val = tbl_h;
+    if (tbl_h < ch_h) {
+        ex = Dom_1;
+        val = ch_h;
+    }
+    jQuery(ex).css('height', val + 'px');
+};
+
+/**
+ * Create Half WordPress Post Box
+ *
+ * @param div_class
+ * @param div_id
+ * @returns {string}
+ */
+wps_js.Create_Half_PostBox = function(div_class, div_id){
+  return `<div class="postbox-container wps-postbox-half ${div_class}"><div class="metabox-holder"><div class="meta-box-sortables"> <div class="postbox" id="${div_id}"> <div class="inside"></div></div></div></div></div>`;
 };
