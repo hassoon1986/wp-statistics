@@ -1,0 +1,58 @@
+<?php
+
+namespace WP_STATISTICS;
+
+class browser_page {
+
+	public function __construct() {
+
+		// Check if in Hits Page
+		if ( Menus::in_page( 'browser' ) ) {
+
+			// Disable Screen Option
+			add_filter( 'screen_options_show_screen', '__return_false' );
+
+			// Set Default All Option for DatePicker
+			add_filter( 'wp_statistics_days_ago_request', array( $this, 'set_all_option_datepicker' ) );
+
+			// Is Validate Date Request
+			$DateRequest = Admin_Template::isValidDateRequest();
+			if ( ! $DateRequest['status'] ) {
+				wp_die( $DateRequest['message'] );
+			}
+		}
+	}
+
+	/**
+	 * Set All Option For DatePicker
+	 */
+	public function set_all_option_datepicker() {
+		$first_day = Helper::get_date_install_plugin();
+		return ( $first_day === false ? 30 : (int) TimeZone::getNumberDayBetween( $first_day ) );
+	}
+
+	/**
+	 * Display Html Page
+	 *
+	 * @throws \Exception
+	 */
+	public static function view() {
+
+		// Page title
+		$args['title'] = __( 'Browser Statistics', 'wp-statistics' );
+
+		// Get Current Page Url
+		$args['pageName']   = Menus::get_page_slug( 'browsers' );
+		$args['pagination'] = Admin_Template::getCurrentPaged();
+
+		// Get Date-Range
+		$args['DateRang'] = Admin_Template::DateRange();
+
+
+		// Show Template Page
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/browsers', 'layout/postbox.toggle', 'layout/footer' ), $args );
+	}
+
+}
+
+new browser_page;

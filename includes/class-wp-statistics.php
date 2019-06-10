@@ -172,6 +172,7 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-category.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-authors.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-tags.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/pages/class-wp-statistics-admin-page-browsers.php';
 		}
 
 		// WordPress ShortCode and Widget

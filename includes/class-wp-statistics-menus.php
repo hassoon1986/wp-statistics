@@ -249,6 +249,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Browsers', 'wp-statistics' ),
 				'page_url' => 'browser',
+				'method'   => 'browser'
 			),
 			'platforms'    => array(
 				'require'  => array( 'visitors' => true ),
