@@ -269,7 +269,7 @@ class Visitor {
 			if ( IP::IsHashIP( $items->ip ) ) {
 				$item['hash_ip'] = IP::$hash_ip_prefix;
 			} else {
-				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'ip' => $items->ip ) ) );
 				$item['map'] = GeoIP::geoIPTools( $items->ip );
 			}
 
@@ -292,6 +292,19 @@ class Visitor {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Count User By Custom Filter
+	 *
+	 * @param array $args
+	 * @return int
+	 */
+	public static function Count( $args = array() ) {
+		global $wpdb;
+		$sql = "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "`";
+		$sql .= Helper::getConditionSQL( $args );
+		return $wpdb->get_var( $sql );
 	}
 
 }

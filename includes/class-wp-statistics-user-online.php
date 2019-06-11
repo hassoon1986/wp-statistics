@@ -267,7 +267,7 @@ class UserOnline {
 			if ( IP::IsHashIP( $items->ip ) ) {
 				$item['hash_ip'] = IP::$hash_ip_prefix;
 			} else {
-				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'type' => 'last-all-visitor', 'ip' => $items->ip ) ) );
+				$item['ip']  = array( 'value' => $items->ip, 'link' => Menus::admin_url( 'visitors', array( 'ip' => $items->ip ) ) );
 				$item['map'] = GeoIP::geoIPTools( $items->ip );
 			}
 

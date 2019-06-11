@@ -28,10 +28,9 @@ class visitors_page {
 	 * @throws \Exception
 	 */
 	public static function view() {
-		global $wpdb;
 
 		// Page title
-		$args['title'] = __( 'Recent Visitors', 'wp-statistics' );
+		$args['title'] = ( count( $_GET ) > 1 ? __( 'Visitors', 'wp-statistics' ) : __( 'Recent Visitors', 'wp-statistics' ) );
 
 		// Get Current Page Url
 		$args['pageName'] = Menus::get_page_slug( 'visitors' );
@@ -41,19 +40,61 @@ class visitors_page {
 		$args['DateRang'] = Admin_Template::DateRange();
 		$date_link        = array( 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
 
-		//Get Sub List
-		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => $wpdb->get_var( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "`" ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
+		// Create Default SQL Params
+		$sql[] = array( 'key' => 'last_counter', 'compare' => 'BETWEEN', 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
+
+		// Create Sub List
+		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => Visitor::Count( $sql ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
+
+		/**
+		 * IP Filter
+		 */
 		if ( isset( $_GET['ip'] ) ) {
-			$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `ip` LIKE %s", $_GET['ip'] ) ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
+
+			// Add Params To SQL
+			$sql[] = array( 'key' => 'ip', 'compare' => 'LIKE', 'value' => trim( $_GET['ip'] ) );
+
+			// Set New Sub List
+			$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
+
+			/**
+			 * Location Filter
+			 */
 		} elseif ( isset( $_GET['location'] ) ) {
-			$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `location` LIKE %s", $_GET['location'] ) ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
+
+			// Add Params To SQL
+			$sql[] = array( 'key' => 'location', 'compare' => 'LIKE', 'value' => trim( $_GET['location'] ) );
+
+			// Set New Sub List
+			$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
+
+			/**
+			 * Platform Filter
+			 */
 		} elseif ( isset( $_GET['platform'] ) ) {
-			$args['sub'][ $_GET['platform'] ] = array( 'title' => Helper::getUrlDecode( $_GET['platform'] ), 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `platform` LIKE %s", Helper::getUrlDecode( $_GET['platform'] ) ) ), 'active' => ( ( isset( $_GET['platform'] ) and $_GET['platform'] == $_GET['platform'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'platform' => $_GET['platform'] ) ), Menus::admin_url( 'visitors' ) ) );
+
+			// Add Params To SQL
+			$sql[] = array( 'key' => 'platform', 'compare' => 'LIKE', 'value' => trim( Helper::getUrlDecode( $_GET['platform'] ) ) );
+
+			// Set New Sub List
+			$args['sub'][ $_GET['platform'] ] = array( 'title' => Helper::getUrlDecode( $_GET['platform'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['platform'] ) and $_GET['platform'] == $_GET['platform'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'platform' => $_GET['platform'] ) ), Menus::admin_url( 'visitors' ) ) );
+
+			/**
+			 * Agent Filter (Default)
+			 */
 		} else {
+
+			// Add to SQL
+			if ( isset( $_GET['agent'] ) ) {
+				$sql[] = array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => trim( $_GET['agent'] ) );
+			}
+
+			// Get List Of Browser
 			$browsers = UserAgent::BrowserList();
 			foreach ( $browsers as $key => $se ) {
-				$args['sub'][ $key ] = array( 'title' => $se, 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `agent` LIKE %s", $key ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $key ] = array( 'title' => $se, 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $key ) ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
 			}
+
 		}
 
 		// Get Current View
@@ -65,9 +106,8 @@ class visitors_page {
 		$args['total'] = $CurrentView[ key( $CurrentView ) ]['count'];
 		$args['list']  = array();
 		if ( $args['total'] > 0 ) {
-			$where        = ( isset( $_GET['ip'] ) ? "WHERE `ip` LIKE '{$_GET['ip']}'" : ( isset( $_GET['agent'] ) ? "WHERE `agent` LIKE '{$_GET['agent']}'" : ( isset( $_GET['location'] ) ? "WHERE `location` LIKE '{$_GET['location']}'" : ( isset( $_GET['platform'] ) ? "WHERE `platform` LIKE '" . Helper::getUrlDecode( $_GET['platform'] ) . "'" : '' ) ) ) );
 			$args['list'] = Visitor::get( array(
-				'sql'      => "SELECT * FROM `" . DB::table( 'visitor' ) . "` " . $where . " ORDER BY ID DESC",
+				'sql'      => "SELECT * FROM `" . DB::table( 'visitor' ) . "` " . Helper::getConditionSQL( $sql ) . " ORDER BY ID DESC",
 				'per_page' => Admin_Template::$item_per_page,
 				'paged'    => $args['paged'],
 			) );

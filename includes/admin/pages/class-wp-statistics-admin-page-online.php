@@ -40,7 +40,7 @@ class online_page {
 			) );
 		}
 
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'pages/online', 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'pages/online', 'layout/footer' ), $args );
 	}
 
 }

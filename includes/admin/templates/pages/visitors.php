@@ -17,45 +17,45 @@
         <div class="meta-box-sortables">
             <div class="postbox">
                 <div class="inside">
-	                <?php if ( ! is_array( $list ) ) { ?>
-                        <div class='wps-center'><?php _e( "No information is available.", "wp-statistics" ); ?></div>
-	                <?php } else { ?>
+					<?php if ( ! is_array( $list ) || ( is_array( $list ) and count( $list ) < 1 ) ) { ?>
+                        <div class='wps-center wps-m-top-20'><?php _e( "No information is available.", "wp-statistics" ); ?></div>
+					<?php } else { ?>
                         <table width="100%" class="widefat table-stats">
                             <tr>
                                 <td><?php _e( 'Browser', 'wp-statistics' ); ?></td>
-				                <?php if ( WP_STATISTICS\GeoIP::active() ) { ?>
+								<?php if ( WP_STATISTICS\GeoIP::active() ) { ?>
                                     <td><?php _e( 'Country', 'wp-statistics' ); ?></td>
-				                <?php } ?>
-				                <?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
+								<?php } ?>
+								<?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
                                     <td><?php _e( 'City', 'wp-statistics' ); ?></td>
-				                <?php } ?>
+								<?php } ?>
                                 <td><?php _e( 'Date', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'IP', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Platform', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Referrer', 'wp-statistics' ); ?></td>
                             </tr>
 
-			                <?php foreach ( $list as $item ) { ?>
+							<?php foreach ( $list as $item ) { ?>
                                 <tr>
                                     <td style="text-align: left">
                                         <a href="<?php echo $item['browser']['link']; ?>" title="<?php echo $item['browser']['name']; ?>"><img src="<?php echo $item['browser']['logo']; ?>" alt="<?php echo $item['browser']['name']; ?>" class="log-tools" title="<?php echo $item['browser']['name']; ?>"/></a>
                                     </td>
-					                <?php if ( WP_STATISTICS\GeoIP::active() ) { ?>
+									<?php if ( WP_STATISTICS\GeoIP::active() ) { ?>
                                         <td style="text-align: left">
                                             <img src="<?php echo $item['country']['flag']; ?>" alt="<?php echo $item['country']['name']; ?>" title="<?php echo $item['country']['name']; ?>" class="log-tools"/>
                                         </td>
-					                <?php } ?>
-					                <?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
+									<?php } ?>
+									<?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
                                         <td><?php echo $item['city']; ?></td>
-					                <?php } ?>
+									<?php } ?>
                                     <td style='text-align: left'><span><?php echo $item['date']; ?></span></td>
                                     <td style='text-align: left'><?php echo( isset( $item['hash_ip'] ) ? $item['hash_ip'] : "<a href='" . $item['ip']['link'] . "' class='wps-text-danger'>" . $item['ip']['value'] . "</a>" ); ?></td>
                                     <td style='text-align: left'><?php echo $item['platform']; ?></td>
                                     <td style='text-align: left'><?php echo $item['referred']; ?></td>
                                 </tr>
-			                <?php } ?>
+							<?php } ?>
                         </table>
-	                <?php } ?>
+					<?php } ?>
                 </div>
             </div>
 			<?php echo isset( $pagination ) ? $pagination : ''; ?>

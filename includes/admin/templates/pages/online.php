@@ -2,14 +2,9 @@
     <div class="metabox-holder">
         <div class="meta-box-sortables">
             <div class="postbox">
-                <button class="handlediv" type="button" aria-expanded="true">
-                    <span class="screen-reader-text"><?php echo sprintf( __( 'Toggle panel: %s', 'wp-statistics' ), $title ); ?></span>
-                    <span class="toggle-indicator" aria-hidden="true"></span>
-                </button>
-                <h2 class="hndle"><span><?php echo $title; ?></span></h2>
                 <div class="inside">
 					<?php if ( ! is_array( $user_online_list ) ) { ?>
-                        <div class='wps-center'><?php echo $user_online_list; ?></div>
+                        <div class='wps-center wps-m-top-20'><?php echo $user_online_list; ?></div>
 					<?php } else { ?>
                         <table width="100%" class="widefat table-stats">
                             <tr>

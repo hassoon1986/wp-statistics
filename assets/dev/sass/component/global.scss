@@ -56,7 +56,7 @@ a[href*='?page=wps_break_menu'] {
     background: rgba(194, 0, 0, 0.75);
     border-color: rgba(153, 0, 0, 0.75);
     color: #fff;
-    outline:0 !important;
+    outline: 0 !important;
   }
 }
 
@@ -65,6 +65,10 @@ a[href*='?page=wps_break_menu'] {
   margin: 0px 5px;
 }
 
+/* Margin */
+.wps-m-top-20 {
+  margin-top: 20px;
+}
 
 /* Text Wrap */
 .wps-text-wrap {

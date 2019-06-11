@@ -579,6 +579,59 @@ class Helper {
 	}
 
 	/**
+	 * Check is Assoc Array
+	 *
+	 * @param array $arr
+	 * @return bool
+	 */
+	public static function isAssoc( array $arr ) {
+		if ( array() === $arr ) {
+			return false;
+		}
+		return array_keys( $arr ) !== range( 0, count( $arr ) - 1 );
+	}
+
+	/**
+	 * Create Condition SQL
+	 *
+	 * @param array $args
+	 * @return string
+	 */
+	public static function getConditionSQL( $args = array() ) {
+
+		// Create Empty SQL
+		$sql = '';
+
+		// Check Number Params
+		if ( self::isAssoc( $args ) ) {
+			$condition[] = $args;
+		} else {
+			$condition = $args;
+		}
+
+		// Add WHERE
+		if ( count( $condition ) > 0 ) {
+			$sql .= ' WHERE ';
+		}
+
+		// Push To SQL
+		$i = 0;
+		foreach ( $condition as $params ) {
+			if ( $i > 0 ) {
+				$sql .= ' AND ';
+			}
+			if ( $params['compare'] == "BETWEEN" ) {
+				$sql .= $params['key'] . " " . $params['compare'] . " " . ( is_numeric( $params['from'] ) ? $params['from'] : "'" . $params['from'] . "'" ) . " AND " . ( is_numeric( $params['to'] ) ? $params['to'] : "'" . $params['to'] . "'" );
+			} else {
+				$sql .= $params['key'] . " " . $params['compare'] . " " . ( is_numeric( $params['value'] ) ? $params['value'] : "'" . $params['value'] . "'" );
+			}
+			$i ++;
+		}
+
+		return $sql;
+	}
+
+	/**
 	 * Send Email
 	 *
 	 * @param $to

@@ -181,6 +181,13 @@ class Menus {
 				'method'   => 'online',
 				'page_url' => 'online',
 			),
+			'visitors'     => array(
+				'require'  => array( 'visitors' => true ),
+				'sub'      => 'overview',
+				'title'    => __( 'Visitors', 'wp-statistics' ),
+				'page_url' => 'visitors',
+				'method'   => 'visitors',
+			),
 			'referrers'    => array(
 				'require'  => array( 'visitors' => true ),
 				'sub'      => 'overview',
@@ -208,13 +215,6 @@ class Menus {
 				'title'    => __( 'Pages', 'wp-statistics' ),
 				'page_url' => 'pages',
 				'method'   => 'pages',
-			),
-			'visitors'     => array(
-				'require'  => array( 'visitors' => true ),
-				'sub'      => 'overview',
-				'title'    => __( 'Visitors', 'wp-statistics' ),
-				'page_url' => 'visitors',
-				'method'   => 'visitors',
 			),
 			'countries'    => array(
 				'require'  => array( 'geoip' => true, 'visitors' => true ),
