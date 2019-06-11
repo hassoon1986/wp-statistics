@@ -4,6 +4,7 @@ namespace WP_STATISTICS\MetaBox;
 
 use WP_STATISTICS\DB;
 use WP_STATISTICS\Helper;
+use WP_STATISTICS\Menus;
 use WP_STATISTICS\TimeZone;
 
 class platforms {
@@ -90,14 +91,25 @@ class platforms {
 			}
 		}
 
+		// Set Title
+		if ( end( $days_time_list ) == TimeZone::getCurrentDate( "Y-m-d" ) ) {
+			$title = sprintf( __( '%s Statistics in the last %s days', 'wp-statistics' ), __( 'Platforms', 'wp-statistics' ), $count_day );
+		} else {
+			$title = sprintf( __( '%s Statistics from %s to %s', 'wp-statistics' ), __( 'Platforms', 'wp-statistics' ), $args['from'], $args['to'] );
+		}
+
 		// Prepare Response
 		$response = array(
 			'days'           => $count_day,
 			'from'           => reset( $days_time_list ),
 			'to'             => end( $days_time_list ),
 			'type'           => ( ( $args['from'] != "" and $args['to'] != "" ) ? 'between' : 'ago' ),
+			'title'          => $title,
 			'platform_name'  => $lists_name,
 			'platform_value' => $lists_value,
+			'info'           => array(
+				'visitor_page' => Menus::admin_url( 'visitors' )
+			),
 			'total'          => $total
 		);
 
