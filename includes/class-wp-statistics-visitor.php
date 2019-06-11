@@ -262,7 +262,7 @@ class Visitor {
 			$item['browser'] = array(
 				'name' => $items->agent,
 				'logo' => UserAgent::getBrowserLogo( $items->agent ),
-				'link' => Menus::admin_url( 'overview', array( 'type' => 'last-all-visitor', 'agent' => $items->agent ) )
+				'link' => Menus::admin_url( 'overview', array( 'agent' => $items->agent ) )
 			);
 
 			// Push IP

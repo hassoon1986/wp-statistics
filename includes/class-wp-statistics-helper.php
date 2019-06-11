@@ -569,6 +569,16 @@ class Helper {
 	}
 
 	/**
+	 * Url Decode
+	 *
+	 * @param $value
+	 * @return string
+	 */
+	public static function getUrlDecode( $value ) {
+		return utf8_decode( urldecode( $value ) );
+	}
+
+	/**
 	 * Send Email
 	 *
 	 * @param $to

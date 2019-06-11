@@ -31,6 +31,7 @@
 				                <?php } ?>
                                 <td><?php _e( 'Date', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'IP', 'wp-statistics' ); ?></td>
+                                <td><?php _e( 'Platform', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Referrer', 'wp-statistics' ); ?></td>
                             </tr>
 
@@ -49,6 +50,7 @@
 					                <?php } ?>
                                     <td style='text-align: left'><span><?php echo $item['date']; ?></span></td>
                                     <td style='text-align: left'><?php echo( isset( $item['hash_ip'] ) ? $item['hash_ip'] : "<a href='" . $item['ip']['link'] . "' class='wps-text-danger'>" . $item['ip']['value'] . "</a>" ); ?></td>
+                                    <td style='text-align: left'><?php echo $item['platform']; ?></td>
                                     <td style='text-align: left'><?php echo $item['referred']; ?></td>
                                 </tr>
 			                <?php } ?>
