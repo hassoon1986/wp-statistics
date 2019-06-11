@@ -2,7 +2,7 @@
 
 namespace WP_STATISTICS;
 
-class RestApi {
+class RestAPI {
 	/**
 	 * WP-Statistics Rest API namespace
 	 *
@@ -25,7 +25,7 @@ class RestApi {
 	protected $db;
 
 	/**
-	 * RestApi constructor.
+	 * RestAPI constructor.
 	 */
 	public function __construct() {
 		global $wpdb;
@@ -58,6 +58,30 @@ class RestApi {
 		return new \WP_REST_Response( $output, $status );
 	}
 
+	/**
+	 * Internal Request WP REST API
+	 *
+	 * @param array $args
+	 * @return mixed
+	 */
+	public static function request( $args = array() ) {
+
+		// Define the array of defaults
+		$defaults = array(
+			'type'      => 'GET',
+			'namespace' => self::$namespace,
+			'route'     => '',
+			'params'    => array()
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		// Send Request
+		$request = new \WP_REST_Request( $args['type'], '/' . ltrim( $args['namespace'], "/" ) . '/' . $args['route'] );
+		$request->set_query_params( $args['params'] );
+		$response = rest_do_request( $request );
+		$server   = rest_get_server();
+		return $server->response_to_data( $response, false );
+	}
 }
 
-new RestApi;
+new RestAPI;
