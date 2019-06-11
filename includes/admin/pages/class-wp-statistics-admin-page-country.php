@@ -12,7 +12,7 @@ class country_page {
 			add_filter( 'screen_options_show_screen', '__return_false' );
 
 			// Set Default All Option for DatePicker
-			add_filter( 'wp_statistics_days_ago_request', array( $this, 'set_all_option_datepicker' ) );
+			add_filter( 'wp_statistics_days_ago_request', array( '\WP_STATISTICS\Helper', 'set_all_option_datepicker' ) );
 
 			// Is Validate Date Request
 			$DateRequest = Admin_Template::isValidDateRequest();
@@ -20,14 +20,6 @@ class country_page {
 				wp_die( $DateRequest['message'] );
 			}
 		}
-	}
-
-	/**
-	 * Set All Option For DatePicker
-	 */
-	public function set_all_option_datepicker() {
-		$first_day = Helper::get_date_install_plugin();
-		return ( $first_day === false ? 30 : (int) TimeZone::getNumberDayBetween( $first_day ) );
 	}
 
 	/**

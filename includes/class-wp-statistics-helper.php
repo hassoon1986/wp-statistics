@@ -559,6 +559,16 @@ class Helper {
 	}
 
 	/**
+	 * Set All Option For DatePicker
+	 *
+	 * @example add_filter( 'wp_statistics_days_ago_request', array( '', 'set_all_option_datepicker' ) );
+	 */
+	public static function set_all_option_datepicker() {
+		$first_day = Helper::get_date_install_plugin();
+		return ( $first_day === false ? 30 : (int) TimeZone::getNumberDayBetween( $first_day ) );
+	}
+
+	/**
 	 * Send Email
 	 *
 	 * @param $to

@@ -2,12 +2,12 @@
 
 namespace WP_STATISTICS;
 
-class browser_page {
+class platform_page {
 
 	public function __construct() {
 
 		// Check if in Hits Page
-		if ( Menus::in_page( 'browser' ) ) {
+		if ( Menus::in_page( 'platform' ) ) {
 
 			// Disable Screen Option
 			add_filter( 'screen_options_show_screen', '__return_false' );
@@ -31,10 +31,10 @@ class browser_page {
 	public static function view() {
 
 		// Page title
-		$args['title'] = __( 'Browser Statistics', 'wp-statistics' );
+		$args['title'] = __( 'Platform Statistics', 'wp-statistics' );
 
 		// Get Current Page Url
-		$args['pageName']   = Menus::get_page_slug( 'browsers' );
+		$args['pageName']   = Menus::get_page_slug( 'platforms' );
 		$args['pagination'] = Admin_Template::getCurrentPaged();
 
 		// Get Date-Range
@@ -42,9 +42,9 @@ class browser_page {
 
 
 		// Show Template Page
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/browsers', 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/platforms', 'layout/postbox.toggle', 'layout/footer' ), $args );
 	}
 
 }
 
-new browser_page;
+new platform_page;

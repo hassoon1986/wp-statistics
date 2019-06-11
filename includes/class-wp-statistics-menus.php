@@ -256,6 +256,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Platforms', 'wp-statistics' ),
 				'page_url' => 'platform',
+				'method'   => 'platform'
 			),
 			'top.visotors' => array(
 				'require'  => array( 'visitors' => true ),
