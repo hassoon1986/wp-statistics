@@ -10,6 +10,15 @@ class visitors_page {
 
 			// Disable Screen Option
 			add_filter( 'screen_options_show_screen', '__return_false' );
+
+			// Set Default All Option for DatePicker
+			add_filter( 'wp_statistics_days_ago_request', array( '\WP_STATISTICS\Helper', 'set_all_option_datepicker' ) );
+
+			// Is Validate Date Request
+			$DateRequest = Admin_Template::isValidDateRequest();
+			if ( ! $DateRequest['status'] ) {
+				wp_die( $DateRequest['message'] );
+			}
 		}
 	}
 
@@ -28,16 +37,20 @@ class visitors_page {
 		$args['pageName'] = Menus::get_page_slug( 'visitors' );
 		$args['paged']    = Admin_Template::getCurrentPaged();
 
+		// Get Date-Range
+		$args['DateRang'] = Admin_Template::DateRange();
+		$date_link        = array( 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
+
 		//Get Sub List
-		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => $wpdb->get_var( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "`" ), 'active' => ( isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
+		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => $wpdb->get_var( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "`" ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
 		if ( isset( $_GET['ip'] ) ) {
-			$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `ip` LIKE %s", $_GET['ip'] ) ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( 'ip', $_GET['ip'], Menus::admin_url( 'visitors' ) ) );
+			$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `ip` LIKE %s", $_GET['ip'] ) ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
 		} elseif ( isset( $_GET['location'] ) ) {
-			$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `location` LIKE %s", $_GET['location'] ) ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( 'location', $_GET['location'], Menus::admin_url( 'visitors' ) ) );
+			$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `location` LIKE %s", $_GET['location'] ) ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
 		} else {
 			$browsers = UserAgent::BrowserList();
 			foreach ( $browsers as $key => $se ) {
-				$args['sub'][ $key ] = array( 'title' => $se, 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `agent` LIKE %s", $key ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( 'agent', $key, Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $key ] = array( 'title' => $se, 'count' => $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . DB::table( 'visitor' ) . "` WHERE `agent` LIKE %s", $key ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -67,7 +80,7 @@ class visitors_page {
 			) );
 		}
 
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'pages/visitors', 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/visitors', 'layout/footer' ), $args );
 	}
 
 }
