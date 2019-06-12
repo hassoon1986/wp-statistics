@@ -35,41 +35,28 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
                         // Create Table
                         let html = '<table class="widefat">';
 
-                        // Add Browser
-                        html += `<tr><td>${wps_js._('browsers')}</td></tr>`;
-                        html += `<tr><td><select name="agent" class="select2 wps-width-100" data-type-show="select2">`;
-                        html += `<option value=''>${wps_js._('all')}</option>`;
-                        Object.keys(data.browsers).forEach(function (key) {
-                            html += `<option value='${key}' ${(data.browsers[key]['active'] === true ? `selected` : ``)}>${data.browsers[key]['title']}</option>`;
-                        });
-                        html += `</select></td></tr>`;
+                        // Show List Select
+                        let select = {
+                            /**
+                             * Key: global i18n
+                             * [0]: select name
+                             * [1]: data key from ajax
+                             */
+                            'browsers': ['agent', 'browsers'],
+                            'country': ['location', 'location'],
+                            'platform': ['platform', 'platform'],
+                            'referrer': ['referrer', 'referrer']
+                        };
 
-                        // Add Country
-                        html += `<tr><td>${wps_js._('country')}</td></tr>`;
-                        html += `<tr><td><select name="location" class="select2 wps-width-100" data-type-show="select2">`;
-                        html += `<option value=''>${wps_js._('all')}</option>`;
-                        Object.keys(data.location).forEach(function (key) {
-                            html += `<option value='${key}' ${(data.location[key]['active'] === true ? `selected` : ``)}>${data.location[key]['title']}</option>`;
+                        Object.keys(select).forEach((key) => {
+                            html += `<tr><td>${wps_js._(key)}</td></tr>`;
+                            html += `<tr><td><select name="${select[key][0]}" class="select2 wps-width-100" data-type-show="select2">`;
+                            html += `<option value=''>${wps_js._('all')}</option>`;
+                            Object.keys(data[select[key][1]]).forEach(function (item) {
+                                html += `<option value='${item}' ${(data[select[key][1]][item]['active'] === true ? `selected` : ``)}>${data[select[key][1]][item]['title']}</option>`;
+                            });
+                            html += `</select></td></tr>`;
                         });
-                        html += `</select></td></tr>`;
-
-                        // Add Platform
-                        html += `<tr><td>${wps_js._('platform')}</td></tr>`;
-                        html += `<tr><td><select name="platform" class="select2 wps-width-100" data-type-show="select2">`;
-                        html += `<option value=''>${wps_js._('all')}</option>`;
-                        Object.keys(data.platform).forEach(function (key) {
-                            html += `<option value='${key}' ${(data.platform[key]['active'] === true ? `selected` : ``)}>${data.platform[key]['title']}</option>`;
-                        });
-                        html += `</select></td></tr>`;
-
-                        // Add Referrer
-                        html += `<tr><td>${wps_js._('referrer')}</td></tr>`;
-                        html += `<tr><td><select name="referrer" class="wps-width-100" data-type-show="select2">`;
-                        html += `<option value=''>${wps_js._('all')}</option>`;
-                        Object.keys(data.referrer).forEach(function (key) {
-                            html += `<option value='${key}' ${(data.referrer[key]['active'] === true ? `selected` : ``)}>${data.referrer[key]['title']}</option>`;
-                        });
-                        html += `</select></td></tr>`;
 
                         // Add IP
                         html += `<tr><td>${wps_js._('ip')}</td></tr>`;
