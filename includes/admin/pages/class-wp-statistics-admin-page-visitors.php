@@ -107,13 +107,20 @@ class visitors_page {
 		/**
 		 * Agent Filter
 		 */
+		$browsers = UserAgent::BrowserList();
 		if ( isset( $_GET['agent'] ) and ! empty( $_GET['agent'] ) ) {
+
+			// Add Params To SQL
 			$sql[] = array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => trim( $_GET['agent'] ) );
+
+			// Set New Sub List
+			if ( $args['filter']['number'] == 1 ) {
+				$args['sub'][ $_GET['agent'] ] = array( 'title' => $browsers[ strtolower( $_GET['agent'] ) ], 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $_GET['agent'] ) ) ), 'active' => ( isset( $_GET['agent'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $_GET['agent'] ) ), Menus::admin_url( 'visitors' ) ) );
+			}
 		}
 
 		// Browser Sub List is Default
 		if ( $args['filter']['number'] < 1 ) {
-			$browsers = UserAgent::BrowserList();
 			foreach ( $browsers as $key => $se ) {
 				$args['sub'][ $key ] = array( 'title' => $se, 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $key ) ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
 			}

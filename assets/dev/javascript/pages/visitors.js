@@ -89,7 +89,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
 
                         // Submit Button
                         html += `<tr><td></td></tr>`;
-                        html += `<tr><td><input type="submit" value="${wps_js._('filter')}" class="button-primary"></td></tr>`;
+                        html += `<tr><td><input type="submit" value="${wps_js._('filter')}" class="button-primary"> &nbsp; <span class="filter-loading"></span></td></tr>`;
                         html += `</table>`;
                         jQuery(tickBox_DIV).html(html);
 
@@ -109,38 +109,49 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
     });
 
     // submit and disable empty value
-    jQuery(document).on('submit', '#wp_statistics_visitors_filter_form', function () {
-
-        // Disable DatePicker
-        jQuery("input[data-wps-date-picker]").prop('disabled', true);
+    var FORM_ID = '#wp_statistics_visitors_filter_form';
+    jQuery(document).on('submit', FORM_ID, function () {
 
         //Validate DatePicker
-        var FROM_DATE = jQuery("#wp_statistics_visitors_filter_form input[name=from]");
-        var TO_DATE = jQuery("#wp_statistics_visitors_filter_form input[name=to]");
+        var FROM_DATE = jQuery(FORM_ID + " input[name=date-from]");
+        var TO_DATE = jQuery(FORM_ID + " input[name=date-to]");
         if ((FROM_DATE.val().length > 0 && TO_DATE.val().length < 1) || (FROM_DATE.val().length < 1 && TO_DATE.val().length > 1)) {
             alert(wps_js._('er_datepicker'));
             return false;
         }
 
+        // Check IS IP
+        var Input_IP = jQuery(FORM_ID + " input[name=ip]").val();
+        if (Input_IP.length > 0 && wps_js.isIP(Input_IP) === false) {
+            alert(wps_js._('er_valid_ip'));
+            return false;
+        }
+
+        // Disable DatePicker
+        jQuery("input[data-wps-date-picker]").prop('disabled', true);
+
         // Remove Empty Parameter
         let forms = {
             'input': ['date-from', 'date-to', 'ip'],
-            'select': ['agent', 'platform', 'location']
+            'select': ['agent', 'platform', 'location', 'referrer']
         };
         Object.keys(forms).forEach(function (type) {
             forms[type].forEach((name) => {
-                let input = jQuery("#wp_statistics_visitors_filter_form " + type + "[name=" + name + "]");
+                let input = jQuery(FORM_ID + " " + type + "[name=" + name + "]");
                 if (input.val().length < 1) {
                     input.prop('disabled', true);
-                    if (name == "date-from") {
-                        FROM_DATE.prop('disabled', true);
-                    }
-                    if (name == "date-to") {
-                        TO_DATE.prop('disabled', true);
-                    }
+                    ['from', 'to'].forEach((key) => {
+                        if (name == "date-" + key) {
+                            jQuery(FORM_ID + " input[name=" + key + "]").prop('disabled', true);
+                        }
+                    });
                 }
             });
         });
+
+        // Show Loading
+        jQuery("span.filter-loading").html(wps_js._('please_wait'));
+
         return true;
     });
 }

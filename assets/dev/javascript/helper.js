@@ -301,3 +301,15 @@ wps_js.set_equal_height = function (Dom_1, Dom_2) {
 wps_js.Create_Half_PostBox = function (div_class, div_id) {
     return `<div class="postbox-container wps-postbox-half ${div_class}"><div class="metabox-holder"><div class="meta-box-sortables"> <div class="postbox" id="${div_id}"> <div class="inside"></div></div></div></div></div>`;
 };
+
+/**
+ * Check IS IP
+ *
+ * @param str
+ * @returns {boolean}
+ */
+wps_js.isIP = function (str) {
+    const octet = '(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0)';
+    const regex = new RegExp(`^${octet}\\.${octet}\\.${octet}\\.${octet}$`);
+    return regex.test(str);
+};

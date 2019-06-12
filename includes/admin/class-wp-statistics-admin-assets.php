@@ -272,6 +272,8 @@ class Admin_Assets {
 			'filter'        => __( 'Filter', 'wp-statistics' ),
 			'all'           => __( 'All', 'wp-statistics' ),
 			'er_datepicker' => __( 'Please select the time efficiency.', 'wp-statistics' ),
+			'er_valid_ip'   => __( 'Please enter a valid ip.', 'wp-statistics' ),
+			'please_wait'   => __( 'Please Wait ...', 'wp-statistics' ),
 		);
 
 		// Rest-API Meta Box Url
