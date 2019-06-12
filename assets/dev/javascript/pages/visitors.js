@@ -73,7 +73,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
 
                         // Add IP
                         html += `<tr><td>${wps_js._('ip')}</td></tr>`;
-                        html += `<tr><td><input name="ip" value="${data.ip}" class="wps-width-100" autocomplete="off"></td></tr>`;
+                        html += `<tr><td><input name="ip" value="${data.ip}" class="wps-width-100" placeholder='xxx.xxx.xxx.xxx' autocomplete="off"></td></tr>`;
 
                         // Add Date
                         html += `<tr><td>${wps_js._('date')}</td></tr>`;
