@@ -12,10 +12,12 @@ class countries {
 	public static function get( $args = array() ) {
 
 		// Check Number of Country
-		$number = ( isset( $args['number'] ) ? $args['number'] : 10 );
+		if ( ! isset( $args['limit'] ) ) {
+			$args['limit'] = 10;
+		}
 
 		// Get List Top Country
-		$response = Country::getTop( $number );
+		$response = Country::getTop( $args );
 
 		// Check For No Data Meta Box
 		if ( count( $response ) < 1 ) {

@@ -1,6 +1,6 @@
 if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.request_params.page === "platform") {
 
-    // Check Pagination
+    // Check Params
     let params = {};
 
     // Check Extra Parameter [Days ago or Between ..]

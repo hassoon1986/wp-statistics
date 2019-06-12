@@ -28,7 +28,6 @@ class country_page {
 	 * @throws \Exception
 	 */
 	public static function view() {
-		global $wpdb;
 
 		// Page title
 		$args['title'] = __( 'Top Countries', 'wp-statistics' );
@@ -40,14 +39,7 @@ class country_page {
 		// Get Date-Range
 		$args['DateRang'] = Admin_Template::DateRange();
 
-		// Total List
-		$args['list']  = $wpdb->get_results(
-			sprintf( "SELECT `location`, COUNT(`location`) AS `count` FROM `" . DB::table( 'visitor' ) . "` WHERE `last_counter` BETWEEN '%s' AND '%s' GROUP BY `location` ORDER BY `count` DESC",
-				$args['DateRang']['from'],
-				$args['DateRang']['to']
-			)
-		);
-
+		// Show Template
 		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/country', 'layout/postbox.toggle', 'layout/footer' ), $args );
 	}
 
