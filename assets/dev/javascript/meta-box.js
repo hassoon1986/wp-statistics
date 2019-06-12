@@ -24,56 +24,6 @@ wps_js.getMetaBoxKey = function (key) {
 };
 
 /**
- * Default PlaceHolder if Custom MetaBox have not this Method
- */
-wps_js.placeholder = function () {
-    return `
-<div class="wps-ph-item">
-    <div class="wps-ph-col-12">
-        <div class="wps-ph-picture"></div>
-        <div class="wps-ph-row">
-            <div class="wps-ph-col-6 big"></div>
-            <div class="wps-ph-col-4 empty big"></div>
-            <div class="wps-ph-col-2 big"></div>
-            <div class="wps-ph-col-4"></div>
-            <div class="wps-ph-col-8 empty"></div>
-            <div class="wps-ph-col-6"></div>
-            <div class="wps-ph-col-6 empty"></div>
-            <div class="wps-ph-col-12"></div>
-        </div>
-    </div>
-</div>
-`;
-};
-
-/**
- * Default Circle PlaceHolder
- */
-wps_js.circle_placeholder = function () {
-    return `
-<div class="wps-ph-item">
-    <div class="wps-ph-col-2"></div>
-    <div class="wps-ph-col-8">
-        <div class="wps-ph-avatar"></div>
-    </div>
-</div>
-`;
-};
-
-/**
- * Default Circle PlaceHolder
- */
-wps_js.rectangle_placeholder = function (cls = '') {
-    return `
-<div class="wps-ph-item` + (cls.length > 0 ? ' ' + cls : '') + `">
-    <div class="wps-ph-col-12">
-        <div class="wps-ph-picture"></div>
-    </div>
-</div>
-`;
-};
-
-/**
  * Show No Data Error if Meta Box is Empty
  */
 wps_js.no_meta_box_data = function () {

@@ -7,18 +7,18 @@ class Uninstall {
 	public function __construct() {
 		global $wpdb;
 
-			if ( is_multisite() ) {
+		if ( is_multisite() ) {
 
-				$blog_ids = $wpdb->get_col( "SELECT `blog_id` FROM $wpdb->blogs" );
-				foreach ( $blog_ids as $blog_id ) {
-					switch_to_blog( $blog_id );
-					$this->wp_statistics_site_removal();
-					restore_current_blog();
-				}
-
-			} else {
+			$blog_ids = $wpdb->get_col( "SELECT `blog_id` FROM $wpdb->blogs" );
+			foreach ( $blog_ids as $blog_id ) {
+				switch_to_blog( $blog_id );
 				$this->wp_statistics_site_removal();
+				restore_current_blog();
 			}
+
+		} else {
+			$this->wp_statistics_site_removal();
+		}
 	}
 
 	/**

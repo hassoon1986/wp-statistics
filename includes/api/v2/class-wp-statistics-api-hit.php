@@ -6,7 +6,7 @@ use WP_STATISTICS\Helper;
 use WP_STATISTICS\Hits;
 use WP_STATISTICS\Option;
 
-class Hit extends \WP_STATISTICS\RestApi {
+class Hit extends \WP_STATISTICS\RestAPI {
 	/**
 	 * Hit Endpoint
 	 *

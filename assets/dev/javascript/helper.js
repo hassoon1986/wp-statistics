@@ -30,6 +30,13 @@ wps_js.date_picker = function () {
 };
 
 /**
+ * Set Select2
+ */
+wps_js.select2 = function () {
+    jQuery("select[data-type-show=select2]").select2();
+};
+
+/**
  * Redirect To Custom Url
  *
  * @param url
@@ -291,6 +298,6 @@ wps_js.set_equal_height = function (Dom_1, Dom_2) {
  * @param div_id
  * @returns {string}
  */
-wps_js.Create_Half_PostBox = function(div_class, div_id){
-  return `<div class="postbox-container wps-postbox-half ${div_class}"><div class="metabox-holder"><div class="meta-box-sortables"> <div class="postbox" id="${div_id}"> <div class="inside"></div></div></div></div></div>`;
+wps_js.Create_Half_PostBox = function (div_class, div_id) {
+    return `<div class="postbox-container wps-postbox-half ${div_class}"><div class="metabox-holder"><div class="meta-box-sortables"> <div class="postbox" id="${div_id}"> <div class="inside"></div></div></div></div></div>`;
 };

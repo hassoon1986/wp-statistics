@@ -9,7 +9,7 @@ use WP_STATISTICS\TimeZone;
 
 class platforms {
 	/**
-	 * Get Platforms ar Chart
+	 * Get Platforms Chart
 	 *
 	 * @param array $arg
 	 * @return array
@@ -23,6 +23,7 @@ class platforms {
 			'ago'    => 0,
 			'from'   => '',
 			'to'     => '',
+			'order'  => '',
 			'number' => 10 // Get Max number of platform
 		);
 		$args     = wp_parse_args( $arg, $defaults );
@@ -67,7 +68,7 @@ class platforms {
 		$lists_value = $lists_name = array();
 
 		// Get List All Platforms
-		$list = $wpdb->get_results( "SELECT platform, COUNT(*) as count FROM " . DB::table( 'visitor' ) . " WHERE `last_counter` BETWEEN '" . reset( $days_time_list ) . "' AND '" . end( $days_time_list ) . "' GROUP BY platform", ARRAY_A );
+		$list = $wpdb->get_results( "SELECT platform, COUNT(*) as count FROM " . DB::table( 'visitor' ) . " WHERE `last_counter` BETWEEN '" . reset( $days_time_list ) . "' AND '" . end( $days_time_list ) . "' GROUP BY platform " . ( $args['order'] != "" ? 'ORDER BY `count` ' . $args['order'] : '' ), ARRAY_A );
 
 		// Sort By Count
 		Helper::SortByKeyValue( $list, 'count' );

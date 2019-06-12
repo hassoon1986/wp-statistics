@@ -44,9 +44,7 @@ class refer_page {
 		if ( ! isset( $_GET['referr'] ) ) {
 
 			// Get Total
-			$site_url = wp_parse_url( get_site_url() );
-			$site_url = $site_url['scheme'] . "://" . $site_url['host'];
-			$result   = $wpdb->get_results( $wpdb->prepare( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND `referred` NOT LIKE '{$site_url}%' AND `last_counter` BETWEEN %s AND %s GROUP BY domain ORDER BY `number` DESC", $args['DateRang']['from'], $args['DateRang']['to'] ) );
+			$result = Referred::getList( array( 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] ) );
 
 			// Total Number
 			$args['total'] = count( $result );

@@ -12,7 +12,8 @@
 			}
 			?>
         </select>
-        <input type="submit" value="<?php _e( 'Select', 'wp-statistics' ); ?>" class="button-primary btn-danger wps-btn-inline"><br>
+        <input type="submit" value="<?php _e( 'Select', 'wp-statistics' ); ?>" class="button-primary btn-danger wps-btn-inline">
+        <br>
 		<?php
 	}
 	?>
@@ -56,8 +57,17 @@
         <input type="hidden" name="<?php echo \WP_STATISTICS\Admin_Template::$request_from_date; ?>" id="date-from" value="<?php echo $DateRang['from']; ?>">
         <input type="hidden" name="<?php echo \WP_STATISTICS\Admin_Template::$request_to_date; ?>" id="date-to" value="<?php echo $DateRang['to']; ?>">
 </form>
+<?php
+if ( isset( $filter ) and isset( $filter['code'] ) ) {
+	echo $filter['code'];
+	?>
+    <div class="wp-clearfix"></div>
+	<?php
+}
+?>
+</ul>
 <script>
     jQuery('#jquery-datepicker').submit(function () {
         jQuery("input[data-wps-date-picker]").prop('disabled', true);
     });
-</script></ul>
+</script>

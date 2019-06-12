@@ -27,7 +27,7 @@ if ( $pageuri && ! $pageid ) {
 
 $post = get_post( $pageid );
 if ( is_object( $post ) ) {
-	$title = $post->post_title;
+	$title = esc_html( $post->post_title );
 } else {
 	$title = "";
 }
@@ -57,8 +57,8 @@ if ( $page > 0 and $post_type != "page" ) {
 $url_fields = '&prepage=' . $pageid;
 
 //Show Select Box Ui
-$html       = __( 'Select Page', 'wp-statistics' ) . ': ';
-$html       .= '<select name="page-id">';
+$html = __( 'Select Page', 'wp-statistics' ) . ': ';
+$html .= '<select name="page-id">';
 foreach ( \WP_STATISTICS\Helper::get_post_list( $arg ) as $post_id => $post_title ) {
 	$html .= '<option value="' . $post_id . '"' . selected( $post_id, $page, false ) . '>' . $post_title . '</option>';
 }
@@ -68,7 +68,7 @@ $html .= '<br>';
 ?>
 <div class="wrap wps-wrap">
 	<?php Admin_Template::show_page_title( sprintf( __( 'Page Trend for Post ID %s', 'wp-statistics' ), $pageid ) . ' - ' . $title ); ?>
-	<?php Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug('pages'), $daysToDisplay, null, null, $url_fields, $html ); ?>
+	<?php Admin_Template::date_range_selector( \WP_STATISTICS\Menus::get_page_slug( 'pages' ), $daysToDisplay, null, null, $url_fields, $html ); ?>
     <div class="postbox-container" id="wps-big-postbox">
         <div class="metabox-holder">
             <div class="meta-box-sortables">

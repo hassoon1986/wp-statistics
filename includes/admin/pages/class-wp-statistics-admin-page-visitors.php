@@ -44,57 +44,84 @@ class visitors_page {
 		$sql[] = array( 'key' => 'last_counter', 'compare' => 'BETWEEN', 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
 
 		// Create Sub List
-		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => Visitor::Count( $sql ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
+		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => Visitor::Count( $sql ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referrer'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
+
+		// Filters Option
+		$args['filter'] = self::Filter();
 
 		/**
 		 * IP Filter
 		 */
 		if ( isset( $_GET['ip'] ) ) {
-
 			// Add Params To SQL
 			$sql[] = array( 'key' => 'ip', 'compare' => 'LIKE', 'value' => trim( $_GET['ip'] ) );
 
 			// Set New Sub List
-			$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
+			if ( $args['filter']['number'] == 1 ) {
+				$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
+			}
+		}
 
-			/**
-			 * Location Filter
-			 */
-		} elseif ( isset( $_GET['location'] ) ) {
+		/**
+		 * Location Filter
+		 */
+		if ( isset( $_GET['location'] ) and ! empty( $_GET['location'] ) ) {
 
 			// Add Params To SQL
 			$sql[] = array( 'key' => 'location', 'compare' => 'LIKE', 'value' => trim( $_GET['location'] ) );
 
 			// Set New Sub List
-			$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
+			if ( $args['filter']['number'] == 1 ) {
+				$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
+			}
+		}
 
-			/**
-			 * Platform Filter
-			 */
-		} elseif ( isset( $_GET['platform'] ) ) {
+		/**
+		 * Platform Filter
+		 */
+		if ( isset( $_GET['platform'] ) and ! empty( $_GET['platform'] ) ) {
 
 			// Add Params To SQL
 			$sql[] = array( 'key' => 'platform', 'compare' => 'LIKE', 'value' => trim( Helper::getUrlDecode( $_GET['platform'] ) ) );
 
 			// Set New Sub List
-			$args['sub'][ $_GET['platform'] ] = array( 'title' => Helper::getUrlDecode( $_GET['platform'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['platform'] ) and $_GET['platform'] == $_GET['platform'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'platform' => $_GET['platform'] ) ), Menus::admin_url( 'visitors' ) ) );
-
-			/**
-			 * Agent Filter (Default)
-			 */
-		} else {
-
-			// Add to SQL
-			if ( isset( $_GET['agent'] ) ) {
-				$sql[] = array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => trim( $_GET['agent'] ) );
+			if ( $args['filter']['number'] == 1 ) {
+				$args['sub'][ $_GET['platform'] ] = array( 'title' => Helper::getUrlDecode( $_GET['platform'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['platform'] ) and $_GET['platform'] == $_GET['platform'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'platform' => $_GET['platform'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
+		}
 
-			// Get List Of Browser
+		/**
+		 * Referrer Filter
+		 */
+		if ( isset( $_GET['referrer'] ) and ! empty( $_GET['referrer'] ) ) {
+
+			// Add Params To SQL
+			$sql[] = array( 'key' => 'referred', 'compare' => 'LIKE', 'value' => "%" . trim( $_GET['referrer'] ) . "%" );
+
+			// Set New Sub List
+			if ( $args['filter']['number'] == 1 ) {
+				$args['sub'][ $_GET['referrer'] ] = array( 'title' => trim( $_GET['referrer'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['referrer'] ) and $_GET['referrer'] == $_GET['referrer'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'referrer' => $_GET['referrer'] ) ), Menus::admin_url( 'visitors' ) ) );
+			}
+		}
+
+		/**
+		 * Agent Filter
+		 */
+		if ( isset( $_GET['agent'] ) and ! empty( $_GET['agent'] ) ) {
+			$sql[] = array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => trim( $_GET['agent'] ) );
+		}
+
+		// Browser Sub List is Default
+		if ( $args['filter']['number'] < 1 ) {
 			$browsers = UserAgent::BrowserList();
 			foreach ( $browsers as $key => $se ) {
 				$args['sub'][ $key ] = array( 'title' => $se, 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $key ) ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
 			}
+		}
 
+		// Set for Custom Filter
+		if ( $args['filter']['number'] > 1 ) {
+			$args['sub']['custom'] = array( 'title' => __( 'Custom filter', 'wp-statistics' ), 'count' => Visitor::Count( $sql ), 'active' => true, 'link' => remove_query_arg( 'custom' ) );
 		}
 
 		// Get Current View
@@ -122,7 +149,30 @@ class visitors_page {
 			) );
 		}
 
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/visitors', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/visitors', 'layout/visitors.filter', 'layout/footer' ), $args );
+	}
+
+	/**
+	 * Create Filter System
+	 *
+	 * @return mixed
+	 */
+	public static function Filter() {
+
+		// Remove unused $_GET
+		$params = ( isset( $_GET ) ? $_GET : array() );
+		foreach ( array( 'page', 'from', 'to' ) as $i ) {
+			if ( isset( $params[ $i ] ) ) {
+				unset( $params[ $i ] );
+			}
+		}
+		$filter['number'] = count( $params );
+
+		// Code Button
+		$filter['code'] = '<div class="wps-pull-' . ( is_rtl() ? 'left' : 'right' ) . '" id="visitors-filter"><span class="dashicons dashicons-filter"></span><span class="filter-text">' . __( "Filters", "wp-statistics" ) . '</span> ' . ( $filter['number'] > 0 ? '<span class="wps-badge">' . number_format_i18n( $filter['number'] ) . '</span>' : '' ) . '</div>';
+
+		// Return Data
+		return $filter;
 	}
 
 }

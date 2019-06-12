@@ -302,4 +302,38 @@ class Referred {
 		return $list;
 	}
 
+	/**
+	 * Get Referred Site List
+	 *
+	 * @param array $args
+	 * @return mixed
+	 */
+	public static function getList( $args = array() ) {
+		global $wpdb;
+
+		// Get Site Url
+		$site_url = wp_parse_url( get_site_url() );
+		$site_url = $site_url['scheme'] . "://" . $site_url['host'];
+
+		// Check Custom Date
+		$where = '';
+		if ( isset( $args['from'] ) and isset( $args['to'] ) ) {
+			$where = "AND `last_counter` BETWEEN '" . $args['from'] . "' AND '" . $args['to'] . "' ";
+		}
+
+		// Check Min Number
+		$having = '';
+		if ( isset( $args['min'] ) ) {
+			$having = "HAVING `number` >" . $args['min'];
+		}
+
+		// Check Limit
+		$limit = '';
+		if ( isset( $args['limit'] ) ) {
+			$limit = "LIMIT " . $args['limit'];
+		}
+
+		// Return List
+		return $wpdb->get_results( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND `referred` NOT LIKE '{$site_url}%' " . $where . " GROUP BY domain " . $having . " ORDER BY `number` DESC " . $limit );
+	}
 }

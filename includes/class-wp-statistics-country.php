@@ -64,25 +64,34 @@ class Country {
 	/**
 	 * get Top Country List
 	 *
-	 * @param int $number
+	 * @param array $args
 	 * @return array
 	 */
-	public static function getTop( $number = 10 ) {
+	public static function getTop( $args = array() ) {
 		global $wpdb;
 
 		// Load List Country Code
 		$ISOCountryCode = Country::getList();
 
 		// Get List From DB
-		$list   = array();
-		$result = $wpdb->get_results( "SELECT `location`, COUNT(`location`) AS `count` FROM `" . DB::table( 'visitor' ) . "` GROUP BY `location` ORDER BY `count` DESC LIMIT " . $number );
+		$list = array();
+
+		// Check Custom Date
+		$where = '';
+		if ( isset( $args['from'] ) and isset( $args['to'] ) ) {
+			$where = "WHERE `last_counter` BETWEEN '" . $args['from'] . "' AND '" . $args['to'] . "'";
+		}
+
+		// Get Result
+		$result = $wpdb->get_results( "SELECT `location`, COUNT(`location`) AS `count` FROM `" . DB::table( 'visitor' ) . "` " . $where . " GROUP BY `location` ORDER BY `count` DESC " . ( ( isset( $args['limit'] ) and $args['limit'] > 0 ) ? "LIMIT " . $args['limit'] : '' ) );
 		foreach ( $result as $item ) {
 			$item->location = strtoupper( $item->location );
 			$list[]         = array(
-				'name'   => $ISOCountryCode[ $item->location ],
-				'flag'   => self::flag( $item->location ),
-				'link'   => Menus::admin_url( 'countries', array( 'country' => $item->location ) ),
-				'number' => number_format_i18n( $item->count )
+				'location' => $item->location,
+				'name'     => $ISOCountryCode[ $item->location ],
+				'flag'     => self::flag( $item->location ),
+				'link'     => Menus::admin_url( 'visitors', array( 'location' => $item->location ) ),
+				'number'   => $item->count
 			);
 		}
 

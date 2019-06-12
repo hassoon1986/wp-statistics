@@ -18,7 +18,8 @@ class Ajax {
 			'delete_ip',
 			'empty_table',
 			'purge_data',
-			'purge_visitor_hits'
+			'purge_visitor_hits',
+			'visitors_page_filters'
 		);
 		foreach ( $list as $method ) {
 			add_action( 'wp_ajax_wp_statistics_' . $method, array( $this, $method . '_action_callback' ) );
@@ -234,6 +235,76 @@ class Ajax {
 		}
 
 		wp_die();
+	}
+
+	/**
+	 * Show Page Visitors Filter
+	 */
+	public function visitors_page_filters_action_callback() {
+
+		if ( Helper::is_request( 'ajax' ) and isset( $_REQUEST['page'] ) ) {
+
+			// Run only Visitors Page
+			if ( $_REQUEST['page'] != "visitors" ) {
+				exit;
+			}
+
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
+
+			// Create Output object
+			$filter = array( 'from' => '', 'to' => '', 'ip' => '' );
+
+			// Check Data filter
+			$_exist_date_filter = false;
+			foreach ( array( 'from', 'to' ) as $item ) {
+				if ( isset( $_REQUEST[ $item ] ) and ! empty( $_REQUEST[ $item ] ) ) {
+					$filter[ $item ]    = $_REQUEST[ $item ];
+					$_exist_date_filter = true;
+				}
+			}
+
+			// Browsers
+			$filter['browsers'] = array();
+			$browsers           = UserAgent::BrowserList();
+			foreach ( $browsers as $key => $se ) {
+				$filter['browsers'][ $key ] = array( 'title' => $se, 'active' => ( ( isset( $_REQUEST['agent'] ) and $_REQUEST['agent'] == $key ) ? true : false ) );
+			}
+
+			// Location
+			$filter['location'] = array();
+			$country_list       = Country::getList();
+			foreach ( $country_list as $key => $name ) {
+				$filter['location'][ $key ] = array( 'title' => $name, 'active' => ( ( isset( $_REQUEST['location'] ) and $_REQUEST['location'] == $key ) ? true : false ) );
+			}
+
+			// Push First "000" Unknown to End of List
+			$first_key = key( $filter['location'] );
+			$first_val = $filter['location'][ $first_key ];
+			unset( $filter['location'][ $first_key ] );
+			$filter['location'][ $first_key ] = $first_val;
+
+			// Platforms
+			$filter['platform'] = array();
+			$platforms_list     = RestAPI::request( array( 'route' => 'metabox', 'params' => array_merge( array( 'name' => 'platforms', 'number' => 15, 'order' => 'DESC' ), ( $_exist_date_filter ? array( 'from' => $filter['from'], 'to' => $filter['to'] ) : array() ) ) ) );
+			for ( $x = 0; $x < count( $platforms_list['platform_name'] ); $x ++ ) {
+				$filter['platform'][ $platforms_list['platform_name'][ $x ] ] = array( 'title' => $platforms_list['platform_name'][ $x ], 'active' => ( ( isset( $_REQUEST['platform'] ) and $_REQUEST['platform'] == $platforms_list['platform_name'][ $x ] ) ? true : false ) );
+			}
+
+			// Referrer
+			$filter['referrer'] = array();
+			$referrer_list      = Referred::getList( ( $_exist_date_filter === true ? array( 'from' => $filter['from'], 'to' => $filter['to'], 'min' => 50, 'limit' => 300 ) : array( 'min' => 50, 'limit' => 300 ) ) );
+			foreach ( $referrer_list as $site ) {
+				$filter['referrer'][ $site->domain ] = array( 'title' => $site->domain, 'active' => ( ( isset( $_REQUEST['referrer'] ) and $_REQUEST['referrer'] == $site->domain ) ? true : false ) );
+			}
+
+			// IP
+			$filter['ip'] = ( isset( $_REQUEST['ip'] ) ? trim( $_REQUEST['ip'] ) : '' );
+
+			// Send Json
+			wp_send_json( $filter );
+		}
+		exit;
 	}
 
 }

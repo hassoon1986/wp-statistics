@@ -122,6 +122,10 @@ class Admin_Assets {
 			wp_enqueue_style( self::$prefix . '-jquery-datepicker', self::url( 'datepicker.min.css' ), array(), '1.11.4' );
 		}
 
+		// Load Select2
+		if ( Menus::in_page( 'visitors' ) ) {
+			wp_enqueue_style( self::$prefix . '-select2', self::url( 'select2/select2.min.css' ), array(), '4.0.7' );
+		}
 	}
 
 	/**
@@ -145,10 +149,15 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-jqvmap-world', self::url( 'jqvmap/jquery.vmap.world.min.js' ), true, '1.5.1' );
 		}
 
-		// Load Jquery UI and Moment Js
+		// Load Jquery UI
 		if ( Menus::in_plugin_page() and Menus::in_page( 'optimization' ) === false and Menus::in_page( 'settings' ) === false ) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
 			wp_localize_script( 'jquery-ui-datepicker', 'wps_i18n_jquery_datepicker', self::localize_jquery_datepicker() );
+		}
+
+		// Load Select2
+		if ( Menus::in_page( 'visitors' ) ) {
+			wp_enqueue_script( self::$prefix . '-select2', self::url( 'select2/select2.full.min.js' ), array( 'jquery' ), '4.0.7' );
 		}
 
 		// Load WordPress PostBox Script
@@ -169,6 +178,11 @@ class Admin_Assets {
 			wp_enqueue_script( self::$prefix . '-button-widget', self::url( 'tinymce.min.js' ), array( 'jquery' ), self::version() );
 		}
 
+		// Add Thick box
+		if ( Menus::in_page( 'visitors' ) ) {
+			wp_enqueue_script( 'thickbox' );
+			wp_enqueue_style( 'thickbox' );
+		}
 	}
 
 	/**
@@ -249,15 +263,20 @@ class Admin_Assets {
 			'str_year'      => __( 'Year', 'wp-statistics' ),
 			'custom'        => __( 'Custom', 'wp-statistics' ),
 			'to'            => __( 'to', 'wp-statistics' ),
+			'from'          => __( 'from', 'wp-statistics' ),
 			'go'            => __( 'Go', 'wp-statistics' ),
 			'no_data'       => __( 'No data to display', 'wp-statistics' ),
 			'count'         => __( 'Count', 'wp-statistics' ),
 			'percentage'    => __( 'Percentage', 'wp-statistics' ),
 			'version_list'  => __( 'Version List', 'wp-statistics' ),
+			'filter'        => __( 'Filter', 'wp-statistics' ),
+			'all'           => __( 'All', 'wp-statistics' ),
+			'er_datepicker' => __( 'Please select the time efficiency.', 'wp-statistics' ),
 		);
 
 		// Rest-API Meta Box Url
-		$list['meta_box_api']   = get_rest_url( null, RestApi::$namespace . '/metabox' );
+		$list['meta_box_api']   = get_rest_url( null, RestAPI::$namespace . '/metabox' );
+		$list['ajax_url']       = admin_url( 'admin-ajax.php' );
 		$list['rest_api_nonce'] = wp_create_nonce( 'wp_rest' );
 
 		// Meta Box List

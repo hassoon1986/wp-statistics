@@ -46,7 +46,7 @@ class Admin_Notices {
 
 			// Check Connect To WordPress Rest API
 			$status  = true;
-			$request = wp_remote_post( get_rest_url( null, RestApi::$namespace . '/enable' ), array( 'method' => 'POST', 'body' => array( 'connect' => 'wp-statistics' ), 'timeout' => 30 ) );
+			$request = wp_remote_post( get_rest_url( null, RestAPI::$namespace . '/enable' ), array( 'method' => 'POST', 'body' => array( 'connect' => 'wp-statistics' ), 'timeout' => 30 ) );
 			if ( is_wp_error( $request ) ) {
 				$status = false;
 			}

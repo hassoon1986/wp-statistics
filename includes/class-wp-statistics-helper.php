@@ -479,7 +479,7 @@ class Helper {
 		$query = new \WP_Query( $args );
 		$list  = array();
 		foreach ( $query->posts as $ID ) {
-			$list[ $ID ] = get_the_title( $ID );
+			$list[ $ID ] = esc_html( get_the_title( $ID ) );
 		}
 
 		return $list;

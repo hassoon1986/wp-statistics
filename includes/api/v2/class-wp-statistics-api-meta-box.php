@@ -4,7 +4,7 @@ namespace WP_STATISTICS\Api\v2;
 
 use WP_STATISTICS\User;
 
-class Meta_Box extends \WP_STATISTICS\RestApi {
+class Meta_Box extends \WP_STATISTICS\RestAPI {
 	/**
 	 * Meta Box constructor.
 	 *

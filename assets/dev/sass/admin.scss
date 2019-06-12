@@ -12,6 +12,7 @@ $image_path: "../images";
 @import "component/meta-box";
 @import "component/btn-group";
 @import "component/placeholder/placeholder-loading";
+@import "component/badge";
 
 // WordPress Admin Page
 @import "pages/setting";
@@ -20,6 +21,7 @@ $image_path: "../images";
 @import "pages/admin";
 @import "pages/overview";
 @import "pages/browsers";
+@import "pages/visitors";
 
 // Load WordPress Meta Box
 @import "meta-box/about";
