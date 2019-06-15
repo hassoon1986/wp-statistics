@@ -311,6 +311,16 @@ class Admin_Assets {
 			$list['meta_boxes'][ $meta_box ] = $value;
 		}
 
+		// Ads For Overview Pages
+		if ( Menus::in_page( 'overview' ) ) {
+			$overview_ads = get_option( 'wp_statistics_overview_page_ads', false );
+			if ( $overview_ads != false and is_array( $overview_ads ) and $overview_ads['ads']['ID'] != $overview_ads['view'] and $overview_ads['ads']['status'] == "yes" ) {
+				$list['overview']['ads']          = $overview_ads['ads'];
+				$list['overview']['ads']['nonce'] = wp_create_nonce( 'overview_ads_nonce' );
+			}
+		}
+
+		// Return Data JSON
 		return $list;
 	}
 

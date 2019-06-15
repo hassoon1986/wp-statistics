@@ -31,6 +31,7 @@ class Uninstall {
 		delete_option( 'wp_statistics' );
 		delete_option( 'wp_statistics_plugin_version' );
 		delete_option( 'wp_statistics_referrals_detail' );
+		delete_option( 'wp_statistics_overview_page_ads' );
 		delete_option( 'wp_statistics_users_city' );
 
 		// Delete the transients.

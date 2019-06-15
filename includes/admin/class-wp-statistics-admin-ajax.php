@@ -13,6 +13,7 @@ class Ajax {
 		 */
 		$list = array(
 			'close_notice',
+			'close_overview_ads',
 			'delete_agents',
 			'delete_platforms',
 			'delete_ip',
@@ -46,6 +47,24 @@ class Ajax {
 		}
 
 		wp_die();
+	}
+
+	/**
+	 * Close Overview Ads
+	 */
+	public function close_overview_ads_action_callback() {
+
+		if ( Helper::is_request( 'ajax' ) and isset( $_REQUEST['ads_id'] ) ) {
+
+			// Check Security Nonce
+			check_ajax_referer( 'overview_ads_nonce', 'wps_nonce' );
+
+			// Update Option
+			$get_opt         = get_option( 'wp_statistics_overview_page_ads' );
+			$get_opt['view'] = $_REQUEST['ads_id'];
+			update_option( 'wp_statistics_overview_page_ads', $get_opt, 'no' );
+		}
+		exit;
 	}
 
 	/**
