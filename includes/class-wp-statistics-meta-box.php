@@ -24,24 +24,24 @@ class Meta_Box {
 	 * Load WordPress Meta Box
 	 */
 	public static function includes() {
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-quickstats.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-summary.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-browsers.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-platforms.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-countries.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-hits.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-pages.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-referring.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-search.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-words.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-top-visitors.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-recent.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-hitsmap.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-useronline.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-about.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-post.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-top-pages-chart.php';
-		require_once WP_STATISTICS_DIR . 'includes/meta-box/wp-statistics-meta-box-pages-chart.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-quickstats.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-summary.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-browsers.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-platforms.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-countries.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-hits.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-pages.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-referring.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-search.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-words.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-top-visitors.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-recent.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-hitsmap.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-useronline.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-about.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-post.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-top-pages-chart.php';
+		require_once WP_STATISTICS_DIR . 'includes/admin/meta-box/wp-statistics-meta-box-pages-chart.php';
 	}
 
 	/**
