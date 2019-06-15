@@ -294,10 +294,11 @@
                     <option value="0"><?php _e( 'Please select', 'wp-statistics' ); ?></option>
 					<?php
 					$platforms = wp_statistics_platform_list();
-
 					foreach ( $platforms as $platform ) {
-						$pid = preg_replace( "/[^a-zA-Z]/", "", $platform );
-						echo "<option value='$platform' id='platform-" . $pid . "-id'>" . $platform . "</option>";
+						if ( ! empty( $platform ) ) {
+							$pid = preg_replace( "/[^a-zA-Z]/", "", $platform );
+							echo "<option value='$platform' id='platform-" . $pid . "-id'>" . $platform . "</option>";
+						}
 					}
 					?>
                 </select>
