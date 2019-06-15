@@ -80,7 +80,7 @@ class UserOnline {
 			update_option( self::$check_user_online_opt, $now );
 		}
 	}
-	
+
 	/**
 	 * Record Users Online
 	 *
@@ -250,8 +250,19 @@ class UserOnline {
 				'referred' => Referred::get_referrer_link( $items->referred ),
 				'agent'    => $items->agent,
 				'platform' => $items->platform,
-				'version'  => $items->version
+				'version'  => $items->version,
 			);
+
+			// Add User information
+			if ( $items->user_id > 0 and User::exists( $items->user_id ) ) {
+				$user_data    = User::get( $items->user_id );
+				$item['user'] = array(
+					'ID'         => $items->user_id,
+					'user_email' => $user_data['user_email'],
+					'user_login' => $user_data['user_login'],
+					'name'       => User::get_name( $items->user_id )
+				);
+			}
 
 			// Page info
 			$item['page'] = Pages::get_page_info( $items->page_id, $items->type );
