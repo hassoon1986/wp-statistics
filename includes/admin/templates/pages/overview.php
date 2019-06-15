@@ -20,19 +20,6 @@
 
         // postboxes setup
         postboxes.add_postbox_toggles('<?php echo $overview_page_slug; ?>');
-
-        // Donate Notice
-        jQuery('#wps-donate-notice').on('click', '.notice-dismiss', function () {
-            jQuery.ajax({
-                url: ajaxurl,
-                type: 'get',
-                data: {
-                    'action': 'wp_statistics_close_notice',
-                    'notice': 'donate',
-                },
-                datatype: 'json',
-            });
-        });
     });
 </script>
 

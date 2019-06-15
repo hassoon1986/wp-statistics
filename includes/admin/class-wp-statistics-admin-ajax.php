@@ -33,6 +33,11 @@ class Ajax {
 	public function close_notice_action_callback() {
 
 		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) and isset( $_REQUEST['notice'] ) ) {
+
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
+
+			// Check Type Of Notice
 			switch ( $_REQUEST['notice'] ) {
 				case 'donate':
 					Option::update( 'disable_donation_nag', true );
@@ -57,7 +62,7 @@ class Ajax {
 		if ( Helper::is_request( 'ajax' ) and isset( $_REQUEST['ads_id'] ) ) {
 
 			// Check Security Nonce
-			check_ajax_referer( 'overview_ads_nonce', 'wps_nonce' );
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
 
 			// Update Option
 			$get_opt         = get_option( 'wp_statistics_overview_page_ads' );
@@ -74,19 +79,22 @@ class Ajax {
 		global $wpdb;
 
 		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
-			$agent = $_POST['agent-name'];
 
-			if ( $agent ) {
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
 
-				$result = $wpdb->query(
-					$wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `agent` = %s", $agent )
-				);
+			// Check Exist
+			if ( isset( $_POST['agent-name'] ) ) {
 
+				// Get User Agent
+				$agent = sanitize_text_field( $_POST['agent-name'] );
+
+				// Remove Type Of Agent
+				$result = $wpdb->query( $wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `agent` = %s", $agent ) );
+
+				// Show Result
 				if ( $result ) {
-					echo sprintf(
-						__( '%s agent data deleted successfully.', 'wp-statistics' ),
-						'<code>' . $agent . '</code>'
-					);
+					echo sprintf( __( '%s agent data deleted successfully.', 'wp-statistics' ), '<code>' . $agent . '</code>' );
 				} else {
 					_e( 'No agent data found to remove!', 'wp-statistics' );
 				}
@@ -98,7 +106,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die();
+		exit;
 	}
 
 	/**
@@ -108,19 +116,22 @@ class Ajax {
 		global $wpdb;
 
 		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
-			$platform = $_POST['platform-name'];
 
-			if ( $platform ) {
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
 
-				$result = $wpdb->query(
-					$wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `platform` = %s", $platform )
-				);
+			// Check Isset Platform
+			if ( isset( $_POST['platform-name'] ) ) {
 
+				// Get User Platform
+				$platform = sanitize_text_field( $_POST['platform-name'] );
+
+				// Delete List
+				$result = $wpdb->query( $wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `platform` = %s", $platform ) );
+
+				// Return Result
 				if ( $result ) {
-					echo sprintf(
-						__( '%s platform data deleted successfully.', 'wp-statistics' ),
-						'<code>' . htmlentities( $platform, ENT_QUOTES ) . '</code>'
-					);
+					echo sprintf( __( '%s platform data deleted successfully.', 'wp-statistics' ), '<code>' . htmlentities( $platform, ENT_QUOTES ) . '</code>' );
 				} else {
 					_e( 'No platform data found to remove!', 'wp-statistics' );
 				}
@@ -131,7 +142,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die();
+		exit;
 	}
 
 	/**
@@ -141,19 +152,21 @@ class Ajax {
 		global $wpdb;
 
 		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
-			$ip_address = sanitize_text_field( $_POST['ip-address'] );
 
-			if ( $ip_address ) {
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
 
-				$result = $wpdb->query(
-					$wpdb->prepare( "DELETE FROM {$wpdb->prefix}statistics_visitor WHERE `ip` = %s", $ip_address )
-				);
+			// Check Isset IP
+			if ( isset( $_POST['ip-address'] ) ) {
+
+				// Sanitize IP Address
+				$ip_address = sanitize_text_field( $_POST['ip-address'] );
+
+				// Delete IP
+				$result = $wpdb->query( $wpdb->prepare( "DELETE FROM " . DB::table( 'visitor' ) . " WHERE `ip` = %s", $ip_address ) );
 
 				if ( $result ) {
-					echo sprintf(
-						__( '%s IP data deleted successfully.', 'wp-statistics' ),
-						'<code>' . htmlentities( $ip_address, ENT_QUOTES ) . '</code>'
-					);
+					echo sprintf( __( '%s IP data deleted successfully.', 'wp-statistics' ), '<code>' . htmlentities( $ip_address, ENT_QUOTES ) . '</code>' );
 				} else {
 					_e( 'No IP address data found to remove!', 'wp-statistics' );
 				}
@@ -164,7 +177,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die();
+		exit;
 	}
 
 	/**
@@ -182,6 +195,9 @@ class Ajax {
 			_e( 'Please select the desired items.', 'wp-statistics' );
 			exit;
 		}
+
+		// Check Refer Ajax
+		check_ajax_referer( 'wp_rest', 'wps_nonce' );
 
 		//Check Valid Table name
 		$table_name    = sanitize_text_field( $_POST['table-name'] );
@@ -207,7 +223,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die();
+		exit;
 	}
 
 	/**
@@ -216,10 +232,13 @@ class Ajax {
 	public function purge_data_action_callback() {
 
 		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
-			$purge_days = 0;
 
-			if ( array_key_exists( 'purge-days', $_POST ) ) {
-				// Get the number of days to purge data before.
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
+
+			// Check Number Day
+			$purge_days = 0;
+			if ( isset( $_POST['purge-days'] ) ) {
 				$purge_days = intval( $_POST['purge-days'] );
 			}
 
@@ -228,7 +247,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die();
+		exit;
 	}
 
 	/**
@@ -237,10 +256,13 @@ class Ajax {
 	public function purge_visitor_hits_action_callback() {
 
 		if ( Helper::is_request( 'ajax' ) and User::Access( 'manage' ) ) {
-			$purge_hits = 10;
 
-			if ( array_key_exists( 'purge-hits', $_POST ) ) {
-				// Get the number of days to purge data before.
+			// Check Refer Ajax
+			check_ajax_referer( 'wp_rest', 'wps_nonce' );
+
+			// Check Number Day
+			$purge_hits = 10;
+			if ( isset( $_POST['purge-hits'] ) ) {
 				$purge_hits = intval( $_POST['purge-hits'] );
 			}
 
@@ -253,7 +275,7 @@ class Ajax {
 			_e( 'Access denied!', 'wp-statistics' );
 		}
 
-		wp_die();
+		exit;
 	}
 
 	/**

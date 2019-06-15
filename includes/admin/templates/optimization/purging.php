@@ -14,16 +14,14 @@
 
             jQuery("#purge-data-submit").attr("disabled", "disabled");
             jQuery("#purge-data-status").html("<img src='<?php echo plugins_url( 'wp-statistics' ); ?>/assets/images/loading.gif'/>");
-
-            var data = {
-                'action': 'wp_statistics_purge_data',
-                'purge-days': action,
-            };
-
             jQuery.ajax({
                 url: ajaxurl,
                 type: 'post',
-                data: data,
+                data: {
+                    'action': 'wp_statistics_purge_data',
+                    'purge-days': action,
+                    'wps_nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
+                },
                 datatype: 'json',
             })
                 .always(function (result) {
@@ -48,16 +46,14 @@
 
             jQuery("#purge-visitor-hits-submit").attr("disabled", "disabled");
             jQuery("#purge-visitor-hits-status").html("<img src='<?php echo plugins_url( 'wp-statistics' ); ?>/assets/images/loading.gif'/>");
-
-            var data = {
-                'action': 'wp_statistics_purge_visitor_hits',
-                'purge-hits': action,
-            };
-
             jQuery.ajax({
                 url: ajaxurl,
                 type: 'post',
-                data: data,
+                data: {
+                    'action': 'wp_statistics_purge_visitor_hits',
+                    'purge-hits': action,
+                    'wps_nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
+                },
                 datatype: 'json',
             })
                 .always(function (result) {
@@ -81,16 +77,14 @@
 
             jQuery("#empty-table-submit").attr("disabled", "disabled");
             jQuery("#empty-status").html("<img src='<?php echo plugins_url( 'wp-statistics' ); ?>/assets/images/loading.gif'/>");
-
-            var data = {
-                'action': 'wp_statistics_empty_table',
-                'table-name': action,
-            };
-
             jQuery.ajax({
                 url: ajaxurl,
                 type: 'post',
-                data: data,
+                data: {
+                    'action': 'wp_statistics_empty_table',
+                    'table-name': action,
+                    'wps_nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
+                },
                 datatype: 'json',
             })
                 .always(function (result) {
@@ -114,16 +108,14 @@
 
             jQuery("#delete-agents-submit").attr("disabled", "disabled");
             jQuery("#delete-agents-status").html("<img src='<?php echo plugins_url( 'wp-statistics' ); ?>/assets/images/loading.gif'/>");
-
-            var data = {
-                'action': 'wp_statistics_delete_agents',
-                'agent-name': action,
-            };
-
             jQuery.ajax({
                 url: ajaxurl,
                 type: 'post',
-                data: data,
+                data: {
+                    'action': 'wp_statistics_delete_agents',
+                    'agent-name': action,
+                    'wps_nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
+                },
                 datatype: 'json',
             })
                 .always(function (result) {
@@ -149,16 +141,14 @@
 
             jQuery("#delete-platforms-submit").attr("disabled", "disabled");
             jQuery("#delete-platforms-status").html("<img src='<?php echo plugins_url( 'wp-statistics' ); ?>/assets/images/loading.gif'/>");
-
-            var data = {
-                'action': 'wp_statistics_delete_platforms',
-                'platform-name': action,
-            };
-
             jQuery.ajax({
                 url: ajaxurl,
                 type: 'post',
-                data: data,
+                data: {
+                    'action': 'wp_statistics_delete_platforms',
+                    'platform-name': action,
+                    'wps_nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
+                },
                 datatype: 'json',
             })
                 .always(function (result) {
@@ -184,16 +174,14 @@
 
             jQuery("#delete-ip-submit").attr("disabled", "disabled");
             jQuery("#delete-ip-status").html("<img src='<?php echo plugins_url( 'wp-statistics' ); ?>/assets/images/loading.gif'/>");
-
-            var data = {
-                'action': 'wp_statistics_delete_ip',
-                'ip-address': value,
-            };
-
             jQuery.ajax({
                 url: ajaxurl,
                 type: 'post',
-                data: data,
+                data: {
+                    'action': 'wp_statistics_delete_ip',
+                    'ip-address': value,
+                    'wps_nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
+                },
                 datatype: 'json',
             })
                 .always(function (result) {

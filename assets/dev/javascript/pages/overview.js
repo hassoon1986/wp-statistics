@@ -15,19 +15,32 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
             </div>`;
         jQuery(PostBox).insertAfter("#wps-postbox-container-2 #normal-sortables div.postbox:first");
 
-
         // Add Click Close Event
         jQuery(document).on('click', '.close-overview-ads', function () {
             jQuery("#wps_overview_ads_postbox").fadeOut("normal");
             jQuery.ajax({
-                url: ajaxurl,
+                url: wps_js.global.ajax_url,
                 type: 'get',
                 data: {
                     'action': 'wp_statistics_close_overview_ads',
                     'ads_id': '' + wps_js.global.overview.ads["ID"] + '',
-                    'wps_nonce': '' + wps_js.global.overview.ads["nonce"] + ''
+                    'wps_nonce': '' + wps_js.global.rest_api_nonce + ''
                 },
                 datatype: 'json'
+            });
+        });
+
+        // Add Click Close Donate Notice
+        jQuery('#wps-donate-notice').on('click', '.notice-dismiss', function () {
+            jQuery.ajax({
+                url: wps_js.global.ajax_url,
+                type: 'get',
+                data: {
+                    'action': 'wp_statistics_close_notice',
+                    'notice': 'donate',
+                    'wps_nonce': '' + wps_js.global.rest_api_nonce + ''
+                },
+                datatype: 'json',
             });
         });
     }
