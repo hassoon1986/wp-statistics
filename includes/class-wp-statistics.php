@@ -197,7 +197,7 @@ final class WP_Statistics {
 
 		// WP-CLI
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-cli.php';
+			require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-cli.php';
 		}
 
 		// Template functions.
