@@ -308,4 +308,25 @@ class Visitor {
 		return $wpdb->get_var( $sql );
 	}
 
+	/**
+	 * Get List Of visitor that Registered in WordPress Users
+	 *
+	 * @return array
+	 */
+	public static function get_users_visitor() {
+		global $wpdb;
+		$query = $wpdb->get_results( "SELECT `user_id` FROM `" . DB::table( 'visitor' ) . "` WHERE `user_id` >0 AND EXISTS (SELECT `ID` FROM `{$wpdb->users}` WHERE " . DB::table( 'visitor' ) . ".user_id = {$wpdb->users}.ID) GROUP BY `user_id` ORDER BY `user_id` DESC", ARRAY_A );
+		$item  = array();
+		foreach ( $query as $row ) {
+			$user_data               = User::get( $row['user_id'] );
+			$item[ $row['user_id'] ] = array(
+				'name'       => User::get_name( $row['user_id'] ),
+				'user_login' => $user_data['user_login'],
+				'user_email' => $user_data['user_email']
+			);
+		}
+
+		return $item;
+	}
+
 }
