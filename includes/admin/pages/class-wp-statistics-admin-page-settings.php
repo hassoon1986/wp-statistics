@@ -386,6 +386,7 @@ class settings_page {
 			'wps_visits',
 			'wps_visitors',
 			'wps_visitors_log',
+			'wps_enable_user_column',
 			'wps_pages',
 			'wps_track_all_pages',
 			'wps_use_cache_plugin',

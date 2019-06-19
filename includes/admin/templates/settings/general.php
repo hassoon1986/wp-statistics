@@ -81,40 +81,42 @@
         <th scope="row">
             <label for="visitors"><?php _e( 'Visitors:', 'wp-statistics' ); ?></label>
         </th>
-
         <td>
             <input id="visitors" type="checkbox" value="1" name="wps_visitors" <?php echo WP_STATISTICS\Option::get( 'visitors' ) == true ? "checked='checked'" : ''; ?>>
             <label for="visitors"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
-    <tr valign="top" id="visitors_log_tr" <?php echo( WP_STATISTICS\Option::get( 'visitors' ) == false ? 'style="display:none;"' : '' ) ?>>
+    <tr valign="top" data-view="visitors_log_tr" <?php echo( WP_STATISTICS\Option::get( 'visitors' ) == false ? 'style="display:none;"' : '' ) ?>>
         <th scope="row">
             <label for="visitors_log"><?php _e( 'Visitors logs:', 'wp-statistics' ); ?></label>
         </th>
-
         <td>
             <input id="visitors_log" type="checkbox" value="1" name="wps_visitors_log" <?php echo WP_STATISTICS\Option::get( 'visitors_log' ) == true ? "checked='checked'" : ''; ?>>
             <label for="visitors_log"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'If enabled, you will receive a report of each user\'s visit to the pages', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
-    <tr valign="top">
+    <tr valign="top" data-view="visitors_log_tr" <?php echo( WP_STATISTICS\Option::get( 'visitors' ) == false ? 'style="display:none;"' : '' ) ?>>
+        <th scope="row">
+            <label for="enable_user_column"><?php _e( 'User visits column', 'wp-statistics' ); ?></label>
+        </th>
+        <td>
+            <input id="enable_user_column" type="checkbox" value="1" name="wps_enable_user_column" <?php echo WP_STATISTICS\Option::get( 'enable_user_column' ) == true ? "checked='checked'" : ''; ?>>
+            <label for="enable_user_column"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
+            <p class="description"><?php _e( 'Enable or disable show list of user visits link in WordPress admin user list page.', 'wp-statistics' ); ?></p>
+        </td>
+    </tr>
+
+    <tr valign="top" data-view="visitors_log_tr" <?php echo( WP_STATISTICS\Option::get( 'visitors' ) == false ? 'style="display:none;"' : '' ) ?>>
         <th scope="row">
             <label for="coefficient"><?php _e( 'Coefficient per visitor:', 'wp-statistics' ); ?></label>
         </th>
-
         <td>
             <input type="text" class="small-text code" id="coefficient" name="wps_coefficient" value="<?php echo htmlentities( WP_STATISTICS\Option::get( 'coefficient' ), ENT_QUOTES ); ?>"/>
-
-            <p class="description"><?php echo sprintf(
-					__( 'For each visit to account for several hits. Currently %s.', 'wp-statistics' ),
-					WP_STATISTICS\Option::get( 'coefficient' )
-				); ?></p>
+            <p class="description"><?php echo sprintf( __( 'For each visit to account for several hits. Currently %s.', 'wp-statistics' ), WP_STATISTICS\Option::get( 'coefficient' ) ); ?></p>
         </td>
     </tr>
 
@@ -126,11 +128,9 @@
         <th scope="row">
             <label for="pages"><?php _e( 'Pages:', 'wp-statistics' ); ?></label>
         </th>
-
         <td>
             <input id="pages" type="checkbox" value="1" name="wps_pages" <?php echo WP_STATISTICS\Option::get( 'pages' ) == true ? "checked='checked'" : ''; ?>>
             <label for="pages"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -139,11 +139,9 @@
         <th scope="row">
             <label for="all_pages"><?php _e( 'Track all pages:', 'wp-statistics' ); ?></label>
         </th>
-
         <td>
             <input id="all_pages" type="checkbox" value="1" name="wps_track_all_pages" <?php echo WP_STATISTICS\Option::get( 'track_all_pages' ) == true ? "checked='checked'" : ''; ?>>
             <label for="all_pages"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
             <p class="description"><?php echo sprintf( __( 'Track All Wordpress Page Contains Category, Post Tags, Author, Custom Taxonomy and ...', 'wp-statistics' ), admin_url( 'options-permalink.php' ) ); ?></p>
         </td>
@@ -184,10 +182,8 @@
         <th scope="row">
             <label for="disable_column"><?php _e( 'Hits column', 'wp-statistics' ); ?></label>
         </th>
-
         <td>
-            <input id="disable_column" type="checkbox" value="1" name="wps_disable_column" <?php echo WP_STATISTICS\Option::get( 'disable_column' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="disable_column" type="checkbox" value="1" name="wps_disable_column" <?php echo WP_STATISTICS\Option::get( 'disable_column' ) == true ? "checked='checked'" : ''; ?>>
             <label for="disable_column"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
             <p class="description"><?php _e( 'Enable or disable show page/post hits number column.', 'wp-statistics' ); ?></p>
         </td>
