@@ -40,7 +40,7 @@ class Visitor {
 		add_filter( 'query', array( '\WP_STATISTICS\DB', 'insert_ignore' ), 10 );
 
 		# Save to WordPress Database
-		$wpdb->insert( DB::table( 'visitor' ), $visitor, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' ) );
+		$wpdb->insert( DB::table( 'visitor' ), $visitor, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s' ) );
 
 		# Get Visitor ID
 		$visitor_id = $wpdb->insert_id;
@@ -49,7 +49,7 @@ class Visitor {
 		remove_filter( 'query', array( '\WP_STATISTICS\DB', 'insert_ignore' ), 10 );
 
 		# Do Action After Save New Visitor
-		do_action( 'wp_statistics_save_visitor', $visitor_id, $visitor, User::get_user_id() );
+		do_action( 'wp_statistics_save_visitor', $visitor_id, $visitor, Pages::get_page_type() );
 
 		return $visitor_id;
 	}
@@ -109,6 +109,7 @@ class Visitor {
 					'version'      => $user_agent['version'],
 					'ip'           => $user_ip,
 					'location'     => GeoIP::getCountry( IP::getIP() ),
+					'user_id'      => User::get_user_id(),
 					'UAString'     => ( Option::get( 'store_ua' ) == true ? UserAgent::getHttpUserAgent() : '' ),
 					'hits'         => 1,
 					'honeypot'     => ( $args['exclusion_reason'] == 'Honeypot' ? 1 : 0 ),
