@@ -223,14 +223,17 @@ class Referred {
 	public static function getTop( $number = 10 ) {
 		global $wpdb;
 
-		//Get Wordpress Domain
-		$site_url = wp_parse_url( get_site_url() );
-		$site_url = $site_url['scheme'] . "://" . $site_url['host'];
+		// Check Protocol Of domain
+		$where       = '';
+		$domain_name = rtrim( preg_replace( '/^https?:\/\//', '', get_site_url() ), " / " );
+		foreach ( array( "http", "https", "ftp" ) as $protocol ) {
+			$where = " AND `referred` NOT LIKE '{$protocol}://{$domain_name}%' ";
+		}
 
 		//Get Top Referring
 		if ( false === ( $get_urls = get_transient( self::$top_referring_transient ) ) ) {
 
-			$result = $wpdb->get_results( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND `referred` NOT LIKE '{$site_url}%' GROUP BY domain ORDER BY `number` DESC LIMIT $number" );
+			$result = $wpdb->get_results( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 {$where} GROUP BY domain ORDER BY `number` DESC LIMIT $number" );
 			foreach ( $result as $items ) {
 				$get_urls[ $items->domain ] = self::get_referer_from_domain( $items->domain );
 			}
@@ -311,14 +314,16 @@ class Referred {
 	public static function getList( $args = array() ) {
 		global $wpdb;
 
-		// Get Site Url
-		$site_url = wp_parse_url( get_site_url() );
-		$site_url = $site_url['scheme'] . "://" . $site_url['host'];
-
 		// Check Custom Date
 		$where = '';
 		if ( isset( $args['from'] ) and isset( $args['to'] ) ) {
 			$where = "AND `last_counter` BETWEEN '" . $args['from'] . "' AND '" . $args['to'] . "' ";
+		}
+
+		// Check Protocol Of domain
+		$domain_name = rtrim( preg_replace( '/^https?:\/\//', '', get_site_url() ), " / " );
+		foreach ( array( "http", "https", "ftp" ) as $protocol ) {
+			$where .= " AND `referred` NOT LIKE '{$protocol}://{$domain_name}%' ";
 		}
 
 		// Check Min Number
@@ -334,6 +339,6 @@ class Referred {
 		}
 
 		// Return List
-		return $wpdb->get_results( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 AND `referred` NOT LIKE '{$site_url}%' " . $where . " GROUP BY domain " . $having . " ORDER BY `number` DESC " . $limit );
+		return $wpdb->get_results( "SELECT SUBSTRING_INDEX(REPLACE( REPLACE( referred, 'http://', '') , 'https://' , '') , '/', 1 ) as `domain`, count(referred) as `number` FROM " . DB::table( 'visitor' ) . " WHERE `referred` REGEXP \"^(https?://|www\\.)[\.A-Za-z0-9\-]+\\.[a-zA-Z]{2,4}\" AND referred <> '' AND LENGTH(referred) >=12 " . $where . " GROUP BY domain " . $having . " ORDER BY `number` DESC " . $limit );
 	}
 }
