@@ -32,6 +32,7 @@
                                 <td><?php _e( 'Date', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'IP', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Platform', 'wp-statistics' ); ?></td>
+                                <td><?php _e( 'User', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Referrer', 'wp-statistics' ); ?></td>
                             </tr>
 
@@ -51,6 +52,11 @@
                                     <td style='text-align: left'><span><?php echo $item['date']; ?></span></td>
                                     <td style='text-align: left'><?php echo( isset( $item['hash_ip'] ) ? $item['hash_ip'] : "<a href='" . $item['ip']['link'] . "' class='wps-text-danger'>" . $item['ip']['value'] . "</a>" ); ?></td>
                                     <td style='text-align: left'><?php echo $item['platform']; ?></td>
+                                    <td style='text-align: left'>
+										<?php if ( isset( $item['user'] ) and isset( $item['user']['ID'] ) and $item['user']['ID'] > 0 ) { ?>
+                                            <a href="<?php echo \WP_STATISTICS\Menus::admin_url( 'visitors', array( 'user_id' => $item['user']['ID'] ) ); ?>" class="wps-text-success"><?php echo $item['user']['user_login']; ?></a>
+										<?php } else { ?><?php echo \WP_STATISTICS\Admin_Template::UnknownColumn(); ?><?php } ?>
+                                    </td>
                                     <td style='text-align: left'><?php echo $item['referred']; ?></td>
                                 </tr>
 							<?php } ?>

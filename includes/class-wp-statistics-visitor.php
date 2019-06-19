@@ -259,6 +259,15 @@ class Visitor {
 				'version'  => $items->version
 			);
 
+			// Push User Data
+			if ( $items->user_id > 0 and User::exists( $items->user_id ) ) {
+				$user_data    = User::get( $items->user_id );
+				$item['user'] = array(
+					'ID'         => $items->user_id,
+					'user_login' => $user_data['user_login']
+				);
+			}
+
 			// Push Browser
 			$item['browser'] = array(
 				'name' => $items->agent,
