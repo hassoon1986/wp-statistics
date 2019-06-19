@@ -5,7 +5,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
         e.preventDefault();
 
         // Show
-        tb_show('', '#TB_inline?&width=420&height=600&inlineId=visitors-filter-popup');
+        tb_show('', '#TB_inline?&width=430&height=668&inlineId=visitors-filter-popup');
 
         // Add Content
         setTimeout(function () {
@@ -14,7 +14,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
             if (!wps_js.exist_tag(tickBox_DIV + " input[type=submit]")) {
 
                 // Set PlaceHolder
-                jQuery(tickBox_DIV).html('<div style="height: 25px;"></div>' + wps_js.line_placeholder(5));
+                jQuery(tickBox_DIV).html('<div style="height: 50px;"></div>' + wps_js.line_placeholder(5));
 
                 // Create Params
                 let params = {
@@ -45,7 +45,8 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
                             'browsers': ['agent', 'browsers'],
                             'country': ['location', 'location'],
                             'platform': ['platform', 'platform'],
-                            'referrer': ['referrer', 'referrer']
+                            'referrer': ['referrer', 'referrer'],
+                            'user': ['user_id', 'users']
                         };
 
                         Object.keys(select).forEach((key) => {

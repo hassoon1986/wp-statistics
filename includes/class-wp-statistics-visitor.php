@@ -320,7 +320,6 @@ class Visitor {
 		foreach ( $query as $row ) {
 			$user_data               = User::get( $row['user_id'] );
 			$item[ $row['user_id'] ] = array(
-				'name'       => User::get_name( $row['user_id'] ),
 				'user_login' => $user_data['user_login'],
 				'user_email' => $user_data['user_email']
 			);

@@ -274,6 +274,7 @@ class Admin_Assets {
 			'er_datepicker' => __( 'Please select the time efficiency.', 'wp-statistics' ),
 			'er_valid_ip'   => __( 'Please enter a valid ip.', 'wp-statistics' ),
 			'please_wait'   => __( 'Please Wait ...', 'wp-statistics' ),
+			'user'          => __( 'User', 'wp-statistics' ),
 		);
 
 		// Rest-API Meta Box Url
@@ -315,7 +316,7 @@ class Admin_Assets {
 		if ( Menus::in_page( 'overview' ) ) {
 			$overview_ads = get_option( 'wp_statistics_overview_page_ads', false );
 			if ( $overview_ads != false and is_array( $overview_ads ) and $overview_ads['ads']['ID'] != $overview_ads['view'] and $overview_ads['ads']['status'] == "yes" ) {
-				$list['overview']['ads']          = $overview_ads['ads'];
+				$list['overview']['ads'] = $overview_ads['ads'];
 			}
 		}
 

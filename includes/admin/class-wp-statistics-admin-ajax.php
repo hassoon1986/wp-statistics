@@ -339,6 +339,13 @@ class Ajax {
 				$filter['referrer'][ $site->domain ] = array( 'title' => $site->domain, 'active' => ( ( isset( $_REQUEST['referrer'] ) and $_REQUEST['referrer'] == $site->domain ) ? true : false ) );
 			}
 
+			// User
+			$filter['users'] = array();
+			$user_list       = Visitor::get_users_visitor();
+			foreach ( $user_list as $user_id => $user_inf ) {
+				$filter['users'][ $user_id ] = array( 'title' => $user_inf['user_login'] . " #" . $user_id . "", 'active' => ( ( isset( $_REQUEST['user_id'] ) and $_REQUEST['user_id'] == $user_id ) ? true : false ) );
+			}
+
 			// IP
 			$filter['ip'] = ( isset( $_REQUEST['ip'] ) ? trim( $_REQUEST['ip'] ) : '' );
 

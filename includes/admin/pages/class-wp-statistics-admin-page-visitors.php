@@ -44,10 +44,26 @@ class visitors_page {
 		$sql[] = array( 'key' => 'last_counter', 'compare' => 'BETWEEN', 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
 
 		// Create Sub List
-		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => Visitor::Count( $sql ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referrer'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
+		$args['sub']['all'] = array( 'title' => __( 'All', 'wp-statistics' ), 'count' => Visitor::Count( $sql ), 'active' => ( isset( $_GET['platform'] ) || isset( $_GET['agent'] ) || isset( $_GET['referrer'] ) || isset( $_GET['referred'] ) || isset( $_GET['ip'] ) || isset( $_GET['location'] ) || isset( $_GET['user_id'] ) ? false : true ), 'link' => Menus::admin_url( 'visitors' ) );
 
 		// Filters Option
 		$args['filter'] = self::Filter();
+
+		/**
+		 * User ID Filter
+		 */
+		if ( isset( $_GET['user_id'] ) ) {
+			// Add Params To SQL
+			$sql[] = array( 'key' => 'user_id', 'compare' => '=', 'value' => trim( $_GET['user_id'] ) );
+
+			// Get User Data
+			$user_info = User::get( $_GET['user_id'] );
+
+			// Set New Sub List
+			if ( $args['filter']['number'] == 1 ) {
+				$args['sub'][ $_GET['user_id'] ] = array( 'title' => $user_info['user_login'] . ' #' . $_GET['user_id'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['user_id'] ) and $_GET['user_id'] == $_GET['user_id'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'user_id' => $_GET['user_id'] ) ), Menus::admin_url( 'visitors' ) ) );
+			}
+		}
 
 		/**
 		 * IP Filter
