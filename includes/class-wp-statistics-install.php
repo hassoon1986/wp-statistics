@@ -115,6 +115,7 @@ class Install {
 						UAString varchar(255),
 						ip varchar(60) NOT NULL,
 						location varchar(10),
+						user_id BIGINT(40) NOT NULL,
 						hits int(11),
 						honeypot int(11),
 						PRIMARY KEY  (ID),
@@ -317,6 +318,7 @@ class Install {
 		/**
 		 * Change Charset All Table To New WordPress Collate
 		 * Reset Overview Order Meta Box View
+		 * Added User_id column in wp_statistics_visitor Table
 		 *
 		 * @see https://developer.wordpress.org/reference/classes/wpdb/has_cap/
 		 * @version 13.0.0
@@ -330,6 +332,10 @@ class Install {
 		}
 		if ( isset( $installed_version ) and version_compare( $installed_version, '13.0', '<=' ) ) {
 			$wpdb->query( "DELETE FROM `{$wpdb->usermeta}` WHERE `meta_key` = 'meta-box-order_toplevel_page_wps_overview_page'" );
+		}
+		$result = $wpdb->query( "SHOW COLUMNS FROM " . DB::table( 'visitor' ) . " LIKE 'user_id'" );
+		if ( $result == 0 ) {
+			$wpdb->query( "ALTER TABLE `" . DB::table( 'visitor' ) . "` ADD `user_id` BIGINT(48) NOT NULL AFTER `location`" );
 		}
 
 		/**
