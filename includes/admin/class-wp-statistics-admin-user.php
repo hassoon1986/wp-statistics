@@ -15,6 +15,9 @@ class Admin_User {
 			add_filter( 'manage_users_sortable_columns', array( $this, 'sort_by_custom_field' ) );
 			add_action( 'pre_user_query', array( $this, 'modify_pre_user_query' ) );
 		}
+
+		// Reset User_id as User is deleted.
+		add_action( 'delete_user', array( $this, 'modify_delete_user' ) );
 	}
 
 	/**
@@ -87,6 +90,16 @@ class Admin_User {
 			// And order by it.
 			$user_query->query_orderby = " ORDER BY user_visit $order";
 		}
+	}
+
+	/**
+	 * Remove User from Visitors Table when user is deleted.
+	 *
+	 * @param $user_id
+	 */
+	public function modify_delete_user( $user_id ) {
+		global $wpdb;
+		$wpdb->update( DB::table( "visitor" ), array( 'user_id' => 0 ), array( 'user_id' => $user_id ), array( '%d' ), array( '%d' ) );
 	}
 
 }
