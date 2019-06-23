@@ -17,12 +17,7 @@ class Admin_Post {
 
 		// Add Hits Column in All Admin Post-Type Wp_List_Table
 		if ( User::Access( 'read' ) and Option::get( 'pages' ) and ! Option::get( 'disable_column' ) ) {
-			foreach ( Helper::get_list_post_type() as $type ) {
-				add_action( 'manage_' . $type . '_posts_columns', array( $this, 'add_hit_column' ), 10, 2 );
-				add_action( 'manage_' . $type . '_posts_custom_column', array( $this, 'render_hit_column' ), 10, 2 );
-				add_filter( 'manage_edit-' . $type . '_sortable_columns', array( $this, 'modify_sortable_columns' ) );
-			}
-			add_filter( 'posts_clauses', array( $this, 'modify_order_by_hits' ), 10, 2 );
+			add_action( 'admin_init', array( $this, 'init' ) );
 		}
 
 		// Add WordPress Post/Page Hit Chart Meta Box in edit Page
@@ -37,6 +32,18 @@ class Admin_Post {
 
 		// Remove Post Hits when Post Id deleted
 		add_action( 'deleted_post', array( $this, 'modify_delete_post' ) );
+	}
+
+	/**
+	 * Init Hook
+	 */
+	public function init() {
+		foreach ( Helper::get_list_post_type() as $type ) {
+			add_action( 'manage_' . $type . '_posts_columns', array( $this, 'add_hit_column' ), 10, 2 );
+			add_action( 'manage_' . $type . '_posts_custom_column', array( $this, 'render_hit_column' ), 10, 2 );
+			add_filter( 'manage_edit-' . $type . '_sortable_columns', array( $this, 'modify_sortable_columns' ) );
+		}
+		add_filter( 'posts_clauses', array( $this, 'modify_order_by_hits' ), 10, 2 );
 	}
 
 	/**
@@ -98,7 +105,7 @@ class Admin_Post {
 			$clauses['fields'] .= ", (select SUM(" . DB::table( "pages" ) . ".count) from " . DB::table( "pages" ) . " where (" . DB::table( "pages" ) . ".type = 'page' OR " . DB::table( "pages" ) . ".type = 'post' OR " . DB::table( "pages" ) . ".type = 'product') AND {$wpdb->posts}.ID = " . DB::table( "pages" ) . ".id) as post_hist_sortable ";
 
 			// And order by it.
-			$clauses['orderby'] = " post_hist_sortable $order";
+			$clauses['orderby'] = " coalesce(post_hist_sortable, 0) $order";
 		}
 
 		return $clauses;

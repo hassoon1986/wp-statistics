@@ -694,4 +694,30 @@ class Helper {
 		return false;
 	}
 
+	/**
+	 * Get List Taxonomy
+	 *
+	 * @param bool $hide_empty
+	 * @return array
+	 */
+	public static function get_list_taxonomy( $hide_empty = false ) {
+		$taxonomies = array( 'category' => __( "Category", "wp-statistics" ), "post_tag" => __( "Tags", "wp-statistics" ) );
+		$get_tax    = get_taxonomies( array( 'public' => true, '_builtin' => false ), 'objects', 'and' );
+		foreach ( $get_tax as $object ) {
+			$object = get_object_vars( $object );
+			if ( $hide_empty === true ) {
+				$count_term_in_tax = wp_count_terms( $object['name'], array( 'hide_empty' => false, 'parent' => 0 ) );
+				if ( $count_term_in_tax > 0 and isset( $object['rewrite']['slug'] ) ) {
+					$taxonomies[ $object['name'] ] = $object['labels']->name;
+				}
+			} else {
+				if ( isset( $object['rewrite']['slug'] ) ) {
+					$taxonomies[ $object['name'] ] = $object['labels']->name;
+				}
+			}
+		}
+
+		return $taxonomies;
+	}
+
 }

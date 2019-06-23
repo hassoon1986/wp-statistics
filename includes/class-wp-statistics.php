@@ -154,6 +154,7 @@ final class WP_Statistics {
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-notices.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-post.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-user.php';
+			require_once WP_STATISTICS_DIR . 'includes/admin/class-wp-statistics-admin-taxonomy.php';
 			require_once WP_STATISTICS_DIR . 'includes/admin/TinyMCE/class-wp-statistics-tinymce.php';
 
 			// Admin Pages List
