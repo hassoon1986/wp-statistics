@@ -36,7 +36,7 @@ class Admin_Post {
 		}
 
 		// Remove Post Hits when Post Id deleted
-		add_action( 'delete_post', array( $this, 'modify_delete_post' ) );
+		add_action( 'deleted_post', array( $this, 'modify_delete_post' ) );
 	}
 
 	/**
