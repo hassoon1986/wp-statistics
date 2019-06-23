@@ -20,7 +20,9 @@ class Admin_Post {
 			foreach ( Helper::get_list_post_type() as $type ) {
 				add_action( 'manage_' . $type . '_posts_columns', array( $this, 'add_hit_column' ), 10, 2 );
 				add_action( 'manage_' . $type . '_posts_custom_column', array( $this, 'render_hit_column' ), 10, 2 );
+				add_filter( 'manage_edit-' . $type . '_sortable_columns', array( $this, 'modify_sortable_columns' ) );
 			}
+			add_filter( 'posts_clauses', array( $this, 'modify_order_by_hits' ), 10, 2 );
 		}
 
 		// Add WordPress Post/Page Hit Chart Meta Box in edit Page
@@ -42,7 +44,7 @@ class Admin_Post {
 	 * @return array Columns
 	 */
 	public function add_hit_column( $columns ) {
-		$columns['wp-statistics'] = __( 'Hits', 'wp-statistics' );
+		$columns['wp-statistics-post-hits'] = __( 'Hits', 'wp-statistics' );
 		return $columns;
 	}
 
@@ -53,9 +55,51 @@ class Admin_Post {
 	 * @param string $post_id Post ID
 	 */
 	public function render_hit_column( $column_name, $post_id ) {
-		if ( $column_name == 'wp-statistics' ) {
+		if ( $column_name == 'wp-statistics-post-hits' ) {
 			echo "<a href='" . Menus::admin_url( 'pages', array( 'page-id' => $post_id ) ) . "'>" . wp_statistics_pages( 'total', "", $post_id ) . "</a>";
 		}
+	}
+
+	/**
+	 * Added Sortable Params
+	 *
+	 * @param $columns
+	 * @return mixed
+	 */
+	public function modify_sortable_columns( $columns ) {
+		$columns['wp-statistics-post-hits'] = 'hits';
+		return $columns;
+	}
+
+	/**
+	 * Sort Post By Hits
+	 *
+	 * @param $clauses
+	 * @param $query
+	 */
+	public function modify_order_by_hits( $clauses, $query ) {
+		global $wpdb;
+
+		// Check in Admin
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		// Get global Variable
+		$order   = $query->query_vars['order'];
+		$orderby = $query->query_vars['orderby'];
+
+		// If order-by.
+		if ( 'hits' === $orderby ) {
+
+			// Select Field
+			$clauses['fields'] .= ", (select SUM(" . DB::table( "pages" ) . ".count) from " . DB::table( "pages" ) . " where (" . DB::table( "pages" ) . ".type = 'page' OR " . DB::table( "pages" ) . ".type = 'post' OR " . DB::table( "pages" ) . ".type = 'product') AND {$wpdb->posts}.ID = " . DB::table( "pages" ) . ".id) as post_hist_sortable ";
+
+			// And order by it.
+			$clauses['orderby'] = " post_hist_sortable $order";
+		}
+
+		return $clauses;
 	}
 
 	/**

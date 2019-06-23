@@ -43,11 +43,7 @@ class Admin_User {
 		switch ( $column_name ) {
 			case 'visits' :
 				$count = Visitor::Count( array( 'key' => 'user_id', 'compare' => '=', 'value' => $user_id ) );
-				if ( $count > 0 ) {
-					return '<a href="' . Menus::admin_url( 'visitors', array( 'user_id' => $user_id ) ) . '" class="wps-text-muted" target="_blank">' . number_format_i18n( $count ) . '</a>';
-				} else {
-					return Admin_Template::UnknownColumn();
-				}
+				return '<a href="' . Menus::admin_url( 'visitors', array( 'user_id' => $user_id ) ) . '" class="wps-text-muted" target="_blank">' . number_format_i18n( $count ) . '</a>';
 			default:
 		}
 		return $val;
@@ -90,6 +86,8 @@ class Admin_User {
 			// And order by it.
 			$user_query->query_orderby = " ORDER BY user_visit $order";
 		}
+
+		return $user_query;
 	}
 
 	/**
