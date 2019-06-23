@@ -35,6 +35,8 @@ class Admin_Post {
 			add_action( 'post_submitbox_misc_actions', array( $this, 'post_hit_misc' ) );
 		}
 
+		// Remove Post Hits when Post Id deleted
+		add_action( 'delete_post', array( $this, 'modify_delete_post' ) );
 	}
 
 	/**
@@ -100,6 +102,16 @@ class Admin_Post {
 		}
 
 		return $clauses;
+	}
+
+	/**
+	 * Delete All Post Hits When Post is Deleted
+	 *
+	 * @param $post_id
+	 */
+	public static function modify_delete_post( $post_id ) {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM `" . DB::table( 'pages' ) . "` WHERE `id` = " . esc_sql( $post_id ) . " AND (`type` = 'post' OR `type` = 'page' OR `type` = 'product');" );
 	}
 
 	/**
