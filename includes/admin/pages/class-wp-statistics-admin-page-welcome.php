@@ -59,7 +59,18 @@ class Welcome {
 	 * Welcome page
 	 */
 	public function page_callback() {
-		Admin_Template::get_template( array( 'welcome' ), self::get_list_addons() );
+
+		// Check Get addOns Tab
+		$args = array( 'plugins' => array(), 'error' => '' );
+		if ( isset( $_GET['tab'] ) and $_GET['tab'] == "addons" ) {
+			$args = self::get_list_addons();
+		}
+
+		// Get Base Page Url
+		$args['pageUrl'] = add_query_arg( 'page', 'wps_welcome_page', admin_url( 'admin.php' ) );
+
+		// Show Admin Template
+		Admin_Template::get_template( array( 'welcome' ), $args );
 	}
 
 	/**
