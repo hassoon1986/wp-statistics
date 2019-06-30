@@ -86,7 +86,7 @@ class Frontend {
 		$params['referred'] = Referred::get();
 
 		//Set IP
-		$params['ip'] = IP::getIP();
+		$params['ip'] = esc_html( IP::getIP() );
 
 		//Set Hash Ip
 		$params['hash_ip'] = IP::getHashIP();
@@ -109,7 +109,7 @@ class Frontend {
 		$get_page_type               = Pages::get_page_type();
 		$params['current_page_type'] = $get_page_type['type'];
 		$params['current_page_id']   = $get_page_type['id'];
-		$params['search_query']      = ( isset( $get_page_type['search_query'] ) ? $get_page_type['search_query'] : '' );
+		$params['search_query']      = ( isset( $get_page_type['search_query'] ) ? esc_html( $get_page_type['search_query'] ) : '' );
 
 		//page url
 		$params['page_uri'] = Pages::get_page_uri();
