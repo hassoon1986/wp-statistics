@@ -55,7 +55,7 @@ class IP {
 
 		// Check isset $_SERVER
 		if ( isset( $_SERVER[ $ip_method ] ) ) {
-			$ip = $_SERVER[ $ip_method ];
+			$ip = sanitize_text_field( $_SERVER[ $ip_method ] );
 		}
 
 		/**
