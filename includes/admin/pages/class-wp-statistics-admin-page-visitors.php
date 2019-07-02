@@ -36,9 +36,17 @@ class visitors_page {
 		$args['pageName'] = Menus::get_page_slug( 'visitors' );
 		$args['paged']    = Admin_Template::getCurrentPaged();
 
+		// Get Type Of Order
+		$order = ( ( isset( $_GET['order'] ) and ( $_GET['order'] == "asc" || $_GET['order'] == "desc" ) ) ? $_GET['order'] : 'desc' );
+
 		// Get Date-Range
 		$args['DateRang'] = Admin_Template::DateRange();
-		$date_link        = array( 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
+
+		// Default Parameter Link
+		$data_link = array( 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
+		if ( $order == "asc" ) {
+			$data_link['order'] = 'asc';
+		}
 
 		// Create Default SQL Params
 		$sql[] = array( 'key' => 'last_counter', 'compare' => 'BETWEEN', 'from' => $args['DateRang']['from'], 'to' => $args['DateRang']['to'] );
@@ -61,7 +69,7 @@ class visitors_page {
 
 			// Set New Sub List
 			if ( $args['filter']['number'] == 1 ) {
-				$args['sub'][ $_GET['user_id'] ] = array( 'title' => $user_info['user_login'] . ' #' . $_GET['user_id'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['user_id'] ) and $_GET['user_id'] == $_GET['user_id'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'user_id' => $_GET['user_id'] ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $_GET['user_id'] ] = array( 'title' => $user_info['user_login'] . ' #' . $_GET['user_id'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['user_id'] ) and $_GET['user_id'] == $_GET['user_id'] ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'user_id' => $_GET['user_id'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -74,7 +82,7 @@ class visitors_page {
 
 			// Set New Sub List
 			if ( $args['filter']['number'] == 1 ) {
-				$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $_GET['ip'] ] = array( 'title' => $_GET['ip'], 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['ip'] ) and $_GET['ip'] == $_GET['ip'] ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'ip' => $_GET['ip'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -88,7 +96,7 @@ class visitors_page {
 
 			// Set New Sub List
 			if ( $args['filter']['number'] == 1 ) {
-				$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $_GET['location'] ] = array( 'title' => Country::getName( $_GET['location'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['location'] ) and $_GET['location'] == $_GET['location'] ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'location' => $_GET['location'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -102,7 +110,7 @@ class visitors_page {
 
 			// Set New Sub List
 			if ( $args['filter']['number'] == 1 ) {
-				$args['sub'][ $_GET['platform'] ] = array( 'title' => Helper::getUrlDecode( $_GET['platform'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['platform'] ) and $_GET['platform'] == $_GET['platform'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'platform' => $_GET['platform'] ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $_GET['platform'] ] = array( 'title' => Helper::getUrlDecode( $_GET['platform'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['platform'] ) and $_GET['platform'] == $_GET['platform'] ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'platform' => $_GET['platform'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -116,7 +124,7 @@ class visitors_page {
 
 			// Set New Sub List
 			if ( $args['filter']['number'] == 1 ) {
-				$args['sub'][ $_GET['referrer'] ] = array( 'title' => trim( $_GET['referrer'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['referrer'] ) and $_GET['referrer'] == $_GET['referrer'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'referrer' => $_GET['referrer'] ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $_GET['referrer'] ] = array( 'title' => trim( $_GET['referrer'] ), 'count' => Visitor::Count( $sql ), 'active' => ( ( isset( $_GET['referrer'] ) and $_GET['referrer'] == $_GET['referrer'] ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'referrer' => $_GET['referrer'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -131,14 +139,14 @@ class visitors_page {
 
 			// Set New Sub List
 			if ( $args['filter']['number'] == 1 ) {
-				$args['sub'][ $_GET['agent'] ] = array( 'title' => $browsers[ strtolower( $_GET['agent'] ) ], 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $_GET['agent'] ) ) ), 'active' => ( isset( $_GET['agent'] ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $_GET['agent'] ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $_GET['agent'] ] = array( 'title' => $browsers[ strtolower( $_GET['agent'] ) ], 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $_GET['agent'] ) ) ), 'active' => ( isset( $_GET['agent'] ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'agent' => $_GET['agent'] ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
 		// Browser Sub List is Default
 		if ( $args['filter']['number'] < 1 ) {
 			foreach ( $browsers as $key => $se ) {
-				$args['sub'][ $key ] = array( 'title' => $se, 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $key ) ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $date_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
+				$args['sub'][ $key ] = array( 'title' => $se, 'count' => Visitor::Count( array_merge( $sql, array( 'key' => 'agent', 'compare' => 'LIKE', 'value' => $key ) ) ), 'active' => ( ( isset( $_GET['agent'] ) and $_GET['agent'] == $key ) ? true : false ), 'link' => add_query_arg( array_merge( $data_link, array( 'agent' => $key ) ), Menus::admin_url( 'visitors' ) ) );
 			}
 		}
 
@@ -151,9 +159,6 @@ class visitors_page {
 		$CurrentView = array_filter( $args['sub'], function ( $val, $key ) {
 			return $val['active'] === true;
 		}, ARRAY_FILTER_USE_BOTH );
-
-		// Get Type Of Order
-		$order = ( ( isset( $_GET['order'] ) and ( $_GET['order'] == "asc" || $_GET['order'] == "desc" ) ) ? $_GET['order'] : 'desc' );
 
 		//Get Total List
 		$args['total'] = $CurrentView[ key( $CurrentView ) ]['count'];
