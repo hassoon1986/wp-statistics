@@ -16,81 +16,43 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
                 // Set PlaceHolder
                 jQuery(tickBox_DIV).html('<div style="height: 50px;"></div>' + wps_js.line_placeholder(5));
 
-                // Create Params
-                let params = {
-                    'wps_nonce': wps_js.global.rest_api_nonce,
-                    'action': 'wp_statistics_visitors_page_filters'
-                };
-                params = Object.assign(params, wps_js.global.request_params);
+                // Check Use Cached Data
+                var filter_data = localStorage.getItem('wp-statistics-visitors-filter') ? JSON.parse(localStorage.getItem('wp-statistics-visitors-filter')) : {};
+                if (!wps_js.isset(filter_data, 'timestamp') || !wps_js.isset(filter_data, 'value') || (wps_js.isset(filter_data, 'timestamp') && wps_js.isset(filter_data, 'value') && (new Date().getTime().toString() > parseInt(filter_data.timestamp)))) {
 
-                // Create Ajax
-                jQuery.ajax({
-                    url: wps_js.global.ajax_url,
-                    type: 'GET',
-                    dataType: "json",
-                    data: params,
-                    timeout: 30000,
-                    success: function (data) {
+                    // Create Params
+                    let params = {
+                        'wps_nonce': wps_js.global.rest_api_nonce,
+                        'action': 'wp_statistics_visitors_page_filters'
+                    };
+                    params = Object.assign(params, wps_js.global.request_params);
 
-                        // Create Table
-                        let html = '<table class="widefat">';
+                    // Create Ajax
+                    jQuery.ajax({
+                        url: wps_js.global.ajax_url,
+                        type: 'GET',
+                        dataType: "json",
+                        data: params,
+                        timeout: 30000,
+                        success: function (data) {
 
-                        // Show List Select
-                        let select = {
-                            /**
-                             * Key: global i18n
-                             * [0]: select name
-                             * [1]: data key from ajax
-                             */
-                            'browsers': ['agent', 'browsers'],
-                            'country': ['location', 'location'],
-                            'platform': ['platform', 'platform'],
-                            'referrer': ['referrer', 'referrer'],
-                            'user': ['user_id', 'users']
-                        };
+                            // Set LocalStorage , Cached for 3 Hour
+                            localStorage.setItem('wp-statistics-visitors-filter', JSON.stringify({
+                                value: JSON.stringify(data),
+                                timestamp: (new Date().getTime() + (3 * 60 * 60 * 1000))
+                            }));
 
-                        Object.keys(select).forEach((key) => {
-                            html += `<tr><td>${wps_js._(key)}</td></tr>`;
-                            html += `<tr><td><select name="${select[key][0]}" class="select2 wps-width-100" data-type-show="select2">`;
-                            html += `<option value=''>${wps_js._('all')}</option>`;
-                            Object.keys(data[select[key][1]]).forEach(function (item) {
-                                html += `<option value='${item}' ${(data[select[key][1]][item]['active'] === true ? `selected` : ``)}>${data[select[key][1]][item]['title']}</option>`;
-                            });
-                            html += `</select></td></tr>`;
-                        });
+                            // Load function
+                            wp_statistics_show_visitors_filter(tickBox_DIV, data);
+                        },
+                        error: function (xhr, status, error) {
+                            jQuery("span.tb-close-icon").click();
+                        }
+                    });
+                } else {
+                    wp_statistics_show_visitors_filter(tickBox_DIV, JSON.parse(filter_data['value']));
+                }
 
-                        // Add IP
-                        html += `<tr><td>${wps_js._('ip')}</td></tr>`;
-                        html += `<tr><td><input name="ip" value="${data.ip}" class="wps-width-100" placeholder='xxx.xxx.xxx.xxx' autocomplete="off"></td></tr>`;
-
-                        // Add Date
-                        html += `<tr><td>${wps_js._('date')}</td></tr>`;
-                        let input_date_style = 'width: calc(50% - 5px);display: inline-block;';
-                        html += `<tr>
-                            <td>
-                                <div style="${input_date_style}">${wps_js._('from')}: <input name="date-from" data-wps-date-picker="from" value="${data.from}" style="width: calc(100% - 5px);" placeholder="YYYY-MM-DD" autocomplete="off"></div>
-                                <div style="${input_date_style}">${wps_js._('to')}: <input name="date-to" data-wps-date-picker="to" value="${data.to}" style="width: 100%;" placeholder="YYYY-MM-DD" autocomplete="off"></div>
-                                <input type="hidden" name="from" id="date-from" value="${data.from}">
-                                <input type="hidden" name="to" id="date-to" value="${data.to}">
-                            </td>
-                            </tr>`;
-
-                        // Submit Button
-                        html += `<tr><td></td></tr>`;
-                        html += `<tr><td><input type="submit" value="${wps_js._('filter')}" class="button-primary"> &nbsp; <span class="filter-loading"></span></td></tr>`;
-                        html += `</table>`;
-                        jQuery(tickBox_DIV).html(html);
-
-                        // Set datePicker and Select 2
-                        setTimeout(function () {
-                            wps_js.date_picker();
-                            wps_js.select2();
-                        }, 200);
-                    },
-                    error: function (xhr, status, error) {
-                        jQuery("span.tb-close-icon").click();
-                    }
-                });
             }
         }, 500);
 
@@ -148,6 +110,66 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
 
         return true;
     });
+
+    // Show Filter form
+    function wp_statistics_show_visitors_filter(tickBox_DIV, data) {
+
+        // Create Table
+        let html = '<table class="widefat">';
+
+        // Show List Select
+        let select = {
+            /**
+             * Key: global i18n
+             * [0]: select name
+             * [1]: data key from ajax
+             */
+            'browsers': ['agent', 'browsers'],
+            'country': ['location', 'location'],
+            'platform': ['platform', 'platform'],
+            'referrer': ['referrer', 'referrer'],
+            'user': ['user_id', 'users']
+        };
+
+        Object.keys(select).forEach((key) => {
+            html += `<tr><td>${wps_js._(key)}</td></tr>`;
+            html += `<tr><td><select name="${select[key][0]}" class="select2 wps-width-100" data-type-show="select2">`;
+            html += `<option value=''>${wps_js._('all')}</option>`;
+            let current_value = wps_js.getLinkParams(select[key][0]);
+            Object.keys(data[select[key][1]]).forEach(function (item) {
+                html += `<option value='${item}' ${((current_value != null && current_value == item) ? `selected` : ``)}>${data[select[key][1]][item]}</option>`;
+            });
+            html += `</select></td></tr>`;
+        });
+
+        // Add IP
+        html += `<tr><td>${wps_js._('ip')}</td></tr>`;
+        html += `<tr><td><input name="ip" value="${(wps_js.getLinkParams('ip') != null ? wps_js.getLinkParams('ip') : ``)}" class="wps-width-100" placeholder='xxx.xxx.xxx.xxx' autocomplete="off"></td></tr>`;
+
+        // Add Date
+        html += `<tr><td>${wps_js._('date')}</td></tr>`;
+        let input_date_style = 'width: calc(50% - 5px);display: inline-block;';
+        html += `<tr>
+                            <td>
+                                <div style="${input_date_style}">${wps_js._('from')}: <input name="date-from" data-wps-date-picker="from" value="${(wps_js.getLinkParams('from') != null ? wps_js.getLinkParams('from') : ``)}" style="width: calc(100% - 5px);" placeholder="YYYY-MM-DD" autocomplete="off"></div>
+                                <div style="${input_date_style}">${wps_js._('to')}: <input name="date-to" data-wps-date-picker="to" value="${(wps_js.getLinkParams('to') != null ? wps_js.getLinkParams('to') : ``)}" style="width: 100%;" placeholder="YYYY-MM-DD" autocomplete="off"></div>
+                                <input type="hidden" name="from" id="date-from" value="${(wps_js.getLinkParams('from') != null ? wps_js.getLinkParams('from') : ``)}">
+                                <input type="hidden" name="to" id="date-to" value="${(wps_js.getLinkParams('to') != null ? wps_js.getLinkParams('to') : ``)}">
+                            </td>
+                            </tr>`;
+
+        // Submit Button
+        html += `<tr><td></td></tr>`;
+        html += `<tr><td><input type="submit" value="${wps_js._('filter')}" class="button-primary"> &nbsp; <span class="filter-loading"></span></td></tr>`;
+        html += `</table>`;
+        jQuery(tickBox_DIV).html(html);
+
+        // Set datePicker and Select 2
+        setTimeout(function () {
+            wps_js.date_picker();
+            wps_js.select2();
+        }, 200);
+    }
 }
 
 // When close TickBox

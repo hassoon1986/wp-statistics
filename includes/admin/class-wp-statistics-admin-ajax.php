@@ -294,29 +294,20 @@ class Ajax {
 			check_ajax_referer( 'wp_rest', 'wps_nonce' );
 
 			// Create Output object
-			$filter = array( 'from' => '', 'to' => '', 'ip' => '' );
-
-			// Check Data filter
-			$_exist_date_filter = false;
-			foreach ( array( 'from', 'to' ) as $item ) {
-				if ( isset( $_REQUEST[ $item ] ) and ! empty( $_REQUEST[ $item ] ) ) {
-					$filter[ $item ]    = $_REQUEST[ $item ];
-					$_exist_date_filter = true;
-				}
-			}
+			$filter = array();
 
 			// Browsers
 			$filter['browsers'] = array();
 			$browsers           = UserAgent::BrowserList();
 			foreach ( $browsers as $key => $se ) {
-				$filter['browsers'][ $key ] = array( 'title' => $se, 'active' => ( ( isset( $_REQUEST['agent'] ) and $_REQUEST['agent'] == $key ) ? true : false ) );
+				$filter['browsers'][ $key ] = $se;
 			}
 
 			// Location
 			$filter['location'] = array();
 			$country_list       = Country::getList();
 			foreach ( $country_list as $key => $name ) {
-				$filter['location'][ $key ] = array( 'title' => $name, 'active' => ( ( isset( $_REQUEST['location'] ) and $_REQUEST['location'] == $key ) ? true : false ) );
+				$filter['location'][ $key ] = $name;
 			}
 
 			// Push First "000" Unknown to End of List
@@ -327,27 +318,24 @@ class Ajax {
 
 			// Platforms
 			$filter['platform'] = array();
-			$platforms_list     = RestAPI::request( array( 'route' => 'metabox', 'params' => array_merge( array( 'name' => 'platforms', 'number' => 15, 'order' => 'DESC' ), ( $_exist_date_filter ? array( 'from' => $filter['from'], 'to' => $filter['to'] ) : array() ) ) ) );
+			$platforms_list     = RestAPI::request( array( 'route' => 'metabox', 'params' => array( 'name' => 'platforms', 'number' => 15, 'order' => 'DESC' ) ) );
 			for ( $x = 0; $x < count( $platforms_list['platform_name'] ); $x ++ ) {
-				$filter['platform'][ $platforms_list['platform_name'][ $x ] ] = array( 'title' => $platforms_list['platform_name'][ $x ], 'active' => ( ( isset( $_REQUEST['platform'] ) and $_REQUEST['platform'] == $platforms_list['platform_name'][ $x ] ) ? true : false ) );
+				$filter['platform'][ $platforms_list['platform_name'][ $x ] ] = $platforms_list['platform_name'][ $x ];
 			}
 
 			// Referrer
 			$filter['referrer'] = array();
-			$referrer_list      = Referred::getList( ( $_exist_date_filter === true ? array( 'from' => $filter['from'], 'to' => $filter['to'], 'min' => 50, 'limit' => 300 ) : array( 'min' => 50, 'limit' => 300 ) ) );
+			$referrer_list      = Referred::getList( array( 'min' => 50, 'limit' => 300 ) );
 			foreach ( $referrer_list as $site ) {
-				$filter['referrer'][ $site->domain ] = array( 'title' => $site->domain, 'active' => ( ( isset( $_REQUEST['referrer'] ) and $_REQUEST['referrer'] == $site->domain ) ? true : false ) );
+				$filter['referrer'][ $site->domain ] = $site->domain;
 			}
 
 			// User
 			$filter['users'] = array();
 			$user_list       = Visitor::get_users_visitor();
 			foreach ( $user_list as $user_id => $user_inf ) {
-				$filter['users'][ $user_id ] = array( 'title' => $user_inf['user_login'] . " #" . $user_id . "", 'active' => ( ( isset( $_REQUEST['user_id'] ) and $_REQUEST['user_id'] == $user_id ) ? true : false ) );
+				$filter['users'][ $user_id ] = $user_inf['user_login'] . " #" . $user_id . "";
 			}
-
-			// IP
-			$filter['ip'] = ( isset( $_REQUEST['ip'] ) ? trim( $_REQUEST['ip'] ) : '' );
 
 			// Send Json
 			wp_send_json( $filter );
