@@ -137,6 +137,12 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
             });
         });
 
+        // Set Order
+        let order = wps_js.getLinkParams('order');
+        if (order != null) {
+            jQuery(this).append('<input type="hidden" name="order" value="' + order + '" /> ');
+        }
+
         // Show Loading
         jQuery("span.filter-loading").html(wps_js._('please_wait'));
 

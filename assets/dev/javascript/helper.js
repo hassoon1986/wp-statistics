@@ -313,3 +313,14 @@ wps_js.isIP = function (str) {
     const regex = new RegExp(`^${octet}\\.${octet}\\.${octet}\\.${octet}$`);
     return regex.test(str);
 };
+
+/**
+ * Get Link Params
+ */
+wps_js.getLinkParams = function (param, link = false) {
+    if (!link) {
+        link = window.location.href;
+    }
+    let v = link.match(new RegExp('(?:[\?\&]' + param + '=)([^&]+)'));
+    return v ? v[1] : null;
+};
