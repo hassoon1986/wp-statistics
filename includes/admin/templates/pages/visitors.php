@@ -29,7 +29,12 @@
 								<?php if ( WP_STATISTICS\GeoIP::active( 'city' ) ) { ?>
                                     <td><?php _e( 'City', 'wp-statistics' ); ?></td>
 								<?php } ?>
-                                <td><?php _e( 'Date', 'wp-statistics' ); ?></td>
+                                <td>
+                                    <a href="<?php echo add_query_arg( 'order', ( ( isset( $_GET['order'] ) and $_GET['order'] == "asc" ) ? 'desc' : 'asc' ) ); ?>">
+	                                    <?php _e( 'Date', 'wp-statistics' ); ?>
+                                        <span class="dashicons dashicons-arrow-<?php echo( ( isset( $_GET['order'] ) and $_GET['order'] == "asc" ) ? 'up' : 'down' ); ?>"></span>
+                                    </a>
+                                </td>
                                 <td><?php _e( 'IP', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Platform', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'User', 'wp-statistics' ); ?></td>

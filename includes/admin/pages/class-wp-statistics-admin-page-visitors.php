@@ -152,12 +152,15 @@ class visitors_page {
 			return $val['active'] === true;
 		}, ARRAY_FILTER_USE_BOTH );
 
+		// Get Type Of Order
+		$order = ( ( isset( $_GET['order'] ) and ( $_GET['order'] == "asc" || $_GET['order'] == "desc" ) ) ? $_GET['order'] : 'desc' );
+
 		//Get Total List
 		$args['total'] = $CurrentView[ key( $CurrentView ) ]['count'];
 		$args['list']  = array();
 		if ( $args['total'] > 0 ) {
 			$args['list'] = Visitor::get( array(
-				'sql'      => "SELECT * FROM `" . DB::table( 'visitor' ) . "` " . Helper::getConditionSQL( $sql ) . " ORDER BY ID DESC",
+				'sql'      => "SELECT * FROM `" . DB::table( 'visitor' ) . "` " . Helper::getConditionSQL( $sql ) . " ORDER BY `last_counter` {$order}, `ID` {$order}",
 				'per_page' => Admin_Template::$item_per_page,
 				'paged'    => $args['paged'],
 			) );
@@ -184,7 +187,7 @@ class visitors_page {
 
 		// Remove unused $_GET
 		$params = ( isset( $_GET ) ? $_GET : array() );
-		foreach ( array( 'page', 'from', 'to' ) as $i ) {
+		foreach ( array( 'page', 'from', 'to', 'order', 'orderby' ) as $i ) {
 			if ( isset( $params[ $i ] ) ) {
 				unset( $params[ $i ] );
 			}

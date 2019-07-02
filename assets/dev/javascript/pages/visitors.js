@@ -121,7 +121,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
         // Remove Empty Parameter
         let forms = {
             'input': ['date-from', 'date-to', 'ip'],
-            'select': ['agent', 'platform', 'location', 'referrer']
+            'select': ['agent', 'platform', 'location', 'referrer', 'user_id']
         };
         Object.keys(forms).forEach(function (type) {
             forms[type].forEach((name) => {
