@@ -162,7 +162,7 @@ class Admin_Template {
 			) );
 
 			if ( $args['show_now_page'] ) {
-				$export .= '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), $args['current'], $total_page ) . '</p>';
+				$export .= '<p class="wps-page-number">' . sprintf( __( 'Page %1$s of %2$s', 'wp-statistics' ), number_format_i18n( $args['current'] ), number_format_i18n( $total_page ) ) . '</p>';
 			}
 			$export .= '</div>';
 
