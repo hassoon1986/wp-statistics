@@ -31,13 +31,20 @@
 								<?php } ?>
                                 <td>
                                     <a href="<?php echo add_query_arg( 'order', ( ( isset( $_GET['order'] ) and $_GET['order'] == "asc" ) ? 'desc' : 'asc' ) ); ?>">
-	                                    <?php _e( 'Date', 'wp-statistics' ); ?>
+										<?php _e( 'Date', 'wp-statistics' ); ?>
                                         <span class="dashicons dashicons-arrow-<?php echo( ( isset( $_GET['order'] ) and $_GET['order'] == "asc" ) ? 'up' : 'down' ); ?>"></span>
                                     </a>
                                 </td>
                                 <td><?php _e( 'IP', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'Platform', 'wp-statistics' ); ?></td>
                                 <td><?php _e( 'User', 'wp-statistics' ); ?></td>
+								<?php
+								if ( \WP_STATISTICS\Option::get( 'visitors_log' ) ) {
+									?>
+                                    <td class="tbl-page-column"><?php _e( 'Page', 'wp-statistics' ); ?></td>
+									<?php
+								}
+								?>
                                 <td><?php _e( 'Referrer', 'wp-statistics' ); ?></td>
                             </tr>
 
@@ -62,6 +69,15 @@
                                             <a href="<?php echo \WP_STATISTICS\Menus::admin_url( 'visitors', array( 'user_id' => $item['user']['ID'] ) ); ?>" class="wps-text-success"><?php echo $item['user']['user_login']; ?></a>
 										<?php } else { ?><?php echo \WP_STATISTICS\Admin_Template::UnknownColumn(); ?><?php } ?>
                                     </td>
+									<?php
+									if ( \WP_STATISTICS\Option::get( 'visitors_log' ) ) {
+										?>
+                                        <td style='text-align: left;' class="tbl-page-column">
+                                            <span class="txt-overflow" title="<?php echo ( $item['page']['title'] != "" ? $item['page']['title'] : \WP_STATISTICS\Admin_Template::UnknownColumn() ); ?>"><?php echo ( $item['page']['link'] != '' ? '<a href="' . $item['page']['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . ( $item['page']['title'] != "" ? $item['page']['title'] : \WP_STATISTICS\Admin_Template::UnknownColumn() ) . ( $item['page']['link'] != '' ? '</a>' : '' ); ?></span>
+                                        </td>
+										<?php
+									}
+									?>
                                     <td style='text-align: left'><?php echo $item['referred']; ?></td>
                                 </tr>
 							<?php } ?>

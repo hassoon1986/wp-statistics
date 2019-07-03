@@ -307,16 +307,18 @@ class Pages {
 				case "post_tag":
 				case "tax":
 					$term = get_term( $page_id );
-					$arg  = array(
-						'title'     => esc_html( $term->name ),
-						'link'      => ( is_wp_error( get_term_link( $page_id ) ) === true ? '' : get_term_link( $page_id ) ),
-						'edit_link' => get_edit_term_link( $page_id ),
-						'meta'      => array(
-							'taxonomy'         => $term->taxonomy,
-							'term_taxonomy_id' => $term->term_taxonomy_id,
-							'count'            => $term->count,
-						)
-					);
+					if ( ! is_wp_error( $term ) and $term !== null ) {
+						$arg = array(
+							'title'     => esc_html( $term->name ),
+							'link'      => ( is_wp_error( get_term_link( $page_id ) ) === true ? '' : get_term_link( $page_id ) ),
+							'edit_link' => get_edit_term_link( $page_id ),
+							'meta'      => array(
+								'taxonomy'         => $term->taxonomy,
+								'term_taxonomy_id' => $term->term_taxonomy_id,
+								'count'            => $term->count
+							)
+						);
+					}
 					break;
 				case "home":
 					$arg = array(

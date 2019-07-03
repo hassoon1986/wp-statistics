@@ -298,10 +298,41 @@ class Visitor {
 				$item['word'] = $items->words;
 			}
 
+			// Get What is Page
+			if ( Option::get( 'visitors_log' ) ) {
+				$item['page'] = self::get_page_by_visitor_id( $items->ID );
+			}
+
 			$list[] = $item;
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Get Page Information By visitor ID
+	 *
+	 * @param $visitor_ID
+	 * @return mixed
+	 */
+	public static function get_page_by_visitor_id( $visitor_ID ) {
+		global $wpdb;
+
+		// Default Params
+		$params = array( 'link' => '', 'title' => '' );
+
+		// Check Active Visitors Log
+		if ( ! Option::get( 'visitors_log' ) ) {
+			return $params;
+		}
+
+		// Get Row
+		$item = $wpdb->get_row( " SELECT " . DB::table( 'pages' ) . ".* FROM `" . DB::table( 'pages' ) . "` INNER JOIN `" . DB::table( 'visitor_relationships' ) . "` ON `" . DB::table( 'pages' ) . "`.`page_id` = `" . DB::table( 'visitor_relationships' ) . "`.`page_id` INNER JOIN `" . DB::table( 'visitor' ) . "` ON `" . DB::table( 'visitor_relationships' ) . "`.`visitor_id` = `" . DB::table( 'visitor' ) . "`.`ID` WHERE `" . DB::table( 'visitor' ) . "`.`ID` = {$visitor_ID};", ARRAY_A );
+		if ( $item !== null ) {
+			$params = Pages::get_page_info( $item['id'], $item['type'] );
+		}
+
+		return $params;
 	}
 
 	/**

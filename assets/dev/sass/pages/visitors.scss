@@ -25,8 +25,21 @@ body.statistics_page_wps_visitors_page {
   .select2-dropdown {
     z-index: 9999999999 !important;
   }
+
   .select2-container {
     width: 100% !important;
+  }
+
+  //page column
+  .tbl-page-column {
+    width: 220px;
+
+    span.txt-overflow {
+      white-space: nowrap;
+      overflow: hidden;
+      width: 210px !important;
+      display: block;
+    }
   }
 }
 

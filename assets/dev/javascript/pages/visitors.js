@@ -39,7 +39,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
                             // Set LocalStorage , Cached for 3 Hour
                             localStorage.setItem('wp-statistics-visitors-filter', JSON.stringify({
                                 value: data,
-                                timestamp: (new Date().getTime() + (3 * 60 * 60 * 1000))
+                                timestamp: (new Date().getTime() + (6 * 60 * 60 * 1000))
                             }));
 
                             // Load function
