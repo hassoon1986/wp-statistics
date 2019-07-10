@@ -99,7 +99,7 @@ class Hits {
 	 * @return mixed
 	 */
 	public function set_hash_ip( $hash_ip ) {
-		return isset( $this->rest_hits->hash_ip ) ? $this->rest_hits->hash_ip : $hash_ip;
+		return isset( $this->rest_hits->hash_ip ) ? IP::$hash_ip_prefix . $this->rest_hits->hash_ip : $hash_ip;
 	}
 
 	/**

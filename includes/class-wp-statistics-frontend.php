@@ -89,7 +89,7 @@ class Frontend {
 		$params['ip'] = esc_html( IP::getIP() );
 
 		//Set Hash Ip
-		$params['hash_ip'] = IP::getHashIP();
+		$params['hash_ip'] = esc_html( str_ireplace( IP::$hash_ip_prefix, '', IP::getHashIP() ) );
 
 		//exclude
 		$exclude                  = Exclusion::check();
