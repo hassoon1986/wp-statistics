@@ -44,6 +44,7 @@ class Hit extends \WP_STATISTICS\RestAPI {
 				},
 				'args'                => array(
 					'_wpnonce'           => array(
+						'required'          => true,
 						'validate_callback' => function ( $value ) {
 							return wp_verify_nonce( $value, 'wp_rest' );
 						}
