@@ -73,7 +73,7 @@
 									if ( \WP_STATISTICS\Option::get( 'visitors_log' ) ) {
 										?>
                                         <td style='text-align: left;' class="tbl-page-column">
-                                            <span class="txt-overflow" title="<?php echo ( $item['page']['title'] != "" ? $item['page']['title'] : \WP_STATISTICS\Admin_Template::UnknownColumn() ); ?>"><?php echo ( $item['page']['link'] != '' ? '<a href="' . $item['page']['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . ( $item['page']['title'] != "" ? $item['page']['title'] : \WP_STATISTICS\Admin_Template::UnknownColumn() ) . ( $item['page']['link'] != '' ? '</a>' : '' ); ?></span>
+                                            <span class="txt-overflow" title="<?php echo ( $item['page']['title'] != "" ? $item['page']['title'] : '' ); ?>"><?php echo ( $item['page']['link'] != '' ? '<a href="' . $item['page']['link'] . '" target="_blank" class="wps-text-danger">' : '' ) . ( $item['page']['title'] != "" ? $item['page']['title'] : \WP_STATISTICS\Admin_Template::UnknownColumn() ) . ( $item['page']['link'] != '' ? '</a>' : '' ); ?></span>
                                         </td>
 										<?php
 									}
