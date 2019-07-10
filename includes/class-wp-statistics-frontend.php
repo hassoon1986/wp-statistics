@@ -63,7 +63,7 @@ class Frontend {
 	public function add_inline_rest_js() {
 		if ( Option::get( 'use_cache_plugin' ) ) {
 			$this->html_comment();
-			echo '<script>var WP_Statistics_http = new XMLHttpRequest();WP_Statistics_http.open(\'POST\', \'' . add_query_arg( array( '_' => time() ), get_rest_url( null, RestAPI::$namespace . '/' . Api\v2\Hit::$endpoint ) ) . '\', true);WP_Statistics_http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");WP_Statistics_http.send("' . Hits::$rest_hits_key . '=" + JSON.stringify(' . self::set_default_params() . '));</script>' . "\n";
+			echo '<script>var WP_Statistics_http = new XMLHttpRequest();WP_Statistics_http.open(\'GET\', \'' . add_query_arg( array( '_' => time(), '_wpnonce' => wp_create_nonce( 'wp_rest' ), Hits::$rest_hits_key => self::set_default_params() ), get_rest_url( null, RestAPI::$namespace . '/' . Api\v2\Hit::$endpoint ) ) . '\', true);WP_Statistics_http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");WP_Statistics_http.send(null);</script>' . "\n";
 		}
 	}
 
@@ -97,7 +97,7 @@ class Frontend {
 		$params['exclude_reason'] = $exclude['exclusion_reason'];
 
 		//User Agent String
-		$params['ua'] = UserAgent::getHttpUserAgent();
+		$params['ua'] = esc_html( UserAgent::getHttpUserAgent() );
 
 		//track all page
 		$params['track_all'] = ( Pages::is_track_all_page() === true ? 1 : 0 );

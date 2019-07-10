@@ -37,12 +37,17 @@ class Hit extends \WP_STATISTICS\RestAPI {
 		// Record WP-Statistics when Cache is enable
 		register_rest_route( self::$namespace, '/' . self::$endpoint, array(
 			array(
-				'methods'             => \WP_REST_Server::CREATABLE,
+				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'hit_callback' ),
 				'permission_callback' => function () {
 					return ( Option::get( 'use_cache_plugin' ) == 1 ? true : false );
 				},
 				'args'                => array(
+					'_wpnonce'           => array(
+						'validate_callback' => function ( $value ) {
+							return wp_verify_nonce( $value, 'wp_rest' );
+						}
+					),
 					Hits::$rest_hits_key => array(
 						'required'          => true,
 						'validate_callback' => function ( $value, $request, $key ) {
