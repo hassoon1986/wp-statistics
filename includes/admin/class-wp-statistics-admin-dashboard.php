@@ -24,7 +24,7 @@ class Admin_Dashboard {
 	 */
 	public function register_dashboard_widget() {
 
-		foreach ( Meta_Box::getList() as $widget_key => $dashboard ) {
+		foreach ( apply_filters( 'wp_statistics_dashboard_widget_list', Meta_Box::getList() ) as $widget_key => $dashboard ) {
 			if ( Option::check_option_require( $dashboard ) === true and isset( $dashboard['show_on_dashboard'] ) and $dashboard['show_on_dashboard'] === true ) {
 				wp_add_dashboard_widget( Meta_Box::getMetaBoxKey( $widget_key ), $dashboard['name'], Meta_Box::LoadMetaBox( $widget_key ), $control_callback = null, array( 'widget' => $widget_key ) );
 			}
