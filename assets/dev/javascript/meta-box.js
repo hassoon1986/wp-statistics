@@ -89,8 +89,10 @@ wps_js.meta_box_button = function (key) {
     jQuery(`<button class="handlediv button-link wps-refresh"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 3%;" ` : '') + ` type="button"><span class="dashicons dashicons-update"></span> <span class="screen-reader-text">` + wps_js._('reload') + `</span></button>`).insertAfter(selector);
 
     // Check Page Url Button
-    if ("page_url" in meta_box_info) {
-        jQuery(`<button class="handlediv button-link wps-more"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 7%;" ` : '') + ` type="button" onclick="location.href = '` + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
+    if (wps_js.is_active('more_btn')) {
+        if ("page_url" in meta_box_info) {
+            jQuery(`<button class="handlediv button-link wps-more"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 7%;" ` : '') + ` type="button" onclick="location.href = '` + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
+        }
     }
 };
 
