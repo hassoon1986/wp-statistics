@@ -7,7 +7,13 @@ use WP_STATISTICS\RestAPI;
 use WP_STATISTICS\TimeZone;
 
 class post {
-
+	/**
+	 * Get WordPress Post Chart Box
+	 *
+	 * @param array $args
+	 * @return array
+	 * @throws \Exception
+	 */
 	public static function get( $args = array() ) {
 
 		// Set Not Publish Content
@@ -33,19 +39,22 @@ class post {
 		$stats = $date = array();
 
 		// Prepare Date time
-		for ( $i = $days; $i >= 0; $i -- ) {
-			$date[] = Timezone::getCurrentDate( 'M j', '-' . $i );
+		$days_list = TimeZone::getListDays( array( 'from' => TimeZone::getTimeAgo( $days ) ) );
+
+		// Get List Of Days
+		foreach ( $days_list as $k => $v ) {
+			$date[] = $v['format'];
 		}
 
-		// Prepare State TODO [ Fix at Last ]
-		list( $daysToDisplay, $rangestart_utime, $rangeend_utime ) = wp_statistics_date_range_calculator( $days, '', '' );
-		$daysInThePast = round( ( time() - $rangeend_utime ) / 86400, 0 );
-		$post_type     = get_post_type( $post->ID );
-		if ( $post_type != "page" or $post_type != "product" ) {
+		// Prepare State
+		$post_type = get_post_type( $post->ID );
+		if ( $post_type != "page" and $post_type != "product" ) {
 			$post_type = 'post';
 		}
-		for ( $i = $daysToDisplay; $i >= 0; $i -- ) {
-			$stats[] = wp_statistics_pages( '-' . ( $i + $daysInThePast ), '', $post->ID, null, null, $post_type );
+
+		// Get Number Search every Days
+		foreach ( array_keys( $days_list ) as $d ) {
+			$stats[] = wp_statistics_pages( $d, '', $post->ID, null, null, $post_type );
 		}
 
 		// Push Basic Chart Data

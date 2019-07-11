@@ -85,14 +85,7 @@ class Admin_Assets {
 		// Prepare Full Url
 		$url = self::$plugin_url . $path;
 
-		// Check Exist Min Version for Css / Js
-		if ( defined( 'SCRIPT_DEBUG' ) and SCRIPT_DEBUG === false and ( $ext == "css" || $ext == "js" ) ) {
-			$min_version = str_replace( array( ".css", ".js" ), array( self::$suffix_min . ".css", self::$suffix_min . ".js" ), $file_name );
-			if ( file_exists( Helper::get_file_path( $path . $min_version ) ) ) {
-				return $url . $min_version;
-			}
-		}
-
+		// Return Url
 		return $url . $file_name;
 	}
 
