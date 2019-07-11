@@ -93,7 +93,7 @@ class refer_page {
 			) );
 		}
 
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', ( isset( $_GET['referr'] ) ? 'pages/refer.url' : 'pages/top.refer' ), 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', ( isset( $_GET['referr'] ) ? 'pages/refer.url' : 'pages/top.refer' ), 'layout/footer' ), $args );
 	}
 
 }

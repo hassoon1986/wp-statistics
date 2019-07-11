@@ -28,7 +28,7 @@ class searches_page {
 	public static function view() {
 
 		// Page title
-		$args['title'] =  __( 'Search Engine Referral Statistics', 'wp-statistics' );
+		$args['title'] = __( 'Search Engine Referral Statistics', 'wp-statistics' );
 
 		// Get Current Page Url
 		$args['pageName']   = Menus::get_page_slug( 'searches' );
@@ -38,7 +38,7 @@ class searches_page {
 		$args['DateRang'] = Admin_Template::DateRange();
 
 		// Show Template Page
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/search', 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/search', 'layout/footer' ), $args );
 	}
 
 }

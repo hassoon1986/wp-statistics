@@ -63,7 +63,7 @@ class words_page {
 			) );
 		}
 
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'pages/words', 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'pages/words', 'layout/footer' ), $args );
 	}
 
 }
