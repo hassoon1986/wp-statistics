@@ -99,26 +99,24 @@ class Schedule {
 	static function define_schedules_time( $schedules ) {
 
 		// Adds once weekly to the existing schedules.
-		//TODO Kholase shavad
-		if ( ! array_key_exists( 'weekly', $schedules ) ) {
-			$schedules['weekly'] = array(
+		$WP_Statistics_schedules = array(
+			'weekly'   => array(
 				'interval' => 604800,
 				'display'  => __( 'Once Weekly' ),
-			);
-		}
-
-		if ( ! array_key_exists( 'biweekly', $schedules ) ) {
-			$schedules['biweekly'] = array(
+			),
+			'biweekly' => array(
 				'interval' => 1209600,
 				'display'  => __( 'Once Every 2 Weeks' ),
-			);
-		}
-
-		if ( ! array_key_exists( '4weeks', $schedules ) ) {
-			$schedules['4weeks'] = array(
+			),
+			'4weeks'   => array(
 				'interval' => 2419200,
 				'display'  => __( 'Once Every 4 Weeks' ),
-			);
+			)
+		);
+		foreach ( $WP_Statistics_schedules as $key => $val ) {
+			if ( ! array_key_exists( $key, $schedules ) ) {
+				$schedules[ $key ] = $val;
+			}
 		}
 
 		return $schedules;
