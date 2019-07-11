@@ -5,7 +5,7 @@
         <p class="about-text">
 			<?php printf( __( 'Thank you for updating to the latest version! We encourage you to submit a %srating and review%s over at WordPress.org. Your feedback is greatly appreciated!', 'wp-statistics' ), '<a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank">', '</a>' ); ?>
 			<?php _e( 'Submit your rating:', 'wp-statistics' ); ?>
-            <a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank"><img src="<?php echo plugins_url( 'wp-statistics/assets/images/stars.png' ); ?>"/></a>
+            <a href="https://wordpress.org/support/plugin/wp-statistics/reviews/?rate=5#new-post" target="_blank"><img alt="star" src="<?php echo plugins_url( 'wp-statistics/assets/images/welcome/stars.png' ); ?>"/></a>
         </p>
 
         <div class="wp-badge"><?php printf( __( 'Version %s', 'wp-statistics' ), WP_STATISTICS_VERSION ); ?></div>
