@@ -1,21 +1,14 @@
 <table class="form-table">
     <tbody>
     <tr valign="top">
-        <th scope="row" colspan="2"><h3><?php use WP_STATISTICS\Admin_Helper;
-		        use WP_STATISTICS\Menus;
-
-		        _e( 'GeoIP settings', 'wp-statistics' ); ?></h3></th>
+        <th scope="row" colspan="2"><h3><?php _e( 'GeoIP settings', 'wp-statistics' ); ?></h3></th>
     </tr>
 
     <tr valign="top">
         <th scope="row" colspan="2">
-			<?php echo sprintf(
-				__( 'IP location services are provided by data created by %s.', 'wp-statistics' ),
-				'<a href="http://www.maxmind.com" target=_blank>MaxMind</a>'
-			); ?>
+			<?php echo sprintf( __( 'IP location services are provided by data created by %s.', 'wp-statistics' ), '<a href="http://www.maxmind.com" target=_blank>MaxMind</a>' ); ?>
         </th>
     </tr>
-
 	<?php
 	if ( WP_STATISTICS\GeoIP::IsSupport() ) {
 		?>
@@ -34,10 +27,7 @@
                     </form>
                 </label>
 
-                <p class="description"><?php _e(
-						'For getting more information and location (country) from visitor, enable this feature.',
-						'wp-statistics'
-					); ?></p>
+                <p class="description"><?php _e( 'For getting more information and location (country) from visitor, enable this feature.', 'wp-statistics' ); ?></p>
             </td>
         </tr>
 
@@ -55,11 +45,7 @@
 						<?php submit_button( __( "Update Database", 'wp-statistics' ), "secondary", "update_geoip", false ); ?>
                     </form>
                 </label>
-
-                <p class="description"><?php _e(
-						'See Visitor\'s City Name',
-						'wp-statistics'
-					); ?></p>
+                <p class="description"><?php _e( 'See Visitor\'s City Name', 'wp-statistics' ); ?></p>
             </td>
         </tr>
 
@@ -97,35 +83,20 @@
 					echo '</code></p>';
 				}
 				?>
-                <p class="description"><?php _e(
-						'Download of the GeoIP database will be scheduled for 2 days after the first Tuesday of the month.',
-						'wp-statistics'
-					); ?></p>
-
-                <p class="description"><?php _e(
-						'This option will also download the database if the local filesize is less than 1k (which usually means the stub that comes with the plugin is still in place).',
-						'wp-statistics'
-					); ?></p>
+                <p class="description"><?php _e( 'Download of the GeoIP database will be scheduled for 2 days after the first Tuesday of the month.', 'wp-statistics' ); ?></p>
+                <p class="description"><?php _e( 'This option will also download the database if the local filesize is less than 1k (which usually means the stub that comes with the plugin is still in place).', 'wp-statistics' ); ?></p>
             </td>
         </tr>
 
         <tr valign="top">
             <th scope="row">
-                <label for="geoip-schedule"><?php _e(
-						'Populate missing GeoIP after update of GeoIP DB:',
-						'wp-statistics'
-					); ?></label>
+                <label for="geoip-schedule"><?php _e( 'Populate missing GeoIP after update of GeoIP DB:', 'wp-statistics' ); ?></label>
             </th>
 
             <td>
-                <input id="geoip-auto-pop" type="checkbox" name="wps_auto_pop" <?php echo WP_STATISTICS\Option::get( 'auto_pop' ) == true
-					? "checked='checked'" : ''; ?>>
+                <input id="geoip-auto-pop" type="checkbox" name="wps_auto_pop" <?php echo WP_STATISTICS\Option::get( 'auto_pop' ) == true ? "checked='checked'" : ''; ?>>
                 <label for="geoip-auto-pop"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-                <p class="description"><?php _e(
-						'Update any missing GeoIP data after downloading a new database.',
-						'wp-statistics'
-					); ?></p>
+                <p class="description"><?php _e( 'Update any missing GeoIP data after downloading a new database.', 'wp-statistics' ); ?></p>
             </td>
         </tr>
 
@@ -135,11 +106,7 @@
             </th>
 
             <td>
-                <input type="text" size="3" id="geoip-private-country-code" name="wps_private_country_code" value="<?php echo htmlentities(
-					WP_STATISTICS\Option::get( 'private_country_code', \WP_STATISTICS\GeoIP::$private_country ),
-					ENT_QUOTES
-				); ?>">
-
+                <input type="text" size="3" id="geoip-private-country-code" name="wps_private_country_code" value="<?php echo htmlentities( WP_STATISTICS\Option::get( 'private_country_code', \WP_STATISTICS\GeoIP::$private_country ), ENT_QUOTES ); ?>">
                 <p class="description"><?php echo __( 'The international standard two letter country code (ie. US = United States, CA = Canada, etc.) for private (non-routable) IP addresses (ie. 10.0.0.1, 192.158.1.1, 127.0.0.1, etc.).', 'wp-statistics' ) . ' ' . __( 'Use "000" (three zeros) to use "Unknown" as the country code.', 'wp-statistics' ); ?></p>
             </td>
         </tr>
@@ -153,28 +120,19 @@
 
 				if ( ! function_exists( 'curl_init' ) ) {
 					echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;* ';
-					_e(
-						'GeoIP collection requires the cURL PHP extension and it is not loaded on your version of PHP!',
-						'wp-statistics'
-					);
+					_e( 'GeoIP collection requires the cURL PHP extension and it is not loaded on your version of PHP!', 'wp-statistics' );
 					echo '<br>';
 				}
 
 				if ( ! function_exists( 'bcadd' ) ) {
 					echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;* ';
-					_e(
-						'GeoIP collection requires the BC Math PHP extension and it is not loaded on your version of PHP!',
-						'wp-statistics'
-					);
+					_e( 'GeoIP collection requires the BC Math PHP extension and it is not loaded on your version of PHP!', 'wp-statistics' );
 					echo '<br>';
 				}
 
 				if ( ini_get( 'safe_mode' ) ) {
 					echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;* ';
-					_e(
-						'PHP safe mode detected! GeoIP collection is not supported with PHP\'s safe mode enabled!',
-						'wp-statistics'
-					);
+					_e( 'PHP safe mode detected! GeoIP collection is not supported with PHP\'s safe mode enabled!', 'wp-statistics' );
 					echo '<br>';
 				}
 				?>
@@ -191,10 +149,7 @@
 
     <tr valign="top">
         <th scope="row" colspan="2">
-			<?php echo sprintf(
-				__( 'Referrer spam blacklist is provided by Matomo, available from %s.', 'wp-statistics' ),
-				'<a href="https://github.com/matomo-org/referrer-spam-blacklist" target=_blank>https://github.com/matomo-org/referrer-spam-blacklist</a>'
-			); ?>
+			<?php echo sprintf( __( 'Referrer spam blacklist is provided by Matomo, available from %s.', 'wp-statistics' ), '<a href="https://github.com/matomo-org/referrer-spam-blacklist" target=_blank>https://github.com/matomo-org/referrer-spam-blacklist</a>' ); ?>
         </th>
     </tr>
 
@@ -206,11 +161,7 @@
         <td>
             <input id="referrerspam-enable" type="checkbox" name="wps_referrerspam" <?php echo WP_STATISTICS\Option::get( 'referrerspam' ) == true ? "checked='checked'" : ''; ?>>
             <label for="referrerspam-enable"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e(
-					'The Matomo Referrer Spam Blacklist database will be downloaded and used to detect referrer spam.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'The Matomo Referrer Spam Blacklist database will be downloaded and used to detect referrer spam.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -222,7 +173,7 @@
         </th>
 
         <td>
-            <a href="<?php echo Menus::admin_url( 'settings', array( 'tab' => 'externals-settings', 'update-referrer-spam' => 'yes' ) ) ?>" class="button"><?php _e( 'Update', 'wp-staitsitcs' ); ?></a>
+            <a href="<?php echo WP_STATISTICS\Menus::admin_url( 'settings', array( 'tab' => 'externals-settings', 'update-referrer-spam' => 'yes' ) ) ?>" class="button"><?php _e( 'Update', 'wp-staitsitcs' ); ?></a>
             <p class="description"><?php _e( 'Click button to download the update.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -235,9 +186,7 @@
         </th>
 
         <td>
-            <input id="referrerspam-schedule" type="checkbox" name="wps_schedule_referrerspam" <?php echo WP_STATISTICS\Option::get(
-				'schedule_referrerspam'
-			) == true ? "checked='checked'" : ''; ?>>
+            <input id="referrerspam-schedule" type="checkbox" name="wps_schedule_referrerspam" <?php echo WP_STATISTICS\Option::get( 'schedule_referrerspam' ) == true ? "checked='checked'" : ''; ?>>
             <label for="referrerspam-schedule"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
 			<?php
 			if ( WP_STATISTICS\Option::get( 'schedule_referrerspam' ) ) {
@@ -263,10 +212,7 @@
 				echo '</code></p>';
 			}
 			?>
-            <p class="description"><?php _e(
-					'Download of the Matomo Referrer Spam Blacklist database will be scheduled for once a week.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'Download of the Matomo Referrer Spam Blacklist database will be scheduled for once a week.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 

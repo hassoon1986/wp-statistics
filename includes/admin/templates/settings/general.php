@@ -16,10 +16,8 @@
         </th>
 
         <td>
-            <input id="useronline" type="checkbox" value="1" name="wps_useronline" <?php echo WP_STATISTICS\Option::get( 'useronline' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="useronline" type="checkbox" value="1" name="wps_useronline" <?php echo WP_STATISTICS\Option::get( 'useronline' ) == true ? "checked='checked'" : ''; ?>>
             <label for="useronline"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -32,10 +30,7 @@
         <td>
             <input type="text" class="small-text code" id="check_online" name="wps_check_online" value="<?php echo htmlentities( WP_STATISTICS\Option::get( 'check_online' ), ENT_QUOTES ); ?>"/>
 			<?php _e( 'Seconds', 'wp-statistics' ); ?>
-            <p class="description"><?php echo sprintf(
-					__( 'Time for the check accurate online user in the site. Now: %s Seconds', 'wp-statistics' ),
-					WP_STATISTICS\Option::get( 'check_online' )
-				); ?></p>
+            <p class="description"><?php echo sprintf( __( 'Time for the check accurate online user in the site. Now: %s Seconds', 'wp-statistics' ), WP_STATISTICS\Option::get( 'check_online' ) ); ?></p>
         </td>
     </tr>
 
@@ -45,14 +40,9 @@
         </th>
 
         <td>
-            <input id="allonline" type="checkbox" value="1" name="wps_all_online" <?php echo WP_STATISTICS\Option::get( 'all_online' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="allonline" type="checkbox" value="1" name="wps_all_online" <?php echo WP_STATISTICS\Option::get( 'all_online' ) == true ? "checked='checked'" : ''; ?>>
             <label for="allonline"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e(
-					'Ignores the exclusion settings and records all users that are online (including self referrals and robots). Should only be used for troubleshooting.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'Ignores the exclusion settings and records all users that are online (including self referrals and robots). Should only be used for troubleshooting.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -68,7 +58,6 @@
         <td>
             <input id="visits" type="checkbox" value="1" name="wps_visits" <?php echo WP_STATISTICS\Option::get( 'visits' ) == true ? "checked='checked'" : ''; ?>>
             <label for="visits"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -227,25 +216,11 @@
 
         <td>
             <select name="wps_display_hits_position" id="display_hits_position">
-                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'display_hits_position' ), '0' ); ?>><?php _e(
-						'Please select',
-						'wp-statistics'
-					); ?></option>
-                <option value="before_content" <?php selected( WP_STATISTICS\Option::get( 'display_hits_position' ), 'before_content' ); ?>><?php _e(
-						'Before Content',
-						'wp-statistics'
-					); ?></option>
-
-                <option value="after_content" <?php selected( WP_STATISTICS\Option::get( 'display_hits_position' ), 'after_content' ); ?>><?php _e(
-						'After Content',
-						'wp-statistics'
-					); ?></option>
+                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'display_hits_position' ), '0' ); ?>><?php _e( 'Please select', 'wp-statistics' ); ?></option>
+                <option value="before_content" <?php selected( WP_STATISTICS\Option::get( 'display_hits_position' ), 'before_content' ); ?>><?php _e( 'Before Content', 'wp-statistics' ); ?></option>
+                <option value="after_content" <?php selected( WP_STATISTICS\Option::get( 'display_hits_position' ), 'after_content' ); ?>><?php _e( 'After Content', 'wp-statistics' ); ?></option>
             </select>
-
-            <p class="description"><?php _e(
-					'Choose the position to show Hits.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'Choose the position to show Hits.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -259,10 +234,8 @@
         </th>
 
         <td>
-            <input id="use_cache_plugin" type="checkbox" value="1" name="wps_use_cache_plugin" <?php echo WP_STATISTICS\Option::get( 'use_cache_plugin' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="use_cache_plugin" type="checkbox" value="1" name="wps_use_cache_plugin" <?php echo WP_STATISTICS\Option::get( 'use_cache_plugin' ) == true ? "checked='checked'" : ''; ?>>
             <label for="use_cache_plugin"><?php _e( 'Yes', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'If you use WordPress Cache Plugins, enable this option.', 'wp-statistics' ); ?></p>
             <p class="description"><?php echo sprintf( __( 'To register WP-Statistics REST API endpoint  ( %s ) , go to the <a href="%s">Permalink page</a> and update the permalink with press Save Changes.', 'wp-statistics' ), WP_STATISTICS\RestAPI::$namespace, admin_url( 'options-permalink.php' ) ); ?></p>
             <p class="description"><?php echo __( 'Don\'t forget to clear your enabled plugin cache.', 'wp-statistics' ); ?></p>
@@ -281,16 +254,9 @@
 
         <td>
             <select name="wps_menu_bar" id="menu-bar">
-                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'menu_bar' ), '0' ); ?>><?php _e(
-						'No',
-						'wp-statistics'
-					); ?></option>
-                <option value="1" <?php selected( WP_STATISTICS\Option::get( 'menu_bar' ), '1' ); ?>><?php _e(
-						'Yes',
-						'wp-statistics'
-					); ?></option>
+                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'menu_bar' ), '0' ); ?>><?php _e( 'No', 'wp-statistics' ); ?></option>
+                <option value="1" <?php selected( WP_STATISTICS\Option::get( 'menu_bar' ), '1' ); ?>><?php _e( 'Yes', 'wp-statistics' ); ?></option>
             </select>
-
             <p class="description"><?php _e( 'Show stats in admin menu bar', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -301,14 +267,10 @@
         </th>
 
         <td>
-            <input id="hide_notices" type="checkbox" value="1" name="wps_hide_notices" <?php echo WP_STATISTICS\Option::get( 'hide_notices' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="hide_notices" type="checkbox" value="1" name="wps_hide_notices" <?php echo WP_STATISTICS\Option::get( 'hide_notices' ) == true ? "checked='checked'" : ''; ?>>
             <label for="hide_notices"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
 
-            <p class="description"><?php _e(
-					'By default WP Statistics displays an alert if any of the core features are disabled on every admin page, this option will disable these notices.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'By default WP Statistics displays an alert if any of the core features are disabled on every admin page, this option will disable these notices.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -322,23 +284,15 @@
         </th>
 
         <td>
-            <input id="addsearchwords" type="checkbox" value="1" name="wps_addsearchwords" <?php echo WP_STATISTICS\Option::get( 'addsearchwords' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="addsearchwords" type="checkbox" value="1" name="wps_addsearchwords" <?php echo WP_STATISTICS\Option::get( 'addsearchwords' ) == true ? "checked='checked'" : ''; ?>>
             <label for="addsearchwords"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e(
-					'If a search engine is identified as the referrer but it does not include the search query this option will substitute the page title in quotes preceded by "~:" as the search query to help identify what the user may have been searching for.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'If a search engine is identified as the referrer but it does not include the search query this option will substitute the page title in quotes preceded by "~:" as the search query to help identify what the user may have been searching for.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
     <tr valign="top">
         <th scope="row" colspan="2">
-            <p class="description"><?php _e(
-					'Disabling all search engines is not allowed, doing so will result in all search engines being active.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'Disabling all search engines is not allowed, doing so will result in all search engines being active.', 'wp-statistics' ); ?></p>
         </th>
     </tr>
 	<?php
@@ -355,16 +309,8 @@
                 <label for="<?php echo $option_name; ?>"><?php _e( $se['name'], 'wp-statistics' ); ?>:</label>
             </th>
             <td>
-                <input id="<?php echo $option_name; ?>" type="checkbox" value="1" name="<?php echo $option_name; ?>" <?php echo WP_STATISTICS\Option::get( $store_name ) == true
-					? "checked='checked'" : ''; ?>><label for="<?php echo $option_name; ?>"><?php _e(
-						'Disable',
-						'wp-statistics'
-					); ?></label>
-
-                <p class="description"><?php echo sprintf(
-						__( 'Disable %s from data collection and reporting.', 'wp-statistics' ),
-						$se['name']
-					); ?></p>
+                <input id="<?php echo $option_name; ?>" type="checkbox" value="1" name="<?php echo $option_name; ?>" <?php echo WP_STATISTICS\Option::get( $store_name ) == true ? "checked='checked'" : ''; ?>><label for="<?php echo $option_name; ?>"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
+                <p class="description"><?php echo sprintf( __( 'Disable %s from data collection and reporting.', 'wp-statistics' ), $se['name'] ); ?></p>
             </td>
         </tr>
 	<?php } ?>

@@ -9,10 +9,7 @@ if ( $wps_admin ) {
         </tr>
 
         <tr valign="top">
-            <td scope="row" colspan="2"><?php _e(
-					'The following items are global to all users.',
-					'wp-statistics'
-				); ?></td>
+            <td scope="row" colspan="2"><?php _e( 'The following items are global to all users.', 'wp-statistics' ); ?></td>
         </tr>
 
         <tr valign="top">
@@ -21,11 +18,8 @@ if ( $wps_admin ) {
             </th>
 
             <td>
-                <input id="disable-dashboard" type="checkbox" value="1"
-                       name="wps_disable_dashboard" <?php echo WP_STATISTICS\Option::get( 'disable_dashboard' ) == true
-					? "checked='checked'" : ''; ?>>
+                <input id="disable-dashboard" type="checkbox" value="1" name="wps_disable_dashboard" <?php echo WP_STATISTICS\Option::get( 'disable_dashboard' ) == true ? "checked='checked'" : ''; ?>>
                 <label for="disable-dashboard"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
-
                 <p class="description"><?php _e( 'Disable the dashboard widgets.', 'wp-statistics' ); ?></p>
             </td>
         </tr>
@@ -35,10 +29,7 @@ if ( $wps_admin ) {
         </tr>
 
         <tr valign="top">
-            <td scope="row" colspan="2"><?php _e(
-					'The following items are global to all users.',
-					'wp-statistics'
-				); ?></td>
+            <td scope="row" colspan="2"><?php _e( 'The following items are global to all users.', 'wp-statistics' ); ?></td>
         </tr>
 
         <tr valign="top">
@@ -47,11 +38,8 @@ if ( $wps_admin ) {
             </th>
 
             <td>
-                <input id="disable-map" type="checkbox" value="1"
-                       name="wps_disable_map" <?php echo WP_STATISTICS\Option::get( 'disable_map' ) == true
-					? "checked='checked'" : ''; ?>>
+                <input id="disable-map" type="checkbox" value="1" name="wps_disable_map" <?php echo WP_STATISTICS\Option::get( 'disable_map' ) == true ? "checked='checked'" : ''; ?>>
                 <label for="disable-map"><?php _e( 'Disable', 'wp-statistics' ); ?></label>
-
                 <p class="description"><?php _e( 'Disable the map display', 'wp-statistics' ); ?></p>
             </td>
         </tr>

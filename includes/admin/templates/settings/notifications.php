@@ -20,11 +20,7 @@
 				$wp_statistics_options['email_list'] = get_bloginfo( 'admin_email' );
 			}
 			echo htmlentities( WP_STATISTICS\Option::get( 'email_list' ), ENT_QUOTES ); ?>"/>
-
-            <p class="description"><?php _e(
-					'A comma separated list of e-mail addresses to send reports to.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'A comma separated list of e-mail addresses to send reports to.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -38,14 +34,9 @@
         </td>
 
         <td>
-            <input id="geoip-report" type="checkbox" value="1" name="wps_geoip_report" <?php echo WP_STATISTICS\Option::get( 'geoip_report' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="geoip-report" type="checkbox" value="1" name="wps_geoip_report" <?php echo WP_STATISTICS\Option::get( 'geoip_report' ) == true ? "checked='checked'" : ''; ?>>
             <label for="geoip-report"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e(
-					'Send a report whenever the GeoIP database is updated.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'Send a report whenever the GeoIP database is updated.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -55,14 +46,9 @@
         </td>
 
         <td>
-            <input id="prune-report" type="checkbox" value="1" name="wps_prune_report" <?php echo WP_STATISTICS\Option::get( 'prune_report' ) == true
-				? "checked='checked'" : ''; ?>>
+            <input id="prune-report" type="checkbox" value="1" name="wps_prune_report" <?php echo WP_STATISTICS\Option::get( 'prune_report' ) == true ? "checked='checked'" : ''; ?>>
             <label for="prune-report"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
-            <p class="description"><?php _e(
-					'Send a report whenever the pruning of database is run.',
-					'wp-statistics'
-				); ?></p>
+            <p class="description"><?php _e( 'Send a report whenever the pruning of database is run.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
 
@@ -76,10 +62,8 @@
         </th>
 
         <td>
-            <input id="stats-report" type="checkbox" value="1" name="wps_stats_report" <?php echo WP_STATISTICS\Option::get( 'stats_report' ) == true
-				? "checked='checked'" : ''; ?> onClick='ToggleStatOptions();'>
+            <input id="stats-report" type="checkbox" value="1" name="wps_stats_report" <?php echo WP_STATISTICS\Option::get( 'stats_report' ) == true ? "checked='checked'" : ''; ?> onClick='ToggleStatOptions();'>
             <label for="stats-report"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Enable or disable this feature', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -96,16 +80,12 @@
 
         <td>
             <select name="wps_time_report" id="time-report">
-                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'time_report' ), '0' ); ?>><?php _e(
-						'Please select',
-						'wp-statistics'
-					); ?></option>
+                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'time_report' ), '0' ); ?>><?php _e( 'Please select', 'wp-statistics' ); ?></option>
 				<?php
 				function wp_statistics_schedule_sort( $a, $b ) {
 					if ( $a['interval'] == $b['interval'] ) {
 						return 0;
 					}
-
 					return ( $a['interval'] < $b['interval'] ) ? - 1 : 1;
 				}
 
@@ -122,7 +102,6 @@
 				}
 				?>
             </select>
-
             <p class="description"><?php _e( 'Select how often to receive statistical report.', 'wp-statistics' ); ?></p>
         </td>
     </tr>
@@ -134,34 +113,16 @@
 
         <td>
             <select name="wps_send_report" id="send-report">
-                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'send_report' ), '0' ); ?>><?php _e(
-						'Please select',
-						'wp-statistics'
-					); ?></option>
-                <option value="mail" <?php selected( WP_STATISTICS\Option::get( 'send_report' ), 'mail' ); ?>><?php _e(
-						'Email',
-						'wp-statistics'
-					); ?></option>
+                <option value="0" <?php selected( WP_STATISTICS\Option::get( 'send_report' ), '0' ); ?>><?php _e( 'Please select', 'wp-statistics' ); ?></option>
+                <option value="mail" <?php selected( WP_STATISTICS\Option::get( 'send_report' ), 'mail' ); ?>><?php _e( 'Email', 'wp-statistics' ); ?></option>
 				<?php if ( is_plugin_active( 'wp-sms/wp-sms.php' ) || is_plugin_active( 'wp-sms-pro/wp-sms.php' ) ) { ?>
-                    <option value="sms" <?php selected(
-						WP_STATISTICS\Option::get( 'send_report' ),
-						'sms'
-					); ?>><?php _e( 'SMS', 'wp-statistics' ); ?></option>
+                    <option value="sms" <?php selected( WP_STATISTICS\Option::get( 'send_report' ), 'sms' ); ?>><?php _e( 'SMS', 'wp-statistics' ); ?></option>
 				<?php } ?>
             </select>
 
-            <p class="description"><?php _e(
-					'Select delivery method for statistical report.',
-					'wp-statistics'
-				); ?></p>
-
+            <p class="description"><?php _e( 'Select delivery method for statistical report.', 'wp-statistics' ); ?></p>
 			<?php if ( ! is_plugin_active( 'wp-sms/wp-sms.php' ) ) { ?>
-                <p class="description note"><?php echo sprintf(
-						__( 'Note: To send SMS text messages please install the %s plugin.', 'wp-statistics' ),
-						'<a href="http://wordpress.org/extend/plugins/wp-sms/" target="_blank">' .
-						__( 'WordPress SMS', 'wp-statistics' ) .
-						'</a>'
-					); ?></p>
+                <p class="description note"><?php echo sprintf( __( 'Note: To send SMS text messages please install the %s plugin.', 'wp-statistics' ), '<a href="http://wordpress.org/extend/plugins/wp-sms/" target="_blank">' . __( 'WordPress SMS', 'wp-statistics' ) . '</a>' ); ?></p>
 			<?php } ?>
         </td>
     </tr>
@@ -172,36 +133,26 @@
         </td>
 
         <td>
-			<?php wp_editor(
-				WP_STATISTICS\Option::get( 'content_report' ),
-				'content-report',
-				array(
-					'media_buttons' => false,
-					'textarea_name' => 'wps_content_report',
-					'textarea_rows' => 5,
-				)
-			); ?>
+			<?php wp_editor( WP_STATISTICS\Option::get( 'content_report' ), 'content-report', array( 'media_buttons' => false, 'textarea_name' => 'wps_content_report', 'textarea_rows' => 5, ) ); ?>
             <p class="description"><?php _e( 'Enter the contents of the report.', 'wp-statistics' ); ?></p>
 
             <p class="description data">
-				<?php _e(
-					'Any shortcode supported by your installation of WordPress, include all shortcodes for WP Statistics (see the documentation for a list of codes available) are supported in the body of the message. Here are some examples:',
-					'wp-statistics'
-				); ?>
-                <br><br> &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Online User', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=usersonline]</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Today\'s Visitors', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=visitors time=today]</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Today\'s Visits', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=visits time=today]</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Yesterday\'s Visitors', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=visitors time=yesterday]</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Yesterday\'s Visits', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=visits time=yesterday]</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Total Visitors', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=visitors time=total]</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<?php _e( 'Total Visits', 'wp-statistics' ); ?>: <code>[wpstatistics
-                    stat=visits time=total]</code><br>
+				<?php _e( 'Any shortcode supported by your installation of WordPress, include all shortcodes for WP Statistics (see the documentation for a list of codes available) are supported in the body of the message. Here are some examples:', 'wp-statistics' ); ?>
+                <br><br>&nbsp;
+				<?php _e( 'Online User', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=usersonline]</code><br>
+				<?php _e( 'Today\'s Visitors', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=visitors time=today]</code><br>
+				<?php _e( 'Today\'s Visits', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=visits time=today]</code><br>
+				<?php _e( 'Yesterday\'s Visitors', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=visitors time=yesterday]</code><br>
+				<?php _e( 'Yesterday\'s Visits', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=visits time=yesterday]</code><br>
+				<?php _e( 'Total Visitors', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=visitors time=total]</code><br>
+				<?php _e( 'Total Visits', 'wp-statistics' ); ?>:
+                <code>[wpstatistics stat=visits time=total]</code><br>
             </p>
         </td>
     </tr>
@@ -218,7 +169,6 @@
         <td>
             <input id="admin-notices" type="checkbox" value="1" name="wps_admin_notices" <?php echo WP_STATISTICS\Option::get( 'admin_notices' ) == true ? "checked='checked'" : ''; ?>>
             <label for="admin-notices"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-
             <p class="description"><?php _e( 'Show all notices and suggestion from WP-Statistics in the admin.', 'wp-statistics' ); ?></p>
         </td>
     </tr>

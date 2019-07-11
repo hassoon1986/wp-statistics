@@ -9,7 +9,6 @@
             <th scope="row">
 				<?php _e( 'Memory usage in PHP', 'wp-statistics' ); ?>:
             </th>
-
             <td>
                 <strong><?php echo size_format( memory_get_usage(), 3 ); ?></strong>
                 <p class="description"><?php _e( 'Memory usage in PHP', 'wp-statistics' ); ?></p>
@@ -32,8 +31,7 @@
 			?>
             <tr valign="top">
                 <th scope="row">
-					<?php echo sprintf( __( 'Number of rows in the %s table', 'wp-statistics' ), '<code>' . $table_name . '</code>' ); ?>
-                    :
+					<?php echo sprintf( __( 'Number of rows in the %s table', 'wp-statistics' ), '<code>' . $table_name . '</code>' ); ?>:
                 </th>
                 <td>
                     <strong><?php echo number_format_i18n( $number_row ); ?></strong> <?php echo _n( 'Row', 'Rows', number_format_i18n( $number_row ), 'wp-statistics' ); ?>
@@ -97,7 +95,6 @@
 					} else {
 						_e( 'No', 'wp-statistics' );
 					} ?></strong>
-
                 <p class="description"><?php _e( 'Is PHP compiled with IPv6 support. You may see warning messages in your PHP log if it is not and you receive HTTP headers with IPv6 addresses in them.', 'wp-statistics' ); ?></p>
             </td>
         </tr>

@@ -269,7 +269,6 @@
                     <option value="0"><?php _e( 'Please select', 'wp-statistics' ); ?></option>
 					<?php
 					$agents = wp_statistics_ua_list();
-
 					foreach ( $agents as $agent ) {
 						$aid = preg_replace( "/[^a-zA-Z]/", "", $agent );
 						echo "<option value='$agent' id='agent-" . $aid . "-id'>" . $agent . "</option>";

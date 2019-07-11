@@ -40,11 +40,7 @@
 
             <td>
                 <input id="hash-ips-submit" class="button button-primary" type="button" value="<?php _e( 'Update Now!', 'wp-statistics' ); ?>" name="hash-ips-submit">
-
-                <p class="description"><?php _e(
-						'Replace IP addresses in the database with hash values, you will not be able to recover the IP addresses in the future to populate location information afterwards and this may take a while',
-						'wp-statistics'
-					); ?></p>
+                <p class="description"><?php _e( 'Replace IP addresses in the database with hash values, you will not be able to recover the IP addresses in the future to populate location information afterwards and this may take a while', 'wp-statistics' ); ?></p>
             </td>
         </tr>
 

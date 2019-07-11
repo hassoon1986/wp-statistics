@@ -2,7 +2,8 @@
     <tbody>
     <tr valign="top">
         <td scope="row" align="center">
-            <img src="<?php echo plugins_url( 'wp-statistics/assets/images/logo-250.png' ); ?>"></td>
+            <img src="<?php echo plugins_url( 'wp-statistics/assets/images/logo-250.png' ); ?>" alt="WP-Statistics">
+        </td>
     </tr>
 
     <tr valign="top">
@@ -13,10 +14,7 @@
 
     <tr valign="top">
         <td scope="row" align="center">
-			<?php echo sprintf(
-				__( 'This product includes GeoLite2 data created by %s.', 'wp-statistics' ),
-				'<a href="http://www.maxmind.com" target=_blank>MaxMind</a>'
-			); ?>
+			<?php echo sprintf( __( 'This product includes GeoLite2 data created by %s.', 'wp-statistics' ), '<a href="http://www.maxmind.com" target=_blank>MaxMind</a>' ); ?>
         </td>
     </tr>
 
@@ -56,14 +54,7 @@
     </tr>
 
     <tr valign="top">
-        <td scope="row" colspan="2"><?php echo sprintf(
-				__(
-					'WP Statistics supports internationalization. Please visit %sWP Statistics translations page%s to help translation.',
-					'wp-statistics'
-				),
-				'<a href="https://wp-statistics.com/translations/" target="_blank">',
-				'</a>'
-			); ?></td>
+        <td scope="row" colspan="2"><?php echo sprintf( __( 'WP Statistics supports internationalization. Please visit %sWP Statistics translations page%s to help translation.', 'wp-statistics' ), '<a href="https://wp-statistics.com/translations/" target="_blank">', '</a>' ); ?></td>
     </tr>
 
     <tr valign="top">
@@ -72,69 +63,27 @@
 
     <tr valign="top">
         <td scope="row" colspan="2">
-            <p><?php _e(
-					"We're sorry you're having problem with WP Statistics and we're happy to help out. Here are a few things to do before contacting us:",
-					'wp-statistics'
-				); ?></p>
+            <p><?php _e( "We're sorry you're having problem with WP Statistics and we're happy to help out. Here are a few things to do before contacting us:", 'wp-statistics' ); ?></p>
 
             <ul style="list-style-type: disc; list-style-position: inside; padding-left: 25px;">
-                <li><?php echo sprintf(
-						__( 'Have you read the %sFAQs%s?', 'wp-statistics' ),
-						'<a title="' .
-						__( 'FAQs', 'wp-statistics' ) .
-						'" href="http://wp-statistics.com/category/faq/" target="_blank">',
-						'</a>'
-					); ?></li>
-                <li><?php echo sprintf(
-						__( 'Have you read the %sdocumentation%s?', 'wp-statistics' ),
-						'<a title="' .
-						__( 'Documentation', 'wp-statistics' ) .
-						'" href="http://wp-statistics.com/category/documentation/">',
-						'</a>'
-					); ?></li>
-                <li><?php echo sprintf(
-						__( 'Have you search the %ssupport forum%s for a similar issue?', 'wp-statistics' ),
-						'<a href="http://wordpress.org/support/plugin/wp-statistics" target="_blank">',
-						'</a>'
-					); ?></li>
-                <li><?php _e(
-						'Have you search the Internet for any error messages you are receiving?',
-						'wp-statistics'
-					); ?></li>
+                <li><?php echo sprintf( __( 'Have you read the %sFAQs%s?', 'wp-statistics' ), '<a title="' . __( 'FAQs', 'wp-statistics' ) . '" href="http://wp-statistics.com/category/faq/" target="_blank">', '</a>' ); ?></li>
+                <li><?php echo sprintf( __( 'Have you read the %sdocumentation%s?', 'wp-statistics' ), '<a title="' . __( 'Documentation', 'wp-statistics' ) . '" href="http://wp-statistics.com/category/documentation/">', '</a>' ); ?></li>
+                <li><?php echo sprintf( __( 'Have you search the %ssupport forum%s for a similar issue?', 'wp-statistics' ), '<a href="http://wordpress.org/support/plugin/wp-statistics" target="_blank">', '</a>' ); ?></li>
+                <li><?php _e( 'Have you search the Internet for any error messages you are receiving?', 'wp-statistics' ); ?></li>
                 <li><?php _e( 'Make sure you have access to your PHP error logs.', 'wp-statistics' ); ?></li>
             </ul>
-
             <p><?php _e( 'And a few things to double-check:', 'wp-statistics' ); ?></p>
 
             <ul style="list-style-type: disc; list-style-position: inside; padding-left: 25px;">
                 <li><?php _e( 'How\'s your memory_limit in php.ini?', 'wp-statistics' ); ?></li>
-                <li><?php _e(
-						'Have you tried disabling any other plugins you may have installed?',
-						'wp-statistics'
-					); ?></li>
+                <li><?php _e( 'Have you tried disabling any other plugins you may have installed?', 'wp-statistics' ); ?></li>
                 <li><?php _e( 'Have you tried using the default WordPress theme?', 'wp-statistics' ); ?></li>
                 <li><?php _e( 'Have you double checked the plugin settings?', 'wp-statistics' ); ?></li>
                 <li><?php _e( 'Do you have all the required PHP extensions installed?', 'wp-statistics' ); ?></li>
-                <li><?php echo __(
-					               'Are you getting a blank or incomplete page displayed in your browser?',
-					               'wp-statistics'
-				               ) .
-				               ' ' .
-				               __(
-					               'Did you view the source for the page and check for any fatal errors?',
-					               'wp-statistics'
-				               ); ?></li>
+                <li><?php echo __( 'Are you getting a blank or incomplete page displayed in your browser?', 'wp-statistics' ) . ' ' . __( 'Did you view the source for the page and check for any fatal errors?', 'wp-statistics' ); ?></li>
                 <li><?php _e( 'Have you checked your PHP and web server error logs?', 'wp-statistics' ); ?></li>
             </ul>
-
-            <p><?php _e( 'Still not having any luck?', 'wp-statistics' ); ?><?php echo sprintf(
-					__(
-						'Then please open a new thread on the %sWordPress.org support forum%s and we\'ll respond as soon as possible.',
-						'wp-statistics'
-					),
-					'<a href="http://wordpress.org/support/plugin/wp-statistics" target="_blank">',
-					'</a>'
-				); ?></p>
+            <p><?php _e( 'Still not having any luck?', 'wp-statistics' ); ?><?php echo sprintf( __( 'Then please open a new thread on the %sWordPress.org support forum%s and we\'ll respond as soon as possible.', 'wp-statistics' ), '<a href="http://wordpress.org/support/plugin/wp-statistics" target="_blank">', '</a>' ); ?></p>
         </td>
     </tr>
 
