@@ -263,6 +263,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Top Visitors Today', 'wp-statistics' ),
 				'page_url' => 'top-visitors',
+				'method'   => 'top_visitors'
 			),
 			'exclusions'   => array(
 				'require'  => array( 'record_exclusions' => true ),
