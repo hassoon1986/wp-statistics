@@ -324,3 +324,15 @@ wps_js.getLinkParams = function (param, link = false) {
     let v = link.match(new RegExp('(?:[\?\&]' + param + '=)([^&]+)'));
     return v ? v[1] : null;
 };
+
+/**
+ * Sum array Of Item
+ *
+ * @param array
+ * @returns {*}
+ */
+wps_js.sum = function(array) {
+    return array.reduce(function (a, b) {
+        return a + b;
+    }, 0);
+};

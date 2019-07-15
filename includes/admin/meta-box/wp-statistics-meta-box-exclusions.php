@@ -73,7 +73,8 @@ class exclusions {
 		);
 
 		// Set List Of Data
-		$exclusive_list = Exclusion::exclusion_list();
+		$exclusive_list     = Exclusion::exclusion_list();
+		$data['exclusions'] = $exclusive_list;
 		foreach ( $exclusive_list as $key => $name ) {
 			$total_item = 0;
 			$list_item  = array();
@@ -82,7 +83,6 @@ class exclusions {
 			}
 			$data['value'][ $key ] = $list_item;
 			$data['total'][ $key ] = $total_item;
-			$data['name'][]        = $name;
 		}
 
 		// Response
