@@ -270,6 +270,7 @@ class Menus {
 				'sub'      => 'overview',
 				'title'    => __( 'Exclusions', 'wp-statistics' ),
 				'page_url' => 'exclusions',
+				'method'   => 'exclusions',
 				'break'    => true,
 			),
 			'optimize'     => array(
