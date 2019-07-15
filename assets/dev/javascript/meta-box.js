@@ -91,7 +91,7 @@ wps_js.meta_box_button = function (key) {
     // Check Page Url Button
     if (wps_js.is_active('more_btn')) {
         if ("page_url" in meta_box_info) {
-            jQuery(`<button class="handlediv button-link wps-more"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 7%;" ` : '') + ` type="button" onclick="location.href = '` + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
+            jQuery(`<button class="handlediv button-link wps-more"` + (wps_js.is_active('gutenberg') ? ` style="${gutenberg_style}right: 7%;" ` : '') + ` type="button" onclick="location.href = '` + wps_js.global.admin_url + 'admin.php?page=' + meta_box_info.page_url + `';"><span class="dashicons dashicons-external"></span> <span class="screen-reader-text">` + wps_js._('more_detail') + `</span></button>`).insertAfter("#" + wps_js.getMetaBoxKey(key) + " button[class*=wps-refresh]");
         }
     }
 };

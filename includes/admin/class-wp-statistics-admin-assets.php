@@ -272,9 +272,9 @@ class Admin_Assets {
 		);
 
 		// Rest-API Meta Box Url
-		$list['meta_box_api']   = get_rest_url( null, RestAPI::$namespace . '/metabox' );
-		$list['ajax_url']       = admin_url( 'admin-ajax.php' );
+		$list['admin_url']      = admin_url();
 		$list['rest_api_nonce'] = wp_create_nonce( 'wp_rest' );
+		$list['meta_box_api']   = get_rest_url( null, RestAPI::$namespace . '/metabox' );
 
 		// Meta Box List
 		$meta_boxes_list    = Meta_Box::getList();
@@ -283,7 +283,7 @@ class Admin_Assets {
 
 			// Convert Page Url
 			if ( isset( $value['page_url'] ) ) {
-				$value['page_url'] = Menus::admin_url( $value['page_url'] );
+				$value['page_url'] = Menus::get_page_slug( $value['page_url'] );
 			}
 
 			// Add Post ID Params To Post Widget Link

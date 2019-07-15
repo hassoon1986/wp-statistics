@@ -29,7 +29,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
 
                     // Create Ajax
                     jQuery.ajax({
-                        url: wps_js.global.ajax_url,
+                        url: wps_js.global.admin_url + 'admin-ajax.php',
                         type: 'GET',
                         dataType: "json",
                         data: params,

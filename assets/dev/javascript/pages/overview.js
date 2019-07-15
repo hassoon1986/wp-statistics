@@ -19,7 +19,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
         jQuery(document).on('click', '.close-overview-ads', function () {
             jQuery("#wps_overview_ads_postbox").fadeOut("normal");
             jQuery.ajax({
-                url: wps_js.global.ajax_url,
+                url: wps_js.global.admin_url + 'admin-ajax.php',
                 type: 'get',
                 data: {
                     'action': 'wp_statistics_close_overview_ads',
@@ -33,7 +33,7 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
         // Add Click Close Donate Notice
         jQuery('#wps-donate-notice').on('click', '.notice-dismiss', function () {
             jQuery.ajax({
-                url: wps_js.global.ajax_url,
+                url: wps_js.global.admin_url + 'admin-ajax.php',
                 type: 'get',
                 data: {
                     'action': 'wp_statistics_close_notice',
