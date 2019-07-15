@@ -8,28 +8,30 @@ class Exclusion {
 	/**
 	 * Get Exclusion List
 	 *
-	 * @var array
+	 * @return array
 	 */
-	public static $exclusion_list = array(
-		'Ajax',
-		'Cron job',
-		'Crawler Detect',
-		'Robot',
-		'Broken Link',
-		'IP Match',
-		'Self Referral',
-		'Login Page',
-		'Admin Page',
-		'Referrer Spam',
-		'Feed',
-		'404',
-		'Excluded URL',
-		'User Role',
-		'Host name',
-		'GeoIP',
-		'Honeypot',
-		'Robot threshold',
-	);
+	public static function exclusion_list() {
+		return array(
+			'ajax'            => __( 'Ajax', 'wp-statistics' ),
+			'cronjob'         => __( 'Cron job', 'wp-statistics' ),
+			'CrawlerDetect'   => __( 'Crawler Detect', 'wp-statistics' ),
+			'robot'           => __( 'Robot', 'wp-statistics' ),
+			'BrokenFile'      => __( 'Broken Link', 'wp-statistics' ),
+			'ip match'        => __( 'IP Match', 'wp-statistics' ),
+			'self referral'   => __( 'Self Referral', 'wp-statistics' ),
+			'login page'      => __( 'Login Page', 'wp-statistics' ),
+			'admin page'      => __( 'Admin Page', 'wp-statistics' ),
+			'referrer_spam'   => __( 'Referrer Spam', 'wp-statistics' ),
+			'feed'            => __( 'Feed', 'wp-statistics' ),
+			'404'             => __( '404', 'wp-statistics' ),
+			'excluded url'    => __( 'Excluded URL', 'wp-statistics' ),
+			'user role'       => __( 'User Role', 'wp-statistics' ),
+			'hostname'        => __( 'Host name', 'wp-statistics' ),
+			'geoip'           => __( 'GeoIP', 'wp-statistics' ),
+			'honeypot'        => __( 'Honeypot', 'wp-statistics' ),
+			'robot_threshold' => __( 'Robot threshold', 'wp-statistics' )
+		);
+	}
 
 	/**
 	 * Check to see if the user wants us to record why we're excluding hits.
@@ -49,7 +51,7 @@ class Exclusion {
 		$exclude = array( 'exclusion_match' => false, 'exclusion_reason' => '' );
 
 		// Get List Of Exclusion WP-Statistics
-		$exclusion_list = apply_filters( 'wp_statistics_exclusion_list', self::$exclusion_list );
+		$exclusion_list = apply_filters( 'wp_statistics_exclusion_list', array_keys( Exclusion::exclusion_list() ) );
 
 		// Check Exclusion
 		foreach ( $exclusion_list as $list ) {
@@ -102,7 +104,7 @@ class Exclusion {
 	/**
 	 * Detect if we're running an WordPress CronJob.
 	 */
-	public static function exclusion_cron_job() {
+	public static function exclusion_cronjob() {
 		return ( defined( 'DOING_CRON' ) && DOING_CRON === true ) || ( function_exists( 'wp_doing_cron' ) && wp_doing_cron() === true );
 	}
 
@@ -212,7 +214,7 @@ class Exclusion {
 	/**
 	 * Detect if Crawler.
 	 */
-	public static function exclusion_crawler_detect() {
+	public static function exclusion_crawlerdetect() {
 		$CrawlerDetect = new CrawlerDetect;
 		if ( $CrawlerDetect->isCrawler() ) {
 			return true;
@@ -285,7 +287,7 @@ class Exclusion {
 	/**
 	 * Detect if Broken Link.
 	 */
-	public static function exclusion_broken_link() {
+	public static function exclusion_brokenfile() {
 		// Check is 404
 		if ( is_404() ) {
 
@@ -372,7 +374,7 @@ class Exclusion {
 	/**
 	 * Detect if Exclude Host name.
 	 */
-	public static function exclusion_host_name() {
+	public static function exclusion_hostname() {
 		global $WP_Statistics;
 
 		// Get Host name List
@@ -409,5 +411,4 @@ class Exclusion {
 
 		return false;
 	}
-
 }
