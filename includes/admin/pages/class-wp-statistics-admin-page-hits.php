@@ -42,7 +42,7 @@ class hits_page {
 		$args['total_visitors'] = ( Option::get( 'visitors' ) ? wp_statistics_visitor( 'total', null, true ) : 0 );
 
 		// Show Template Page
-		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/hits', 'layout/postbox.toggle', 'layout/footer' ), $args );
+		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/hits', 'layout/footer' ), $args );
 	}
 
 }

@@ -89,5 +89,4 @@ class exclusions {
 		return $data;
 	}
 
-
 }
