@@ -116,7 +116,7 @@ class Admin_Assets {
 		}
 
 		// Load Select2
-		if ( Menus::in_page( 'visitors' ) ) {
+		if ( Menus::in_page( 'visitors' ) || ( Menus::in_page( 'pages' ) and isset( $_GET['ID'] ) ) ) {
 			wp_enqueue_style( self::$prefix . '-select2', self::url( 'select2/select2.min.css' ), array(), '4.0.7' );
 		}
 	}
@@ -149,7 +149,7 @@ class Admin_Assets {
 		}
 
 		// Load Select2
-		if ( Menus::in_page( 'visitors' ) ) {
+		if ( Menus::in_page( 'visitors' ) || ( Menus::in_page( 'pages' ) and isset( $_GET['ID'] ) ) ) {
 			wp_enqueue_script( self::$prefix . '-select2', self::url( 'select2/select2.full.min.js' ), array( 'jquery' ), '4.0.7' );
 		}
 
