@@ -243,7 +243,10 @@ class Install {
 		require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-visitor.php';
 
 		// Create Default Option
-		update_option( Option::$opt_name, Option::defaultOption() );
+		$exist_option = get_option( Option::$opt_name );
+		if ( $exist_option === false || ( isset( $exist_option ) and ! is_array( $exist_option ) ) ) {
+			update_option( Option::$opt_name, Option::defaultOption() );
+		}
 	}
 
 	/**
