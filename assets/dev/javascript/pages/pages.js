@@ -22,6 +22,17 @@ if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.reque
         // Run MetaBox
         wps_js.run_meta_box('pages-chart', params, false);
 
+        // Set Select2 For List
+        if (wps_js.exist_tag("form#wp-statistics-select-pages")) {
+            wps_js.select2();
+        }
+
+        // Submit Change Page Select Form
+        jQuery(document).on('change', 'select[name=ID]', function () {
+            jQuery("span.submit-form").html(wps_js._('please_wait'));
+            jQuery(this).closest('form').trigger('submit');
+        });
+
     } else {
 
         // Check Pagination

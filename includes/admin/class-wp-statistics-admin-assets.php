@@ -287,8 +287,8 @@ class Admin_Assets {
 			}
 
 			// Add Post ID Params To Post Widget Link
-			if ( $meta_box == "post" and isset( $post ) and in_array( $post->post_status, array( "publish", "private" ) ) ) {
-				$value['page_url'] = add_query_arg( array( 'ID' => $post->ID, 'type' => Pages::get_post_type( $post_id ) ), $value['page_url'] );
+			if ( $meta_box == "post" and isset( $post ) and isset( $post->ID ) and in_array( $post->post_status, array( "publish", "private" ) ) ) {
+				$value['page_url'] = add_query_arg( array( 'ID' => $post->ID, 'type' => Pages::get_post_type( $post->ID ) ), $value['page_url'] );
 			}
 
 			// Remove unnecessary params

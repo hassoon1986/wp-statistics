@@ -411,6 +411,6 @@ class Pages {
 	 */
 	public static function get_post_type( $post_id ) {
 		$post_type = get_post_type( $post_id );
-		return ( in_array( $post_type, array( "page", "product" ) ) ? $post_type : "post" );
+		return ( in_array( $post_type, array( "page", "product", "attachment" ) ) ? $post_type : "post" );
 	}
 }
