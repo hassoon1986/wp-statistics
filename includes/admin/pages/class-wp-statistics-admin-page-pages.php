@@ -84,6 +84,9 @@ class pages_page {
 		// Get Date-Range
 		$args['DateRang'] = Admin_Template::DateRange();
 
+		// List Of Pages From custom Type
+		$args['lists'] = array();
+
 		// Show Template Page
 		Admin_Template::get_template( array( 'layout/header', 'layout/title', 'layout/date.range', 'pages/page-chart', 'layout/footer' ), $args );
 	}

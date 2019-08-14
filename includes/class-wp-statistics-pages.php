@@ -384,7 +384,7 @@ class Pages {
 				'title'     => $page_info['title'],
 				'link'      => $page_info['link'],
 				'str_url'   => htmlentities( urldecode( $item->uri ), ENT_QUOTES ),
-				'hits_page' => Menus::admin_url( 'pages', array( 'page-uri' => htmlentities( $item->uri, ENT_QUOTES ) ) ), # Convert to page-id in next Version [//TODO]
+				'hits_page' => Menus::admin_url( 'pages', array( 'ID' => $item->id, 'type' => $item->type ) ),
 				'number'    => number_format_i18n( $item->count_sum )
 			);
 		}
@@ -401,5 +401,16 @@ class Pages {
 	public static function TotalCount( $group_by = 'uri' ) {
 		global $wpdb;
 		return $wpdb->get_var( "SELECT COUNT(*) FROM `" . DB::table( 'pages' ) . "` `pages` GROUP BY `{$group_by}`" );
+	}
+
+	/**
+	 * Get Post Type by ID
+	 *
+	 * @param $post_id
+	 * @return string
+	 */
+	public static function get_post_type( $post_id ) {
+		$post_type = get_post_type( $post_id );
+		return ( in_array( $post_type, array( "page", "product" ) ) ? $post_type : "post" );
 	}
 }

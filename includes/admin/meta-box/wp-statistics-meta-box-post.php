@@ -47,10 +47,7 @@ class post {
 		}
 
 		// Prepare State
-		$post_type = get_post_type( $post->ID );
-		if ( $post_type != "page" and $post_type != "product" ) {
-			$post_type = 'post';
-		}
+		$post_type = \WP_STATISTICS\Pages::get_post_type( $post->ID );
 
 		// Get Number Search every Days
 		foreach ( array_keys( $days_list ) as $d ) {
