@@ -720,4 +720,259 @@ class Helper {
 		return $taxonomies;
 	}
 
+	/**
+	 * Create Condition Where Time in MySql
+	 *
+	 * @param string $field : date column name in database table
+	 * @param string $time : Time return
+	 * @param array $range : an array contain two Date e.g : array('start' => 'xx-xx-xx', 'end' => 'xx-xx-xx', 'is_day' => true, 'current_date' => true)
+	 *
+	 * ---- Time Range -----
+	 * today
+	 * yesterday
+	 * week
+	 * month
+	 * year
+	 * total
+	 * “-x” (i.e., “-10” for the past 10 days)
+	 * ----------------------
+	 *
+	 * @return string|bool
+	 */
+	public static function mysql_time_conditions( $field = 'date', $time = 'total', $range = array() ) {
+		global $WP_Statistics;
+
+		//Get Current Date From WP
+		$current_date = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d' );
+
+		//Create Field Sql
+		$field_sql = function ( $time ) use ( $current_date, $field, $WP_Statistics, $range ) {
+			$is_current     = array_key_exists( 'current_date', $range );
+			$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', (int) $time );
+			return "`$field` " . ( $is_current === true ? '=' : 'BETWEEN' ) . " '{$getCurrentDate}'" . ( $is_current === false ? " AND '{$current_date}'" : "" );
+		};
+
+		//Check Time
+		switch ( $time ) {
+			case 'today':
+				$where = "`$field` = '{$current_date}'";
+				break;
+			case 'yesterday':
+				$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', - 1 );
+				$where          = "`$field` = '{$getCurrentDate}'";
+				break;
+			case 'week':
+				$where = $field_sql( - 7 );
+				break;
+			case 'month':
+				$where = $field_sql( - 30 );
+				break;
+			case 'year':
+				$where = $field_sql( - 365 );
+				break;
+			case 'total':
+				$where = "";
+				break;
+			default:
+				if ( array_key_exists( 'is_day', $range ) ) {
+					//Check a day
+					if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+						$where = "`$field` = '{$time}'";
+					} else {
+						$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+						$where          = "`$field` = '{$getCurrentDate}'";
+					}
+				} elseif ( array_key_exists( 'start', $range ) and array_key_exists( 'end', $range ) ) {
+					//Check Between Two Time
+					$getCurrentDate    = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['start'] ) );
+					$getCurrentEndDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['end'] ) );
+					$where             = "`$field` BETWEEN '{$getCurrentDate}' AND '{$getCurrentEndDate}'";
+				} else {
+					//Check From a Date To Now
+					$where = $field_sql( $time );
+				}
+		}
+
+		return $where;
+	}
+
+	/**
+	 * Easy U-sort Array
+	 *
+	 * @param $a
+	 * @param $b
+	 * @return bool
+	 */
+	public static function compare_uri_hits( $a, $b ) {
+		return $a[1] < $b[1];
+	}
+
+	/**
+	 * Return Number Posts in WordPress
+	 *
+	 * @return int
+	 */
+	public static function getCountPosts() {
+		$count_posts = wp_count_posts( 'post' );
+
+		$ret = 0;
+		if ( is_object( $count_posts ) ) {
+			$ret = $count_posts->publish;
+		}
+		return $ret;
+	}
+
+	/**
+	 * Get Count Pages WordPress
+	 *
+	 * @return int
+	 */
+	public static function getCountPages() {
+		$count_pages = wp_count_posts( 'page' );
+
+		$ret = 0;
+		if ( is_object( $count_pages ) ) {
+			$ret = $count_pages->publish;
+		}
+		return $ret;
+	}
+
+	/**
+	 * Get All WordPress Count
+	 *
+	 * @return mixed
+	 */
+	public static function getCountComment() {
+		global $wpdb;
+
+		$countcomms = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved = '1'" );
+		return $countcomms;
+	}
+
+	/**
+	 * Get Count Comment Spam
+	 *
+	 * @return mixed
+	 */
+	public static function getCountSpam() {
+		return number_format_i18n( get_option( 'akismet_spam_count' ) );
+	}
+
+	/**
+	 * Get Count All WordPress Users
+	 *
+	 * @return mixed
+	 */
+	public static function getCountUsers() {
+		$result = count_users();
+		return $result['total_users'];
+	}
+
+	/**
+	 * Return the last date a post was published on your site.
+	 *
+	 * @return string
+	 */
+	public static function getLastPostDate() {
+		global $wpdb;
+
+		$db_date     = $wpdb->get_var( "SELECT post_date FROM {$wpdb->posts} WHERE post_type='post' AND post_status='publish' ORDER BY post_date DESC LIMIT 1" );
+		$date_format = get_option( 'date_format' );
+		return TimeZone::getCurrentDate_i18n( $date_format, $db_date, false );
+	}
+
+	/**
+	 * Returns the average number of days between posts on your site.
+	 *
+	 * @param bool $days
+	 * @return float
+	 */
+	public static function getAveragePost( $days = false ) {
+		global $wpdb;
+
+		$get_first_post = $wpdb->get_var( "SELECT post_date FROM {$wpdb->posts} WHERE post_status = 'publish' ORDER BY post_date LIMIT 1" );
+		$get_total_post = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type = 'post'" );
+
+		$days_spend = intval(
+			( time() - strtotime( $get_first_post ) ) / 86400
+		); // 86400 = 60 * 60 * 24 = number of seconds in a day
+
+		if ( $days == true ) {
+			if ( $get_total_post == 0 ) {
+				$get_total_post = 1;
+			} // Avoid divide by zero errors.
+
+			return round( $days_spend / $get_total_post, 0 );
+		} else {
+			if ( $days_spend == 0 ) {
+				$days_spend = 1;
+			} // Avoid divide by zero errors.
+
+			return round( $get_total_post / $days_spend, 2 );
+		}
+	}
+
+	/**
+	 * Returns the average number of days between comments on your site.
+	 *
+	 * @param bool $days
+	 * @return float
+	 */
+	public static function getAverageComment( $days = false ) {
+
+		global $wpdb;
+
+		$get_first_comment = $wpdb->get_var( "SELECT comment_date FROM {$wpdb->comments} ORDER BY comment_date LIMIT 1" );
+		$get_total_comment = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved = '1'" );
+
+		$days_spend = intval(
+			( time() - strtotime( $get_first_comment ) ) / 86400
+		); // 86400 = 60 * 60 * 24 = number of seconds in a day
+
+		if ( $days == true ) {
+			if ( $get_total_comment == 0 ) {
+				$get_total_comment = 1;
+			} // Avoid divide by zero errors.
+
+			return round( $days_spend / $get_total_comment, 0 );
+		} else {
+			if ( $days_spend == 0 ) {
+				$days_spend = 1;
+			} // Avoid divide by zero errors.
+
+			return round( $get_total_comment / $days_spend, 2 );
+		}
+	}
+
+	/**
+	 * Returns the average number of days between user registrations on your site.
+	 *
+	 * @param bool $days
+	 * @return float
+	 */
+	public static function getAverageRegisterUser( $days = false ) {
+
+		global $wpdb;
+
+		$get_first_user = $wpdb->get_var( "SELECT `user_registered` FROM {$wpdb->users} ORDER BY user_registered LIMIT 1" );
+		$get_total_user = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users}" );
+
+		$days_spend = intval(
+			( time() - strtotime( $get_first_user ) ) / 86400
+		);
+
+		if ( $days == true ) {
+			if ( $get_total_user == 0 ) {
+				$get_total_user = 1;
+			}
+
+			return round( $days_spend / $get_total_user, 0 );
+		} else {
+			if ( $days_spend == 0 ) {
+				$days_spend = 1;
+			}
+
+			return round( $get_total_user / $days_spend, 2 );
+		}
+	}
 }

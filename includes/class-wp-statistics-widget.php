@@ -117,63 +117,63 @@ class WP_Statistics_Widget extends \WP_Widget {
 		if ( $widget_options['tp_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Total Posts', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_countposts() );
+			echo number_format_i18n( WP_STATISTICS\Helper::getCountPosts() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['tpg_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Total Pages', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_countpages() );
+			echo number_format_i18n( \WP_STATISTICS\Helper::getCountPages() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['tc_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Total Comments', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_countcomment() );
+			echo number_format_i18n( \WP_STATISTICS\Helper::getCountComment() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['ts_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Total Spams', 'wp-statistics' ) . ': </label>';
-			echo wp_statistics_countspam();
+			echo \WP_STATISTICS\Helper::getCountSpam();
 			echo '</li>';
 		}
 
 		if ( $widget_options['tu_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Total Users', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_countusers() );
+			echo number_format_i18n( \WP_STATISTICS\Helper::getCountUsers() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['ap_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Post Average', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_average_post() );
+			echo number_format_i18n( \WP_STATISTICS\Helper::getAveragePost() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['ac_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Comment Average', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_average_comment() );
+			echo number_format_i18n( \WP_STATISTICS\Helper::getAverageComment() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['au_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'User Average', 'wp-statistics' ) . ': </label>';
-			echo number_format_i18n( wp_statistics_average_registeruser() );
+			echo number_format_i18n( \WP_STATISTICS\Helper::getAverageRegisterUser() );
 			echo '</li>';
 		}
 
 		if ( $widget_options['lpd_widget'] ) {
 			echo '<li>';
 			echo '<label>' . __( 'Last Post Date', 'wp-statistics' ) . ': </label>';
-			echo wp_statistics_lastpostdate();
+			echo \WP_STATISTICS\Helper::getLastPostDate();
 			echo '</li>';
 		}
 

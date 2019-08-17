@@ -76,39 +76,39 @@ class ShortCode {
 				break;
 
 			case 'postcount':
-				$result = wp_statistics_countposts();
+				$result = Helper::getCountPosts();
 				break;
 
 			case 'pagecount':
-				$result = wp_statistics_countpages();
+				$result = Helper::getCountPages();
 				break;
 
 			case 'commentcount':
-				$result = wp_statistics_countcomment();
+				$result = Helper::getCountComment();
 				break;
 
 			case 'spamcount':
-				$result = wp_statistics_countspam();
+				$result = Helper::getCountSpam();
 				break;
 
 			case 'usercount':
-				$result = wp_statistics_countusers();
+				$result = Helper::getCountUsers();
 				break;
 
 			case 'postaverage':
-				$result = wp_statistics_average_post();
+				$result = Helper::getAveragePost();
 				break;
 
 			case 'commentaverage':
-				$result = wp_statistics_average_comment();
+				$result = Helper::getAverageComment();
 				break;
 
 			case 'useraverage':
-				$result = wp_statistics_average_registeruser();
+				$result = Helper::getAverageRegisterUser();
 				break;
 
 			case 'lpd':
-				$result       = wp_statistics_lastpostdate();
+				$result       = Helper::getLastPostDate();
 				$formatnumber = false;
 				break;
 		}

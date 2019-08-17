@@ -413,4 +413,21 @@ class Pages {
 		$post_type = get_post_type( $post_id );
 		return ( in_array( $post_type, array( "page", "product", "attachment" ) ) ? $post_type : "post" );
 	}
+
+	/**
+	 * Convert Url to Page ID
+	 *
+	 * @param $uri
+	 * @return int
+	 */
+	public static function uri_to_id( $uri ) {
+		global $wpdb;
+		$sql    = $wpdb->prepare( "SELECT id FROM `" . DB::table( 'pages' ) . "` WHERE `uri` = %s AND id > 0 ORDER BY date DESC", $uri );
+		$result = $wpdb->get_var( $sql );
+		if ( $result == 0 ) {
+			$result = 0;
+		}
+
+		return $result;
+	}
 }

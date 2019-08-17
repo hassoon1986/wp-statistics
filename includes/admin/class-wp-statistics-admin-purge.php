@@ -121,7 +121,7 @@ class Purge {
 								'value'    => $historical,
 								'category' => 'uri',
 								'uri'      => $row->uri,
-								'page_id'  => wp_statistics_uri_to_id( $row->uri ),
+								'page_id'  => Pages::uri_to_id( $row->uri ),
 							)
 						);
 					}

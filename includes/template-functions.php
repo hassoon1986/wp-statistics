@@ -4,6 +4,70 @@ use WP_STATISTICS\Country;
 use WP_STATISTICS\Pages;
 
 /**
+ * Get Current User IP
+ */
+function wp_statistics_get_user_ip() {
+	return \WP_STATISTICS\IP::getIP();
+}
+
+/**
+ * Get Current User Data
+ *
+ * @throws Exception
+ */
+function wp_statistics_get_current_user_data() {
+
+	// Get Current User country and City
+	$data = wp_statistics_get_user_location();
+
+	// Get Current User IP
+	$data['ip'] = wp_statistics_get_user_ip();
+
+	// Get User Agent contain Browser and Platform
+	$data['agent'] = \WP_STATISTICS\UserAgent::getUserAgent();
+
+	// Get User info if Registered in Wordpress
+	if ( \WP_STATISTICS\User::is_login() ) {
+		$data['user'] = \WP_STATISTICS\User::get();
+	}
+
+	// Return
+	return $data;
+}
+
+/**
+ * Get User Statistics Data By IP
+ *
+ * @param bool $ip
+ * @return array
+ * @throws Exception
+ */
+function wp_statistics_get_user_location( $ip = false ) {
+	$ip   = ( $ip === false ? wp_statistics_get_user_ip() : $ip );
+	$data = array(
+		'country' => '',
+		'city'    => '',
+	);
+
+	// Get user Country
+	if ( \WP_STATISTICS\GeoIP::active() ) {
+		$country         = \WP_STATISTICS\GeoIP::getCountry( $ip );
+		$data['country'] = array(
+			'code' => $country,
+			'name' => Country::getName( $country ),
+			'flag' => Country::flag( $country )
+		);
+	}
+
+	// Get User City
+	if ( \WP_STATISTICS\GeoIP::active( 'city' ) ) {
+		$data['city'] = \WP_STATISTICS\GeoIP::getCity( $ip );
+	}
+
+	return $data;
+}
+
+/**
  * Get Current Users online
  *
  * @param array $options
@@ -67,14 +131,23 @@ function wp_statistics_useronline( $options = array() ) {
 		 * e.g : Windows, iPad, Macintosh, Unknown, ..
 		 *
 		 */
-		'platform'     => 'all'
+		'platform'     => 'all',
+		/**
+		 * Return Of Data
+		 *
+		 * -- Acceptable values --
+		 * count -> Get number of user online
+		 * all   -> Get List of User Online data
+		 */
+		'return'       => 'count'
 	);
 
 	// Parse incoming $args into an array and merge it with $defaults
 	$arg = wp_parse_args( $options, $defaults );
 
 	//Basic SQL
-	$sql = "SELECT COUNT(*) FROM " . WP_STATISTICS\DB::table( 'useronline' );
+	$type_request = ( $arg['return'] == "all" ? '*' : 'COUNT(*)' );
+	$sql          = "SELECT {$type_request} FROM " . WP_STATISTICS\DB::table( 'useronline' );
 
 	//Check Where Condition
 	$where = false;
@@ -113,83 +186,7 @@ function wp_statistics_useronline( $options = array() ) {
 	}
 
 	//Return Number od user Online
-	return $wpdb->get_var( $sql );
-}
-
-/**
- * Create Condition Where Time in MySql
- *
- * @param string $field : date column name in database table
- * @param string $time : Time return
- * @param array $range : an array contain two Date e.g : array('start' => 'xx-xx-xx', 'end' => 'xx-xx-xx', 'is_day' => true, 'current_date' => true)
- *
- * ---- Time Range -----
- * today
- * yesterday
- * week
- * month
- * year
- * total
- * “-x” (i.e., “-10” for the past 10 days)
- * ----------------------
- *
- * @return string|bool
- */
-function wp_statistics_mysql_time_conditions( $field = 'date', $time = 'total', $range = array() ) {
-	global $WP_Statistics;
-
-	//Get Current Date From WP
-	$current_date = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d' );
-
-	//Create Field Sql
-	$field_sql = function ( $time ) use ( $current_date, $field, $WP_Statistics, $range ) {
-		$is_current     = array_key_exists( 'current_date', $range );
-		$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', (int) $time );
-		return "`$field` " . ( $is_current === true ? '=' : 'BETWEEN' ) . " '{$getCurrentDate}'" . ( $is_current === false ? " AND '{$current_date}'" : "" );
-	};
-
-	//Check Time
-	switch ( $time ) {
-		case 'today':
-			$where = "`$field` = '{$current_date}'";
-			break;
-		case 'yesterday':
-			$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', - 1 );
-			$where          = "`$field` = '{$getCurrentDate}'";
-			break;
-		case 'week':
-			$where = $field_sql( - 7 );
-			break;
-		case 'month':
-			$where = $field_sql( - 30 );
-			break;
-		case 'year':
-			$where = $field_sql( - 365 );
-			break;
-		case 'total':
-			$where = "";
-			break;
-		default:
-			if ( array_key_exists( 'is_day', $range ) ) {
-				//Check a day
-				if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
-					$where = "`$field` = '{$time}'";
-				} else {
-					$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
-					$where          = "`$field` = '{$getCurrentDate}'";
-				}
-			} elseif ( array_key_exists( 'start', $range ) and array_key_exists( 'end', $range ) ) {
-				//Check Between Two Time
-				$getCurrentDate    = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['start'] ) );
-				$getCurrentEndDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['end'] ) );
-				$where             = "`$field` BETWEEN '{$getCurrentDate}' AND '{$getCurrentEndDate}'";
-			} else {
-				//Check From a Date To Now
-				$where = $field_sql( $time );
-			}
-	}
-
-	return $where;
+	return ( $arg['return'] == "count" ? $wpdb->get_var( $sql ) : $wpdb->get_results( $sql ) );
 }
 
 /**
@@ -236,7 +233,7 @@ function wp_statistics_visit( $time, $daily = null ) {
 	} else {
 
 		//Generate MySql Time Conditions
-		$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time );
+		$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time );
 		if ( ! empty( $mysql_time_sql ) ) {
 			$sql = $sql . ' WHERE ' . $mysql_time_sql;
 		}
@@ -378,7 +375,7 @@ function wp_statistics_visitor( $time, $daily = null, $count_only = false, $opti
 	} else {
 
 		//Generate MySql Time Conditions
-		$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time );
+		$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time );
 		if ( ! empty( $mysql_time_sql ) ) {
 			$where[] = $mysql_time_sql;
 		}
@@ -465,7 +462,7 @@ function wp_statistics_pages( $time, $page_uri = '', $id = - 1, $rangestartdate 
 	}
 
 	//Check MySql Time Conditions
-	$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time, $time_array );
+	$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time, $time_array );
 	if ( ! empty( $mysql_time_sql ) ) {
 		$where[] = $mysql_time_sql;
 	}
@@ -486,30 +483,6 @@ function wp_statistics_pages( $time, $page_uri = '', $id = - 1, $rangestartdate 
 	return ( $sum == '' ? 0 : $sum );
 }
 
-// This function converts a page URI to a page/post ID.  It does this by looking up in the pages database
-// the URI and getting the associated ID.  This will only work if the page has been visited at least once.
-function wp_statistics_uri_to_id( $uri ) {
-	global $wpdb;
-
-	// Create the SQL query to use.
-	$sqlstatement = $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}statistics_pages WHERE `URI` = %s AND id > 0 ORDER BY date DESC", $uri );
-
-	// Execute the query.
-	$result = $wpdb->get_var( $sqlstatement );
-
-	// If we returned a false or some other 0 equivalent value, make sure $result is set to an integer 0.
-	if ( $result == 0 ) {
-		$result = 0;
-	}
-
-	return $result;
-}
-
-// We need a quick function to pass to usort to properly sort the most popular pages.
-function wp_stats_compare_uri_hits( $a, $b ) {
-	return $a[1] < $b[1];
-}
-
 /**
  * Get top Pages between Time
  *
@@ -523,9 +496,9 @@ function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = nu
 
 	// Get every unique URI from the pages database.
 	if ( $rangestartdate != null && $rangeenddate != null ) {
-		$result = $wpdb->get_results( $wpdb->prepare( "SELECT `uri`,`id`,`type` FROM {$wpdb->prefix}statistics_pages WHERE `date` BETWEEN %s AND %s GROUP BY `uri`" . ( $limit != null ? ' LIMIT ' . $limit : '' ), $rangestartdate, $rangeenddate ), ARRAY_N );
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT `uri`,`id`,`type` FROM " . \WP_STATISTICS\DB::table( 'pages' ) . " WHERE `date` BETWEEN %s AND %s GROUP BY `uri`" . ( $limit != null ? ' LIMIT ' . $limit : '' ), $rangestartdate, $rangeenddate ), ARRAY_N );
 	} else {
-		$result = $wpdb->get_results( "SELECT `uri`,`id`,`type` FROM {$wpdb->prefix}statistics_pages GROUP BY `uri`" . ( $limit != null ? ' LIMIT ' . $limit : '' ), ARRAY_N );
+		$result = $wpdb->get_results( "SELECT `uri`,`id`,`type` FROM " . \WP_STATISTICS\DB::table( 'pages' ) . " GROUP BY `uri`" . ( $limit != null ? ' LIMIT ' . $limit : '' ), ARRAY_N );
 	}
 
 	$total = 0;
@@ -547,7 +520,7 @@ function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = nu
 		// Check age Title if page id or type not exist
 		if ( $page_info['link'] == "" ) {
 			$page_url = htmlentities( path_join( get_site_url(), $url ), ENT_QUOTES );
-			$id       = wp_statistics_uri_to_id( $out[0] );
+			$id       = WP_STATISTICS\Pages::uri_to_id( $out[0] );
 			$post     = get_post( $id );
 			if ( is_object( $post ) ) {
 				$title = esc_html( $post->post_title );
@@ -581,14 +554,19 @@ function wp_statistics_get_top_pages( $rangestartdate = null, $rangeenddate = nu
 
 	// If we have more than one result, let's sort them using usort.
 	if ( count( $uris ) > 1 ) {
-		// Sort the URI's based on their hit count.
-		usort( $uris, 'wp_stats_compare_uri_hits' );
+		usort( $uris, array( '\WP_STATISTICS\Helper', 'compare_uri_hits' ) );
 	}
 
 	return array( $total, $uris );
 }
 
-// This function returns all unique user agents in the database.
+/**
+ * Returns all unique user agents in the database.
+ *
+ * @param null $rangestartdate
+ * @param null $rangeenddate
+ * @return array
+ */
 function wp_statistics_ua_list( $rangestartdate = null, $rangeenddate = null ) {
 	global $wpdb;
 
@@ -640,7 +618,13 @@ function wp_statistics_useragent( $agent, $rangestartdate = null, $rangeenddate 
 	return $result;
 }
 
-// This function returns all unique platform types from the database.
+/**
+ * Returns all unique platform types from the database.
+ *
+ * @param null $rangestartdate
+ * @param null $rangeenddate
+ * @return array
+ */
 function wp_statistics_platform_list( $rangestartdate = null, $rangeenddate = null ) {
 	global $wpdb;
 
@@ -658,32 +642,34 @@ function wp_statistics_platform_list( $rangestartdate = null, $rangeenddate = nu
 	return $Platforms;
 }
 
-// This function returns the count of a given platform in the database.
+/**
+ * Returns the count of a given platform in the database.
+ *
+ * @param $platform
+ * @param null $rangestartdate
+ * @param null $rangeenddate
+ * @return mixed
+ */
 function wp_statistics_platform( $platform, $rangestartdate = null, $rangeenddate = null ) {
 	global $wpdb;
 
 	if ( $rangestartdate != null && $rangeenddate != null ) {
-		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(platform) FROM {$wpdb->prefix}statistics_visitor WHERE `platform` = %s AND `last_counter` BETWEEN %s AND %s",
-				$platform,
-				$rangestartdate,
-				$rangeenddate
-			)
-		);
+		$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(platform) FROM " . \WP_STATISTICS\DB::table( 'visitor' ) . " WHERE `platform` = %s AND `last_counter` BETWEEN %s AND %s", $platform, $rangestartdate, $rangeenddate ) );
 	} else {
-		$result = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(platform) FROM {$wpdb->prefix}statistics_visitor WHERE `platform` = %s",
-				$platform
-			)
-		);
+		$result = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(platform) FROM " . \WP_STATISTICS\DB::table( 'visitor' ) . " WHERE `platform` = %s", $platform ) );
 	}
 
 	return $result;
 }
 
-// This function returns all unique versions for a given agent from the database.
+/**
+ * Returns all unique versions for a given agent from the database.
+ *
+ * @param $agent
+ * @param null $rangestartdate
+ * @param null $rangeenddate
+ * @return array
+ */
 function wp_statistics_agent_version_list( $agent, $rangestartdate = null, $rangeenddate = null ) {
 	global $wpdb;
 
@@ -701,7 +687,15 @@ function wp_statistics_agent_version_list( $agent, $rangestartdate = null, $rang
 	return $Versions;
 }
 
-// This function returns the statistics for a given agent/version pair from the database.
+/**
+ * Returns the statistics for a given agent/version pair from the database.
+ *
+ * @param $agent
+ * @param $version
+ * @param null $rangestartdate
+ * @param null $rangeenddate
+ * @return mixed
+ */
 function wp_statistics_agent_version( $agent, $version, $rangestartdate = null, $rangeenddate = null ) {
 	global $wpdb;
 
@@ -718,7 +712,12 @@ function wp_statistics_agent_version( $agent, $version, $rangestartdate = null, 
 	return $result;
 }
 
-// This function will return the SQL WHERE clause for getting the search words for a given search engine.
+/**
+ * Return the SQL WHERE clause for getting the search words for a given search engine.
+ *
+ * @param string $search_engine
+ * @return bool|string
+ */
 function wp_statistics_searchword_query( $search_engine = 'all' ) {
 
 	// Get a complete list of search engines
@@ -741,7 +740,12 @@ function wp_statistics_searchword_query( $search_engine = 'all' ) {
 	return $search_query;
 }
 
-// This function will return the SQL WHERE clause for getting the search engine.
+/**
+ * Return the SQL WHERE clause for getting the search engine.
+ *
+ * @param string $search_engine
+ * @return bool|string
+ */
 function wp_statistics_searchengine_query( $search_engine = 'all' ) {
 
 	// Get a complete list of search engines
@@ -797,9 +801,9 @@ function wp_statistics_get_search_engine_query( $search_engine = 'all', $time = 
 
 	// Check Sanitize Datetime
 	if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
-		$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time, array( 'is_day' => true ) );
+		$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time, array( 'is_day' => true ) );
 	} else {
-		$mysql_time_sql = wp_statistics_mysql_time_conditions( $date_column, $time, array( 'current_date' => true ) );
+		$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time, array( 'current_date' => true ) );
 	}
 
 	//Generate MySql Time Conditions
@@ -822,7 +826,12 @@ function wp_statistics_searchengine( $search_engine = 'all', $time = 'total' ) {
 	return wp_statistics_get_search_engine_query( $search_engine, $time, $search_by = 'query' );
 }
 
-//This Function will return the referrer list
+/**
+ * Return Refer List
+ *
+ * @param null $time
+ * @return int
+ */
 function wp_statistics_referrer( $time = null ) {
 	global $wpdb;
 
@@ -859,7 +868,7 @@ function wp_statistics_referrer( $time = null ) {
 }
 
 /**
- * This function will return the statistics for a given search engine for a given time frame.
+ * Return the statistics for a given search engine for a given time frame.
  *
  * @param string $search_engine
  * @param string $time
@@ -867,142 +876,4 @@ function wp_statistics_referrer( $time = null ) {
  */
 function wp_statistics_searchword( $search_engine = 'all', $time = 'total' ) {
 	return wp_statistics_get_search_engine_query( $search_engine, $time, $search_by = 'word' );
-}
-
-// This function will return the total number of posts in WordPress.
-function wp_statistics_countposts() {
-	$count_posts = wp_count_posts( 'post' );
-
-	$ret = 0;
-	if ( is_object( $count_posts ) ) {
-		$ret = $count_posts->publish;
-	}
-	return $ret;
-}
-
-// This function will return the total number of pages in WordPress.
-function wp_statistics_countpages() {
-	$count_pages = wp_count_posts( 'page' );
-
-	$ret = 0;
-	if ( is_object( $count_pages ) ) {
-		$ret = $count_pages->publish;
-	}
-	return $ret;
-}
-
-// This function will return the total number of comments in WordPress.
-function wp_statistics_countcomment() {
-	global $wpdb;
-
-	$countcomms = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved = '1'" );
-	return $countcomms;
-}
-
-// This function will return the total number of spam comments *IF* akismet is installed.
-function wp_statistics_countspam() {
-	return number_format_i18n( get_option( 'akismet_spam_count' ) );
-}
-
-// This function will return the total number of users in WordPress.
-function wp_statistics_countusers() {
-	$result = count_users();
-	return $result['total_users'];
-}
-
-// This function will return the last date a post was published on your site.
-function wp_statistics_lastpostdate() {
-	global $wpdb;
-
-	$db_date     = $wpdb->get_var( "SELECT post_date FROM {$wpdb->posts} WHERE post_type='post' AND post_status='publish' ORDER BY post_date DESC LIMIT 1" );
-	$date_format = get_option( 'date_format' );
-	return \WP_STATISTICS\TimeZone::getCurrentDate_i18n( $date_format, $db_date, false );
-}
-
-// This function will return the average number of posts per day that are published on your site.
-// Alternatively if $days is set to true it returns the average number of days between posts on your site.
-function wp_statistics_average_post( $days = false ) {
-
-	global $wpdb;
-
-	$get_first_post = $wpdb->get_var(
-		"SELECT post_date FROM {$wpdb->posts} WHERE post_status = 'publish' ORDER BY post_date LIMIT 1"
-	);
-	$get_total_post = $wpdb->get_var(
-		"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type = 'post'"
-	);
-
-	$days_spend = intval(
-		( time() - strtotime( $get_first_post ) ) / 86400
-	); // 86400 = 60 * 60 * 24 = number of seconds in a day
-
-	if ( $days == true ) {
-		if ( $get_total_post == 0 ) {
-			$get_total_post = 1;
-		} // Avoid divide by zero errors.
-
-		return round( $days_spend / $get_total_post, 0 );
-	} else {
-		if ( $days_spend == 0 ) {
-			$days_spend = 1;
-		} // Avoid divide by zero errors.
-
-		return round( $get_total_post / $days_spend, 2 );
-	}
-}
-
-// This function will return the average number of comments per day that are published on your site.
-// Alternatively if $days is set to true it returns the average number of days between comments on your site.
-function wp_statistics_average_comment( $days = false ) {
-
-	global $wpdb;
-
-	$get_first_comment = $wpdb->get_var( "SELECT comment_date FROM {$wpdb->comments} ORDER BY comment_date LIMIT 1" );
-	$get_total_comment = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved = '1'" );
-
-	$days_spend = intval(
-		( time() - strtotime( $get_first_comment ) ) / 86400
-	); // 86400 = 60 * 60 * 24 = number of seconds in a day
-
-	if ( $days == true ) {
-		if ( $get_total_comment == 0 ) {
-			$get_total_comment = 1;
-		} // Avoid divide by zero errors.
-
-		return round( $days_spend / $get_total_comment, 0 );
-	} else {
-		if ( $days_spend == 0 ) {
-			$days_spend = 1;
-		} // Avoid divide by zero errors.
-
-		return round( $get_total_comment / $days_spend, 2 );
-	}
-}
-
-// This function will return the average number of users per day that are registered on your site.
-// Alternatively if $days is set to true it returns the average number of days between user registrations on your site.
-function wp_statistics_average_registeruser( $days = false ) {
-
-	global $wpdb;
-
-	$get_first_user = $wpdb->get_var( "SELECT user_registered FROM {$wpdb->users} ORDER BY user_registered LIMIT 1" );
-	$get_total_user = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users}" );
-
-	$days_spend = intval(
-		( time() - strtotime( $get_first_user ) ) / 86400
-	); // 86400 = 60 * 60 * 24 = number of seconds in a day
-
-	if ( $days == true ) {
-		if ( $get_total_user == 0 ) {
-			$get_total_user = 1;
-		} // Avoid divide by zero errors.
-
-		return round( $days_spend / $get_total_user, 0 );
-	} else {
-		if ( $days_spend == 0 ) {
-			$days_spend = 1;
-		} // Avoid divide by zero errors.
-
-		return round( $get_total_user / $days_spend, 2 );
-	}
 }
