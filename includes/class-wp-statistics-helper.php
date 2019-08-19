@@ -743,12 +743,12 @@ class Helper {
 		global $WP_Statistics;
 
 		//Get Current Date From WP
-		$current_date = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d' );
+		$current_date = TimeZone::getCurrentDate( 'Y-m-d' );
 
 		//Create Field Sql
 		$field_sql = function ( $time ) use ( $current_date, $field, $WP_Statistics, $range ) {
 			$is_current     = array_key_exists( 'current_date', $range );
-			$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', (int) $time );
+			$getCurrentDate = TimeZone::getCurrentDate( 'Y-m-d', (int) $time );
 			return "`$field` " . ( $is_current === true ? '=' : 'BETWEEN' ) . " '{$getCurrentDate}'" . ( $is_current === false ? " AND '{$current_date}'" : "" );
 		};
 
@@ -758,7 +758,7 @@ class Helper {
 				$where = "`$field` = '{$current_date}'";
 				break;
 			case 'yesterday':
-				$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', - 1 );
+				$getCurrentDate = TimeZone::getCurrentDate( 'Y-m-d', - 1 );
 				$where          = "`$field` = '{$getCurrentDate}'";
 				break;
 			case 'week':
@@ -776,16 +776,16 @@ class Helper {
 			default:
 				if ( array_key_exists( 'is_day', $range ) ) {
 					//Check a day
-					if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+					if ( TimeZone::isValidDate( $time ) ) {
 						$where = "`$field` = '{$time}'";
 					} else {
-						$getCurrentDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+						$getCurrentDate = TimeZone::getCurrentDate( 'Y-m-d', $time );
 						$where          = "`$field` = '{$getCurrentDate}'";
 					}
 				} elseif ( array_key_exists( 'start', $range ) and array_key_exists( 'end', $range ) ) {
 					//Check Between Two Time
-					$getCurrentDate    = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['start'] ) );
-					$getCurrentEndDate = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['end'] ) );
+					$getCurrentDate    = TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['start'] ) );
+					$getCurrentEndDate = TimeZone::getCurrentDate( 'Y-m-d', '-0', strtotime( $range['end'] ) );
 					$where             = "`$field` BETWEEN '{$getCurrentDate}' AND '{$getCurrentEndDate}'";
 				} else {
 					//Check From a Date To Now
