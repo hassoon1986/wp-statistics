@@ -13,6 +13,7 @@ class summary {
 	 *
 	 * @param array $args
 	 * @return array
+	 * @throws \Exception
 	 */
 	public static function get( $args = array() ) {
 		return self::getSummaryHits( array( 'user-online', 'visitors', 'visits', 'search-engine', 'timezone' ) );
@@ -36,6 +37,7 @@ class summary {
 	 *
 	 * @param array $component
 	 * @return array
+	 * @throws \Exception
 	 */
 	public static function getSummaryHits( $component = array() ) {
 		$data = array();

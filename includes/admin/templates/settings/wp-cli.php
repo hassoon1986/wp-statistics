@@ -20,12 +20,13 @@
     </tr>
 
     <tr valign="top">
-        <th scope="row"><label for="wps-wp_cli_summary"><?php _e( 'Summary:', 'wp-statistics' ); ?></label>
-        </th>
+        <th scope="row"><label for="wps-wp_cli_summary"><?php _e( 'Summary:', 'wp-statistics' ); ?></label></th>
         <td>
             <input id="wps-wp_cli_summary" type="checkbox" value="1" name="wps_wp_cli_summary" <?php echo WP_STATISTICS\Option::get( 'wp_cli_summary' ) == true ? "checked='checked'" : ''; ?>>
             <label for="wps-wp_cli_summary"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-            <p class="description"><?php echo __( 'Show a summary of statistics.', 'wp-statistics' ); ?></p>
+            <p class="description">
+				<?php echo __( 'Show a summary of statistics.', 'wp-statistics' ); ?><br/>
+				<?php echo __( 'Usage: ', 'wp-statistics' ); ?> wp statistics summary </p>
         </td>
     </tr>
 
