@@ -13,6 +13,7 @@
                             <li class="tab-link" data-tab="overview-display-settings"><?php _e( 'Dashboard', 'wp-statistics' ); ?></li>
                             <li class="tab-link" data-tab="access-settings"><?php _e( 'Access Levels', 'wp-statistics' ); ?></li>
                             <li class="tab-link" data-tab="exclusions-settings"><?php _e( 'Exclusions', 'wp-statistics' ); ?></li>
+                            <li class="tab-link" data-tab="wp-cli-settings"><?php _e( 'Command Line', 'wp-statistics' ); ?></li>
                             <li class="tab-link" data-tab="externals-settings"><?php _e( 'Externals', 'wp-statistics' ); ?></li>
                             <li class="tab-link" data-tab="maintenance-settings"><?php _e( 'Maintenance', 'wp-statistics' ); ?></li>
                             <li class="tab-link" data-tab="reset-settings"><?php _e( 'Reset', 'wp-statistics' ); ?></li>
@@ -41,6 +42,9 @@
                         </div>
                         <div id="exclusions-settings" class="tab-content">
 							<?php include WP_STATISTICS_DIR . 'includes/admin/templates/settings/exclusions.php'; ?>
+                        </div>
+                        <div id="wp-cli-settings" class="tab-content">
+							<?php include WP_STATISTICS_DIR . 'includes/admin/templates/settings/wp-cli.php'; ?>
                         </div>
                         <div id="externals-settings" class="tab-content">
 							<?php include WP_STATISTICS_DIR . 'includes/admin/templates/settings/externals.php'; ?>
