@@ -15,8 +15,39 @@
         </td>
     </tr>
 
+    <tr valign="top">
+        <th scope="row" colspan="2"><h3><?php _e( 'Commands', 'wp-statistics' ); ?></h3></th>
+    </tr>
 
+    <tr valign="top">
+        <th scope="row"><label for="wps-wp_cli_summary"><?php _e( 'Summary:', 'wp-statistics' ); ?></label>
+        </th>
+        <td>
+            <input id="wps-wp_cli_summary" type="checkbox" value="1" name="wps_wp_cli_summary" <?php echo WP_STATISTICS\Option::get( 'wp_cli_summary' ) == true ? "checked='checked'" : ''; ?>>
+            <label for="wps-wp_cli_summary"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
+            <p class="description"><?php echo __( 'Show a summary of statistics.', 'wp-statistics' ); ?></p>
+        </td>
+    </tr>
 
+    <tr valign="top">
+        <th scope="row"><label for="wps-wp_cli_user_online"><?php _e( 'User Online:', 'wp-statistics' ); ?></label>
+        </th>
+        <td>
+            <input id="wps-wp_cli_user_online" type="checkbox" value="1" name="wps_wp_cli_user_online" <?php echo WP_STATISTICS\Option::get( 'wp_cli_user_online' ) == true ? "checked='checked'" : ''; ?>>
+            <label for="wps-wp_cli_user_online"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
+            <p class="description"><?php echo __( 'Show Users Online List.', 'wp-statistics' ); ?></p>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><label for="wps-wp_cli_visitors"><?php _e( 'Visitors:', 'wp-statistics' ); ?></label>
+        </th>
+        <td>
+            <input id="wps-wp_cli_visitors" type="checkbox" value="1" name="wps_wp_cli_visitors" <?php echo WP_STATISTICS\Option::get( 'wp_cli_visitors' ) == true ? "checked='checked'" : ''; ?>>
+            <label for="wps-wp_cli_visitors"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
+            <p class="description"><?php echo __( 'Show list of Visitors.', 'wp-statistics' ); ?></p>
+        </td>
+    </tr>
 
     </tbody>
 </table>
