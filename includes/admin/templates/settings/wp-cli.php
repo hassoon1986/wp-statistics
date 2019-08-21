@@ -36,8 +36,8 @@
         <td>
             <input id="wps-wp_cli_user_online" type="checkbox" value="1" name="wps_wp_cli_user_online" <?php echo WP_STATISTICS\Option::get( 'wp_cli_user_online' ) == true ? "checked='checked'" : ''; ?>>
             <label for="wps-wp_cli_user_online"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-            <p class="description"><?php echo __( 'Show Users Online List.', 'wp-statistics' ); ?><br />
-	        <?php echo __( 'Usage: ', 'wp-statistics' ); ?> wp statistics online --number=[integer] </p>
+            <p class="description"><?php echo __( 'Show Users Online List.', 'wp-statistics' ); ?><br/>
+				<?php echo __( 'Usage: ', 'wp-statistics' ); ?> wp statistics online --number=[integer] </p>
         </td>
     </tr>
 
@@ -47,7 +47,8 @@
         <td>
             <input id="wps-wp_cli_visitors" type="checkbox" value="1" name="wps_wp_cli_visitors" <?php echo WP_STATISTICS\Option::get( 'wp_cli_visitors' ) == true ? "checked='checked'" : ''; ?>>
             <label for="wps-wp_cli_visitors"><?php _e( 'Enable', 'wp-statistics' ); ?></label>
-            <p class="description"><?php echo __( 'Show list of Visitors.', 'wp-statistics' ); ?></p>
+            <p class="description"><?php echo __( 'Show list of Visitors.', 'wp-statistics' ); ?><br/>
+				<?php echo __( 'Usage: ', 'wp-statistics' ); ?> wp statistics visitors --number=[integer] </p>
         </td>
     </tr>
 

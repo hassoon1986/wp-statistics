@@ -140,8 +140,77 @@ class WP_STATISTICS_CLI extends \WP_CLI_Command {
 		\WP_CLI\Utils\format_items( $assoc_args['format'], $items, $column );
 	}
 
-	public function visitors() {
+	/**
+	 * Show list of visitors.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--number=<number>]
+	 * : Number of return user.
+	 *
+	 * [--format=<format>]
+	 * : Render output in a particular format.
+	 * ---
+	 * default: table
+	 * options:
+	 *   - table
+	 *   - csv
+	 *   - json
+	 *   - count
+	 *   - yaml
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      # show list of visitors
+	 *      $ wp statistics visitors
+	 *
+	 *      # show list of last ten visitors
+	 *      $ wp statistics online --number=10
+	 *
+	 * @alias visitor
+	 * @throws \Exception
+	 */
+	public function visitors( $args, $assoc_args ) {
 
+		// Check Enable Command
+		if ( Option::get( 'wp_cli_visitors' ) == false ) {
+			\WP_CLI::error( "The `visitors` command is not active." );
+		}
+
+		// Get Number Of result
+		$number = \WP_CLI\Utils\get_flag_value( $assoc_args, 'number', 15 );
+
+		// Get List Of Users Online
+		$lists = Visitor::get( array( 'per_page' => $number ) );
+		if ( count( $lists ) < 1 ) {
+			\WP_CLI::error( "There are no visitors." );
+		}
+
+		// Set Column
+		$column = array( 'IP', 'Date', 'Browser', 'Referrer', 'Platform', 'User ID' );
+		if ( GeoIP::active() === true ) {
+			$column[] = 'Country';
+		}
+
+		// Show List
+		$items = array();
+		foreach ( $lists as $row ) {
+			$item = array(
+				'IP'       => ( isset( $row['hash_ip'] ) ? $row['hash_ip'] : $row['ip']['value'] ),
+				'Date'     => $row['date'],
+				'Browser'  => $row['browser']['name'],
+				'Referrer' => wp_strip_all_tags( $row['referred'] ),
+				'Platform' => $row['platform'],
+				'User ID'  => ( ( isset( $row['user'] ) and isset( $row['user']['ID'] ) and $row['user']['ID'] > 0 ) ? $row['user']['ID'] : '-' )
+			);
+			if ( GeoIP::active() === true ) {
+				$item['Country'] = $row['country']['name'];
+			}
+			$items[] = $item;
+		}
+
+		\WP_CLI\Utils\format_items( $assoc_args['format'], $items, $column );
 	}
 
 }
