@@ -210,10 +210,10 @@ class Admin_Assets {
 		if ( isset( $_GET ) ) {
 			foreach ( $_GET as $key => $value ) {
 				if ( $key == "page" ) {
-					$slug  = Menus::getPageKeyFromSlug( $value );
+					$slug  = Menus::getPageKeyFromSlug( esc_html( $value ) );
 					$value = $slug[0];
 				}
-				$list['request_params'][ $key ] = $value;
+				$list['request_params'][ $key ] = esc_html( $value );
 			}
 		}
 
