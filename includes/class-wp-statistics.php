@@ -200,7 +200,7 @@ final class WP_Statistics {
 		}
 
 		// WP-CLI
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		if ( defined( 'WP_CLI' ) && WP_CLI && WP_STATISTICS\Option::get( 'wp_cli' ) == true ) {
 			require_once WP_STATISTICS_DIR . 'includes/class-wp-statistics-cli.php';
 		}
 
