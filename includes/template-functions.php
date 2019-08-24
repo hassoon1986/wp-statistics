@@ -1,13 +1,18 @@
 <?php
 
 use WP_STATISTICS\Country;
+use WP_STATISTICS\GeoIP;
+use WP_STATISTICS\IP;
 use WP_STATISTICS\Pages;
+use WP_STATISTICS\TimeZone;
+use WP_STATISTICS\User;
+use WP_STATISTICS\UserAgent;
 
 /**
  * Get Current User IP
  */
 function wp_statistics_get_user_ip() {
-	return \WP_STATISTICS\IP::getIP();
+	return IP::getIP();
 }
 
 /**
@@ -24,11 +29,11 @@ function wp_statistics_get_current_user_data() {
 	$data['ip'] = wp_statistics_get_user_ip();
 
 	// Get User Agent contain Browser and Platform
-	$data['agent'] = \WP_STATISTICS\UserAgent::getUserAgent();
+	$data['agent'] = UserAgent::getUserAgent();
 
 	// Get User info if Registered in Wordpress
-	if ( \WP_STATISTICS\User::is_login() ) {
-		$data['user'] = \WP_STATISTICS\User::get();
+	if ( User::is_login() ) {
+		$data['user'] = User::get();
 	}
 
 	// Return
@@ -50,8 +55,8 @@ function wp_statistics_get_user_location( $ip = false ) {
 	);
 
 	// Get user Country
-	if ( \WP_STATISTICS\GeoIP::active() ) {
-		$country         = \WP_STATISTICS\GeoIP::getCountry( $ip );
+	if ( GeoIP::active() ) {
+		$country         = GeoIP::getCountry( $ip );
 		$data['country'] = array(
 			'code' => $country,
 			'name' => Country::getName( $country ),
@@ -60,8 +65,8 @@ function wp_statistics_get_user_location( $ip = false ) {
 	}
 
 	// Get User City
-	if ( \WP_STATISTICS\GeoIP::active( 'city' ) ) {
-		$data['city'] = \WP_STATISTICS\GeoIP::getCity( $ip );
+	if ( GeoIP::active( 'city' ) ) {
+		$data['city'] = GeoIP::getCity( $ip );
 	}
 
 	return $data;
@@ -219,10 +224,10 @@ function wp_statistics_visit( $time, $daily = null ) {
 	if ( $daily === true ) {
 
 		// Check Sanitize Datetime
-		if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+		if ( TimeZone::isValidDate( $time ) ) {
 			$d = $time;
 		} else {
-			$d = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+			$d = TimeZone::getCurrentDate( 'Y-m-d', $time );
 		}
 
 		$result = $wpdb->get_row( $sql . " WHERE `$date_column` = '" . $d . "'" );
@@ -364,10 +369,10 @@ function wp_statistics_visitor( $time, $daily = null, $count_only = false, $opti
 	if ( $daily == true ) {
 
 		// Check Sanitize Datetime
-		if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+		if ( TimeZone::isValidDate( $time ) ) {
 			$d = $time;
 		} else {
-			$d = \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time );
+			$d = TimeZone::getCurrentDate( 'Y-m-d', $time );
 		}
 
 		//Get Only Current Day Visitors
@@ -454,7 +459,7 @@ function wp_statistics_pages( $time, $page_uri = '', $id = - 1, $rangestartdate 
 
 	//Prepare Time
 	$time_array = array();
-	if ( is_numeric( $time ) || \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+	if ( is_numeric( $time ) || TimeZone::isValidDate( $time ) ) {
 		$time_array['is_day'] = true;
 	}
 	if ( ! is_null( $rangestartdate ) and ! is_null( $rangeenddate ) ) {
@@ -800,7 +805,7 @@ function wp_statistics_get_search_engine_query( $search_engine = 'all', $time = 
 	$sql = "SELECT COUNT(*) FROM {$table_name} WHERE ({$search_query})";
 
 	// Check Sanitize Datetime
-	if ( \WP_STATISTICS\TimeZone::isValidDate( $time ) ) {
+	if ( TimeZone::isValidDate( $time ) ) {
 		$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time, array( 'is_day' => true ) );
 	} else {
 		$mysql_time_sql = WP_STATISTICS\Helper::mysql_time_conditions( $date_column, $time, array( 'current_date' => true ) );
@@ -846,11 +851,11 @@ function wp_statistics_referrer( $time = null ) {
 	$sql      = "SELECT `referred` FROM `" . \WP_STATISTICS\DB::table( 'visitor' ) . "` WHERE referred <> ''";
 	if ( array_key_exists( $time, $timezone ) ) {
 		if ( $time != "total" ) {
-			$sql .= " AND (`last_counter` = '" . \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $timezone[ $time ] ) . "')";
+			$sql .= " AND (`last_counter` = '" . TimeZone::getCurrentDate( 'Y-m-d', $timezone[ $time ] ) . "')";
 		}
 	} else {
 		//Set Default
-		$sql .= " AND (`last_counter` = '" . \WP_STATISTICS\TimeZone::getCurrentDate( 'Y-m-d', $time ) . "')";
+		$sql .= " AND (`last_counter` = '" . TimeZone::getCurrentDate( 'Y-m-d', $time ) . "')";
 	}
 	$result = $wpdb->get_results( $sql );
 
