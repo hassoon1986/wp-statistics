@@ -8,7 +8,7 @@ class Hits {
 	 *
 	 * @var string
 	 */
-	public static $rest_hits_key = 'wp_statistics_hits';
+	public static $rest_hits_key = 'wp_statistics_hit_rest';
 
 	/**
 	 * Rest-Api Hit Data
@@ -99,7 +99,12 @@ class Hits {
 	 * @return mixed
 	 */
 	public function set_hash_ip( $hash_ip ) {
-		return isset( $this->rest_hits->hash_ip ) ? IP::$hash_ip_prefix . $this->rest_hits->hash_ip : $hash_ip;
+		if ( isset( $this->rest_hits->ua ) and trim( $this->rest_hits->ua ) != "" ) {
+			$key = $this->rest_hits->ua;
+		} else {
+			$key = 'Unknown';
+		}
+		return $hash_ip = '#hash#' . sha1( $this->rest_hits->ip . $key );
 	}
 
 	/**
@@ -199,28 +204,28 @@ class Hits {
 	 * @return bool
 	 */
 	public static function is_rest_hit() {
-		return Helper::is_rest_request() and isset( $_REQUEST[ self::$rest_hits_key ] ) and count( $_REQUEST[ self::$rest_hits_key ] ) > 0;
+		return defined( 'REST_REQUEST' ) && REST_REQUEST and isset( $_REQUEST[ self::$rest_hits_key ] );
 	}
 
 	/**
 	 * Get Params Value in Rest-APi Request Hit
 	 *
 	 * @param $params
-	 * @return bool
+	 * @return Mixed
 	 */
 	public static function rest_params( $params = false ) {
+		$data = array();
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST and isset( $_REQUEST[ Hits::$rest_hits_key ] ) ) {
+			foreach ( $_REQUEST as $key => $value ) {
+				if ( ! in_array( $key, array( '_', '_wpnonce' ) ) ) {
+					$data[ $key ] = trim( $value );
+				}
+			}
 
-		# Check Isset Request Parameter
-		if ( isset( $_REQUEST[ Hits::$rest_hits_key ] ) ) {
-
-			# Check Data
-			$data = Helper::json_to_array( $_REQUEST[ Hits::$rest_hits_key ] );
-
-			# Return Data
 			return ( $params === false ? $data : ( isset( $data[ $params ] ) ? $data[ $params ] : false ) );
 		}
 
-		return false;
+		return $data;
 	}
 
 	/**

@@ -62,8 +62,19 @@ class Frontend {
 	 */
 	public function add_inline_rest_js() {
 		if ( Option::get( 'use_cache_plugin' ) ) {
+
+			// Wp-Statistics HTML comment
 			$this->html_comment();
-			echo '<script>var WP_Statistics_http = new XMLHttpRequest();WP_Statistics_http.open(\'GET\', \'' . add_query_arg( array( '_' => time(), '_wpnonce' => wp_create_nonce( 'wp_rest' ), Hits::$rest_hits_key => self::set_default_params() ), get_rest_url( null, RestAPI::$namespace . '/' . Api\v2\Hit::$endpoint ) ) . '\', true);WP_Statistics_http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");WP_Statistics_http.send(null);</script>' . "\n";
+
+			// Prepare Params
+			$params = array_merge( array(
+				'_'                  => time(),
+				'_wpnonce'           => wp_create_nonce( 'wp_rest' ),
+				Hits::$rest_hits_key => 'yes',
+			), self::set_default_params() );
+
+			// Return Script
+			echo '<script>var WP_Statistics_http = new XMLHttpRequest();WP_Statistics_http.open(\'GET\', \'' . add_query_arg( $params, get_rest_url( null, RestAPI::$namespace . '/' . Api\v2\Hit::$endpoint ) ) . '\', true);WP_Statistics_http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");WP_Statistics_http.send(null);</script>' . "\n";
 		}
 	}
 
@@ -75,10 +86,6 @@ class Frontend {
 		// Create Empty Params Object
 		$params = array();
 
-		//Set Url WP-Rest API
-		$params['base'] = rtrim( get_rest_url(), "/" );
-		$params['api']  = rtrim( rest_get_url_prefix(), "/" );
-
 		//Set UserAgent [browser|platform|version]
 		$params = wp_parse_args( $params, UserAgent::getUserAgent() );
 
@@ -87,9 +94,6 @@ class Frontend {
 
 		//Set IP
 		$params['ip'] = esc_html( IP::getIP() );
-
-		//Set Hash Ip
-		$params['hash_ip'] = esc_html( str_ireplace( IP::$hash_ip_prefix, '', IP::getHashIP() ) );
 
 		//exclude
 		$exclude                  = Exclusion::check();
@@ -118,7 +122,7 @@ class Frontend {
 		$params['user_id'] = User::get_user_id();
 
 		//return Json Data
-		return Helper::standard_json_encode( $params );
+		return $params;
 	}
 
 	/**

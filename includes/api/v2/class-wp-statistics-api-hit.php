@@ -28,11 +28,35 @@ class Hit extends \WP_STATISTICS\RestAPI {
 	}
 
 	/**
+	 * List Of Required Params
+	 *
+	 * @return array
+	 */
+	public static function require_params_hit() {
+		return array(
+			'browser',
+			'platform',
+			'version',
+			'ip',
+			'track_all',
+			'timestamp',
+			'page_uri',
+			'user_id',
+		);
+	}
+
+	/**
 	 * Register routes
 	 *
 	 * @see https://developer.wordpress.org/reference/classes/wp_rest_server/
 	 */
 	public function register_routes() {
+
+		// Create Require Params
+		$params = array();
+		foreach ( self::require_params_hit() as $p ) {
+			$params[ $p ] = array( 'required' => true );
+		}
 
 		// Record WP-Statistics when Cache is enable
 		register_rest_route( self::$namespace, '/' . self::$endpoint, array(
@@ -42,20 +66,13 @@ class Hit extends \WP_STATISTICS\RestAPI {
 				'permission_callback' => function () {
 					return ( Option::get( 'use_cache_plugin' ) == 1 ? true : false );
 				},
-				'args'                => array(
-					'_wpnonce'           => array(
+				'args'                => array_merge(
+					array( '_wpnonce' => array(
 						'required'          => true,
 						'validate_callback' => function ( $value ) {
 							return wp_verify_nonce( $value, 'wp_rest' );
 						}
-					),
-					Hits::$rest_hits_key => array(
-						'required'          => true,
-						'validate_callback' => function ( $value, $request, $key ) {
-							return ( Helper::json_to_array( $value ) === false ? false : true );
-						}
-					)
-				)
+					) ), $params )
 			)
 		) );
 
@@ -81,19 +98,11 @@ class Hit extends \WP_STATISTICS\RestAPI {
 	 * @throws \Exception
 	 */
 	public function hit_callback( \WP_REST_Request $request ) {
-		$param = $request->get_param( Hits::$rest_hits_key );
 
-		// Check List OF Require Parameter
-		$list           = Helper::json_to_array( $param );
-		$require_params = array( 'referred', 'ip', 'hash_ip', 'exclude', 'exclude_reason', 'ua', 'track_all', 'timestamp', 'current_page_type', 'current_page_id', 'page_uri', 'user_id' );
-		foreach ( $require_params as $parameter ) {
-			if ( ! array_key_exists( $parameter, $list ) ) {
-				return self::response( 'Missing ' . $parameter . ' parameter.', 400 );
-			}
-		}
-
-		// Run Hit Record
+		// Start Record
 		Hits::record();
+
+		// Return
 		return self::response( __( 'Visitor Hit was recorded successfully.', 'wp-statistics' ) );
 	}
 
