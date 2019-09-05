@@ -212,7 +212,7 @@ final class WP_Statistics {
 	 * Loads the load plugin text domain code.
 	 */
 	public function load_textdomain() {
-		load_plugin_textdomain( 'wp-statistics', false, WP_STATISTICS_DIR . 'languages' );
+		load_plugin_textdomain( 'wp-statistics', false, basename( WP_STATISTICS_DIR ) . '/languages' );
 	}
 
 	/**
