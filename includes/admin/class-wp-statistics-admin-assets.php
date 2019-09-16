@@ -197,7 +197,8 @@ class Admin_Assets {
 			'geo_city'      => ( GeoIP::active( 'city' ) ? 1 : 0 ),
 			'overview_page' => ( Menus::in_page( 'overview' ) ? 1 : 0 ),
 			'gutenberg'     => ( Helper::is_gutenberg() ? 1 : 0 ),
-			'more_btn'      => ( apply_filters( 'wp_statistics_meta_box_more_button', true ) ? 1 : 0 )
+			'more_btn'      => ( apply_filters( 'wp_statistics_meta_box_more_button', true ) ? 1 : 0 ),
+			'overview_ads'  => ( apply_filters( 'wp_statistics_ads_overview_page_show', true ) ? 1 : 0 )
 		);
 
 		// WordPress Current Page

@@ -31,6 +31,11 @@ class Welcome {
 	 */
 	public function init() {
 
+		// Check Filter Show Welcome Page
+		if ( apply_filters( 'wp_statistics_show_welcome_page', true ) === false ) {
+			return;
+		}
+
 		// Check Show Welcome Page
 		if ( Option::get( 'show_welcome_page', false ) and ( strpos( $_SERVER['REQUEST_URI'], '/wp-admin/index.php' ) !== false or ( isset( $_GET['page'] ) and $_GET['page'] == 'wps_overview_page' ) ) ) {
 

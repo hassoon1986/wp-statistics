@@ -1,7 +1,7 @@
 if (wps_js.isset(wps_js.global, 'request_params', 'page') && wps_js.global.request_params.page === "overview") {
 
     // Show ADS
-    if (wps_js.isset(wps_js.global, 'overview', 'ads')) {
+    if (wps_js.isset(wps_js.global, 'overview', 'ads') && wps_js.is_active('overview_ads')) {
         let PostBox = `
             <div id="wps_overview_ads_postbox" class="postbox">
             <div class="inside">
