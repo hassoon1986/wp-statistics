@@ -79,7 +79,7 @@ class Hit extends \WP_STATISTICS\RestAPI {
 		// Check WP-Statistics Rest API Not disabled
 		register_rest_route( self::$namespace, '/enable', array(
 			array(
-				'methods'  => \WP_REST_Server::CREATABLE,
+				'methods'  => \WP_REST_Server::READABLE,
 				'callback' => array( $this, 'check_enable_callback' ),
 				'args'     => array(
 					'connect' => array(
